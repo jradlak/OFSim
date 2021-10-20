@@ -29,6 +29,8 @@
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="light_source_fs.glsl" />
+    <None Include="light_source_vs.glsl" />
     <None Include="shader_fs.glsl" />
     <None Include="shader_vs.glsl" />
   </ItemGroup>

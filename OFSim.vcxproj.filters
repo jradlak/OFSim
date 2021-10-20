@@ -43,5 +43,11 @@
     <None Include="shader_vs.glsl">
       <Filter>Pliki zasobów</Filter>
     </None>
+    <None Include="light_source_fs.glsl">
+      <Filter>Pliki zasobów</Filter>
+    </None>
+    <None Include="light_source_vs.glsl">
+      <Filter>Pliki zasobów</Filter>
+    </None>
   </ItemGroup>
 </Project>
