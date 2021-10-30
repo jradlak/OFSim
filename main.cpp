@@ -18,7 +18,7 @@ const unsigned int SCR_WIDTH = 1280;
 const unsigned int SCR_HEIGHT = 720;
 
 // camera
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+Camera camera(glm::vec3(0.0f, 10.0f, 0.0f));
 
 int main()
 {
@@ -47,12 +47,15 @@ int main()
 
     // world space positions of our spheres
     glm::vec3 spherePositions[] = {
-        glm::vec3( 0.0f,  0.0f,  0.0f),
-        glm::vec3(-1.5f, -2.2f, -2.5f),
+        glm::vec3( 0.0f,  0.0f,  0.0f), // earth
+        glm::vec3(220.0f, 2.5f, 0.0f), // moon
     };
 
     // lighting source position:
-    glm::vec3 lightPos(2.0f,  5.0f, -15.0f);
+    glm::vec3 lightPos(0.0f,  0.0f, 86125.5f); // sun
+
+
+    ///////////// PLANETS:
 
     //sphere VAO:
     unsigned int VBO, sphereVAO;
@@ -78,6 +81,9 @@ int main()
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
+
+    //////////// LIGHT SOURCE:
+
     //light source VAO:
     unsigned int lightCubeVAO;
     glGenVertexArrays(1, &lightCubeVAO);
@@ -86,6 +92,10 @@ int main()
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     // note that we update the lamp's position attribute's stride to reflect the updated buffer data
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
     glEnableVertexAttribArray(0);
 
     // draw only lines
@@ -108,7 +118,7 @@ int main()
         sphereShader.use();
 
         // pass projection matrix to shader (note that in this case it could change every frame)
-        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 90000.0f);
         sphereShader.setMat4("projection", projection);
 
         // camera/view transformation
@@ -128,7 +138,12 @@ int main()
             glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
             model = glm::translate(model, spherePositions[i]);
             float angle = 20.0f * i;
-            model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+            
+            if (i == 0) {
+                model = glm::scale(model, glm::vec3(3.67f)); // an Earth scale
+            }
+
+            //model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
             sphereShader.setMat4("model", model);
 
             glBindVertexArray(sphereVAO);
@@ -143,7 +158,7 @@ int main()
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::mat4(1.0f);
         model = glm::translate(model, lightPos);
-        //model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
+        model = glm::scale(model, glm::vec3(801.78f)); // a Sun scale
         lightSourceShader.setMat4("model", model);
 
         glBindVertexArray(lightCubeVAO);
