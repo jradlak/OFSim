@@ -9,6 +9,7 @@
 #include "Camera.h"
 #include "Window.h"
 #include "Sphere.h"
+#include "CelestialBody.h"
 
 #include <iostream>
 #include <vector>
@@ -29,6 +30,19 @@ int main()
         return result;
     }
 
+    // celsrial bodies positions:
+    glm::vec3 lightPos(0.0f, 0.0f, 86125.5f);
+    glm::vec3 earthPos(0.0f, 0.0f, 0.0f);
+    glm::vec3 moonPos(220.0f, 2.5f, 0.0f);
+
+    CelestialBody sun(star, "light_source", 801.78f, lightPos);
+    CelestialBody earth(planet, "shader", 3.67f, earthPos);
+    CelestialBody earthsMoon(moon, "shader", 1.0f, moonPos);
+
+    sun.init();
+    earth.init();
+    earthsMoon.init();
+
     // build and compile our shader programs
     // ------------------------------------
     Shader sphereShader("shader_vs.glsl", "shader_fs.glsl");
@@ -37,7 +51,7 @@ int main()
     Sphere sphere(0.5f, 32, 16);
 
     std::vector<float> vert = sphere.getVertices();
-    float vertices[3366];
+    float vertices[3366];   
     std::copy(vert.begin(), vert.end(), vertices);
 
     std::vector<int> ind = sphere.getIndices();
@@ -50,9 +64,6 @@ int main()
         glm::vec3( 0.0f,  0.0f,  0.0f), // earth
         glm::vec3(220.0f, 2.5f, 0.0f), // moon
     };
-
-    // lighting source position:
-    glm::vec3 lightPos(0.0f,  0.0f, 86125.5f); // sun
 
 
     ///////////// PLANETS:
@@ -124,8 +135,7 @@ int main()
         // camera/view transformation
         glm::mat4 view = camera.GetViewMatrix();
         sphereShader.setMat4("view", view);
-
-        sphereShader.use();
+        
         sphereShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
         sphereShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
         sphereShader.setVec3("lightPos", lightPos);
