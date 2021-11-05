@@ -1,10 +1,9 @@
 #include "CelestialBody.h"
 
 CelestialBody::CelestialBody(CelestialBodyType _bodyType, std::string shaderName,
-	float _size, glm::vec3& _position) 
+	float _size, glm::vec3& _position) : position(_position)
 {	
 	bodyType = _bodyType;
-	position = _position;
 	size = _size;
 	indexCount = 0;
 
@@ -49,12 +48,7 @@ void CelestialBody::init()
 	glBindVertexArray(0);
 }
 
-void CelestialBody::updateLightPos(glm::vec3& _lightPos)
-{
-	lightPos = _lightPos;
-}
-
-void CelestialBody::render(glm::mat4& projection, glm::mat4& view)
+void CelestialBody::render(glm::mat4& projection, glm::mat4& view, glm::vec3& _lightPos)
 {
 	shader->use();
 	shader->setMat4("projection", projection);
@@ -64,7 +58,7 @@ void CelestialBody::render(glm::mat4& projection, glm::mat4& view)
 	{
 		shader->setVec3("objectColor", 1.0f, 0.5f, 0.31f);
 		shader->setVec3("lightColor", 1.0f, 1.0f, 1.0f);
-		shader->setVec3("lightPos", lightPos);
+		shader->setVec3("lightPos", _lightPos);
 	}
 
 	glm::mat4 model = glm::mat4(1.0f);

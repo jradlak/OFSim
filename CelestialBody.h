@@ -24,9 +24,7 @@ public:
 
 	void init();
 
-	void updateLightPos(glm::vec3& _lightPos);
-
-	void render(glm::mat4& projection, glm::mat4& view);
+	void render(glm::mat4& projection, glm::mat4& view, glm::vec3& _lightPos);
 
 	void clear();
 
@@ -36,7 +34,6 @@ private:
 	Shader* shader;
 
 	glm::vec3& position;
-	glm::vec3& lightPos;
 
 	float size;
 	unsigned int VAO, VBO, IBO;
