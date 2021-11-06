@@ -5,12 +5,15 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include <iostream>
+#include <vector>
+#include <thread>
+#include <chrono> 
+
 #include "Camera.h"
 #include "Window.h"
 #include "CelestialBody.h"
 
-#include <iostream>
-#include <vector>
 
 // settings
 const unsigned int SCR_WIDTH = 1280;
@@ -34,8 +37,8 @@ int main()
     glm::vec3 moonPos(220.0f, 2.5f, 0.0f);
 
     CelestialBody sun(star, "light_source", 801.78f, lightPos);
-    CelestialBody earth(planet, "shader", 3.67f, earthPos);
-    CelestialBody earthsMoon(moon, "shader", 1.0f, moonPos);
+    CelestialBody earth(planet, "planet_shader", 3.67f, earthPos);
+    CelestialBody earthsMoon(moon, "moon_shader", 1.0f, moonPos);
 
     sun.init();
     earth.init();
@@ -70,6 +73,8 @@ int main()
        
         mainWindow.swapBuffers();
         glfwPollEvents();
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(12));
     }
 
     return 0;

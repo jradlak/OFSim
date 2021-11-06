@@ -34,8 +34,10 @@
   <ItemGroup>
     <None Include="light_source_fs.glsl" />
     <None Include="light_source_vs.glsl" />
-    <None Include="shader_fs.glsl" />
-    <None Include="shader_vs.glsl" />
+    <None Include="moon_shader_fs.glsl" />
+    <None Include="moon_shader_vs.glsl" />
+    <None Include="planet_shader_fs.glsl" />
+    <None Include="planet_shader_vs.glsl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

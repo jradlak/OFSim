@@ -56,7 +56,14 @@ void CelestialBody::render(glm::mat4& projection, glm::mat4& view, glm::vec3& _l
 
 	if (bodyType != star)
 	{
-		shader->setVec3("objectColor", 1.0f, 0.5f, 0.31f);
+		if (bodyType == moon) 
+		{
+			shader->setVec3("objectColor", 0.55f, 0.55f, 0.55f);
+		} else 
+		{
+			shader->setVec3("objectColor", 0.25f, 0.75f, 0.55f);
+		}
+		
 		shader->setVec3("lightColor", 1.0f, 1.0f, 1.0f);
 		shader->setVec3("lightPos", _lightPos);
 	}

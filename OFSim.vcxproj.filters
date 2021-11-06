@@ -46,16 +46,22 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shader_fs.glsl">
+    <None Include="planet_shader_fs.glsl">
       <Filter>Pliki zasobów</Filter>
     </None>
-    <None Include="shader_vs.glsl">
+    <None Include="planet_shader_vs.glsl">
       <Filter>Pliki zasobów</Filter>
     </None>
     <None Include="light_source_fs.glsl">
       <Filter>Pliki zasobów</Filter>
     </None>
     <None Include="light_source_vs.glsl">
+      <Filter>Pliki zasobów</Filter>
+    </None>
+    <None Include="moon_shader_fs.glsl">
+      <Filter>Pliki zasobów</Filter>
+    </None>
+    <None Include="moon_shader_vs.glsl">
       <Filter>Pliki zasobów</Filter>
     </None>
   </ItemGroup>
