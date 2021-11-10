@@ -4,7 +4,10 @@ out vec4 FragColor;
 in vec3 Normal;  
 in vec3 FragPos;
 in vec3 Pos;
-  
+
+in float vFragDepth;
+uniform float logDepthBufFC;
+
 uniform vec3 lightPos; 
 uniform vec3 lightColor;
 uniform vec3 objectColor;
@@ -12,9 +15,9 @@ uniform vec3 objectColor;
 // make islands-like color pattern
 int computeColor() 
 {
-    highp int x = int(FragPos.x * 10);   
-    highp int y = int(FragPos.y * 10);
-    highp int z = int(FragPos.z * 10);
+    highp int x = int(FragPos.x / 100);   
+    highp int y = int(FragPos.y / 100);
+    highp int z = int(FragPos.z / 100);
 
     return (x - 2 * (x / 2)) * (y - 2 * (y / 2)) * (z - 2 * (z / 2));
 }
@@ -39,4 +42,6 @@ void main()
 
     vec3 result = (ambient + diffuse) * currColor;
     FragColor = vec4(result, 1.0);
+
+    gl_FragDepth = log2(vFragDepth) * logDepthBufFC * 0.5;
 }

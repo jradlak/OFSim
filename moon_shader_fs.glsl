@@ -4,6 +4,9 @@ out vec4 FragColor;
 in vec3 Normal;  
 in vec3 FragPos;  
   
+in float vFragDepth;
+uniform float logDepthBufFC;
+
 uniform vec3 lightPos; 
 uniform vec3 lightColor;
 uniform vec3 objectColor;
@@ -11,7 +14,7 @@ uniform vec3 objectColor;
 void main()
 {
     // ambient
-    float ambientStrength = 0.1;
+    float ambientStrength = 0.05; 
     vec3 ambient = ambientStrength * lightColor;
   	
     // diffuse 
@@ -22,4 +25,6 @@ void main()
             
     vec3 result = (ambient + diffuse) * objectColor;
     FragColor = vec4(result, 1.0);
+    
+    gl_FragDepth = log2(vFragDepth) * logDepthBufFC * 0.5;
 } 

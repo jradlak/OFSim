@@ -4,10 +4,10 @@ layout (location = 1) in vec3 aNormal;
 
 out vec3 FragPos;
 out vec3 Normal;
+out float vFragDepth;
 
 uniform mat4 model;
-uniform mat4 view;
-uniform mat4 projection;
+uniform mat4 transformation;
 
 void main()
 {
@@ -15,5 +15,7 @@ void main()
          
     Normal = mat3(transpose(inverse(model))) * aNormal;
 
-    gl_Position = projection * view * vec4(FragPos, 1.0);
+    gl_Position = transformation * vec4(aPos, 1.0); //vec4(FragPos, 1.0);
+    
+    vFragDepth = 1.0 + gl_Position.w;
 }

@@ -17,14 +17,13 @@ enum CelestialBodyType { star, planet, moon };
 class CelestialBody
 {
 public:
-	CelestialBody(CelestialBodyType _bodyType, std::string shaderName,
-		float _size, glm::vec3& _position);
+	CelestialBody(CelestialBodyType _bodyType, std::string shaderName, double _size, glm::dvec3& _position);
 	
 	~CelestialBody();
 
 	void init();
 
-	void render(glm::mat4& projection, glm::mat4& view, glm::vec3& _lightPos);
+	void render(glm::dmat4& projection, glm::dmat4& view, glm::dvec3& _lightPos);
 
 	void clear();
 
@@ -33,9 +32,11 @@ private:
 	Sphere* sphere;
 	Shader* shader;
 
-	glm::vec3& position;
+	glm::dvec3& position;
 
-	float size;
+	double size;
 	unsigned int VAO, VBO, IBO;
 	unsigned int indexCount;
+
+	double logDepthBufFC;	
 };

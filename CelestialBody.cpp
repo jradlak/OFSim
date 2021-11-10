@@ -1,25 +1,27 @@
 #include "CelestialBody.h"
+#include "Math.h"
 
-CelestialBody::CelestialBody(CelestialBodyType _bodyType, std::string shaderName,
-	float _size, glm::vec3& _position) : position(_position)
+CelestialBody::CelestialBody(CelestialBodyType _bodyType, std::string shaderName, double _size, glm::dvec3& _position) : position(_position)
 {	
 	bodyType = _bodyType;
 	size = _size;
 	indexCount = 0;
 
-	sphere = new Sphere(0.5f, 32, 16);
+	sphere = new Sphere(0.5f, 64, 32);
 	shader = new Shader((shaderName + "_vs.glsl").c_str(), (shaderName + "_fs.glsl").c_str());
+
+	logDepthBufFC = 2.0 / log(150000000000000.0 + 1.0) / 0.69315;
 }
 
 void CelestialBody::init()
 {
 	std::vector<float> vert = sphere->getVertices();
-	float vertices[3366];
+	float vertices[12870];
 	int numOfVertices = vert.size();
 	std::copy(vert.begin(), vert.end(), vertices);
 
 	std::vector<int> ind = sphere->getIndices();
-	int indices[2880];
+	int indices[11904];
 	int numOfIndices = ind.size();
 	std::copy(ind.begin(), ind.end(), indices);
 	indexCount = numOfIndices;
@@ -48,12 +50,10 @@ void CelestialBody::init()
 	glBindVertexArray(0);
 }
 
-void CelestialBody::render(glm::mat4& projection, glm::mat4& view, glm::vec3& _lightPos)
+void CelestialBody::render(glm::dmat4& projection, glm::dmat4& view, glm::dvec3& _lightPos)
 {
 	shader->use();
-	shader->setMat4("projection", projection);
-	shader->setMat4("view", view);
-
+	
 	if (bodyType != star)
 	{
 		if (bodyType == moon) 
@@ -66,13 +66,17 @@ void CelestialBody::render(glm::mat4& projection, glm::mat4& view, glm::vec3& _l
 		
 		shader->setVec3("lightColor", 1.0f, 1.0f, 1.0f);
 		shader->setVec3("lightPos", _lightPos);
+		shader->setFloat("logDepthBufFC", logDepthBufFC);
 	}
 
-	glm::mat4 model = glm::mat4(1.0f);
+	glm::dmat4 model = glm::dmat4(1.0);
 	model = glm::translate(model, position);
-	model = glm::scale(model, glm::vec3(size));
-	shader->setMat4("model", model);
-
+	model = glm::scale(model, glm::dvec3(size));
+	shader->setMat4("model", glm::mat4(model));
+	
+	glm::mat4 transformation = glm::mat4((projection * view * model));
+	shader->setMat4("transformation", transformation);
+	
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
 	glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, 0);

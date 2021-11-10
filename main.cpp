@@ -14,13 +14,12 @@
 #include "Window.h"
 #include "CelestialBody.h"
 
-
 // settings
 const unsigned int SCR_WIDTH = 1280;
 const unsigned int SCR_HEIGHT = 720;
 
 // camera
-Camera camera(glm::vec3(0.0f, 10.0f, 0.0f));
+Camera camera(glm::vec3(-100.0, -160.0, 1000.0));
 
 int main()
 {
@@ -30,16 +29,19 @@ int main()
     {
         return result;
     }
+    
+    glm::dmat4 projection = glm::perspective((double)glm::radians(camera.Zoom),
+        (double)SCR_WIDTH / (double)SCR_HEIGHT, 0.001, 150000000.0);
 
     // celestial bodies positions:
-    glm::vec3 lightPos(0.0f, 0.0f, 86125.5f);
-    glm::vec3 earthPos(0.0f, 0.0f, 0.0f);
-    glm::vec3 moonPos(220.0f, 2.5f, 0.0f);
-
-    CelestialBody sun(star, "light_source", 801.78f, lightPos);
-    CelestialBody earth(planet, "planet_shader", 3.67f, earthPos);
-    CelestialBody earthsMoon(moon, "moon_shader", 1.0f, moonPos);
-
+    glm::dvec3 lightPos(0.0, -3185.0, 149600000.0);
+    glm::dvec3 earthPos(0.0, -3185.0, 0.0);
+    glm::dvec3 moonPos(384400.0, -3185.0, 0.0);
+    
+    CelestialBody sun(star, "light_source", 1392700, lightPos);
+    CelestialBody earth(planet, "planet_shader", 6371.0, earthPos);
+    CelestialBody earthsMoon(moon, "moon_shader", 1737.0, moonPos);
+    
     sun.init();
     earth.init();
     earthsMoon.init();
@@ -47,6 +49,7 @@ int main()
     // draw lines only
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
+    
     // render loop
     // -----------
     while (!mainWindow.shouldClose())
@@ -59,23 +62,19 @@ int main()
         // ------
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        // pass projection matrix to shader (note that in this case it could change every frame)
-        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 90000.0f);
-        
+   
         // camera/view transformation
-        glm::mat4 view = camera.GetViewMatrix();
-       
+        glm::dmat4 view = camera.GetViewMatrix();
+        
         earth.render(projection, view, lightPos);
         earthsMoon.render(projection, view, lightPos);
-
         sun.render(projection, view, lightPos);
-       
+
         mainWindow.swapBuffers();
         glfwPollEvents();
 
         std::this_thread::sleep_for(std::chrono::milliseconds(12));
     }
-
+    
     return 0;
 }
