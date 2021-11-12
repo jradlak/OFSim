@@ -41,6 +41,8 @@ int main()
     CelestialBody sun(star, "light_source", 1392700, lightPos);
     CelestialBody earth(planet, "planet_shader", 6371.0, earthPos);
     CelestialBody earthsMoon(moon, "moon_shader", 1737.0, moonPos);
+
+    camera.Position = earth.pointAboveTheSurface(64.5, 40.5, 0.1);
     
     sun.init();
     earth.init();
@@ -48,7 +50,6 @@ int main()
 
     // draw lines only
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
     
     // render loop
     // -----------

@@ -19,11 +19,14 @@
     <Filter Include="Pliki nagłówkowe\world">
       <UniqueIdentifier>{d830a05d-939f-4384-bf39-2e1dec38d913}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Pliki nagłówkowe\renderer">
+      <UniqueIdentifier>{0fe9885b-b76b-40f1-8498-1e44237a1685}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pliki źródłowe\renderer">
+      <UniqueIdentifier>{b3d90861-6b6b-4d37-be9d-9b7e8d333119}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Shader.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="Window.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
@@ -33,8 +36,17 @@
     <ClInclude Include="Sphere.h">
       <Filter>Pliki nagłówkowe\world</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h">
+    <ClInclude Include="ObjectRenderer.h">
+      <Filter>Pliki nagłówkowe\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Pliki nagłówkowe\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Rocket.h">
       <Filter>Pliki nagłówkowe\world</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Pliki nagłówkowe\renderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -48,6 +60,12 @@
       <Filter>Pliki źródłowe\world</Filter>
     </ClCompile>
     <ClCompile Include="Sphere.cpp">
+      <Filter>Pliki źródłowe\world</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectRenderer.cpp">
+      <Filter>Pliki źródłowe\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Rocket.cpp">
       <Filter>Pliki źródłowe\world</Filter>
     </ClCompile>
   </ItemGroup>

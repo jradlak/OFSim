@@ -20,6 +20,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="ObjectRenderer.h" />
+    <ClInclude Include="Rocket.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="CelestialBody.h" />
@@ -28,6 +30,8 @@
   <ItemGroup>
     <ClCompile Include="CelestialBody.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ObjectRenderer.cpp" />
+    <ClCompile Include="Rocket.cpp" />
     <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>

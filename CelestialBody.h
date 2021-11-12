@@ -10,7 +10,7 @@
 #include <string>
 
 #include "Sphere.h"
-#include "Shader.h"
+#include "ObjectRenderer.h"
 
 enum CelestialBodyType { star, planet, moon };
 
@@ -25,18 +25,14 @@ public:
 
 	void render(glm::dmat4& projection, glm::dmat4& view, glm::dvec3& _lightPos);
 
-	void clear();
+	glm::dvec3 pointAboveTheSurface(double theta, double fi, double distance);
 
 private:
 	CelestialBodyType bodyType;
 	Sphere* sphere;
-	Shader* shader;
+	ObjectRenderer* objectRenderer;
 
 	glm::dvec3& position;
 
-	double size;
-	unsigned int VAO, VBO, IBO;
-	unsigned int indexCount;
-
-	double logDepthBufFC;	
+	double diameter;
 };

@@ -19,7 +19,7 @@ enum Camera_Movement {
 // Default camera values
 const double YAW         = 90.0;
 const double PITCH       = -45.0;
-const double SPEED       = 1.0;
+const double SPEED       = 10000.0;
 const double SENSITIVITY = 0.1;
 const double ZOOM        = 45.0;
 
@@ -128,6 +128,10 @@ private:
         // also re-calculate the Right and Up vector
         Right = glm::normalize(glm::cross(Front, WorldUp));  // normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
         Up    = glm::normalize(glm::cross(Right, Front));
+
+        double x = Front.x;
+        double y = Front.y;
+        std::cout << "X = " << x << " Y = " << y << std::endl;
     }
 };
 #endif
