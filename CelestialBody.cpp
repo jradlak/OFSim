@@ -1,7 +1,8 @@
 #include "CelestialBody.h"
 #include "Math.h"
 
-CelestialBody::CelestialBody(CelestialBodyType _bodyType, std::string shaderName, double _size, glm::dvec3& _position) : position(_position)
+CelestialBody::CelestialBody(CelestialBodyType _bodyType, std::string shaderName, double _size, glm::dvec3& _position)
+	: position(_position)
 {	
 	bodyType = _bodyType;
 	diameter = _size;
@@ -32,7 +33,8 @@ void CelestialBody::render(glm::dmat4& projection, glm::dmat4& view, glm::dvec3&
 		if (bodyType == moon) 
 		{
 			shader->setVec3("objectColor", 0.55f, 0.55f, 0.55f);
-		} else 
+		} 
+		else 
 		{
 			shader->setVec3("objectColor", 0.25f, 0.75f, 0.55f);
 		}

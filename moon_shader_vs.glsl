@@ -4,10 +4,10 @@ layout (location = 1) in vec3 aNormal;
 
 out vec3 FragPos;
 out vec3 Normal;
+out float vFragDepth;
 
 uniform mat4 model;
 uniform mat4 transformation;
-out float vFragDepth;
 
 void main()
 {

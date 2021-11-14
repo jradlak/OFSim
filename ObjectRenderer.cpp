@@ -3,7 +3,7 @@
 ObjectRenderer::ObjectRenderer(std::string shaderName)
 {
 	shader = new Shader((shaderName + "_vs.glsl").c_str(), (shaderName + "_fs.glsl").c_str());
-	logDepthBufFC = 2.0 / log(150000000000000.0 + 1.0) / 0.69315;
+	logDepthBufFC = 2.0 / log(150000000000000000.0 + 1.0) / 0.69315;
 }
 
 void ObjectRenderer::init(std::vector<float> _vertices, std::vector<int> _indices)
@@ -56,11 +56,9 @@ void ObjectRenderer::render(glm::dmat4& projection, glm::dmat4& view, glm::dvec3
 	glm::dvec3 position,
 	double size)
 {
-	//shader->use();
+	shader->use();
 
-	if (size < 10000.0) {
-		shader->setFloat("logDepthBufFC", logDepthBufFC);
-	}
+	shader->setFloat("logDepthBufFC", logDepthBufFC);
 
 	glm::dmat4 model = glm::dmat4(1.0);
 	model = glm::translate(model, position);

@@ -30,9 +30,9 @@ public:
 private:
 	CelestialBodyType bodyType;
 	Sphere* sphere;
+	
 	ObjectRenderer* objectRenderer;
 
 	glm::dvec3& position;
-
 	double diameter;
 };

@@ -98,17 +98,11 @@ void Window::swapBuffers()
             camera.ProcessKeyboard(RIGHT, deltaTime);
     }
 
-
     void Window::framebuffer_size_callback(GLFWwindow* window, int width, int height)
     {
-        // make sure the viewport matches the new window dimensions; note that width and
-        // height will be significantly larger than specified on retina displays.
         glViewport(0, 0, width, height);
     }
 
-
-    // glfw: whenever the mouse moves, this callback is called
-    // -------------------------------------------------------
     void Window::mouse_callback(GLFWwindow* window, double xpos, double ypos)
     {
         Window* theWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));
@@ -129,8 +123,6 @@ void Window::swapBuffers()
         theWindow->camera.ProcessMouseMovement(xoffset, yoffset);
     }
 
-    // glfw: whenever the mouse scroll wheel scrolls, this callback is called
-    // ----------------------------------------------------------------------
     void Window::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
     {
         Window* theWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));

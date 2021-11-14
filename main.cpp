@@ -13,6 +13,7 @@
 #include "Camera.h"
 #include "Window.h"
 #include "CelestialBody.h"
+#include "Rocket.h"
 
 // settings
 const unsigned int SCR_WIDTH = 1280;
@@ -42,11 +43,16 @@ int main()
     CelestialBody earth(planet, "planet_shader", 6371.0, earthPos);
     CelestialBody earthsMoon(moon, "moon_shader", 1737.0, moonPos);
 
-    camera.Position = earth.pointAboveTheSurface(64.5, 40.5, 0.1);
+    camera.Position = earth.pointAboveTheSurface(64.5, 40.5, 0.15);
     
     sun.init();
     earth.init();
     earthsMoon.init();
+
+    glm::dvec3 rocketPos = earth.pointAboveTheSurface(64.5, 40.45, 0.1);
+    Rocket rocket("moon_shader", rocketPos, 40);
+
+    rocket.init();
 
     // draw lines only
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -70,6 +76,8 @@ int main()
         earth.render(projection, view, lightPos);
         earthsMoon.render(projection, view, lightPos);
         sun.render(projection, view, lightPos);
+
+        rocket.render(projection, view, lightPos);
 
         mainWindow.swapBuffers();
         glfwPollEvents();
