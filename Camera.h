@@ -19,10 +19,9 @@ enum Camera_Movement {
 // Default camera values
 const double YAW         = 90.0;
 const double PITCH       = -45.0;
-const double SPEED       = 2.0;
+const double SPEED       = 0.05;
 const double SENSITIVITY = 0.1;
 const double ZOOM        = 45.0;
-
 
 // An abstract camera class that processes input and calculates the corresponding Euler Angles, Vectors and Matrices for use in OpenGL
 class Camera

@@ -43,7 +43,7 @@ void CelestialBody::render(glm::dmat4& projection, glm::dmat4& view, glm::dvec3&
 		shader->setVec3("lightPos", _lightPos);
 	}
 
-	objectRenderer->render(projection, view, _lightPos, position, diameter);
+	objectRenderer->render(projection, view, diameter, position);
 }
 
 glm::dvec3 CelestialBody::pointAboveTheSurface(double theta, double fi, double distance)

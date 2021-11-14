@@ -1,7 +1,7 @@
 #include "Rocket.h"
 
-Rocket::Rocket(std::string shaderName, glm::dvec3& _position, double _size)
-	: position(_position), size(_size)
+Rocket::Rocket(std::string shaderName, glm::dvec3& _position, double _size, glm::vec3 _rotation)
+	: position(_position), size(_size), rotation(_rotation)
 {
 	objectRenderer = new ObjectRenderer(shaderName);
 }
@@ -20,12 +20,17 @@ void Rocket::render(glm::dmat4& projection, glm::dmat4& view, glm::dvec3& _light
 	shader->setVec3("objectColor", 0.55f, 0.55f, 0.55f);
 	shader->setVec3("lightColor", 1.0f, 1.0f, 1.0f);
 	shader->setVec3("lightPos", _lightPos);
-	objectRenderer->render(projection, view, _lightPos, position, size);
+	objectRenderer->render(projection, view, size, position, rotation);
 }
 
 void Rocket::updatePosition(glm::dvec3 newPosition)
 {
 	position = newPosition;
+}
+
+void Rocket::updateRotation(glm::vec3 newRotation)
+{
+	rotation = newRotation;
 }
 
 void Rocket::makeRocketGeometry()
@@ -43,7 +48,7 @@ void Rocket::makeRocketGeometry()
 	);
 
 	addTriangle(
-		point(0.0, 0.016003, 0.0),		   //0
+		point(0.0, 0.016003, 0.0),		  //0
 		point(0.001, 0.014005, 0.001),    //3
 		point(-0.001, 0.014006, 0.001)    //4
 	);

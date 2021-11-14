@@ -22,9 +22,9 @@ public:
 
 	void render(glm::dmat4& projection, 
 		glm::dmat4& view,
-		glm::dvec3& _lightPos,
+		double size,
 		glm::dvec3 position,
-		double size);
+		glm::vec3 rotation = glm::vec3(0.0, 0.0, 0.0));
 
 	void clear();
 

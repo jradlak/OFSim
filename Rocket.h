@@ -10,13 +10,15 @@
 class Rocket
 {
 public:
-	Rocket(std::string shaderName, glm::dvec3& _position, double _size);
+	Rocket(std::string shaderName, glm::dvec3& _position, double _size, 
+		glm::vec3 _rotation = glm::vec3(0.0, 0.0, 0.0));
 
 	void init();
-
+	
 	void render(glm::dmat4& projection, glm::dmat4& view, glm::dvec3& _lightPos);
 
 	void updatePosition(glm::dvec3 newPosition);
+	void updateRotation(glm::vec3 newRotation);
 
 	~Rocket();
 
@@ -26,6 +28,7 @@ private:
 
 	ObjectRenderer* objectRenderer;
 	glm::dvec3& position;
+	glm::vec3& rotation;
 	double size;
 
 	void makeRocketGeometry();

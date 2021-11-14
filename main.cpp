@@ -43,16 +43,17 @@ int main()
     CelestialBody earth(planet, "planet_shader", 6371.0, earthPos);
     CelestialBody earthsMoon(moon, "moon_shader", 1737.0, moonPos);
 
-    camera.Position = earth.pointAboveTheSurface(64.5, 40.5, 0.15);
+    camera.Position = earth.pointAboveTheSurface(64.5, 40.5, -0.05);
     
     sun.init();
     earth.init();
     earthsMoon.init();
 
-    glm::dvec3 rocketPos = earth.pointAboveTheSurface(64.5, 40.45, 0.1);
-    Rocket rocket("moon_shader", rocketPos, 40);
+    glm::dvec3 rocketPos = earth.pointAboveTheSurface(64.5, 40.498, -0.05);
+    Rocket rocket("moon_shader", rocketPos, 1);
 
     rocket.init();
+    rocket.updateRotation(glm::dvec3(30.0, 0.0, -40.45));
 
     // draw lines only
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
