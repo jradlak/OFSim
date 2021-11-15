@@ -96,6 +96,11 @@ void Window::swapBuffers()
             camera.ProcessKeyboard(LEFT, deltaTime);
         if (glfwGetKey(mainWindow, GLFW_KEY_D) == GLFW_PRESS)
             camera.ProcessKeyboard(RIGHT, deltaTime);
+        if (glfwGetKey(mainWindow, GLFW_KEY_Q) == GLFW_PRESS)
+            camera.ProcessKeyboard(ROLL_LEFT, deltaTime);
+        if (glfwGetKey(mainWindow, GLFW_KEY_E) == GLFW_PRESS)
+            camera.ProcessKeyboard(ROLL_RIGHT, deltaTime);
+
     }
 
     void Window::framebuffer_size_callback(GLFWwindow* window, int width, int height)

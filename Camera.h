@@ -13,11 +13,13 @@ enum Camera_Movement {
     FORWARD,
     BACKWARD,
     LEFT,
-    RIGHT
+    RIGHT,
+    ROLL_LEFT,
+    ROLL_RIGHT
 };
 
 // Default camera values
-const double YAW         = 90.0;
+const double YAW         = 40.0;
 const double PITCH       = -45.0;
 const double SPEED       = 0.05;
 const double SENSITIVITY = 0.1;
@@ -36,29 +38,33 @@ public:
     // euler Angles
     double Yaw;
     double Pitch;
+    float Roll;
     // camera options
     double MovementSpeed;
     double MouseSensitivity;
     double Zoom;
 
     // constructor with vectors
-    Camera(glm::dvec3 position = glm::dvec3(0.0, 0.0, 0.0), glm::dvec3 up = glm::dvec3(0.0, 1.0, 0.0), double yaw = YAW, double pitch = PITCH)
+    Camera(glm::dvec3 position = glm::dvec3(0.0, 0.0, 0.0), glm::dvec3 up = glm::dvec3(0.0, 1.0, 0.0), 
+        double yaw = YAW, double pitch = PITCH, float roll = -4.0f)
         : Front(glm::dvec3(0.0f, 0.0f, -1.0)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM)
     {
         Position = position;
         WorldUp = up;
         Yaw = yaw;
         Pitch = pitch;
+        Roll = roll;
         updateCameraVectors();
     }
     // constructor with scalar values
-    Camera(double posX, double posY, double posZ, double upX, double upY, double upZ, double yaw, double pitch)
+    Camera(double posX, double posY, double posZ, double upX, double upY, double upZ, double yaw, double pitch, double roll)
         : Front(glm::dvec3(0.0, 0.0, -1.0)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM)
     {
         Position = glm::dvec3(posX, posY, posZ);
         WorldUp = glm::dvec3(upX, upY, upZ);
         Yaw = yaw;
         Pitch = pitch;
+        Roll = roll;
         updateCameraVectors();
     }
 
@@ -80,6 +86,26 @@ public:
             Position -= Right * velocity;
         if (direction == RIGHT)
             Position += Right * velocity;
+        
+        if (direction == ROLL_LEFT)
+        {
+            Roll -= 1.0f;
+            if (Roll < -89.0)
+            {
+                Roll = -89.0;
+            }
+        }
+
+        if (direction == ROLL_RIGHT)
+        {
+            Roll += 1.0f;
+            if (Roll > 89.0)
+            {
+                Roll = 89.0;
+            }
+        }
+
+        updateCameraVectors();
     }
 
     // processes input received from a mouse input system. Expects the offset value in both the x and y direction.
@@ -128,9 +154,8 @@ private:
         Right = glm::normalize(glm::cross(Front, WorldUp));  // normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
         Up    = glm::normalize(glm::cross(Right, Front));
 
-        double x = Front.x;
-        double y = Front.y;
-        std::cout << "X = " << x << " Y = " << y << std::endl;
+        glm::mat4 roll_mat = glm::rotate(glm::mat4(1.0f), glm::radians(Roll), glm::vec3(Front));
+        Up = glm::mat3(roll_mat) * Up;
     }
 };
 #endif

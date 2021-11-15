@@ -4,12 +4,13 @@ Rocket::Rocket(std::string shaderName, glm::dvec3& _position, double _size, glm:
 	: position(_position), size(_size), rotation(_rotation)
 {
 	objectRenderer = new ObjectRenderer(shaderName);
+	geometry = new TriangleGeometry();
 }
 
 void Rocket::init()
 {
 	makeRocketGeometry();
-	objectRenderer->init(vertAN, indices);
+	objectRenderer->init(geometry->getVertAN(), geometry->getIndices());
 }
 
 void Rocket::render(glm::dmat4& projection, glm::dmat4& view, glm::dvec3& _lightPos)
@@ -62,50 +63,7 @@ void Rocket::makeRocketGeometry()
 
 void Rocket::addTriangle(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3)
 {
-	glm::vec3 normal = glm::cross(p3 - p1, p2 - p1);
-	addVert(p1, normal);
-	addVert(p2, normal);
-	addVert(p3, normal);
-}
-
-void Rocket::addVert(glm::vec3 vert, glm::vec3 normal)
-{
-	int index = indexOfVert(vert);
-
-	if (index == -1)
-	{
-		int pos = vertAN.size();
-
-		vertAN.insert(vertAN.end(), {
-				vert.x, vert.y, vert.z,
-				normal.x, normal.y, normal.z
-			});
-
-		index = pos;
-	}
-
-	indices.push_back(index / 6);
-}
-
-int Rocket::indexOfVert(glm::vec3 vert)
-{
-	if (vertAN.size() < 6) {
-		return -1;
-	}
-
-	for (unsigned int i = 0; i <= vertAN.size() - 6; i += 6)
-	{
-		if (
-			vert.x == vertAN[i] &&
-			vert.y == vertAN[i + 1] &&
-			vert.z == vertAN[i + 2]
-			)
-		{
-			return i;
-		}
-	}
-
-	return -1;
+	geometry->addTriangle(p1, p2, p3);
 }
 
 glm::vec3 Rocket::point(double x, double y, double z)
@@ -116,4 +74,5 @@ glm::vec3 Rocket::point(double x, double y, double z)
 Rocket::~Rocket()
 {
 	delete objectRenderer;
+	delete geometry;
 }
