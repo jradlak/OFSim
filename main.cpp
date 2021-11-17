@@ -65,7 +65,7 @@ int main()
     // render loop
     // -----------
     unsigned __int64 lag = 0, previous = currentTime();
-    int MS_PER_UPDATE = 15;
+    int MS_PER_UPDATE = 12;
     while (!mainWindow.shouldClose())
     {
         unsigned __int64 current = currentTime();
@@ -89,6 +89,7 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
    
         // camera/view transformation
+        camera.Position = rocket.getPosition() + glm::dvec3(0.0, 0.024, 0.0);
         glm::dmat4 view = camera.GetViewMatrix();
         
         earth.render(projection, view, lightPos);
@@ -97,10 +98,10 @@ int main()
 
         rocket.render(projection, view, lightPos);
 
+        syncFramerate(current, MS_PER_UPDATE);
+
         mainWindow.swapBuffers();
         glfwPollEvents();
-
-        syncFramerate(current, MS_PER_UPDATE);
     }
     
     return 0;

@@ -24,7 +24,7 @@ public:
 		glm::dmat4& view,
 		double size,
 		glm::dvec3 position,
-		glm::vec3 rotation = glm::vec3(0.0, 0.0, 0.0));
+		glm::dvec3 rotation = glm::dvec3(0.0, 0.0, 0.0));
 
 	void clear();
 

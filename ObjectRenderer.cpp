@@ -55,7 +55,7 @@ Shader* ObjectRenderer::getShader()
 void ObjectRenderer::render(glm::dmat4& projection, glm::dmat4& view,
 	double size,
 	glm::dvec3 position, 
-	glm::vec3 rotation)
+	glm::dvec3 rotation)
 {
 	shader->use();
 

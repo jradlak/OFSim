@@ -1,12 +1,12 @@
 #include "Rocket.h"
 
-Rocket::Rocket(std::string shaderName, glm::dvec3& _position, double _size, glm::vec3 _rotation)
+Rocket::Rocket(std::string shaderName, glm::dvec3& _position, double _size, glm::dvec3 _rotation)
 	: position(_position), size(_size), rotation(_rotation)
 {
 	objectRenderer = new ObjectRenderer(shaderName);
 	geometry = new TriangleGeometry();
-	forces.push_back(glm::vec3(0.0f, -9.81f, 0.0f));
-	mass = 4000;
+	forces.push_back(glm::dvec3(0.0f, 9.81f, 0.0f));
+	mass = 40.0;
 }
 
 void Rocket::init()
@@ -26,7 +26,12 @@ void Rocket::render(glm::dmat4& projection, glm::dmat4& view, glm::dvec3& _light
 	objectRenderer->render(projection, view, size, position, rotation);
 }
 
-void Rocket::updatePhysics(float deltaTime)
+glm::dvec3 Rocket::getPosition()
+{
+	return position;
+}
+
+void Rocket::updatePhysics(double deltaTime)
 {
 	glm::vec3 sumOfForces = glm::vec3(0.0f);
 	for (unsigned int i = 0; i < forces.size(); i++)
@@ -34,7 +39,7 @@ void Rocket::updatePhysics(float deltaTime)
 		sumOfForces += forces[i];
 	}
 
-	glm::vec3 force = sumOfForces;
+	glm::dvec3 force = sumOfForces;
 
 	velocity += force / mass * deltaTime;
 	position += velocity * deltaTime;
@@ -48,7 +53,7 @@ void Rocket::addForce(glm::vec3 force)
 void Rocket::resetForces()
 {
 	forces.clear();
-	forces.push_back(glm::vec3(0.0f, -9.81f, 0.0f));
+	forces.push_back(glm::vec3(0.0f, 9.81f, 0.0f));
 }
 
 void Rocket::updatePosition(glm::dvec3 newPosition)
@@ -56,7 +61,7 @@ void Rocket::updatePosition(glm::dvec3 newPosition)
 	position = newPosition;
 }
 
-void Rocket::updateRotation(glm::vec3 newRotation)
+void Rocket::updateRotation(glm::dvec3 newRotation)
 {
 	rotation = newRotation;
 }
