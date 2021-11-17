@@ -18,6 +18,11 @@ public:
 	
 	void render(glm::dmat4& projection, glm::dmat4& view, glm::dvec3& _lightPos);
 
+	//physics:
+	void updatePhysics(float deltaTime);
+	void addForce(glm::vec3 force);
+	void resetForces();
+
 	void updatePosition(glm::dvec3 newPosition);
 	void updateRotation(glm::vec3 newRotation);
 
@@ -29,6 +34,14 @@ private:
 	glm::dvec3& position;
 	glm::vec3& rotation;
 	double size;
+
+
+	//physics:
+	std::vector<glm::vec3> forces;
+	glm::vec3 velocity;
+	float mass;
+
+	//helper methods: 
 
 	void makeRocketGeometry();
 

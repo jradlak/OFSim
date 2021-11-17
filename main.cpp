@@ -22,6 +22,10 @@ const unsigned int SCR_HEIGHT = 720;
 // camera
 Camera camera(glm::vec3(-100.0, -160.0, 1000.0));
 
+
+unsigned __int64 currentTime();
+void syncFramerate(unsigned __int64 startTime, int ms_per_update);
+
 int main()
 {
     Window mainWindow(camera, SCR_WIDTH, SCR_HEIGHT);
@@ -60,11 +64,24 @@ int main()
     
     // render loop
     // -----------
+    unsigned __int64 lag = 0, previous = currentTime();
+    int MS_PER_UPDATE = 15;
     while (!mainWindow.shouldClose())
     {
+        unsigned __int64 current = currentTime();
+        unsigned __int64 elapsed = current - previous;
+        previous = current;
+        lag += elapsed;
+
         // input
         // -----
         mainWindow.processInput();
+
+        while (lag > MS_PER_UPDATE)
+        {
+            rocket.updatePhysics(MS_PER_UPDATE / 1000.0f);
+            lag -= MS_PER_UPDATE;          
+        }
 
         // render
         // ------
@@ -83,8 +100,24 @@ int main()
         mainWindow.swapBuffers();
         glfwPollEvents();
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(12));
+        syncFramerate(current, MS_PER_UPDATE);
     }
     
     return 0;
+}
+
+void syncFramerate(unsigned __int64 startTime, int ms_per_update)
+{
+    unsigned __int64 endTime = startTime + ms_per_update;
+    while (currentTime() < endTime)
+    {
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    }
+}
+
+unsigned __int64 currentTime()
+{
+    return std::chrono::duration_cast<std::chrono::milliseconds>(
+        std::chrono::system_clock::now().time_since_epoch()
+        ).count();
 }

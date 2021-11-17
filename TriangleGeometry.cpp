@@ -17,7 +17,17 @@ std::vector<int> TriangleGeometry::getIndices()
 
 void TriangleGeometry::addTriangle(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3)
 {
-	glm::vec3 normal = glm::cross(p3 - p1, p2 - p1);
+	// TODO: fix norlam calculations
+	glm::vec3 normal;
+	if (p2.x > p3.x) 
+	{
+		normal = glm::cross(p3 - p1, p2 - p1);
+	}
+	else
+	{
+		normal = glm::cross(p2 - p1, p3 - p1);
+	}
+
 	addVert(p1, normal);
 	addVert(p2, normal);
 	addVert(p3, normal);

@@ -5,6 +5,8 @@ Rocket::Rocket(std::string shaderName, glm::dvec3& _position, double _size, glm:
 {
 	objectRenderer = new ObjectRenderer(shaderName);
 	geometry = new TriangleGeometry();
+	forces.push_back(glm::vec3(0.0f, -9.81f, 0.0f));
+	mass = 4000;
 }
 
 void Rocket::init()
@@ -24,6 +26,31 @@ void Rocket::render(glm::dmat4& projection, glm::dmat4& view, glm::dvec3& _light
 	objectRenderer->render(projection, view, size, position, rotation);
 }
 
+void Rocket::updatePhysics(float deltaTime)
+{
+	glm::vec3 sumOfForces = glm::vec3(0.0f);
+	for (unsigned int i = 0; i < forces.size(); i++)
+	{
+		sumOfForces += forces[i];
+	}
+
+	glm::vec3 force = sumOfForces;
+
+	velocity += force / mass * deltaTime;
+	position += velocity * deltaTime;
+}
+
+void Rocket::addForce(glm::vec3 force)
+{
+	forces.push_back(force);
+}
+
+void Rocket::resetForces()
+{
+	forces.clear();
+	forces.push_back(glm::vec3(0.0f, -9.81f, 0.0f));
+}
+
 void Rocket::updatePosition(glm::dvec3 newPosition)
 {
 	position = newPosition;
@@ -36,28 +63,81 @@ void Rocket::updateRotation(glm::vec3 newRotation)
 
 void Rocket::makeRocketGeometry()
 {
+	// top:
 	addTriangle(
-		point(0.0, 0.016001, 0.0),        //0
-		point(-0.001, 0.014001, -0.001),  //1
-		point(0.001, 0.014002, -0.001)    //2
+		point(0.0, 0.01600001, 0.0),        //0
+		point(-0.001, 0.01400001, -0.001),  //1
+		point(0.001, 0.01400002, -0.001)    //2
 	);
 
 	addTriangle(
-		point(0.0, 0.016002, 0.0),        //0
-		point(0.001, 0.014003, -0.001),   //2
-		point(0.001, 0.014004, 0.001)     //3
+		point(0.0, 0.01600002, 0.0),        //0
+		point(0.001, 0.01400003, -0.001),   //2
+		point(0.001, 0.01400004, 0.001)     //3
 	);
 
 	addTriangle(
-		point(0.0, 0.016003, 0.0),		  //0
-		point(0.001, 0.014005, 0.001),    //3
-		point(-0.001, 0.014006, 0.001)    //4
+		point(0.0, 0.01600003, 0.0),		  //0
+		point(0.001, 0.01400005, 0.001),    //3
+		point(-0.001, 0.01400006, 0.001)    //4
 	);
 
 	addTriangle(
-		point(0.0, 0.016004, 0.0),        //0
-		point(-0.001, 0.014007, 0.001),   //4
-		point(-0.001, 0.014008, -0.001)   //1
+		point(0.0, 0.01600004, 0.0),        //0
+		point(-0.001, 0.01400007, 0.001),   //4
+		point(-0.001, 0.01400008, -0.001)   //1
+	);
+	
+	// side 1:
+	addTriangle(
+		point(-0.001, 0.01400009, -0.001),
+		point(-0.001, 0.002, -0.001),
+		point(0.001, 0.01400009, -0.001)
+	);
+
+	addTriangle(
+		point(0.001, 0.01400010, -0.001),
+		point(-0.001, 0.002, -0.001),
+		point(0.001, 0.002, -0.001)
+	);
+
+	// side 2:
+	addTriangle(
+		point(-0.001, 0.01400011, -0.001),
+		point(-0.001, 0.002001, 0.001),
+		point(-0.001, 0.01400011, 0.001)
+	);
+
+	addTriangle(
+		point(-0.001, 0.01400012, -0.001),
+		point(-0.001, 0.002002, -0.001),
+		point(-0.001, 0.002002, 0.001)
+	);
+
+	// side 3:
+	addTriangle(
+		point(0.001, 0.01400013, -0.001),
+		point(0.001, 0.002003, 0.001),
+		point(0.001, 0.01400013, 0.001)
+	);
+
+	addTriangle(
+		point(0.001, 0.01400014, -0.001),
+		point(0.001, 0.002004, -0.001),
+		point(0.001, 0.002004, 0.001)
+	);
+
+	// side 4:
+	addTriangle(
+		point(-0.001, 0.01400015, 0.001),
+		point(-0.001, 0.002005, 0.001),
+		point(0.001, 0.01400015, 0.001)
+	);
+
+	addTriangle(
+		point(0.001, 0.01400016, 0.001),
+		point(-0.001, 0.002006, 0.001),
+		point(0.001, 0.002006, 0.001)
 	);
 }
 
