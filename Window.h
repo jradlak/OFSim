@@ -14,6 +14,8 @@ public:
     bool shouldClose();
     void swapBuffers();
 
+    GLFWwindow* getWindow();
+
     ~Window();
 
 private:

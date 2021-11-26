@@ -1,4 +1,8 @@
+
+
 #include <iostream>
+#include <map>
+
 #include "Window.h"
 
 Window::Window(Camera& _camera, unsigned int _width, unsigned int _height)
@@ -20,8 +24,8 @@ Window::Window(Camera& _camera, unsigned int _width, unsigned int _height)
         // glfw: initialize and configure
         // ------------------------------
         glfwInit();
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
         // glfw window creation
@@ -59,7 +63,7 @@ Window::Window(Camera& _camera, unsigned int _width, unsigned int _height)
         // configure global opengl state
         // -----------------------------
         glEnable(GL_DEPTH_TEST);
-
+        
         glfwSetWindowUserPointer(mainWindow, this);
 
         return 0;
@@ -73,6 +77,11 @@ bool Window::shouldClose()
 void Window::swapBuffers()
 {
     glfwSwapBuffers(mainWindow);
+}
+
+GLFWwindow* Window::getWindow()
+{
+    return mainWindow;
 }
 
  // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly

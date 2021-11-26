@@ -15,7 +15,7 @@ public:
 	std::vector<float> getVertAN();
 	std::vector<int> getIndices();
 
-	void addTriangle(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3);
+	void addTriangle(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3, glm::vec3 normal = glm::vec3(0.0f));
 	int indexOfVert(glm::vec3 vert);
 	void addVert(glm::vec3 vert, glm::vec3 normal);
 

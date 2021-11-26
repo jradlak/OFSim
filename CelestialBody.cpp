@@ -49,9 +49,9 @@ void CelestialBody::render(glm::dmat4& projection, glm::dmat4& view, glm::dvec3&
 glm::dvec3 CelestialBody::pointAboveTheSurface(double theta, double fi, double distance)
 {
 	double r = diameter / 2.0 + distance;
-	double x = position.x + r * sin(glm::radians(theta)) * cos(glm::radians(fi));
+	double x = position.x + r * cos(glm::radians(theta)) * sin(glm::radians(fi));
 	double y = position.y + r * sin(glm::radians(theta)) * sin(glm::radians(fi));
-	double z = position.z + r * cos(glm::radians(theta));
+	double z = position.z + r * cos(glm::radians(fi));
 
 	return glm::dvec3(x, y, z);
 }

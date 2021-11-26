@@ -46,6 +46,6 @@ private:
 	//helper methods: 
 	void makeRocketGeometry();
 
-	void addTriangle(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3);
+	void addTriangle(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3, glm::vec3 normal = glm::vec3(0.0f));
 	glm::vec3 point(double x, double y, double z);
 };

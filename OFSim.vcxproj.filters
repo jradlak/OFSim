@@ -94,5 +94,11 @@
     <None Include="moon_shader_vs.glsl">
       <Filter>Pliki zasobów</Filter>
     </None>
+    <None Include="text_vs.glsl">
+      <Filter>Pliki zasobów</Filter>
+    </None>
+    <None Include="text_fs.glsl">
+      <Filter>Pliki zasobów</Filter>
+    </None>
   </ItemGroup>
 </Project>

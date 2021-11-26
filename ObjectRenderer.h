@@ -26,8 +26,6 @@ public:
 		glm::dvec3 position,
 		glm::dvec3 rotation = glm::dvec3(0.0, 0.0, 0.0));
 
-	void clear();
-
 	~ObjectRenderer();
 
 private:
@@ -36,4 +34,6 @@ private:
 	unsigned int indexCount;
 
 	double logDepthBufFC;
+
+	void clear();
 };

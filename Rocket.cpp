@@ -146,7 +146,7 @@ void Rocket::makeRocketGeometry()
 	);
 }
 
-void Rocket::addTriangle(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3)
+void Rocket::addTriangle(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3, glm::vec3 normal)
 {
 	geometry->addTriangle(p1, p2, p3);
 }
