@@ -25,6 +25,7 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="CelestialBody.h" />
+    <ClInclude Include="TextRenderer.h" />
     <ClInclude Include="TriangleGeometry.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
@@ -34,6 +35,7 @@
     <ClCompile Include="ObjectRenderer.cpp" />
     <ClCompile Include="Rocket.cpp" />
     <ClCompile Include="Sphere.cpp" />
+    <ClCompile Include="TextRenderer.cpp" />
     <ClCompile Include="TriangleGeometry.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>

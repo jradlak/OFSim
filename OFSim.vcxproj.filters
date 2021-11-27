@@ -51,6 +51,9 @@
     <ClInclude Include="TriangleGeometry.h">
       <Filter>Pliki nagłówkowe\world</Filter>
     </ClInclude>
+    <ClInclude Include="TextRenderer.h">
+      <Filter>Pliki nagłówkowe\renderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -73,6 +76,9 @@
     </ClCompile>
     <ClCompile Include="TriangleGeometry.cpp">
       <Filter>Pliki źródłowe\world</Filter>
+    </ClCompile>
+    <ClCompile Include="TextRenderer.cpp">
+      <Filter>Pliki źródłowe\renderer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
