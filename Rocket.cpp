@@ -6,7 +6,7 @@ Rocket::Rocket(std::string shaderName, glm::dvec3& _position, double _size, glm:
 	objectRenderer = new ObjectRenderer(shaderName);
 	geometry = new TriangleGeometry();
 	forces.push_back(glm::dvec3(0.0f, 9.81f, 0.0f));
-	mass = 40.0;
+	mass = 4.0;
 }
 
 void Rocket::init()
@@ -24,11 +24,17 @@ void Rocket::render(glm::dmat4& projection, glm::dmat4& view, glm::dvec3& _light
 	shader->setVec3("lightColor", 1.0f, 1.0f, 1.0f);
 	shader->setVec3("lightPos", _lightPos);
 	objectRenderer->render(projection, view, size, position, rotation);
+	//objectRenderer->render(projection, view, size, position, glm::dvec3(0.0));
 }
 
 glm::dvec3 Rocket::getPosition()
 {
 	return position;
+}
+
+glm::dvec3 Rocket::getVelocity()
+{
+	return velocity;
 }
 
 void Rocket::updatePhysics(double deltaTime)
@@ -66,89 +72,107 @@ void Rocket::updateRotation(glm::dvec3 newRotation)
 	rotation = newRotation;
 }
 
+glm::dvec3 Rocket::getRotation()
+{
+	return rotation;
+}
+
 void Rocket::makeRocketGeometry()
 {
 	// top:
 	addTriangle(
-		point(0.0, 0.01600001, 0.0),        //0
-		point(-0.001, 0.01400001, -0.001),  //1
-		point(0.001, 0.01400002, -0.001)    //2
+		point(0.0, 0.0, 0.01600001),        //0
+		point(-0.001, -0.001, 0.01400001),  //1
+		point(0.001, -0.001, 0.01400002),
+		point(0.0, -1.0, 0.0)  //2
 	);
 
 	addTriangle(
-		point(0.0, 0.01600002, 0.0),        //0
-		point(0.001, 0.01400003, -0.001),   //2
-		point(0.001, 0.01400004, 0.001)     //3
+		point(0.0, 0.0, 0.01600002),        //0
+		point(0.001, -0.001, 0.01400003),   //2
+		point(0.001, 0.001, 0.01400004),
+		point(1.0, 0.0, 0.0)//3
 	);
 
 	addTriangle(
-		point(0.0, 0.01600003, 0.0),		  //0
-		point(0.001, 0.01400005, 0.001),    //3
-		point(-0.001, 0.01400006, 0.001)    //4
+		point(0.0, 0.0, 0.01600003),		  //0
+		point(0.001, 0.001, 0.01400005),    //3
+		point(-0.001, 0.001, 0.01400006),
+		point(0.0, 1.0, 0.0)
+		//4
 	);
 
 	addTriangle(
-		point(0.0, 0.01600004, 0.0),        //0
-		point(-0.001, 0.01400007, 0.001),   //4
-		point(-0.001, 0.01400008, -0.001)   //1
+		point(0.0, 0.0, 0.01600004),        //0
+		point(-0.001, 0.001, 0.01400007),   //4
+		point(-0.001, -0.001, 0.01400008),
+		point(-1.0, 0.0, 0.0)//1
 	);
 	
 	// side 1:
 	addTriangle(
-		point(-0.001, 0.01400009, -0.001),
-		point(-0.001, 0.002, -0.001),
-		point(0.001, 0.01400009, -0.001)
+		point(-0.001, -0.001, 0.01400009),
+		point(-0.001, -0.001, 0.002),
+		point(0.001, -0.001, 0.01400009),
+		point(0.0, -1.0, 0.0)
 	);
 
 	addTriangle(
-		point(0.001, 0.01400010, -0.001),
-		point(-0.001, 0.002, -0.001),
-		point(0.001, 0.002, -0.001)
+		point(0.001, -0.001, 0.01400010),
+		point(-0.001, -0.001, 0.002),
+		point(0.001, -0.001, 0.002),
+		point(0.0, -1.0, 0.0)
 	);
 
 	// side 2:
 	addTriangle(
-		point(-0.001, 0.01400011, -0.001),
-		point(-0.001, 0.002001, 0.001),
-		point(-0.001, 0.01400011, 0.001)
+		point(-0.001, -0.001, 0.01400011),
+		point(-0.001, 0.001, 0.002001),
+		point(-0.001, 0.001, 0.01400011),
+		point(-1.0, 0.0, 0.0)
 	);
 
 	addTriangle(
-		point(-0.001, 0.01400012, -0.001),
-		point(-0.001, 0.002002, -0.001),
-		point(-0.001, 0.002002, 0.001)
+		point(-0.001, -0.001, 0.01400012),
+		point(-0.001, -0.001, 0.002002),
+		point(-0.001, 0.001, 0.002002),
+		point(-1.0, 0.0, 0.0)
 	);
 
 	// side 3:
 	addTriangle(
-		point(0.001, 0.01400013, -0.001),
-		point(0.001, 0.002003, 0.001),
-		point(0.001, 0.01400013, 0.001)
+		point(0.001, -0.001, 0.01400013),
+		point(0.001, 0.001, 0.002003),
+		point(0.001, 0.001, 0.01400013),
+		point(1.0, 0.0, 0.0)
 	);
 
 	addTriangle(
-		point(0.001, 0.01400014, -0.001),
-		point(0.001, 0.002004, -0.001),
-		point(0.001, 0.002004, 0.001)
+		point(0.001, -0.001, 0.01400014),
+		point(0.001, -0.001, 0.002004),
+		point(0.001, 0.001, 0.002004),
+		point(1.0, 0.0, 0.0)
 	);
 
 	// side 4:
 	addTriangle(
-		point(-0.001, 0.01400015, 0.001),
-		point(-0.001, 0.002005, 0.001),
-		point(0.001, 0.01400015, 0.001)
+		point(-0.001, 0.001, 0.01400015),
+		point(-0.001, 0.001, 0.002005),
+		point(0.001, 0.001, 0.01400015),
+		point(0.0, 1.0, 0.0)
 	);
 
 	addTriangle(
-		point(0.001, 0.01400016, 0.001),
-		point(-0.001, 0.002006, 0.001),
-		point(0.001, 0.002006, 0.001)
+		point(0.001, 0.001, 0.01400016),
+		point(-0.001, 0.001, 0.002006),
+		point(0.001, 0.001, 0.002006),
+		point(0.0, 1.0, 0.0)
 	);
 }
 
 void Rocket::addTriangle(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3, glm::vec3 normal)
 {
-	geometry->addTriangle(p1, p2, p3);
+	geometry->addTriangle(p1, p2, p3, normal);
 }
 
 glm::vec3 Rocket::point(double x, double y, double z)

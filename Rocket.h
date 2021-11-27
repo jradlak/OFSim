@@ -28,6 +28,9 @@ public:
 	void updatePosition(glm::dvec3 newPosition);
 	void updateRotation(glm::dvec3 newRotation);
 
+	glm::dvec3 getRotation();
+	glm::dvec3 getVelocity();
+
 	~Rocket();
 
 private:

@@ -20,7 +20,7 @@ void TriangleGeometry::addTriangle(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3, glm
 	// TODO: fix normal calculations	
 	if (normal == glm::vec3(0.0f)) 
 	{		
-		normal = glm::cross(p3 - p1, p2 - p1);				
+		//normal = glm::cross(p3 - p1, p2 - p1);				
 	}
 
 	addVert(p1, normal);
