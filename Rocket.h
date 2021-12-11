@@ -11,8 +11,7 @@
 class Rocket
 {
 public:
-	Rocket(std::string shaderName, glm::dvec3& _position, double _size, 
-		glm::dvec3 _rotation = glm::dvec3(0.0, 0.0, 0.0));
+	Rocket(std::string shaderName, glm::dvec3& _position, double _size);
 
 	void init();
 	
@@ -26,9 +25,9 @@ public:
 	void resetForces();
 
 	void updatePosition(glm::dvec3 newPosition);
-	void updateRotation(glm::dvec3 newRotation);
+	void updateRotation(glm::dvec3 axis, double angle);
+	void updateRotation(glm::dvec3 rotation);
 
-	glm::dvec3 getRotation();
 	glm::dvec3 getVelocity();
 
 	~Rocket();
@@ -37,9 +36,13 @@ private:
 	ObjectRenderer* objectRenderer;
 	TriangleGeometry* geometry;
 	glm::dvec3& position;
-	glm::dvec3& rotation;
-	double size;
+	
+	glm::dvec3 rotation;
 
+	glm::dvec3 rotatinAxis;
+	double rotationAngle;
+
+	double size;
 
 	//physics:
 	std::vector<glm::dvec3> forces;

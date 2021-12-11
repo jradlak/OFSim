@@ -59,22 +59,25 @@ int main()
     CelestialBody earth(planet, "planet_shader", 6371.0, earthPos);
     CelestialBody earthsMoon(moon, "moon_shader", 1737.0, moonPos);
 
-    camera.Position = earth.pointAboveTheSurface(34.5, 40.5, -0.05);
+    camera.Position = glm::dvec3(0.002);//earth.pointAboveTheSurface(34.5, 40.5, -0.05);
 
     sun.init();
     earth.init();
     earthsMoon.init();
+    
+    //TODO: coœ jest tu chyba nie tak z obliczaniem tego punktu
+    glm::dvec3 rocketPos = earth.pointAboveTheSurface(0.0, 0.0, 0.05); //earth.pointAboveTheSurface(30.0, 30.0, 0.05); //earth.pointAboveTheSurface(34.498, 40.5, -0.05);
+    Rocket rocket("moon_shader", rocketPos, 1);
 
-    glm::dvec3 rocketPos = earth.pointAboveTheSurface(34.498, 40.5, -0.05);
-    Rocket rocket("moon_shader", rocketPos, 1, glm::dvec3(0));
-
+    camera.Position = rocket.getPosition() + glm::dvec3(0.0, 0.024, 0.0);
     rocket.init();
-    rocket.updateRotation(glm::dvec3(-30.0, 0.0, 0.0));
-
+    
     // simulation loop
     // -----------
     unsigned __int64 lag = 0, previous = currentTime();
     int MS_PER_UPDATE = 12;
+    //float angle = 30.0f;
+    glm::dvec3 rotation = glm::dvec3(-30.0, -60.0, 0.0);
     while (!mainWindow.shouldClose())
     {
         unsigned __int64 current = currentTime();
@@ -88,21 +91,35 @@ int main()
 
         while (lag > MS_PER_UPDATE)
         {
-            rocket.updatePhysics(MS_PER_UPDATE / 1000.0f);
+            //rocket.updatePhysics(MS_PER_UPDATE / 1000.0f);
             lag -= MS_PER_UPDATE;
         }
 
         switchGLStateForWorldRendering();
 
         // camera/view transformation
-        camera.Position = rocket.getPosition() + glm::dvec3(0.0, 0.024, 0.0);
+        //camera.Position = rocket.getPosition() + glm::dvec3(0.0, 0.024, 0.0);
         glm::dmat4 view = camera.GetViewMatrix();
 
         earth.render(projection, view, lightPos);
         earthsMoon.render(projection, view, lightPos);
         sun.render(projection, view, lightPos);
 
-        rocket.updateRotation(glm::dvec3(10.0, 10.0, 10.0));
+        // calculating rotations for rocket:
+        //glm::dvec3 rPosition = rocket.getPosition();
+        //glm::dvec3 origin = glm::normalize(earth.pointAboveTheSurface(0.0, 0.0, 0.05));
+
+        //glm::dvec3 rPosNorm = glm::normalize(rPosition);
+        //double angle = glm::acos(glm::dot(origin, rPosNorm));
+        //glm::dvec3 axis = glm::normalize(glm::cross(origin, rPosNorm));
+
+        //angle += 0.01;
+        //axis.x -= 0.01;
+        //rocket.updateRotation(axis, angle);
+
+        rotation.z += 0.1;
+        rocket.updateRotation(rotation);
+
         rocket.render(projection, view, lightPos);
 
         renderTextHUD(text, rocket);

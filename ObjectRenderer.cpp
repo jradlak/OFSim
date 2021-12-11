@@ -55,6 +55,38 @@ Shader* ObjectRenderer::getShader()
 void ObjectRenderer::render(glm::dmat4& projection, glm::dmat4& view,
 	double size,
 	glm::dvec3 position, 
+	glm::dvec3 rotationAxis,
+	double rotationAngle)
+{
+	shader->use();
+
+	shader->setFloat("logDepthBufFC", logDepthBufFC);
+
+	glm::dmat4 model = glm::dmat4(1.0);
+	model = glm::translate(model, position);
+
+	// calculate rotations:
+	if (rotationAngle != 0.0)
+	{		
+		model = glm::rotate(model, rotationAngle, rotationAxis);
+	}
+	
+	model = glm::scale(model, glm::dvec3(size));
+	shader->setMat4("model", glm::mat4(model));
+
+	glm::mat4 transformation = glm::mat4((projection * view * model));
+	shader->setMat4("transformation", transformation);
+
+	glBindVertexArray(VAO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+	glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
+}
+
+void ObjectRenderer::renderWithRotation(glm::dmat4& projection,
+	glm::dmat4& view,
+	double size,
+	glm::dvec3 position,
 	glm::dvec3 rotation)
 {
 	shader->use();
@@ -66,18 +98,18 @@ void ObjectRenderer::render(glm::dmat4& projection, glm::dmat4& view,
 
 	// calculate rotations:
 	if (rotation.x != 0.0)
-	{		
-		model = glm::rotate(model, (double)glm::radians(rotation.x), glm::dvec3(1.0, 0.0, 0.0));
+	{
+		model = glm::rotate(model, glm::radians(rotation.x), glm::dvec3(1.0, 0.0, 0.0));
 	}
-	
+
 	if (rotation.y != 0.0)
-	{		
-		model = glm::rotate(model, (double)glm::radians(rotation.y), glm::dvec3(0.0, 1.0, 0.0));
+	{
+		model = glm::rotate(model, glm::radians(rotation.y), glm::dvec3(0.0, 1.0, 0.0));
 	}
 
 	if (rotation.z != 0.0)
-	{		
-		model = glm::rotate(model, (double)glm::radians(rotation.z), glm::dvec3(0.0, 0.0, 1.0));
+	{
+		model = glm::rotate(model, glm::radians(rotation.z), glm::dvec3(0.0, 0.0, 1.0));
 	}
 
 	model = glm::scale(model, glm::dvec3(size));

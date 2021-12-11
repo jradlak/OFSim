@@ -19,8 +19,8 @@ enum Camera_Movement {
 };
 
 // Default camera values
-const double YAW         = 40.0;
-const double PITCH       = -45.0;
+const double YAW         = 90.0;
+const double PITCH       = -90.0;
 const double SPEED       = 0.05;
 const double SENSITIVITY = 0.1;
 const double ZOOM        = 45.0;
@@ -46,7 +46,7 @@ public:
 
     // constructor with vectors
     Camera(glm::dvec3 position = glm::dvec3(0.0, 0.0, 0.0), glm::dvec3 up = glm::dvec3(0.0, 1.0, 0.0), 
-        double yaw = YAW, double pitch = PITCH, float roll = -4.0f)
+        double yaw = YAW, double pitch = PITCH, float roll = 0.0f)
         : Front(glm::dvec3(0.0f, 0.0f, -1.0)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM)
     {
         Position = position;

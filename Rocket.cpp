@@ -1,12 +1,16 @@
 #include "Rocket.h"
 
-Rocket::Rocket(std::string shaderName, glm::dvec3& _position, double _size, glm::dvec3 _rotation)
-	: position(_position), size(_size), rotation(_rotation)
+Rocket::Rocket(std::string shaderName, glm::dvec3& _position, double _size)
+	: position(_position), size(_size)
 {
 	objectRenderer = new ObjectRenderer(shaderName);
 	geometry = new TriangleGeometry();
 	forces.push_back(glm::dvec3(0.0f, 9.81f, 0.0f));
 	mass = 4.0;
+
+	rotatinAxis = glm::dvec3(0.0);
+	rotationAngle = 0.0;
+	rotation = glm::dvec3(0.0);
 }
 
 void Rocket::init()
@@ -23,8 +27,10 @@ void Rocket::render(glm::dmat4& projection, glm::dmat4& view, glm::dvec3& _light
 	shader->setVec3("objectColor", 0.55f, 0.55f, 0.55f);
 	shader->setVec3("lightColor", 1.0f, 1.0f, 1.0f);
 	shader->setVec3("lightPos", _lightPos);
-	objectRenderer->render(projection, view, size, position, rotation);
-	//objectRenderer->render(projection, view, size, position, glm::dvec3(0.0));
+
+	//objectRenderer->render(projection, view, size, position, rotatinAxis, rotationAngle);	
+
+	objectRenderer->renderWithRotation(projection, view, size, position, rotation);
 }
 
 glm::dvec3 Rocket::getPosition()
@@ -67,14 +73,15 @@ void Rocket::updatePosition(glm::dvec3 newPosition)
 	position = newPosition;
 }
 
-void Rocket::updateRotation(glm::dvec3 newRotation)
+void Rocket::updateRotation(glm::dvec3 axis, double angle)
 {
-	rotation = newRotation;
+	rotatinAxis = axis;
+	rotationAngle = angle;
 }
 
-glm::dvec3 Rocket::getRotation()
+void Rocket::updateRotation(glm::dvec3 _rotation)
 {
-	return rotation;
+	rotation = _rotation;
 }
 
 void Rocket::makeRocketGeometry()
@@ -84,7 +91,7 @@ void Rocket::makeRocketGeometry()
 		point(0.0, 0.0, 0.01600001),        //0
 		point(-0.001, -0.001, 0.01400001),  //1
 		point(0.001, -0.001, 0.01400002),
-		point(0.0, -1.0, 0.0)  //2
+		point(0.0, 1.0, 0.0)  //2
 	);
 
 	addTriangle(
