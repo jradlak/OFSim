@@ -37,7 +37,7 @@ void main()
     vec3 currColor = objectColor;
     if (computeColor() == 0)
     {
-        currColor = vec3(0.25, 0.55, 0.75);
+        currColor = vec3(0.0, 0.0, 0.6);
     }
 
     vec3 result = (ambient + diffuse) * currColor;

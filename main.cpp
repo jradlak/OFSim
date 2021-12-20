@@ -29,8 +29,8 @@ const unsigned int SCR_HEIGHT = 720;
 Camera camera(glm::vec3(-100.0, -160.0, 1000.0));
 
 unsigned __int64 currentTime();
-void switchGLStateForWorldRendering();
-void renderTextHUD(TextRenderer* text, Rocket& rocket);
+void switchGLStateForWorldRendering(float r, float g, float b);
+void renderTextHUD(TextRenderer* text, Rocket& rocket, double altitude);
 void syncFramerate(unsigned __int64 startTime, int ms_per_update);
 
 int main()
@@ -77,12 +77,18 @@ int main()
     camera.Position = rocket.getPosition() + glm::dvec3(0.0, 0.024, 0.0);
     rocket.init();
     
-    // simulation loop
-    // -----------
     unsigned __int64 lag = 0, previous = currentTime();
     int MS_PER_UPDATE = 12;
     glm::dvec3 rotation = glm::dvec3(0.0); // glm::dvec3(-20.0, 30.0, 0.0);
    
+    glm::dvec3 thrustVector = glm::normalize(rocket.getPosition() - earthPos) * 0.64;
+
+    // simulation loop
+    // -----------
+    bool thrustCutOff = false;
+    float r = 0.25, g = 0.55, b = 0.75;
+    float orr = 0.25, og = 0.55, ob = 0.75;
+
     while (!mainWindow.shouldClose())
     {
         unsigned __int64 current = currentTime();
@@ -94,32 +100,73 @@ int main()
         // -----
         mainWindow.processInput();
 
-        while (lag > MS_PER_UPDATE)
+        // adding forces and updating physics:
+        double altitude = glm::length(rocket.getPosition() - earthPos) - 3185.5;
+        if (altitude > 0.09)
         {
-            rocket.updatePhysics(MS_PER_UPDATE / 1000.0f);
-            lag -= MS_PER_UPDATE;
+            glm::vec3 gravityForceVector = glm::normalize(rocket.getPosition() - earthPos) * -0.0981;
+            rocket.addForce(gravityForceVector);
+            
+            if (altitude > 5.0)
+            {
+                thrustCutOff = true;
+            }
+
+            if (!thrustCutOff)
+            {
+                rocket.addForce(thrustVector);
+            }
+
+            while (lag > MS_PER_UPDATE)
+            {
+                rocket.updatePhysics(MS_PER_UPDATE / 1000.0f);
+                lag -= MS_PER_UPDATE;
+            }
         }
 
-        switchGLStateForWorldRendering();
+        switchGLStateForWorldRendering(r, g, b);
 
-        // camera/view transformation
+        // camera/view transformation:
         camera.Position = rocket.getPosition() + glm::dvec3(0.0, 0.024, 0.0);
         glm::dmat4 view = camera.GetViewMatrix();
 
+        // render celestial bodies:
         earth.render(projection, view, lightPos);
         earthsMoon.render(projection, view, lightPos);
         sun.render(projection, view, lightPos);
 
+        //recalculate rocket orientation:
         glm::vec3 direction = glm::normalize(rocket.getPosition() - earthPos);
-
         glm::quat qlook = lookAt(direction, glm::dvec3(0.0, 1.0, 0.0));
         rotation = glm::eulerAngles(qlook) * 180.0f / 3.14159f;
-      
         rocket.updateRotation(rotation);
 
         rocket.render(projection, view, lightPos);
 
-        renderTextHUD(text, rocket);
+        //atmosphere gradient simulation:
+        float factor = 0;
+        if (altitude > 4.0) {
+            factor = 0.001 * altitude * altitude;
+        }
+        b = ob - factor;
+        if (b < 0)
+        {
+            b = 0;
+        }
+
+        r = orr - factor;
+        if (r < 0)
+        {
+            r = 0;
+        }
+
+        g = og - factor;
+        if (g < 0)
+        {
+            g = 0;
+        }
+
+        renderTextHUD(text, rocket, altitude);
 
         syncFramerate(current, MS_PER_UPDATE);
         mainWindow.swapBuffers();
@@ -132,34 +179,38 @@ int main()
     return 0;
 }
 
-void switchGLStateForWorldRendering()
+void switchGLStateForWorldRendering(float r, float g, float b)
 {
     glEnable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
     glDisable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClearColor(r, g, b, 1.0f);
+    
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void renderTextHUD(TextRenderer* text, Rocket& rocket)
+void renderTextHUD(TextRenderer* text, Rocket& rocket, double altitude)
 {
     glEnable(GL_CULL_FACE);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glDisable(GL_DEPTH_TEST);
 
+    std::stringstream ssAltitude;
+    ssAltitude << "Wysokosc rakiety: " << altitude << " km";
+    text->renderText(ssAltitude.str(), 25.0f, 75.0f, 0.5f, glm::vec3(0.5, 0.8f, 0.2f));
+
     glm::dvec3 position = rocket.getPosition();
     std::stringstream ssPosition;
-    ssPosition << "This is rocket position: (" << position.x << ", " << position.y << "," << position.y << ")";
+    ssPosition << "Pozycja rakiety: (" << position.x << ", " << position.y << "," << position.y << ")";
     text->renderText(ssPosition.str(), 25.0f, 25.0f, 0.5f, glm::vec3(0.5, 0.8f, 0.2f));
 
     glm::dvec3 velocity = rocket.getVelocity();
     std::stringstream ssVeloticy;
-    ssVeloticy << "This is rocket velocity: (" << velocity.x << ", " << velocity.y << ",   " << velocity.y << ")";
+    ssVeloticy << "Wektor predkosci rakiety: (" << velocity.x << ", " << velocity.y << ",   " << velocity.y << ")";
     text->renderText(ssVeloticy.str(), 25.0f, 50.0f, 0.5f, glm::vec3(0.5, 0.8f, 0.2f));
-
 }
 
 void syncFramerate(unsigned __int64 startTime, int ms_per_update)
