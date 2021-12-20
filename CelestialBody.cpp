@@ -50,12 +50,16 @@ glm::dvec3 CelestialBody::pointAboveTheSurface(double theta, double phi, double 
 {
 	// theta - polar angle
 	// phi - azimuth angle
-	double r = diameter / 2.0 + distance;
-	double x = position.x + r * cos(glm::radians(theta)) * sin(glm::radians(phi));
-	double y = position.y + r * sin(glm::radians(theta)) * sin(glm::radians(phi));
-	double z = position.z + r * cos(glm::radians(phi));
 
-	return glm::dvec3(x, y, z);
+	// phi as north pole:
+	//phi -= 90.0;
+
+	double r = diameter / 2.0 + distance;
+	double x = r * cos(glm::radians(theta)) * sin(glm::radians(phi));
+	double z = r * sin(glm::radians(theta)) * sin(glm::radians(phi));
+	double y = r * cos(glm::radians(phi));
+
+	return position + glm::dvec3(x, y, z);
 }
 
 CelestialBody::~CelestialBody()

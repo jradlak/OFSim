@@ -20,6 +20,8 @@
 #include "Rocket.h"
 #include "TextRenderer.h"
 
+#include "Geometry.h"
+
 // settings
 const unsigned int SCR_WIDTH = 1280;
 const unsigned int SCR_HEIGHT = 720;
@@ -66,7 +68,10 @@ int main()
     earthsMoon.init();
     
     //TODO: coœ jest tu chyba nie tak z obliczaniem tego punktu
-    glm::dvec3 rocketPos = earth.pointAboveTheSurface(0.0, 0.0, 0.05); //earth.pointAboveTheSurface(30.0, 30.0, 0.05); //earth.pointAboveTheSurface(34.498, 40.5, -0.05);
+    float angle = 30.0;
+    float dangle = 60.0;
+
+    glm::dvec3 rocketPos = earth.pointAboveTheSurface(angle, dangle, 0.1); //earth.pointAboveTheSurface(30.0, 30.0, 0.05); //earth.pointAboveTheSurface(34.498, 40.5, -0.05);
     Rocket rocket("moon_shader", rocketPos, 1);
 
     camera.Position = rocket.getPosition() + glm::dvec3(0.0, 0.024, 0.0);
@@ -76,8 +81,8 @@ int main()
     // -----------
     unsigned __int64 lag = 0, previous = currentTime();
     int MS_PER_UPDATE = 12;
-    //float angle = 30.0f;
-    glm::dvec3 rotation = glm::dvec3(-30.0, -60.0, 0.0);
+    glm::dvec3 rotation = glm::dvec3(0.0); // glm::dvec3(-20.0, 30.0, 0.0);
+   
     while (!mainWindow.shouldClose())
     {
         unsigned __int64 current = currentTime();
@@ -91,33 +96,25 @@ int main()
 
         while (lag > MS_PER_UPDATE)
         {
-            //rocket.updatePhysics(MS_PER_UPDATE / 1000.0f);
+            rocket.updatePhysics(MS_PER_UPDATE / 1000.0f);
             lag -= MS_PER_UPDATE;
         }
 
         switchGLStateForWorldRendering();
 
         // camera/view transformation
-        //camera.Position = rocket.getPosition() + glm::dvec3(0.0, 0.024, 0.0);
+        camera.Position = rocket.getPosition() + glm::dvec3(0.0, 0.024, 0.0);
         glm::dmat4 view = camera.GetViewMatrix();
 
         earth.render(projection, view, lightPos);
         earthsMoon.render(projection, view, lightPos);
         sun.render(projection, view, lightPos);
 
-        // calculating rotations for rocket:
-        //glm::dvec3 rPosition = rocket.getPosition();
-        //glm::dvec3 origin = glm::normalize(earth.pointAboveTheSurface(0.0, 0.0, 0.05));
+        glm::vec3 direction = glm::normalize(rocket.getPosition() - earthPos);
 
-        //glm::dvec3 rPosNorm = glm::normalize(rPosition);
-        //double angle = glm::acos(glm::dot(origin, rPosNorm));
-        //glm::dvec3 axis = glm::normalize(glm::cross(origin, rPosNorm));
-
-        //angle += 0.01;
-        //axis.x -= 0.01;
-        //rocket.updateRotation(axis, angle);
-
-        rotation.z += 0.1;
+        glm::quat qlook = lookAt(direction, glm::dvec3(0.0, 1.0, 0.0));
+        rotation = glm::eulerAngles(qlook) * 180.0f / 3.14159f;
+      
         rocket.updateRotation(rotation);
 
         rocket.render(projection, view, lightPos);
@@ -162,6 +159,7 @@ void renderTextHUD(TextRenderer* text, Rocket& rocket)
     std::stringstream ssVeloticy;
     ssVeloticy << "This is rocket velocity: (" << velocity.x << ", " << velocity.y << ",   " << velocity.y << ")";
     text->renderText(ssVeloticy.str(), 25.0f, 50.0f, 0.5f, glm::vec3(0.5, 0.8f, 0.2f));
+
 }
 
 void syncFramerate(unsigned __int64 startTime, int ms_per_update)

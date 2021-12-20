@@ -25,6 +25,9 @@
     <Filter Include="Pliki źródłowe\renderer">
       <UniqueIdentifier>{b3d90861-6b6b-4d37-be9d-9b7e8d333119}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Pliki nagłówkowe\math">
+      <UniqueIdentifier>{c63326a5-aaba-4c90-b422-cc668d6b53ed}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -53,6 +56,9 @@
     </ClInclude>
     <ClInclude Include="TextRenderer.h">
       <Filter>Pliki nagłówkowe\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Geometry.h">
+      <Filter>Pliki nagłówkowe\math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
