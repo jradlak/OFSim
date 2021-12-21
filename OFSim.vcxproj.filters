@@ -28,6 +28,9 @@
     <Filter Include="Pliki nagłówkowe\math">
       <UniqueIdentifier>{c63326a5-aaba-4c90-b422-cc668d6b53ed}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Pliki źródłowe\math">
+      <UniqueIdentifier>{d2d12a77-bfdc-430c-8c9c-112a147051dc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -60,6 +63,9 @@
     <ClInclude Include="Geometry.h">
       <Filter>Pliki nagłówkowe\math</Filter>
     </ClInclude>
+    <ClInclude Include="PhysicsEngine.h">
+      <Filter>Pliki nagłówkowe\math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -85,6 +91,9 @@
     </ClCompile>
     <ClCompile Include="TextRenderer.cpp">
       <Filter>Pliki źródłowe\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsEngine.cpp">
+      <Filter>Pliki źródłowe\math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

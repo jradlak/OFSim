@@ -22,6 +22,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Geometry.h" />
     <ClInclude Include="ObjectRenderer.h" />
+    <ClInclude Include="PhysicsEngine.h" />
     <ClInclude Include="Rocket.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Sphere.h" />
@@ -34,6 +35,7 @@
     <ClCompile Include="CelestialBody.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ObjectRenderer.cpp" />
+    <ClCompile Include="PhysicsEngine.cpp" />
     <ClCompile Include="Rocket.cpp" />
     <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="TextRenderer.cpp" />

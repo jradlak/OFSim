@@ -9,20 +9,21 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include <glm/gtx/rotate_vector.hpp>
-
 #include <iostream>
 #include <vector>
 #include <thread>
 #include <chrono> 
 
+// world rendering
 #include "Camera.h"
 #include "Window.h"
 #include "CelestialBody.h"
 #include "Rocket.h"
 #include "TextRenderer.h"
 
+// math and physics
 #include "Geometry.h"
+#include "PhysicsEngine.h"
 
 // settings
 const unsigned int SCR_WIDTH = 1280;
@@ -97,8 +98,11 @@ int main()
     glm::quat qlook = lookAt(direction, glm::dvec3(0.0, 1.0, 0.0));
     glm::dvec3 rotation = glm::eulerAngles(qlook) * 180.0f / 3.14159f;
     
-    glm::dvec3 towards = earthPos;
+    glm::dvec3 towards = earthPos; //earth.pointAboveTheSurface(angle, dangle, 0.01);;
     mainWindow.registerInputCallback(changeRocketRotationByKeyPressed);
+
+    //initialize Physic engine:
+    PhysicsEngine* physics = new PhysicsEngine(rocket, MS_PER_UPDATE)
 
     // simulation loop
     // -----------
@@ -113,29 +117,10 @@ int main()
         // -----
         mainWindow.processInput();
 
-        // adding forces and updating physics:
-        double altitude = glm::length(rocket.getPosition() - earthPos) - 3185.5;
-        if (altitude > 0.09)
-        {
-            glm::vec3 gravityForceVector = glm::normalize(rocket.getPosition() - earthPos) * -0.0981;
-            rocket.addForce(gravityForceVector);
-            
-            if (altitude > 5.0)
-            {
-                thrustCutOff = true;
-            }
-
-            if (!thrustCutOff)
-            {
-                rocket.addForce(thrustVector);
-            }
-
-            while (lag > MS_PER_UPDATE)
-            {
-                rocket.updatePhysics(MS_PER_UPDATE / 1000.0f);
-                lag -= MS_PER_UPDATE;
-            }
-        }
+        
+        // update physics:
+        physics->calculateForces();
+        
 
         switchGLStateForWorldRendering(r, g, b);
 
@@ -147,10 +132,6 @@ int main()
         earth.render(projection, view, lightPos);
         earthsMoon.render(projection, view, lightPos);
         sun.render(projection, view, lightPos);
-
-        //reacalculate thrust vector direction:
-        rotation = changeRocketRotation(rocket, thrustVector, towards);
-        rocket.updateRotation(rotation);
 
         rocket.render(projection, view, lightPos);
 
@@ -185,7 +166,9 @@ int main()
     }
 
     glfwTerminate();
+    
     delete text;
+    delete physics;
 
     return 0;
 }
@@ -242,33 +225,41 @@ unsigned __int64 currentTime()
 
 glm::dvec3 changeRocketRotation(Rocket& rocket, glm::dvec3 &thrustVector, glm::dvec3 &towards)
 {
+    //towards += rocket.getPosition() - glm::dvec3(0.1, 0.1, 0.1);
+    double factor = 10;
     if (lastKeyPressed == GLFW_KEY_UP)
     {
-        towards.x += 10;
+        towards.x += factor;
     }
 
     if (lastKeyPressed == GLFW_KEY_DOWN)
     {
-        towards.x -= 10;
+        towards.x -= factor;
     }
 
     if (lastKeyPressed == GLFW_KEY_RIGHT)
     {
-        towards.y -= 10;
+        towards.z -= factor;
     }
     
     if (lastKeyPressed == GLFW_KEY_LEFT)
     {
-        towards.y += 10;
+        towards.z += factor;
     }
 
-    glm::dvec3 direction = glm::normalize(rocket.getPosition() - towards);
-    glm::quat qlook = lookAt(direction, glm::dvec3(0.0, 1.0, 0.0));
-    glm::dvec3 rotation = glm::eulerAngles(qlook) * 180.0f / 3.14159f;
+    if (lastKeyPressed != 0)
+    {
+        glm::dvec3 direction = glm::normalize(rocket.getPosition() - towards);
+        glm::quat qlook = lookAt(direction, glm::dvec3(0.0, 1.0, 0.0));
+        glm::dvec3 rotation = glm::eulerAngles(qlook) * 180.0f / 3.14159f;
 
-    thrustVector = direction * 0.64;
-    lastKeyPressed = 0;
-    return rotation;
+        thrustVector = direction * 0.64;
+        lastKeyPressed = 0;
+
+        return rotation;
+    }
+
+    return glm::dvec3(0); 
 }
 
 void changeRocketRotationByKeyPressed(int keyPressed)
