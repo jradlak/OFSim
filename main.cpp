@@ -9,6 +9,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include <glm/gtx/rotate_vector.hpp>
+
 #include <iostream>
 #include <vector>
 #include <thread>
@@ -28,10 +30,15 @@ const unsigned int SCR_HEIGHT = 720;
 
 Camera camera(glm::vec3(-100.0, -160.0, 1000.0));
 
+int lastKeyPressed = 0;
+
 unsigned __int64 currentTime();
 void switchGLStateForWorldRendering(float r, float g, float b);
 void renderTextHUD(TextRenderer* text, Rocket& rocket, double altitude);
 void syncFramerate(unsigned __int64 startTime, int ms_per_update);
+void changeRocketRotationByKeyPressed(int keyPressed);
+
+glm::dvec3 changeRocketRotation(Rocket& rocket, glm::dvec3 &thrustVector, glm::dvec3 &towards);
 
 int main()
 {
@@ -66,8 +73,7 @@ int main()
     sun.init();
     earth.init();
     earthsMoon.init();
-    
-    //TODO: coœ jest tu chyba nie tak z obliczaniem tego punktu
+   
     float angle = 30.0;
     float dangle = 60.0;
 
@@ -79,16 +85,23 @@ int main()
     
     unsigned __int64 lag = 0, previous = currentTime();
     int MS_PER_UPDATE = 12;
-    glm::dvec3 rotation = glm::dvec3(0.0); // glm::dvec3(-20.0, 30.0, 0.0);
    
     glm::dvec3 thrustVector = glm::normalize(rocket.getPosition() - earthPos) * 0.64;
 
-    // simulation loop
-    // -----------
     bool thrustCutOff = false;
     float r = 0.25, g = 0.55, b = 0.75;
     float orr = 0.25, og = 0.55, ob = 0.75;
 
+    //recalculate rocket orientation:
+    glm::vec3 direction = glm::normalize(rocket.getPosition() - earthPos);
+    glm::quat qlook = lookAt(direction, glm::dvec3(0.0, 1.0, 0.0));
+    glm::dvec3 rotation = glm::eulerAngles(qlook) * 180.0f / 3.14159f;
+    
+    glm::dvec3 towards = earthPos;
+    mainWindow.registerInputCallback(changeRocketRotationByKeyPressed);
+
+    // simulation loop
+    // -----------
     while (!mainWindow.shouldClose())
     {
         unsigned __int64 current = currentTime();
@@ -135,10 +148,8 @@ int main()
         earthsMoon.render(projection, view, lightPos);
         sun.render(projection, view, lightPos);
 
-        //recalculate rocket orientation:
-        glm::vec3 direction = glm::normalize(rocket.getPosition() - earthPos);
-        glm::quat qlook = lookAt(direction, glm::dvec3(0.0, 1.0, 0.0));
-        rotation = glm::eulerAngles(qlook) * 180.0f / 3.14159f;
+        //reacalculate thrust vector direction:
+        rotation = changeRocketRotation(rocket, thrustVector, towards);
         rocket.updateRotation(rotation);
 
         rocket.render(projection, view, lightPos);
@@ -227,4 +238,40 @@ unsigned __int64 currentTime()
     return std::chrono::duration_cast<std::chrono::milliseconds>(
         std::chrono::system_clock::now().time_since_epoch()
         ).count();
+}
+
+glm::dvec3 changeRocketRotation(Rocket& rocket, glm::dvec3 &thrustVector, glm::dvec3 &towards)
+{
+    if (lastKeyPressed == GLFW_KEY_UP)
+    {
+        towards.x += 10;
+    }
+
+    if (lastKeyPressed == GLFW_KEY_DOWN)
+    {
+        towards.x -= 10;
+    }
+
+    if (lastKeyPressed == GLFW_KEY_RIGHT)
+    {
+        towards.y -= 10;
+    }
+    
+    if (lastKeyPressed == GLFW_KEY_LEFT)
+    {
+        towards.y += 10;
+    }
+
+    glm::dvec3 direction = glm::normalize(rocket.getPosition() - towards);
+    glm::quat qlook = lookAt(direction, glm::dvec3(0.0, 1.0, 0.0));
+    glm::dvec3 rotation = glm::eulerAngles(qlook) * 180.0f / 3.14159f;
+
+    thrustVector = direction * 0.64;
+    lastKeyPressed = 0;
+    return rotation;
+}
+
+void changeRocketRotationByKeyPressed(int keyPressed)
+{   
+    lastKeyPressed = keyPressed;
 }

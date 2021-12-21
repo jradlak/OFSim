@@ -3,6 +3,8 @@
 
 #include "Camera.h"
 
+typedef void (*inputCall)(int);
+
 class Window
 {
 public:
@@ -10,6 +12,9 @@ public:
 
     int initialize();
     void processInput();
+
+    // function callback to precess key pressed
+    void registerInputCallback(inputCall funct);
 
     bool shouldClose();
     void swapBuffers();
@@ -28,6 +33,8 @@ private:
     // timing
     float deltaTime; 	// time between current frame and last frame
     float lastFrame;
+
+    inputCall processInputCall;
 
     // glfw: whenever the window size changed (by OS or user resize) this callback function executes
     // ---------------------------------------------------------------------------------------------

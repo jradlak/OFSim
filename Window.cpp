@@ -11,12 +11,12 @@ Window::Window(Camera& _camera, unsigned int _width, unsigned int _height)
         width = _width;
         height = _height;
 
-        lastX = width / 2.0f;
-        lastY = height / 2.0f;
-        firstMouse = true;
+lastX = width / 2.0f;
+lastY = height / 2.0f;
+firstMouse = true;
 
-        deltaTime = 0.0f;
-        lastFrame = 0.0f;
+deltaTime = 0.0f;
+lastFrame = 0.0f;
     }
 
     int Window::initialize()
@@ -63,29 +63,29 @@ Window::Window(Camera& _camera, unsigned int _width, unsigned int _height)
         // configure global opengl state
         // -----------------------------
         glEnable(GL_DEPTH_TEST);
-        
+
         glfwSetWindowUserPointer(mainWindow, this);
 
         return 0;
-}
+    }
 
-bool Window::shouldClose()
-{
-    return glfwWindowShouldClose(mainWindow);
-}
+    bool Window::shouldClose()
+    {
+        return glfwWindowShouldClose(mainWindow);
+    }
 
-void Window::swapBuffers()
-{
-    glfwSwapBuffers(mainWindow);
-}
+    void Window::swapBuffers()
+    {
+        glfwSwapBuffers(mainWindow);
+    }
 
-GLFWwindow* Window::getWindow()
-{
-    return mainWindow;
-}
+    GLFWwindow* Window::getWindow()
+    {
+        return mainWindow;
+    }
 
- // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
-    // ---------------------------------------------------------------------------------------------------------
+    // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
+       // ---------------------------------------------------------------------------------------------------------
     void Window::processInput()
     {
         // per-frame time logic
@@ -110,6 +110,30 @@ GLFWwindow* Window::getWindow()
         if (glfwGetKey(mainWindow, GLFW_KEY_E) == GLFW_PRESS)
             camera.ProcessKeyboard(ROLL_RIGHT, deltaTime);
 
+        if (glfwGetKey(mainWindow, GLFW_KEY_UP) == GLFW_PRESS) 
+        {
+            processInputCall((int)GLFW_KEY_UP);
+        }
+
+        if (glfwGetKey(mainWindow, GLFW_KEY_DOWN) == GLFW_PRESS) 
+        {
+            processInputCall((int)GLFW_KEY_DOWN);
+        }
+
+        if (glfwGetKey(mainWindow, GLFW_KEY_LEFT) == GLFW_PRESS)
+        {
+            processInputCall((int)GLFW_KEY_LEFT);
+        }
+
+        if (glfwGetKey(mainWindow, GLFW_KEY_RIGHT) == GLFW_PRESS)
+        {
+            processInputCall((int)GLFW_KEY_RIGHT);
+        }
+    }
+
+    void Window::registerInputCallback(inputCall funct)
+    {
+        processInputCall = funct;
     }
 
     void Window::framebuffer_size_callback(GLFWwindow* window, int width, int height)

@@ -8,7 +8,6 @@
 glm::quat rotationBetweenVectors(glm::vec3 start, glm::vec3 dest);
 glm::quat lookAt(glm::vec3 direction, glm::vec3 desiredUp);
 
-
 glm::quat rotationBetweenVectors(glm::vec3 start, glm::vec3 dest)
 {
 	start = glm::normalize(start);
