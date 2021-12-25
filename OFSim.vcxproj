@@ -25,6 +25,7 @@
     <ClInclude Include="PhysicsEngine.h" />
     <ClInclude Include="Rocket.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="Smoke.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="CelestialBody.h" />
     <ClInclude Include="TextRenderer.h" />
@@ -43,6 +44,7 @@
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram.cd" />
     <None Include="light_source_fs.glsl" />
     <None Include="light_source_vs.glsl" />
     <None Include="moon_shader_fs.glsl" />

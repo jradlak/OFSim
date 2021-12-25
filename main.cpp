@@ -5,10 +5,6 @@
 #include <gl/glew.h>
 #include <GLFW/glfw3.h>
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
 #include <iostream>
 #include <vector>
 #include <thread>
@@ -17,12 +13,9 @@
 // world rendering
 #include "Camera.h"
 #include "Window.h"
-#include "CelestialBody.h"
-#include "Rocket.h"
 #include "TextRenderer.h"
 
 // math and physics
-#include "Geometry.h"
 #include "PhysicsEngine.h"
 
 // settings
@@ -38,8 +31,6 @@ void switchGLStateForWorldRendering(float r, float g, float b);
 void renderTextHUD(TextRenderer* text, Rocket& rocket, double altitude);
 void syncFramerate(unsigned __int64 startTime, int ms_per_update);
 void changeRocketRotationByKeyPressed(int keyPressed);
-
-glm::dvec3 changeRocketRotation(Rocket& rocket, glm::dvec3 &thrustVector, glm::dvec3 &towards);
 
 int main()
 {
@@ -69,7 +60,7 @@ int main()
     CelestialBody earth(planet, "planet_shader", 6371.0, earthPos);
     CelestialBody earthsMoon(moon, "moon_shader", 1737.0, moonPos);
 
-    camera.Position = glm::dvec3(0.002);//earth.pointAboveTheSurface(34.5, 40.5, -0.05);
+    camera.Position = glm::dvec3(0.002);
 
     sun.init();
     earth.init();
@@ -78,7 +69,7 @@ int main()
     float angle = 30.0;
     float dangle = 60.0;
 
-    glm::dvec3 rocketPos = earth.pointAboveTheSurface(angle, dangle, 0.1); //earth.pointAboveTheSurface(30.0, 30.0, 0.05); //earth.pointAboveTheSurface(34.498, 40.5, -0.05);
+    glm::dvec3 rocketPos = earth.pointAboveTheSurface(angle, dangle, 0.1);
     Rocket rocket("moon_shader", rocketPos, 1);
 
     camera.Position = rocket.getPosition() + glm::dvec3(0.0, 0.024, 0.0);
@@ -87,22 +78,11 @@ int main()
     unsigned __int64 lag = 0, previous = currentTime();
     int MS_PER_UPDATE = 12;
    
-    glm::dvec3 thrustVector = glm::normalize(rocket.getPosition() - earthPos) * 0.64;
-
-    bool thrustCutOff = false;
-    float r = 0.25, g = 0.55, b = 0.75;
-    float orr = 0.25, og = 0.55, ob = 0.75;
-
-    //recalculate rocket orientation:
-    glm::vec3 direction = glm::normalize(rocket.getPosition() - earthPos);
-    glm::quat qlook = lookAt(direction, glm::dvec3(0.0, 1.0, 0.0));
-    glm::dvec3 rotation = glm::eulerAngles(qlook) * 180.0f / 3.14159f;
-    
-    glm::dvec3 towards = earthPos; //earth.pointAboveTheSurface(angle, dangle, 0.01);;
     mainWindow.registerInputCallback(changeRocketRotationByKeyPressed);
 
     //initialize Physic engine:
-    PhysicsEngine* physics = new PhysicsEngine(rocket, MS_PER_UPDATE)
+    PhysicsEngine* physics = new PhysicsEngine(rocket, MS_PER_UPDATE);
+    physics->changeAltitudeOrientation(CelestialBodyType::planet, 3185.0, earth.pointAboveTheSurface(angle, dangle, -10.0));
 
     // simulation loop
     // -----------
@@ -117,12 +97,13 @@ int main()
         // -----
         mainWindow.processInput();
 
-        
         // update physics:
-        physics->calculateForces();
+        physics->updateKeyPressed(lastKeyPressed);
+        lag = physics->calculateForces(lag);
+        lastKeyPressed = 0;
         
-
-        switchGLStateForWorldRendering(r, g, b);
+        float* rgb = physics->atmosphereRgb();
+        switchGLStateForWorldRendering(rgb[0], rgb[1], rgb[2]);
 
         // camera/view transformation:
         camera.Position = rocket.getPosition() + glm::dvec3(0.0, 0.024, 0.0);
@@ -133,32 +114,10 @@ int main()
         earthsMoon.render(projection, view, lightPos);
         sun.render(projection, view, lightPos);
 
+        // render other objects
         rocket.render(projection, view, lightPos);
 
-        //atmosphere gradient simulation:
-        float factor = 0;
-        if (altitude > 4.0) {
-            factor = 0.001 * altitude * altitude;
-        }
-        b = ob - factor;
-        if (b < 0)
-        {
-            b = 0;
-        }
-
-        r = orr - factor;
-        if (r < 0)
-        {
-            r = 0;
-        }
-
-        g = og - factor;
-        if (g < 0)
-        {
-            g = 0;
-        }
-
-        renderTextHUD(text, rocket, altitude);
+        renderTextHUD(text, rocket, physics->getAltitude());
 
         syncFramerate(current, MS_PER_UPDATE);
         mainWindow.swapBuffers();
@@ -221,45 +180,6 @@ unsigned __int64 currentTime()
     return std::chrono::duration_cast<std::chrono::milliseconds>(
         std::chrono::system_clock::now().time_since_epoch()
         ).count();
-}
-
-glm::dvec3 changeRocketRotation(Rocket& rocket, glm::dvec3 &thrustVector, glm::dvec3 &towards)
-{
-    //towards += rocket.getPosition() - glm::dvec3(0.1, 0.1, 0.1);
-    double factor = 10;
-    if (lastKeyPressed == GLFW_KEY_UP)
-    {
-        towards.x += factor;
-    }
-
-    if (lastKeyPressed == GLFW_KEY_DOWN)
-    {
-        towards.x -= factor;
-    }
-
-    if (lastKeyPressed == GLFW_KEY_RIGHT)
-    {
-        towards.z -= factor;
-    }
-    
-    if (lastKeyPressed == GLFW_KEY_LEFT)
-    {
-        towards.z += factor;
-    }
-
-    if (lastKeyPressed != 0)
-    {
-        glm::dvec3 direction = glm::normalize(rocket.getPosition() - towards);
-        glm::quat qlook = lookAt(direction, glm::dvec3(0.0, 1.0, 0.0));
-        glm::dvec3 rotation = glm::eulerAngles(qlook) * 180.0f / 3.14159f;
-
-        thrustVector = direction * 0.64;
-        lastKeyPressed = 0;
-
-        return rotation;
-    }
-
-    return glm::dvec3(0); 
 }
 
 void changeRocketRotationByKeyPressed(int keyPressed)

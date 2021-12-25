@@ -19,19 +19,18 @@ public:
 
 	glm::dvec3 getPosition();
 
-	//physics:
-	void updatePhysics(double deltaTime);
-	void addForce(glm::vec3 force);
-	void resetForces();
-
+	void updateMass(double newMass);
 	void updatePosition(glm::dvec3 newPosition);
+	void updateVelocity(glm::dvec3 newVelocity);
 	void updateRotation(glm::dvec3 axis, double angle);
 	void updateRotation(glm::dvec3 rotation);
-
+	
+	double getMass();
 	glm::dvec3 getVelocity();
+	glm::dvec3 getRotation();
 
 	~Rocket();
-
+	
 private:
 	ObjectRenderer* objectRenderer;
 	TriangleGeometry* geometry;
@@ -45,13 +44,11 @@ private:
 	double size;
 
 	//physics:
-	std::vector<glm::dvec3> forces;
 	glm::dvec3 velocity;
 	double mass;
 
 	//helper methods: 
 	void makeRocketGeometry();
-
 	void addTriangle(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3, glm::vec3 normal = glm::vec3(0.0f));
 	glm::vec3 point(double x, double y, double z);
 };

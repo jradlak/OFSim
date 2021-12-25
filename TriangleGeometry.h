@@ -19,6 +19,8 @@ public:
 	int indexOfVert(glm::vec3 vert);
 	void addVert(glm::vec3 vert, glm::vec3 normal);
 
+	void normalize();
+
 	~TriangleGeometry();
 
 private:

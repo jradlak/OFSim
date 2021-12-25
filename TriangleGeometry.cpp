@@ -47,6 +47,15 @@ void TriangleGeometry::addVert(glm::vec3 vert, glm::vec3 normal)
 	indices.push_back(index / 6);
 }
 
+void TriangleGeometry::normalize()
+{
+	double h = 0.016 / 2.0;
+	for (int i = 2; i < vertAN.size(); i += 6)
+	{
+		vertAN[i] = vertAN[i] - h;
+	}
+}
+
 int TriangleGeometry::indexOfVert(glm::vec3 vert)
 {
 	if (vertAN.size() < 6) {

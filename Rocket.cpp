@@ -35,38 +35,34 @@ glm::dvec3 Rocket::getPosition()
 	return position;
 }
 
+double Rocket::getMass()
+{
+	return mass;
+}
+
 glm::dvec3 Rocket::getVelocity()
 {
 	return velocity;
 }
 
-void Rocket::updatePhysics(double deltaTime)
+glm::dvec3 Rocket::getRotation()
 {
-	glm::dvec3 sumOfForces = glm::dvec3(0.0);
-	for (unsigned int i = 0; i < forces.size(); i++)
-	{
-		sumOfForces += forces[i];
-	}
-
-	velocity += sumOfForces / mass * deltaTime;
-	position += velocity * deltaTime;
-
-	resetForces();
+	return rotation;
 }
 
-void Rocket::addForce(glm::vec3 force)
+void Rocket::updateMass(double newMass)
 {
-	forces.push_back(force);
-}
-
-void Rocket::resetForces()
-{
-	forces.clear();
+	mass = newMass;
 }
 
 void Rocket::updatePosition(glm::dvec3 newPosition)
 {
 	position = newPosition;
+}
+
+void Rocket::updateVelocity(glm::dvec3 newVelocity)
+{
+	velocity = newVelocity;
 }
 
 void Rocket::updateRotation(glm::dvec3 axis, double angle)
@@ -171,6 +167,8 @@ void Rocket::makeRocketGeometry()
 		point(0.001, 0.001, 0.002006),
 		point(0.0, 1.0, 0.0)
 	);
+
+	geometry->normalize();
 }
 
 void Rocket::addTriangle(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3, glm::vec3 normal)
