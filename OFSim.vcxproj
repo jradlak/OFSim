@@ -38,6 +38,7 @@
     <ClCompile Include="ObjectRenderer.cpp" />
     <ClCompile Include="PhysicsEngine.cpp" />
     <ClCompile Include="Rocket.cpp" />
+    <ClCompile Include="Smoke.cpp" />
     <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="TextRenderer.cpp" />
     <ClCompile Include="TriangleGeometry.cpp" />

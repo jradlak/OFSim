@@ -5,8 +5,10 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <vector>
+
 #include "ObjectRenderer.h"
 #include "TriangleGeometry.h"
+#include "Smoke.h"
 
 class Rocket
 {
@@ -34,10 +36,10 @@ public:
 private:
 	ObjectRenderer* objectRenderer;
 	TriangleGeometry* geometry;
-	glm::dvec3& position;
-	
-	glm::dvec3 rotation;
+	Smoke* smoke;
 
+	glm::dvec3& position;
+	glm::dvec3 rotation;
 	glm::dvec3 rotatinAxis;
 	double rotationAngle;
 

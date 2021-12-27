@@ -5,6 +5,8 @@ Rocket::Rocket(std::string shaderName, glm::dvec3& _position, double _size)
 {
 	objectRenderer = new ObjectRenderer(shaderName);
 	geometry = new TriangleGeometry();
+	smoke = new Smoke();
+
 	mass = 40.0;
 
 	rotatinAxis = glm::dvec3(0.0);
@@ -28,6 +30,7 @@ void Rocket::render(glm::dmat4& projection, glm::dmat4& view, glm::dvec3& _light
 	shader->setVec3("lightPos", _lightPos);
 
 	objectRenderer->renderWithRotation(projection, view, size, position, rotation);
+	smoke->puff(projection, view, _lightPos, position);
 }
 
 glm::dvec3 Rocket::getPosition()
@@ -185,4 +188,5 @@ Rocket::~Rocket()
 {
 	delete objectRenderer;
 	delete geometry;
+	delete smoke;
 }

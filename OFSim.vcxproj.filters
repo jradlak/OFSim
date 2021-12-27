@@ -98,6 +98,9 @@
     <ClCompile Include="PhysicsEngine.cpp">
       <Filter>Pliki źródłowe\math</Filter>
     </ClCompile>
+    <ClCompile Include="Smoke.cpp">
+      <Filter>Pliki źródłowe\world</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="planet_shader_fs.glsl">

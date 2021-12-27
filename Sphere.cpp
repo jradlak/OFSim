@@ -4,6 +4,20 @@
 
 #include "Sphere.h"
 
+Sphere::Sphere()
+{
+    radius = 0.5f;
+    sectorCount = 32;
+    stackCount = 16;
+
+    //int _size = rand() % 10 + 10;
+    //size = _size / 10000.0f;
+    size = 0.0f;
+
+    build();
+}
+
+
 Sphere::Sphere(float _radius, unsigned int _sectorCount, unsigned int _stackCount)
 {
     radius = _radius;
@@ -87,6 +101,26 @@ std::vector<float> Sphere::getVertices()
 std::vector<int> Sphere::getIndices()
 {
     return indices;
+}
+
+float Sphere::getSize()
+{
+    return size;
+}
+
+void Sphere::updateSize(float newSize)
+{
+    size = newSize;
+}
+
+glm::dvec3 Sphere::getPosition()
+{
+    return position;
+}
+
+void Sphere::updatePosition(glm::dvec3 newPosition)
+{
+    position = newPosition;
 }
 
 Sphere::~Sphere()
