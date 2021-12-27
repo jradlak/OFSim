@@ -17,5 +17,5 @@ public:
 private:
 	int puffIndex = 0;
 	std::vector<Sphere*> puffClouds;
-	std::vector<ObjectRenderer*> renderers;
+	ObjectRenderer* renderer;
 };
