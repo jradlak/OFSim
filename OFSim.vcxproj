@@ -45,7 +45,6 @@
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram.cd" />
     <None Include="light_source_fs.glsl" />
     <None Include="light_source_vs.glsl" />
     <None Include="moon_shader_fs.glsl" />

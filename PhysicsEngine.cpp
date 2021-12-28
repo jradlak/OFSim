@@ -17,7 +17,7 @@ void PhysicsEngine::changeAltitudeOrientation(
 	altitudeOrientation = _celestialBodyType;
 	celestialBodySize = _celestialBodySize;
 
-    towards = _towards; //celestialBodyCenter(celestialBodySize);
+    towards = _towards; 
     lastPos = rocket.getPosition();
 
     thrustCutOff = false;
@@ -27,8 +27,9 @@ void PhysicsEngine::changeAltitudeOrientation(
     glm::dvec3 rotation = glm::eulerAngles(qlook) * 180.0f / 3.14159f;
 
     thrustVector = direction * 0.64;
-
+    
     rocket.updateRotation(rotation);
+    rocket.updateTowards(towards);
 }
 
 unsigned __int64 PhysicsEngine::calculateForces(unsigned __int64 timeInterval)
@@ -217,6 +218,7 @@ glm::dvec3 PhysicsEngine::changeRocketRotation()
         towards.x = pos.x - x;
         towards.y = pos.y - y;
         towards.z = pos.z - z;
+        rocket.updateTowards(towards);
 
         glm::dvec3 direction = glm::normalize(rocket.getPosition() - towards);
         glm::quat qlook = Geometry::gLookAt(direction, glm::dvec3(0.0, 1.0, 0.0));

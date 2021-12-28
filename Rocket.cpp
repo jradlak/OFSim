@@ -30,7 +30,10 @@ void Rocket::render(glm::dmat4& projection, glm::dmat4& view, glm::dvec3& _light
 	shader->setVec3("lightPos", _lightPos);
 
 	objectRenderer->renderWithRotation(projection, view, size, position, rotation);
-	smoke->puff(projection, view, _lightPos, position);
+
+	glm::dvec3 direction = glm::normalize(position - towards);
+	glm::dvec3 smokePosition = position - (direction / 100.0);
+	smoke->puff(projection, view, _lightPos, smokePosition);
 }
 
 glm::dvec3 Rocket::getPosition()
@@ -77,6 +80,11 @@ void Rocket::updateRotation(glm::dvec3 axis, double angle)
 void Rocket::updateRotation(glm::dvec3 _rotation)
 {
 	rotation = _rotation;
+}
+
+void Rocket::updateTowards(glm::dvec3 newTowards)
+{
+	towards = newTowards;
 }
 
 void Rocket::makeRocketGeometry()

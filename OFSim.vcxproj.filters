@@ -127,6 +127,5 @@
     <None Include="text_fs.glsl">
       <Filter>Pliki zasobów</Filter>
     </None>
-    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

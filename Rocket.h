@@ -26,6 +26,7 @@ public:
 	void updateVelocity(glm::dvec3 newVelocity);
 	void updateRotation(glm::dvec3 axis, double angle);
 	void updateRotation(glm::dvec3 rotation);
+	void updateTowards(glm::dvec3 newTowards);
 	
 	double getMass();
 	glm::dvec3 getVelocity();
@@ -39,6 +40,7 @@ private:
 	Smoke* smoke;
 
 	glm::dvec3& position;
+	glm::dvec3 towards;
 	glm::dvec3 rotation;
 	glm::dvec3 rotatinAxis;
 	double rotationAngle;
