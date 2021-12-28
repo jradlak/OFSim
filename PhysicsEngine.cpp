@@ -1,5 +1,7 @@
 #include "PhysicsEngine.h"
 
+#include <iostream>
+
 #include <glm/gtx/rotate_vector.hpp>
 #include <glm/gtx/euler_angles.hpp> 
 
@@ -26,7 +28,7 @@ void PhysicsEngine::changeAltitudeOrientation(
     glm::quat qlook = Geometry::gLookAt(direction, glm::dvec3(0.0, 1.0, 0.0));
     glm::dvec3 rotation = glm::eulerAngles(qlook) * 180.0f / 3.14159f;
 
-    thrustVector = direction * 0.64;
+    thrustVector = direction * 0.24;
     
     rocket.updateRotation(rotation);
     rocket.updateTowards(towards);
@@ -35,14 +37,16 @@ void PhysicsEngine::changeAltitudeOrientation(
 unsigned __int64 PhysicsEngine::calculateForces(unsigned __int64 timeInterval)
 {
     altitude = calculateAltitude();
-    if (altitude > 0.09)
-    {
-        glm::vec3 gravityForceVector = glm::normalize(rocket.getPosition() - celestialBodyCenter(celestialBodySize)) * -0.0981;
-        addForce(gravityForceVector);
-
-        if (altitude > 30.0)
+    if (altitude > 0.9)
+    {                      
+        double mass = rocket.getMass();                
+        if (mass < 3.0)
         {
-            thrustCutOff = true;
+            thrustCutOff = true;            
+        }
+        else 
+        {
+            rocket.updateMass(mass -= 0.0004);
         }
 
         if (!thrustCutOff)
@@ -68,10 +72,11 @@ unsigned __int64 PhysicsEngine::calculateForces(unsigned __int64 timeInterval)
         lastPos = rocket.getPosition();
         towards += deltaP;
 
+        calculateAtmosphereGradient();
+        calculateAtmosphericDragForce();
+
         rocket.updateRotation(rotation);
     }
-
-    calculateAtmosphereGradient();
 
     return timeInterval;
 }
@@ -81,13 +86,15 @@ void PhysicsEngine::updatePhysics(double deltaTime)
     glm::dvec3 velocity = rocket.getVelocity();
     glm::dvec3 position = rocket.getPosition();
 
+    glm::dvec3 gravityForceVector = glm::normalize(rocket.getPosition() - celestialBodyCenter(celestialBodySize)) * -0.00981;
+
     glm::dvec3 sumOfForces = glm::dvec3(0.0);
     for (unsigned int i = 0; i < forces.size(); i++)
     {
         sumOfForces += forces[i];
     }
 
-    velocity += sumOfForces / rocket.getMass() * deltaTime;
+    velocity += (gravityForceVector + (sumOfForces / rocket.getMass())) * deltaTime;
     position += velocity * deltaTime;
 
     rocket.updatePosition(position);
@@ -145,6 +152,32 @@ void PhysicsEngine::calculateAtmosphereGradient()
     if (g < 0)
     {
         g = 0;
+    }
+}
+
+void PhysicsEngine::calculateAtmosphericDragForce()
+{
+    if (glm::length(rocket.getVelocity()) > 0.0) 
+    {
+        glm::dvec3 forceDirection = glm::normalize(rocket.getVelocity()) * -1.0;
+        double velocityMagnitude = 1.8 * glm::length(rocket.getVelocity());
+        double altitudeMagnitude = 1.0 / altitude;
+        if (altitude > 20.0)
+        {
+            altitudeMagnitude *= 1.0 / altitude;
+        }
+
+        glm::dvec3 dragForce = forceDirection * velocityMagnitude * altitudeMagnitude;
+
+        if (glm::length(dragForce) > 0.0001 && altitude < 98.0)
+        {            
+            addForce(dragForce);
+        }
+
+        std::cout << "altitude = " << altitude 
+            << " atm drag force = " << glm::length(dragForce) 
+            << " mass = " << rocket.getMass() 
+            << " velocity = " << glm::length(rocket.getVelocity()) << std::endl;               
     }
 }
 
@@ -224,7 +257,7 @@ glm::dvec3 PhysicsEngine::changeRocketRotation()
         glm::quat qlook = Geometry::gLookAt(direction, glm::dvec3(0.0, 1.0, 0.0));
         glm::dvec3 rotation = glm::eulerAngles(qlook) * 180.0f / 3.14159f;
 
-        thrustVector = direction * 0.64;
+        thrustVector = direction * 0.24;
         lastKeyPressed = 0;
 
         return rotation;

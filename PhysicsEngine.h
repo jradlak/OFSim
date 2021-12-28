@@ -30,8 +30,11 @@ private:
 	void resetForces();
 
 	void calculateAtmosphereGradient();
+	void calculateAtmosphericDragForce();
+	
 	double calculateAltitude();
 	glm::dvec3 changeRocketRotation();
+	
 	glm::dvec3 celestialBodyCenter(double bodySize);
 
 	std::vector<glm::dvec3> forces;

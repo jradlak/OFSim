@@ -7,7 +7,7 @@ Rocket::Rocket(std::string shaderName, glm::dvec3& _position, double _size)
 	geometry = new TriangleGeometry();
 	smoke = new Smoke();
 
-	mass = 40.0;
+	mass = 10.0;
 
 	rotatinAxis = glm::dvec3(0.0);
 	rotationAngle = 0.0;
@@ -33,7 +33,7 @@ void Rocket::render(glm::dmat4& projection, glm::dmat4& view, glm::dvec3& _light
 
 	glm::dvec3 direction = glm::normalize(position - towards);
 	glm::dvec3 smokePosition = position - (direction / 100.0);
-	smoke->puff(projection, view, _lightPos, smokePosition);
+	smoke->puff(projection, view, _lightPos, smokePosition);	
 }
 
 glm::dvec3 Rocket::getPosition()
