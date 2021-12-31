@@ -174,10 +174,12 @@ void PhysicsEngine::calculateAtmosphericDragForce()
             addForce(dragForce);
         }
 
+        /*
         std::cout << "altitude = " << altitude 
             << " atm drag force = " << glm::length(dragForce) 
             << " mass = " << rocket.getMass() 
             << " velocity = " << glm::length(rocket.getVelocity()) << std::endl;               
+            */
     }
 }
 

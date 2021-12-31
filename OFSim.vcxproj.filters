@@ -31,6 +31,9 @@
     <Filter Include="Pliki źródłowe\math">
       <UniqueIdentifier>{d2d12a77-bfdc-430c-8c9c-112a147051dc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Pliki nagłówkowe\vm">
+      <UniqueIdentifier>{5c9a267e-a368-4e6f-8337-4d208126e247}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -69,6 +72,15 @@
     <ClInclude Include="Smoke.h">
       <Filter>Pliki nagłówkowe\world</Filter>
     </ClInclude>
+    <ClInclude Include="Registers.h">
+      <Filter>Pliki nagłówkowe\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="Memory.h">
+      <Filter>Pliki nagłówkowe\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitTests.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -100,6 +112,9 @@
     </ClCompile>
     <ClCompile Include="Smoke.cpp">
       <Filter>Pliki źródłowe\world</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitTests.cpp">
+      <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

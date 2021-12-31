@@ -18,6 +18,9 @@
 // math and physics
 #include "PhysicsEngine.h"
 
+// testing
+#include "UnitTests.h"
+
 // settings
 const unsigned int SCR_WIDTH = 1280;
 const unsigned int SCR_HEIGHT = 720;
@@ -31,9 +34,15 @@ void switchGLStateForWorldRendering(float r, float g, float b);
 void renderTextHUD(TextRenderer* text, Rocket& rocket, double altitude);
 void syncFramerate(unsigned __int64 startTime, int ms_per_update);
 void changeRocketRotationByKeyPressed(int keyPressed);
+bool runTests(int argc, char** argv);
 
-int main()
+int main(int argc, char** argv)
 {
+    if (runTests(argc, argv))
+    {
+        return 0;
+    }
+
     Window mainWindow(camera, SCR_WIDTH, SCR_HEIGHT);
     int result = mainWindow.initialize();
     if (result != 0)
@@ -185,4 +194,21 @@ unsigned __int64 currentTime()
 void changeRocketRotationByKeyPressed(int keyPressed)
 {   
     lastKeyPressed = keyPressed;
+}
+
+bool runTests(int argc, char** argv)
+{
+    if (argc > 1)
+    {
+        if (strcmp(argv[1], "-testingMode") == 0)
+        {
+            UnitTests* tests = new UnitTests();
+            tests->run();
+            delete tests;
+
+            return true;
+        }
+    }
+
+    return false;
 }

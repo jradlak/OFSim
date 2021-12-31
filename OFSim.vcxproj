@@ -21,8 +21,10 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Geometry.h" />
+    <ClInclude Include="Memory.h" />
     <ClInclude Include="ObjectRenderer.h" />
     <ClInclude Include="PhysicsEngine.h" />
+    <ClInclude Include="Registers.h" />
     <ClInclude Include="Rocket.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Smoke.h" />
@@ -30,6 +32,7 @@
     <ClInclude Include="CelestialBody.h" />
     <ClInclude Include="TextRenderer.h" />
     <ClInclude Include="TriangleGeometry.h" />
+    <ClInclude Include="UnitTests.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
@@ -42,6 +45,7 @@
     <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="TextRenderer.cpp" />
     <ClCompile Include="TriangleGeometry.cpp" />
+    <ClCompile Include="UnitTests.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
