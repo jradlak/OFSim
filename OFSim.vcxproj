@@ -33,19 +33,23 @@
     <ClInclude Include="TextRenderer.h" />
     <ClInclude Include="TriangleGeometry.h" />
     <ClInclude Include="UnitTests.h" />
+    <ClInclude Include="VMachine.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CelestialBody.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Memory.cpp" />
     <ClCompile Include="ObjectRenderer.cpp" />
     <ClCompile Include="PhysicsEngine.cpp" />
+    <ClCompile Include="Registers.cpp" />
     <ClCompile Include="Rocket.cpp" />
     <ClCompile Include="Smoke.cpp" />
     <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="TextRenderer.cpp" />
     <ClCompile Include="TriangleGeometry.cpp" />
     <ClCompile Include="UnitTests.cpp" />
+    <ClCompile Include="VMachine.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>

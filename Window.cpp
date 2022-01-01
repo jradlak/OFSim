@@ -1,5 +1,3 @@
-
-
 #include <iostream>
 #include <map>
 
@@ -11,12 +9,12 @@ Window::Window(Camera& _camera, unsigned int _width, unsigned int _height)
         width = _width;
         height = _height;
 
-lastX = width / 2.0f;
-lastY = height / 2.0f;
-firstMouse = true;
+        lastX = width / 2.0f;
+        lastY = height / 2.0f;
+        firstMouse = true;
 
-deltaTime = 0.0f;
-lastFrame = 0.0f;
+        deltaTime = 0.0f;
+        lastFrame = 0.0f;
     }
 
     int Window::initialize()

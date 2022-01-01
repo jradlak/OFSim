@@ -34,6 +34,9 @@
     <Filter Include="Pliki nagłówkowe\vm">
       <UniqueIdentifier>{5c9a267e-a368-4e6f-8337-4d208126e247}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Pliki źródłowe\vm">
+      <UniqueIdentifier>{914b766f-b4a5-4206-9351-fef73b2170b1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -81,6 +84,9 @@
     <ClInclude Include="UnitTests.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
+    <ClInclude Include="VMachine.h">
+      <Filter>Pliki nagłówkowe\vm</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -115,6 +121,15 @@
     </ClCompile>
     <ClCompile Include="UnitTests.cpp">
       <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="Memory.cpp">
+      <Filter>Pliki źródłowe\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="Registers.cpp">
+      <Filter>Pliki źródłowe\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="VMachine.cpp">
+      <Filter>Pliki źródłowe\vm</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

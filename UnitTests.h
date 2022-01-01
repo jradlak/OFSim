@@ -8,5 +8,5 @@ public:
 	void run();
 
 private:
-	void shouldTestVMMemory();
+	void shouldTestVMMemory();	
 };

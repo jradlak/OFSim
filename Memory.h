@@ -2,58 +2,34 @@
 
 #include <iostream>
 
+//#include "VMachine.h"
+
 class Memory
 {
 public:
-	Memory()
-	{
+	Memory() { }
 
-	}
+	unsigned char fetchByte(unsigned int addr);
+	
+	void storeByte(unsigned int addr, unsigned char byte);
+	
+	int fetchWord(unsigned int addr);
+	
+	void storeWord(unsigned int addr, int word);
 
-	unsigned char fetchByte(unsigned int addr)
-	{
-		assertKnown(addr);
-		return mem[addr];
-	}
+	double fetchDWord(unsigned int addr);
 
-	int fetchWord(unsigned int addr)
-	{
-		assertKnown(addr + 4);
-		unsigned char result[4] = { };
-		memcopy(mem, result, addr, 0, 4);
-		return *reinterpret_cast<int*>(result);
-	}
+	void storeDWord(unsigned int addr, double dword);
 
-	void storeWord(unsigned int addr, int word)
-	{
-		assertKnown(addr + 4);
-		unsigned char* result = static_cast<unsigned char*>(static_cast<void*>(&word));
-		memcopy(result, mem, 0, addr, 4);
-	}
-
-	void memcopy(unsigned char* src, unsigned char* dst, unsigned int addr_s, unsigned int addr_d, unsigned int length)
-	{
-		for (unsigned int i = 0; i < length; i++)
-		{
-			dst[addr_d + i] = src[addr_s + i];
-		}
-	}
-
-	~Memory()
-	{
-
-	}
+	~Memory() { }
 
 private:
 	unsigned int size = 64 * 1024;
-	unsigned char mem[64 * 1024] = {};
+	unsigned char mem[64 * 1024] = { };
 
-	void assertKnown(unsigned int addr)
-	{
-		if (addr > size)
-		{
-			std::cout << "Unknown address!!! Program must be terminated!" << std::endl;
-			exit(0);
-		}
-	}
+	//VMachine* vmachine;
+
+	void assertKnown(unsigned int addr);
+
+	void memcopy(unsigned char* src, unsigned char* dst, unsigned int addr_s, unsigned int addr_d, unsigned int length);
 };

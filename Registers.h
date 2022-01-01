@@ -7,43 +7,19 @@ class Registers
 public:
 	Registers() { }
 
-	unsigned int& operator[](int index)
-	{
-		assertKnown(index);
-		return r[index];
-	}
+	unsigned int& operator[](int index);
 
-	double fl(unsigned int index)
-	{
-		assertKnown(index);
-		return flr[index];
-	}
+	double fl(unsigned int index);
 
-	void fl(unsigned int index, double value)
-	{
-		assertKnown(index);
-		flr[index] = value;
-	}
+	void fl(unsigned int index, double value);
 
-	short fr()
-	{
-		return freg;
-	}
+	short fr();
 
-	void fr(short value)
-	{
-		freg = value;
-	}
+	void fr(short value);
 
-	short cr()
-	{
-		return creg;
-	}
+	short cr();
 
-	void cr(short value)
-	{
-		creg = value;
-	}
+	void cr(short value);
 
 	~Registers() { }
 
@@ -54,12 +30,5 @@ private:
 	short freg = 0;			  // state register
 	short creg = 0;			  // control register
 
-	void assertKnown(unsigned int index)
-	{
-		if (index > size)
-		{
-			std::cout << "Unknown register!!! Program must be terminated!" << std::endl;
-			exit(0);
-		}
-	}
+	void assertKnown(unsigned int index);
 };
