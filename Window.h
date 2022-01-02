@@ -30,7 +30,7 @@ private:
     float lastX, lastY;
     bool firstMouse;
 
-    // timing
+    
     float deltaTime; 	// time between current frame and last frame
     float lastFrame;
 

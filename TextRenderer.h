@@ -14,6 +14,8 @@
 
 #include "Shader.h"
 
+// based on: https://learnopengl.com/code_viewer_gh.php?code=src/7.in_practice/2.text_rendering/text_rendering.cpp
+
 struct Character {
     unsigned int textureID; 
     glm::ivec2   size;      

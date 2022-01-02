@@ -1,5 +1,7 @@
 #include "TextRenderer.h"
 
+// based on: https://learnopengl.com/code_viewer_gh.php?code=src/7.in_practice/2.text_rendering/text_rendering.cpp
+
 TextRenderer::TextRenderer(void)
 {
 	shader = new Shader("text_vs.glsl", "text_fs.glsl");

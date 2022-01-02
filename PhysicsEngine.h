@@ -22,6 +22,8 @@ public:
 
 	float* atmosphereRgb();
 
+	double getAtmosphereDragForceMagnitude();
+
 	~PhysicsEngine();
 
 private:
@@ -48,6 +50,8 @@ private:
 
 	double altitude;
 	double celestialBodySize;
+	double atmosphereDragForceMagnitude = 0.0;
+
 	int MS_PER_UPDATE;
 
 	glm::dvec3 thrustVector;

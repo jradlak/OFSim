@@ -31,7 +31,7 @@ int lastKeyPressed = 0;
 
 unsigned __int64 currentTime();
 void switchGLStateForWorldRendering(float r, float g, float b);
-void renderTextHUD(TextRenderer* text, Rocket& rocket, double altitude);
+void renderTextHUD(TextRenderer* text, Rocket& rocket, double altitude, double atmosphereDragForceMagnitude);
 void syncFramerate(unsigned __int64 startTime, int ms_per_update);
 void changeRocketRotationByKeyPressed(int keyPressed);
 bool runTests(int argc, char** argv);
@@ -116,7 +116,7 @@ int main(int argc, char** argv)
 
         // camera/view transformation:
         camera.Position = rocket.getPosition() + glm::dvec3(0.0, 0.024, 0.0);
-        glm::dmat4 view = camera.GetViewMatrix();
+        glm::dmat4 view = camera.getViewMatrix();
 
         // render celestial bodies:
         earth.render(projection, view, lightPos);
@@ -126,7 +126,7 @@ int main(int argc, char** argv)
         // render other objects
         rocket.render(projection, view, lightPos);
 
-        renderTextHUD(text, rocket, physics->getAltitude());
+        renderTextHUD(text, rocket, physics->getAltitude(), physics->getAtmosphereDragForceMagnitude());
 
         syncFramerate(current, MS_PER_UPDATE);
         mainWindow.swapBuffers();
@@ -153,7 +153,7 @@ void switchGLStateForWorldRendering(float r, float g, float b)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void renderTextHUD(TextRenderer* text, Rocket& rocket, double altitude)
+void renderTextHUD(TextRenderer* text, Rocket& rocket, double altitude, double atmosphereDragForceMagnitude)
 {
     glEnable(GL_CULL_FACE);
     glEnable(GL_BLEND);
@@ -161,18 +161,26 @@ void renderTextHUD(TextRenderer* text, Rocket& rocket, double altitude)
     glDisable(GL_DEPTH_TEST);
 
     std::stringstream ssAltitude;
-    ssAltitude << "Wysokosc rakiety: " << altitude << " km";
-    text->renderText(ssAltitude.str(), 25.0f, 75.0f, 0.5f, glm::vec3(0.5, 0.8f, 0.2f));
+    ssAltitude << "Wysokosc punktu widzenia: " << altitude << " km";
+    text->renderText(ssAltitude.str(), 25.0f, 125.0f, 0.5f, glm::vec3(0.5, 0.8f, 0.2f));
+    
+    std::stringstream ssMass;
+    ssMass << "Masa rakiety: " << rocket.getMass() << " t";
+    text->renderText(ssMass.str(), 25.0f, 100.0f, 0.5f, glm::vec3(0.5, 0.8f, 0.2f));
 
-    glm::dvec3 position = rocket.getPosition();
-    std::stringstream ssPosition;
-    ssPosition << "Pozycja rakiety: (" << position.x << ", " << position.y << "," << position.y << ")";
-    text->renderText(ssPosition.str(), 25.0f, 25.0f, 0.5f, glm::vec3(0.5, 0.8f, 0.2f));
+    std::stringstream ssPresure;
+    ssPresure << "Ciœnienie dynamiczne atmosfery: " << atmosphereDragForceMagnitude * 10.0 << "";
+    text->renderText(ssPresure.str(), 25.0f, 75.0f, 0.5f, glm::vec3(0.5, 0.8f, 0.2f));
 
     glm::dvec3 velocity = rocket.getVelocity();
     std::stringstream ssVeloticy;
     ssVeloticy << "Wektor predkosci rakiety: (" << velocity.x << ", " << velocity.y << ",   " << velocity.y << ")";
     text->renderText(ssVeloticy.str(), 25.0f, 50.0f, 0.5f, glm::vec3(0.5, 0.8f, 0.2f));
+
+    glm::dvec3 position = rocket.getPosition();
+    std::stringstream ssPosition;
+    ssPosition << "Pozycja rakiety: (" << position.x << ", " << position.y << "," << position.y << ")";
+    text->renderText(ssPosition.str(), 25.0f, 25.0f, 0.5f, glm::vec3(0.5, 0.8f, 0.2f));    
 }
 
 void syncFramerate(unsigned __int64 startTime, int ms_per_update)

@@ -37,13 +37,16 @@
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CelestialBody.cpp" />
+    <ClCompile Include="Geometry.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Memory.cpp" />
     <ClCompile Include="ObjectRenderer.cpp" />
     <ClCompile Include="PhysicsEngine.cpp" />
     <ClCompile Include="Registers.cpp" />
     <ClCompile Include="Rocket.cpp" />
+    <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Smoke.cpp" />
     <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="TextRenderer.cpp" />

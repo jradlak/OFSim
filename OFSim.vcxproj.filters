@@ -131,6 +131,15 @@
     <ClCompile Include="VMachine.cpp">
       <Filter>Pliki źródłowe\vm</Filter>
     </ClCompile>
+    <ClCompile Include="Geometry.cpp">
+      <Filter>Pliki źródłowe\math</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Pliki źródłowe\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Pliki źródłowe\renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="planet_shader_fs.glsl">

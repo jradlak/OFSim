@@ -28,7 +28,7 @@ Window::Window(Camera& _camera, unsigned int _width, unsigned int _height)
 
         // glfw window creation
         // --------------------
-        mainWindow = glfwCreateWindow(width, height, "Orbital Flight Simulator", NULL, NULL);
+        mainWindow = glfwCreateWindow(width, height, "Symulator Lotów Orbitalnych", NULL, NULL);
         if (mainWindow == NULL)
         {
             std::cout << "Failed to create GLFW window" << std::endl;
@@ -51,8 +51,7 @@ Window::Window(Camera& _camera, unsigned int _width, unsigned int _height)
         }
 
         glfwSetFramebufferSizeCallback(mainWindow, framebuffer_size_callback);
-        glfwSetCursorPosCallback(mainWindow, mouse_callback);
-        glfwSetScrollCallback(mainWindow, scroll_callback);
+        glfwSetCursorPosCallback(mainWindow, mouse_callback);        
 
         // tell GLFW to capture our mouse
         glfwSetInputMode(mainWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -96,17 +95,17 @@ Window::Window(Camera& _camera, unsigned int _width, unsigned int _height)
             glfwSetWindowShouldClose(mainWindow, true);
 
         if (glfwGetKey(mainWindow, GLFW_KEY_W) == GLFW_PRESS)
-            camera.ProcessKeyboard(FORWARD, deltaTime);
+            camera.processKeyboard(FORWARD, deltaTime);
         if (glfwGetKey(mainWindow, GLFW_KEY_S) == GLFW_PRESS)
-            camera.ProcessKeyboard(BACKWARD, deltaTime);
+            camera.processKeyboard(BACKWARD, deltaTime);
         if (glfwGetKey(mainWindow, GLFW_KEY_A) == GLFW_PRESS)
-            camera.ProcessKeyboard(LEFT, deltaTime);
+            camera.processKeyboard(LEFT, deltaTime);
         if (glfwGetKey(mainWindow, GLFW_KEY_D) == GLFW_PRESS)
-            camera.ProcessKeyboard(RIGHT, deltaTime);
+            camera.processKeyboard(RIGHT, deltaTime);
         if (glfwGetKey(mainWindow, GLFW_KEY_Q) == GLFW_PRESS)
-            camera.ProcessKeyboard(ROLL_LEFT, deltaTime);
+            camera.processKeyboard(ROLL_LEFT, deltaTime);
         if (glfwGetKey(mainWindow, GLFW_KEY_E) == GLFW_PRESS)
-            camera.ProcessKeyboard(ROLL_RIGHT, deltaTime);
+            camera.processKeyboard(ROLL_RIGHT, deltaTime);
 
         if (glfwGetKey(mainWindow, GLFW_KEY_UP) == GLFW_PRESS) 
         {
@@ -156,13 +155,7 @@ Window::Window(Camera& _camera, unsigned int _width, unsigned int _height)
         theWindow->lastX = xpos;
         theWindow->lastY = ypos;
 
-        theWindow->camera.ProcessMouseMovement(xoffset, yoffset);
-    }
-
-    void Window::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
-    {
-        Window* theWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));
-        theWindow->camera.ProcessMouseScroll(yoffset);
+        theWindow->camera.processMouseMovement(xoffset, yoffset);
     }
 
     Window::~Window()

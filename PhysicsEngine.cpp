@@ -129,6 +129,18 @@ float* PhysicsEngine::atmosphereRgb()
     return rgb;
 }
 
+double PhysicsEngine::getAtmosphereDragForceMagnitude()
+{
+    if (altitude > 98.0)
+    {
+        return 0.0;
+    }
+    else
+    {
+        return atmosphereDragForceMagnitude;
+    }
+}
+
 void PhysicsEngine::calculateAtmosphereGradient()
 {
     //atmosphere gradient simulation:
@@ -174,12 +186,7 @@ void PhysicsEngine::calculateAtmosphericDragForce()
             addForce(dragForce);
         }
 
-        /*
-        std::cout << "altitude = " << altitude 
-            << " atm drag force = " << glm::length(dragForce) 
-            << " mass = " << rocket.getMass() 
-            << " velocity = " << glm::length(rocket.getVelocity()) << std::endl;               
-            */
+        atmosphereDragForceMagnitude = glm::length(dragForce);
     }
 }
 
