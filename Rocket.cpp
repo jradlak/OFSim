@@ -33,7 +33,12 @@ void Rocket::render(glm::dmat4& projection, glm::dmat4& view, glm::dvec3& _light
 
 	glm::dvec3 direction = glm::normalize(position - towards);
 	glm::dvec3 smokePosition = position - (direction / 100.0);
-	smoke->puff(projection, view, _lightPos, smokePosition);	
+	
+	//TODO: needs better solution
+	if (mass > 3.0)
+	{
+		smoke->puff(projection, view, _lightPos, smokePosition);
+	}
 }
 
 glm::dvec3 Rocket::getPosition()

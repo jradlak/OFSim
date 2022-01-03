@@ -28,7 +28,7 @@ Window::Window(Camera& _camera, unsigned int _width, unsigned int _height)
 
         // glfw window creation
         // --------------------
-        mainWindow = glfwCreateWindow(width, height, "Symulator Lotów Orbitalnych", NULL, NULL);
+        mainWindow = glfwCreateWindow(width, height, "Symulator Lotow Orbitalnych", NULL, NULL);
         if (mainWindow == NULL)
         {
             std::cout << "Failed to create GLFW window" << std::endl;

@@ -169,12 +169,12 @@ void renderTextHUD(TextRenderer* text, Rocket& rocket, double altitude, double a
     text->renderText(ssMass.str(), 25.0f, 100.0f, 0.5f, glm::vec3(0.5, 0.8f, 0.2f));
 
     std::stringstream ssPresure;
-    ssPresure << "Ciœnienie dynamiczne atmosfery: " << atmosphereDragForceMagnitude * 10.0 << "";
+    ssPresure << "Cisnienie dynamiczne atmosfery: " << atmosphereDragForceMagnitude * 10.0 << "";
     text->renderText(ssPresure.str(), 25.0f, 75.0f, 0.5f, glm::vec3(0.5, 0.8f, 0.2f));
 
     glm::dvec3 velocity = rocket.getVelocity();
     std::stringstream ssVeloticy;
-    ssVeloticy << "Wektor predkosci rakiety: (" << velocity.x << ", " << velocity.y << ",   " << velocity.y << ")";
+    ssVeloticy << "Predkosc bezgledna rakiety: " << glm::length(velocity) << " km/s";
     text->renderText(ssVeloticy.str(), 25.0f, 50.0f, 0.5f, glm::vec3(0.5, 0.8f, 0.2f));
 
     glm::dvec3 position = rocket.getPosition();
