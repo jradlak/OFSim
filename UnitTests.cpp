@@ -91,6 +91,33 @@ void UnitTests::shouldTestSetInstructions()
 	print("shouldTestSetInstructions testing... ");
 	setup();
 
+	// test regular word:
+	unsigned char args[5] = { };
+	args[0] = 3; // sets third register
+	unsigned int value = 135711;
+	unsigned char* rvalue = static_cast<unsigned char*>(static_cast<void*>(&value));
+	Memory::memcopy(rvalue, args, 0, 1, 4);
+
+	instructions->set(args);
+
+	// test floating point number:
+	unsigned char fargs[9] = { };
+	fargs[0] = 4; // sets fourth floating point register
+	double fvalue = 1357.11;
+	unsigned char* rfvalue = static_cast<unsigned char*>(static_cast<void*>(&fvalue));
+	Memory::memcopy(rfvalue, fargs, 0, 1, 8);
+
+	instructions->fset(fargs);
+
+	if (registers->operator[](3) != value ||
+		registers->fl(4) != fvalue)
+	{
+		print(" ...failed");
+
+		cleanUp();
+		return;
+	}
+
 	print(" ...passed");
 	cleanUp();
 }
