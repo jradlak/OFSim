@@ -87,6 +87,9 @@
     <ClInclude Include="VMachine.h">
       <Filter>Pliki nagłówkowe\vm</Filter>
     </ClInclude>
+    <ClInclude Include="Instructions.h">
+      <Filter>Pliki nagłówkowe\vm</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -139,6 +142,9 @@
     </ClCompile>
     <ClCompile Include="Shader.cpp">
       <Filter>Pliki źródłowe\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Instructions.cpp">
+      <Filter>Pliki źródłowe\vm</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

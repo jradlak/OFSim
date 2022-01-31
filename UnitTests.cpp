@@ -1,14 +1,14 @@
 #include <iostream>
 
 #include "UnitTests.h"
-#include "Memory.h"
-#include "VMachine.h"
 
 void print(const char* text);
 
 void UnitTests::run()
 {
 	shouldTestVMMemory();
+	shouldTestInstructions();
+	shouldTestSetInstructions();
 
 	int wait;
 	std::cin >> wait;
@@ -17,7 +17,6 @@ void UnitTests::run()
 void UnitTests::shouldTestVMMemory()
 {
 	print("shouldTestVMMemory testing... ");
-	//VMachine* vm = new VMachine();
 	Memory* mem = new Memory();
 
 	int word = 3456;
@@ -53,12 +52,61 @@ void UnitTests::shouldTestVMMemory()
 		!wasException)
 	{
 		print(" ...failed");
+		delete mem;
 		return;
 	}
 
 	print(" ...passed");
 	delete mem;
 	//delete vm;
+}
+
+void UnitTests::shouldTestInstructions()
+{
+	print("shouldTestInstructions testing... ");
+	setup();
+
+	registers->operator[](1)= 0;
+	registers->operator[](2) = 20;
+
+	//mov:
+	unsigned char args[] = { 1, 2 };
+	instructions->mov(args);
+
+
+	if (registers->operator[](1) != 20) 
+	{
+		print(" ...failed");
+
+		cleanUp();
+		return;
+	}
+
+	print(" ...passed");
+	cleanUp();
+}
+
+void UnitTests::shouldTestSetInstructions()
+{
+	print("shouldTestSetInstructions testing... ");
+	setup();
+
+	print(" ...passed");
+	cleanUp();
+}
+
+void UnitTests::setup()
+{
+	memory = new Memory();
+	registers = new Registers();
+	instructions = new Instructions(*memory, *registers);
+}
+
+void UnitTests::cleanUp()
+{
+	delete instructions;
+	delete registers;
+	delete memory;
 }
 
 void print(const char* text)

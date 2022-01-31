@@ -2,6 +2,7 @@
 
 #include "Memory.h"
 #include "Registers.h"
+#include "Instructions.h"
 
 class VMachine
 {
@@ -14,7 +15,8 @@ public:
 
 private:
 	Memory* memory;
-	Registers* registers;	
+	Registers* registers;
+	Instructions* instructions;
 
 	void interruptHandler();
 };

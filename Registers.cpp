@@ -1,18 +1,18 @@
 #include "Registers.h"
 
-unsigned int& Registers::operator[](int index)
+unsigned int& Registers::operator[](unsigned char index)
 {
 	assertKnown(index);
 	return r[index];
 }
 
-double Registers::fl(unsigned int index)
+double Registers::fl(unsigned char index)
 {
 	assertKnown(index);
 	return flr[index];
 }
 
-void Registers::fl(unsigned int index, double value)
+void Registers::fl(unsigned char index, double value)
 {
 	assertKnown(index);
 	flr[index] = value;
@@ -38,7 +38,7 @@ void Registers::cr(short value)
 	creg = value;
 }
 
-void Registers::assertKnown(unsigned int index)
+void Registers::assertKnown(unsigned char index)
 {
 	if (index > size)
 	{

@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Geometry.h" />
+    <ClInclude Include="Instructions.h" />
     <ClInclude Include="Memory.h" />
     <ClInclude Include="ObjectRenderer.h" />
     <ClInclude Include="PhysicsEngine.h" />
@@ -40,6 +41,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CelestialBody.cpp" />
     <ClCompile Include="Geometry.cpp" />
+    <ClCompile Include="Instructions.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Memory.cpp" />
     <ClCompile Include="ObjectRenderer.cpp" />

@@ -7,11 +7,11 @@ class Registers
 public:
 	Registers() { }
 
-	unsigned int& operator[](int index);
+	unsigned int& operator[](unsigned char index);
 
-	double fl(unsigned int index);
+	double fl(unsigned char index);
 
-	void fl(unsigned int index, double value);
+	void fl(unsigned char index, double value);
 
 	short fr();
 
@@ -30,5 +30,5 @@ private:
 	short freg = 0;			  // state register
 	short creg = 0;			  // control register
 
-	void assertKnown(unsigned int index);
+	void assertKnown(unsigned char index);
 };

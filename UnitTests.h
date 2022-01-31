@@ -1,5 +1,10 @@
 #pragma once
 
+#include "Memory.h"
+#include "Registers.h"
+#include "Instructions.h"
+#include "VMachine.h"
+
 class UnitTests
 {
 public:
@@ -9,4 +14,13 @@ public:
 
 private:
 	void shouldTestVMMemory();	
+	void shouldTestInstructions();
+	void shouldTestSetInstructions();
+
+	void setup();
+	void cleanUp();
+
+	Memory* memory;
+	Registers* registers;
+	Instructions* instructions;
 };
