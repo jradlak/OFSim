@@ -16,6 +16,7 @@ private:
 	void shouldTestVMMemory();	
 	void shouldTestInstructions();
 	void shouldTestSetInstructions();
+	void shouldTestLoadAndStoreInstructions();
 
 	void setup();
 	void cleanUp();

@@ -122,6 +122,17 @@ void UnitTests::shouldTestSetInstructions()
 	cleanUp();
 }
 
+void UnitTests::shouldTestLoadAndStoreInstructions()
+{
+	print("shouldTestLoadAndStoreInstructions testing... ");
+	setup();
+
+
+
+	print(" ...passed");
+	cleanUp();
+}
+
 void UnitTests::setup()
 {
 	memory = new Memory();
