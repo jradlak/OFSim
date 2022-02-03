@@ -9,6 +9,7 @@ void UnitTests::run()
 	shouldTestVMMemory();
 	shouldTestInstructions();
 	shouldTestSetInstructions();
+	shouldTestLoadAndStoreInstructions();
 
 	int wait;
 	std::cin >> wait;
@@ -66,7 +67,7 @@ void UnitTests::shouldTestInstructions()
 	print("shouldTestInstructions testing... ");
 	setup();
 
-	registers->operator[](1)= 0;
+	registers->operator[](1) = 0;
 	registers->operator[](2) = 20;
 
 	//mov:
@@ -127,7 +128,25 @@ void UnitTests::shouldTestLoadAndStoreInstructions()
 	print("shouldTestLoadAndStoreInstructions testing... ");
 	setup();
 
+	unsigned int src_addr = 13;
+	unsigned int dst_addr = 16;
 
+	int word = 3456;
+
+	//ld:
+	memory->storeWord(src_addr, word);
+	registers->operator[](8) = src_addr;
+	registers->operator[](10) = dst_addr;
+
+	unsigned char args[] = { 10, 8 };
+	instructions->ld(args);
+
+	if (memory->fetchWord(dst_addr) != word) {
+		print(" ...failed");
+
+		cleanUp();
+		return;
+	}
 
 	print(" ...passed");
 	cleanUp();
