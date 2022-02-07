@@ -11,6 +11,8 @@ void UnitTests::run()
 	shouldTestSetInstructions();
 	shouldTestLoadAndStoreInstructions();
 
+	shouldTestTranslator();
+
 	int wait;
 	std::cin >> wait;
 }
@@ -152,15 +154,30 @@ void UnitTests::shouldTestLoadAndStoreInstructions()
 	cleanUp();
 }
 
+void UnitTests::shouldTestTranslator()
+{
+	print("shouldTestTranslator testing... ");
+	setup();
+
+	translator->translate("orbitalProgram1.oasm");
+
+	print(" ...passed");
+	cleanUp();
+}
+
 void UnitTests::setup()
 {
 	memory = new Memory();
 	registers = new Registers();
 	instructions = new Instructions(*memory, *registers);
+
+	translator = new Translator();
 }
 
 void UnitTests::cleanUp()
 {
+	delete translator;
+
 	delete instructions;
 	delete registers;
 	delete memory;

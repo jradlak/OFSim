@@ -18,16 +18,6 @@ void Registers::fl(unsigned char index, double value)
 	flr[index] = value;
 }
 
-short Registers::fr()
-{
-	return freg;
-}
-
-void Registers::fr(short value)
-{
-	freg = value;
-}
-
 short Registers::cr()
 {
 	return creg;
@@ -36,6 +26,36 @@ short Registers::cr()
 void Registers::cr(short value)
 {
 	creg = value;
+}
+
+short Registers::zf()
+{
+	return zfreg;
+}
+
+void Registers::zf(short value)
+{
+	zfreg = value;
+}
+
+short Registers::cf()
+{
+	return cfreg;
+}
+
+void Registers::cf(short value)
+{
+	cfreg = value;
+}
+
+unsigned int Registers::pc()
+{
+	return pcreg;
+}
+
+void Registers::pc(unsigned int value)
+{
+	pcreg = value;
 }
 
 void Registers::assertKnown(unsigned char index)

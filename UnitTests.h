@@ -4,6 +4,7 @@
 #include "Registers.h"
 #include "Instructions.h"
 #include "VMachine.h"
+#include "Translator.h"
 
 class UnitTests
 {
@@ -18,10 +19,14 @@ private:
 	void shouldTestSetInstructions();
 	void shouldTestLoadAndStoreInstructions();
 
+	void shouldTestTranslator();
+
 	void setup();
 	void cleanUp();
 
 	Memory* memory;
 	Registers* registers;
 	Instructions* instructions;
+
+	Translator* translator;
 };
