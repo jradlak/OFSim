@@ -42,10 +42,9 @@ void Instructions::ld(unsigned char* args)
 	unsigned char r_dst_addr = args[0];
 
 	unsigned int src_addr = registers[r_src_addr];
-	unsigned int dst_addr = registers[r_dst_addr];
 	
 	unsigned int value = memory.fetchWord(src_addr);
-	memory.storeWord(dst_addr, value);
+	registers[r_dst_addr] = value;
 }
 
 void Instructions::fld(unsigned char* args)
@@ -54,10 +53,9 @@ void Instructions::fld(unsigned char* args)
 	unsigned char r_dst_addr = args[0];
 
 	unsigned int src_addr = registers[r_src_addr];
-	unsigned int dst_addr = registers[r_dst_addr];
 
 	double value = memory.fetchDWord(src_addr);
-	memory.storeDWord(dst_addr, value);
+	registers.fl(r_dst_addr, value);
 }
 
 void Instructions::bld(unsigned char* args)
@@ -66,10 +64,9 @@ void Instructions::bld(unsigned char* args)
 	unsigned char r_dst_addr = args[0];
 
 	unsigned int src_addr = registers[r_src_addr];
-	unsigned int dst_addr = registers[r_dst_addr];
-
+	
 	unsigned char value = memory.fetchByte(src_addr);
-	memory.storeByte(dst_addr, value);
+	registers[r_dst_addr] = value;
 }
 
 void Instructions::st(unsigned char* args)
@@ -356,11 +353,50 @@ void Instructions::jmpr(unsigned char* args)
 	registers.pc(dst_addr);
 }
 
+void Instructions::halt(unsigned char* args)
+{
+	// do nthng!
+}
+
 void Instructions::call(unsigned int opcode, unsigned char* args)
 {
 	switch (opcode)
 	{
-	case 0x0: mov(args); break;
-	case 0x1: fmov(args); break;
+		case 0x0: mov(args); break;
+		case 0x1: fmov(args); break;
+		case 0x3: set(args); break;
+		case 0x4: fset(args); break;
+		case 0x5: ld(args); break;
+		case 0x6: fld(args); break;
+		case 0x7: bld(args); break;
+		case 0x8: st(args); break;
+		case 0x9: fst(args); break;
+		case 0xA: bst(args); break;
+		case 0xB: add(args); break;
+		case 0xC: fadd(args); break;
+		case 0xD: sub(args); break;
+		case 0xE: fsub(args); break;
+		case 0xF: mul(args); break;
+		case 0x10: fmul(args); break;
+		case 0x11: div(args); break;
+		case 0x12: fdiv(args); break;
+		case 0x13: mod(args); break;
+		case 0x14: vor(args); break;
+		case 0x15: vand(args); break;
+		case 0x16: vxor(args); break;
+		case 0x17: vnot(args); break;
+		case 0x18: vshl(args); break;
+		case 0x19: vshr(args); break;
+		case 0x1A: cmp(args); break;
+		case 0x1B: fcmp(args); break;
+		case 0x1C: jz(args); break;
+		case 0x1D: jnz(args); break;
+		case 0x1E: jc(args); break;
+		case 0x1F: jnc(args); break;
+		case 0x20: jbe(args); break;
+		case 0x21: ja(args); break;
+		case 0x22: jmp(args); break;
+		case 0x23: jmpr(args); break;
+		case 0x24: halt(args); break;
 	}
 }

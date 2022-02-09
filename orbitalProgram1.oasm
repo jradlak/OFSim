@@ -1,8 +1,27 @@
-Hello
-World!!
-start:
-start to start
-; kandydat:
-jeszcze raz
-koniec:
-koniec to koniec:
+; Wypisz dane znak po znaku
+set r4, data
+vxor r0, r0
+set r1, 1
+set r3, 1024
+
+print_loop:
+; Pobierz bajt spod adresu z R0
+bld r2, r0
+
+; Jeœli to zero, wyjdŸ z pêtli
+cmp r2, r0
+jz .end
+
+; W przeciwnym wypadku wypisz znak na konsolê (u nas ustaw bajt w odpowiednim miejscu pamiêci)
+add r3, r1
+bst r3, r2
+
+; Przesuñ r4 na kolejny znak i wróæ na pocz¹tek pêtli
+add r4. r1
+jmp print_loop
+
+.end:
+halt
+
+data:
+db Hello world

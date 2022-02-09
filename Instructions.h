@@ -61,6 +61,9 @@ public:
 	void jmp(unsigned char* args);  // jump to address
 	void jmpr(unsigned char* args);  // jump to address from register
 
+	// special instructions:
+	void halt(unsigned char* args);
+
 	void call(unsigned int opcode, unsigned char* args);
 
 	~Instructions() {}

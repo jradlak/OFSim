@@ -4,7 +4,6 @@
 #include <tuple>
 #include "Instructions.h"
 
-
 class Opcodes
 {
 public:
@@ -49,11 +48,7 @@ public:
 
 		opcodes.push_back(std::make_tuple(0x22, "jmp", 0x4));
 		opcodes.push_back(std::make_tuple(0x23, "jmpr", 0x1));
-	}
-
-	std::string getInstruction(unsigned int opcode) 
-	{
-		return "";
+		opcodes.push_back(std::make_tuple(0x24, "halt", 0x0));
 	}
 
 	unsigned int getOpcode(std::string name)
@@ -65,6 +60,8 @@ public:
 				return std::get<0>(opcodes[i]);					
 			}
 		}
+
+		return 0x100;
 	}
 
 	std::string getInstrName(unsigned int opcode)
@@ -76,6 +73,8 @@ public:
 				return std::get<1>(opcodes[i]);
 			}
 		}
+
+		return "";
 	}
 
 	unsigned int getInstrSize(unsigned int opcode)
@@ -87,6 +86,8 @@ public:
 				return std::get<2>(opcodes[i]);
 			}
 		}
+
+		return 0x0;
 	}
 
 	~Opcodes() {}

@@ -29,6 +29,9 @@ private:
 	unsigned int size = 64 * 1024;
 	unsigned char mem[64 * 1024] = { };
 
-	void assertKnown(unsigned int addr);
+	void assertConditions(unsigned int addr);
+	void blockSemaphore();
+	void leaseSemaphore();
 
+	bool blocked = false;
 };
