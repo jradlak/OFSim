@@ -6,6 +6,10 @@
 #include <vector>
 #include <string>
 #include <map>
+#include <algorithm> 
+#include <functional> 
+#include <cctype>
+#include <locale>
 
 class Translator
 {
@@ -21,4 +25,5 @@ private:
 	std::map<std::string, unsigned int> labelDict;
 
 	void translate(std::string sourceLine);
+	void findLabel(std::string sourceLine);
 };

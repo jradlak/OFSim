@@ -8,7 +8,7 @@ class Instructions
 public:
 	Instructions(Memory& _memory, Registers& _registers)
 		:memory(_memory), registers(_registers) {}
-		
+	
 	// copy data operations:
 	void mov(unsigned char* args);
 	void fmov(unsigned char* args);
@@ -18,7 +18,6 @@ public:
 	
 	// load and store data from and to memory:
 	void ld(unsigned char* args);
-	
 	void fld(unsigned char* args);
 	void bld(unsigned char* args);
 
@@ -61,6 +60,8 @@ public:
 	// unconditional jumps:
 	void jmp(unsigned char* args);  // jump to address
 	void jmpr(unsigned char* args);  // jump to address from register
+
+	void call(unsigned int opcode, unsigned char* args);
 
 	~Instructions() {}
 	

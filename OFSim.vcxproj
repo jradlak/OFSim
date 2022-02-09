@@ -24,6 +24,7 @@
     <ClInclude Include="Instructions.h" />
     <ClInclude Include="Memory.h" />
     <ClInclude Include="ObjectRenderer.h" />
+    <ClInclude Include="Opcodes.h" />
     <ClInclude Include="PhysicsEngine.h" />
     <ClInclude Include="Registers.h" />
     <ClInclude Include="Rocket.h" />

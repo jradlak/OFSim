@@ -355,3 +355,12 @@ void Instructions::jmpr(unsigned char* args)
 	unsigned int dst_addr = (registers.pc() + addr) % 0xffff;
 	registers.pc(dst_addr);
 }
+
+void Instructions::call(unsigned int opcode, unsigned char* args)
+{
+	switch (opcode)
+	{
+	case 0x0: mov(args); break;
+	case 0x1: fmov(args); break;
+	}
+}

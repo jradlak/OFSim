@@ -11,6 +11,7 @@ void UnitTests::run()
 	shouldTestSetInstructions();
 	shouldTestLoadAndStoreInstructions();
 
+	shouldTestOpcodes();
 	shouldTestTranslator();
 
 	int wait;
@@ -154,6 +155,30 @@ void UnitTests::shouldTestLoadAndStoreInstructions()
 	cleanUp();
 }
 
+void UnitTests::shouldTestOpcodes()
+{
+	print("shouldTestOpcodes testing... ");
+	setup();
+
+	unsigned int movcode = opcodes->getOpcode("mov");
+	registers->operator[](1) = 0;
+	registers->operator[](2) = 20;
+
+	unsigned char args[] = { 1, 2 };
+	instructions->call(movcode, args);
+
+	if (registers->operator[](1) != 20)
+	{
+		print(" ...failed");
+
+		cleanUp();
+		return;
+	}
+
+	print(" ...passed");
+	cleanUp();
+}
+
 void UnitTests::shouldTestTranslator()
 {
 	print("shouldTestTranslator testing... ");
@@ -161,6 +186,7 @@ void UnitTests::shouldTestTranslator()
 
 	translator->translate("orbitalProgram1.oasm");
 
+	
 	print(" ...passed");
 	cleanUp();
 }
@@ -171,12 +197,14 @@ void UnitTests::setup()
 	registers = new Registers();
 	instructions = new Instructions(*memory, *registers);
 
+	opcodes = new Opcodes();
 	translator = new Translator();
 }
 
 void UnitTests::cleanUp()
 {
 	delete translator;
+	delete opcodes;
 
 	delete instructions;
 	delete registers;

@@ -93,6 +93,9 @@
     <ClInclude Include="Translator.h">
       <Filter>Pliki nagłówkowe\vm</Filter>
     </ClInclude>
+    <ClInclude Include="Opcodes.h">
+      <Filter>Pliki nagłówkowe\vm</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

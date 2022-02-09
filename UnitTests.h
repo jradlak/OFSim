@@ -5,6 +5,7 @@
 #include "Instructions.h"
 #include "VMachine.h"
 #include "Translator.h"
+#include "Opcodes.h"
 
 class UnitTests
 {
@@ -19,6 +20,8 @@ private:
 	void shouldTestSetInstructions();
 	void shouldTestLoadAndStoreInstructions();
 
+	void shouldTestOpcodes();
+
 	void shouldTestTranslator();
 
 	void setup();
@@ -28,5 +31,6 @@ private:
 	Registers* registers;
 	Instructions* instructions;
 
+	Opcodes* opcodes;
 	Translator* translator;
 };
