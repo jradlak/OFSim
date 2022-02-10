@@ -90,6 +90,11 @@ public:
 		return 0x0;
 	}
 
+	bool isJump(unsigned int opcode) 
+	{
+		return opcode >= 0x1C && opcode != 0x24;
+	}
+
 	~Opcodes() {}
 
 private:

@@ -256,7 +256,7 @@ void Instructions::cmp(unsigned char* args)
 
 	registers.zf(0);
 	registers.cf(0);
-	int result = value1 - value1;
+	int result = value2 - value1;
 	if (result == 0) 
 	{
 		registers.zf(1);
@@ -276,7 +276,7 @@ void Instructions::fcmp(unsigned char* args)
 
 	registers.zf(0);
 	registers.cf(0);
-	double result = value1 - value1;
+	double result = value2 - value1;
 	if (result == 0.0)
 	{
 		registers.zf(1);
@@ -341,16 +341,16 @@ void Instructions::jmp(unsigned char* args)
 	unsigned char aaddr[4] = { };
 	Memory::memcopy(args, aaddr, 0, 0, 4);
 	unsigned int addr = *reinterpret_cast<unsigned int*>(aaddr);
-	unsigned int dst_addr = (registers.pc() + addr) % 0xffff;
-	registers.pc(dst_addr);
+	//unsigned int dst_addr = (registers.pc() + addr) % 0xffff;
+	registers.pc(addr);
 }
 
 void Instructions::jmpr(unsigned char* args)
 {
 	unsigned char r_dst_addr = args[0];
 	unsigned int addr = registers[r_dst_addr];
-	unsigned int dst_addr = (registers.pc() + addr) % 0xffff;
-	registers.pc(dst_addr);
+	//unsigned int dst_addr = (registers.pc() + addr) % 0xffff;
+	registers.pc(addr);
 }
 
 void Instructions::halt(unsigned char* args)

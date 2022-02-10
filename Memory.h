@@ -23,12 +23,13 @@ public:
 
 	static void memcopy(unsigned char* src, unsigned char* dst, unsigned int addr_s, unsigned int addr_d, unsigned int length);
 
-	~Memory() { }
-
-private:
 	unsigned int size = 64 * 1024;
 	unsigned char mem[64 * 1024] = { };
 
+	~Memory() { }
+
+private:
+	
 	void assertConditions(unsigned int addr);
 	void blockSemaphore();
 	void leaseSemaphore();

@@ -20,11 +20,14 @@ public:
 	Translator() { opcodes = new Opcodes(); }
 
 	void translate(const char* sourcePath);
+   
+    unsigned int getCodeSize() { return instr_addr; }
+
+    unsigned char code[64 * 512] = { }; // code buffer
 
 	~Translator() { delete opcodes; }
 
-private:
-    unsigned char code[64 * 512] = { }; // code buffer
+private:   
 	unsigned int instr_addr = 0;
 	std::map<std::string, unsigned int> labelDict;
 	Opcodes* opcodes;

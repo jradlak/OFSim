@@ -20,9 +20,7 @@ void Translator::translate(const char* sourcePath)
             recognizeInstr(line);
             findLabel(line);
         }
-
-        //std::cout << "Wlasciwa translacja: \n";
-
+        
         instr_addr = 0;
         sourceFile.clear();
         sourceFile.seekg(0);
@@ -80,6 +78,25 @@ void Translator::translate(std::string sourceLine)
         case 0x22: trnsl_jmp(instr, sourceLine); break;
         case 0x23: trnsl_jmpr(instr, sourceLine); break;
         case 0x24: trnsl_halt(instr, sourceLine); break;       
+        }
+    }
+    else
+    {
+        std::string line = trim(sourceLine);
+        unsigned int pos = line.find(" ");
+        std::string token = line.substr(0, pos);
+        if (token == "db")
+        {
+            pos += 1;
+            unsigned int pose = line.length() - pos;
+            std::string dbData = line.substr(pos, pose);
+            for (int i = 0; i < dbData.length(); i++)
+            {
+                unsigned char znk = dbData[i];
+                code[instr_addr + i] = znk;
+            }
+
+            instr_addr += dbData.length();
         }
     }
 }
@@ -312,6 +329,7 @@ void Translator::trnsl_ja(std::tuple<unsigned int, unsigned int> instr, std::str
 
 void Translator::trnsl_jmp(std::tuple<unsigned int, unsigned int> instr, std::string line)
 {
+    trnsl_jz(instr, line);
 }
 
 void Translator::trnsl_jmpr(std::tuple<unsigned int, unsigned int> instr, std::string line)
@@ -320,6 +338,9 @@ void Translator::trnsl_jmpr(std::tuple<unsigned int, unsigned int> instr, std::s
 
 void Translator::trnsl_halt(std::tuple<unsigned int, unsigned int> instr, std::string line)
 {
+    unsigned int opcode = std::get<0>(instr);
+    unsigned int addr = instr_addr - 1;
+    code[addr++] = opcode;
 }
 
 std::tuple<unsigned int, unsigned int> Translator::recognizeInstr(std::string sourceLine)

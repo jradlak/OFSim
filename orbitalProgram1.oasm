@@ -2,22 +2,22 @@
 set r4, data
 vxor r0, r0
 set r1, 1
-set r3, 1024
+set r3, 256
 
 print_loop:
-; Pobierz bajt spod adresu z R0
-bld r2, r0
+; Pobierz bajt spod adresu z R4
+bld r2, r4
 
 ; Jeœli to zero, wyjdŸ z pêtli
 cmp r2, r0
 jz .end
 
 ; W przeciwnym wypadku wypisz znak na konsolê (u nas ustaw bajt w odpowiednim miejscu pamiêci)
-add r3, r1
 bst r3, r2
+add r3, r1
 
 ; Przesuñ r4 na kolejny znak i wróæ na pocz¹tek pêtli
-add r4. r1
+add r4, r1
 jmp print_loop
 
 .end:

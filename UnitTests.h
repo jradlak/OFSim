@@ -21,8 +21,8 @@ private:
 	void shouldTestLoadAndStoreInstructions();
 
 	void shouldTestOpcodes();
-
 	void shouldTestTranslator();
+	void shouldTestVM();
 
 	void setup();
 	void cleanUp();
@@ -31,6 +31,8 @@ private:
 	Registers* registers;
 	Instructions* instructions;
 
+
 	Opcodes* opcodes;
 	Translator* translator;
+	VMachine* vm;
 };

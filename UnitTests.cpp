@@ -13,6 +13,7 @@ void UnitTests::run()
 
 	shouldTestOpcodes();
 	shouldTestTranslator();
+	shouldTestVM();
 
 	int wait;
 	std::cin >> wait;
@@ -185,8 +186,29 @@ void UnitTests::shouldTestTranslator()
 	setup();
 
 	translator->translate("orbitalProgram1.oasm");
-
 	
+	print(" ...passed");
+	cleanUp();
+}
+
+void UnitTests::shouldTestVM()
+{
+	print("shouldTestVM testing... ");
+	setup();
+
+	vm->interpret("orbitalProgram1.oasm");
+	Memory* memory = vm->getMemory();
+
+	unsigned char H = memory->mem[256];
+	unsigned char d = memory->mem[266];
+	if (H != 'H' || d != 'd')
+	{
+		print(" ...failed");
+
+		cleanUp();
+		return;
+	}
+
 	print(" ...passed");
 	cleanUp();
 }
@@ -199,10 +221,12 @@ void UnitTests::setup()
 
 	opcodes = new Opcodes();
 	translator = new Translator();
+	vm = new VMachine();
 }
 
 void UnitTests::cleanUp()
 {
+	delete vm;
 	delete translator;
 	delete opcodes;
 
