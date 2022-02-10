@@ -42,41 +42,41 @@ void Translator::translate(std::string sourceLine)
     {
         switch (opcode)
         {          
-        case 0x0: trnsl_mov(instr, sourceLine); break;
-        case 0x1: trnsl_fmov(instr, sourceLine); break;
-        case 0x3: trnsl_set(instr, sourceLine); break;
-        case 0x4: trnsl_fset(instr, sourceLine); break;
-        case 0x5: trnsl_ld(instr, sourceLine); break;
-        case 0x6: trnsl_fld(instr, sourceLine); break;
-        case 0x7: trnsl_bld(instr, sourceLine); break;
-        case 0x8: trnsl_st(instr, sourceLine); break;
-        case 0x9: trnsl_fst(instr, sourceLine); break;
-        case 0xA: trnsl_bst(instr, sourceLine); break;
-        case 0xB: trnsl_add(instr, sourceLine); break;
-        case 0xC: trnsl_fadd(instr, sourceLine); break;
-        case 0xD: trnsl_sub(instr, sourceLine); break;
-        case 0xE: trnsl_fsub(instr, sourceLine); break;
-        case 0xF: trnsl_mul(instr, sourceLine); break;
-        case 0x10: trnsl_fmul(instr, sourceLine); break;
-        case 0x11: trnsl_div(instr, sourceLine); break;
-        case 0x12: trnsl_fdiv(instr, sourceLine); break;
-        case 0x13: trnsl_mod(instr, sourceLine); break;
-        case 0x14: trnsl_vor(instr, sourceLine); break;
-        case 0x15: trnsl_vand(instr, sourceLine); break;
-        case 0x16: trnsl_vxor(instr, sourceLine); break;
-        case 0x17: trnsl_vnot(instr, sourceLine); break;
-        case 0x18: trnsl_vshl(instr, sourceLine); break;
-        case 0x19: trnsl_vshr(instr, sourceLine); break;
-        case 0x1A: trnsl_cmp(instr, sourceLine); break;
-        case 0x1B: trnsl_fcmp(instr, sourceLine); break;
-        case 0x1C: trnsl_jz(instr, sourceLine); break;
-        case 0x1D: trnsl_jnz(instr, sourceLine); break;
-        case 0x1E: trnsl_jc(instr, sourceLine); break;
-        case 0x1F: trnsl_jnc(instr, sourceLine); break;
-        case 0x20: trnsl_jbe(instr, sourceLine); break;
-        case 0x21: trnsl_ja(instr, sourceLine); break;
-        case 0x22: trnsl_jmp(instr, sourceLine); break;
-        case 0x23: trnsl_jmpr(instr, sourceLine); break;
+        case 0x0: trnsl_register_to_register(instr, sourceLine); break;
+        case 0x1: trnsl_register_to_register(instr, sourceLine); break;
+        case 0x3: trnsl_constant_to_register(instr, sourceLine); break;
+        case 0x4: trnsl_constant_to_register(instr, sourceLine); break;
+        case 0x5: trnsl_register_to_register(instr, sourceLine); break;
+        case 0x6: trnsl_register_to_register(instr, sourceLine); break;
+        case 0x7: trnsl_register_to_register(instr, sourceLine); break;
+        case 0x8: trnsl_register_to_register(instr, sourceLine); break;
+        case 0x9: trnsl_register_to_register(instr, sourceLine); break;
+        case 0xA: trnsl_register_to_register(instr, sourceLine); break;
+        case 0xB: trnsl_register_to_register(instr, sourceLine); break;
+        case 0xC: trnsl_register_to_register(instr, sourceLine); break;
+        case 0xD: trnsl_register_to_register(instr, sourceLine); break;
+        case 0xE: trnsl_register_to_register(instr, sourceLine); break;
+        case 0xF: trnsl_register_to_register(instr, sourceLine); break;
+        case 0x10: trnsl_register_to_register(instr, sourceLine); break;
+        case 0x11: trnsl_register_to_register(instr, sourceLine); break;
+        case 0x12: trnsl_register_to_register(instr, sourceLine); break;
+        case 0x13: trnsl_register_to_register(instr, sourceLine); break;
+        case 0x14: trnsl_register_to_register(instr, sourceLine); break;
+        case 0x15: trnsl_register_to_register(instr, sourceLine); break;
+        case 0x16: trnsl_register_to_register(instr, sourceLine); break;
+        case 0x17: trnsl_register(instr, sourceLine); break;
+        case 0x18: trnsl_register_to_register(instr, sourceLine); break;
+        case 0x19: trnsl_register_to_register(instr, sourceLine); break;
+        case 0x1A: trnsl_register_to_register(instr, sourceLine); break;
+        case 0x1B: trnsl_register_to_register(instr, sourceLine); break;
+        case 0x1C: trnsl_constant(instr, sourceLine); break;
+        case 0x1D: trnsl_constant(instr, sourceLine); break;
+        case 0x1E: trnsl_constant(instr, sourceLine); break;
+        case 0x1F: trnsl_constant(instr, sourceLine); break;
+        case 0x20: trnsl_constant(instr, sourceLine); break;
+        case 0x21: trnsl_constant(instr, sourceLine); break;
+        case 0x22: trnsl_constant(instr, sourceLine); break;
+        case 0x23: trnsl_register(instr, sourceLine); break;
         case 0x24: trnsl_halt(instr, sourceLine); break;       
         }
     }
@@ -111,16 +111,7 @@ void Translator::findLabel(std::string sourceLine)
     }
 }
 
-void Translator::trnsl_mov(std::tuple<unsigned int, unsigned int> instr, std::string line)
-{
-    
-}
-
-void Translator::trnsl_fmov(std::tuple<unsigned int, unsigned int> instr, std::string line)
-{
-}
-
-void Translator::trnsl_set(std::tuple<unsigned int, unsigned int> instr, std::string line)
+void Translator::trnsl_constant_to_register(std::tuple<unsigned int, unsigned int> instr, std::string line)
 {
     line = trim(line);
     unsigned int opcode = std::get<0>(instr);
@@ -155,84 +146,7 @@ void Translator::trnsl_set(std::tuple<unsigned int, unsigned int> instr, std::st
     Memory::memcopy(word, code, 0, addr, 4);
 }
 
-void Translator::trnsl_fset(std::tuple<unsigned int, unsigned int> instr, std::string line)
-{
-}
-
-void Translator::trnsl_ld(std::tuple<unsigned int, unsigned int> instr, std::string line)
-{
-    trnsl_vxor(instr, line);
-}
-
-void Translator::trnsl_fld(std::tuple<unsigned int, unsigned int> instr, std::string line)
-{
-    trnsl_vxor(instr, line);
-}
-
-void Translator::trnsl_bld(std::tuple<unsigned int, unsigned int> instr, std::string line)
-{
-    trnsl_vxor(instr, line);
-}
-
-void Translator::trnsl_st(std::tuple<unsigned int, unsigned int> instr, std::string line)
-{
-}
-
-void Translator::trnsl_fst(std::tuple<unsigned int, unsigned int> instr, std::string line)
-{
-}
-
-void Translator::trnsl_bst(std::tuple<unsigned int, unsigned int> instr, std::string line)
-{
-    trnsl_vxor(instr, line);
-}
-
-void Translator::trnsl_add(std::tuple<unsigned int, unsigned int> instr, std::string line)
-{
-    trnsl_vxor(instr, line);
-}
-
-void Translator::trnsl_fadd(std::tuple<unsigned int, unsigned int> instr, std::string line)
-{
-}
-
-void Translator::trnsl_sub(std::tuple<unsigned int, unsigned int> instr, std::string line)
-{
-}
-
-void Translator::trnsl_fsub(std::tuple<unsigned int, unsigned int> instr, std::string line)
-{
-}
-
-void Translator::trnsl_mul(std::tuple<unsigned int, unsigned int> instr, std::string line)
-{
-}
-
-void Translator::trnsl_fmul(std::tuple<unsigned int, unsigned int> instr, std::string line)
-{
-}
-
-void Translator::trnsl_div(std::tuple<unsigned int, unsigned int> instr, std::string line)
-{
-}
-
-void Translator::trnsl_fdiv(std::tuple<unsigned int, unsigned int> instr, std::string line)
-{
-}
-
-void Translator::trnsl_mod(std::tuple<unsigned int, unsigned int> instr, std::string line)
-{
-}
-
-void Translator::trnsl_vor(std::tuple<unsigned int, unsigned int> instr, std::string line)
-{
-}
-
-void Translator::trnsl_vand(std::tuple<unsigned int, unsigned int> instr, std::string line)
-{
-}
-
-void Translator::trnsl_vxor(std::tuple<unsigned int, unsigned int> instr, std::string line)
+void Translator::trnsl_register_to_register(std::tuple<unsigned int, unsigned int> instr, std::string line)
 {
     line = trim(line);
     unsigned int opcode = std::get<0>(instr);
@@ -253,33 +167,10 @@ void Translator::trnsl_vxor(std::tuple<unsigned int, unsigned int> instr, std::s
     unsigned int addr = instr_addr - instrSize;
     code[addr++] = opcode;
     code[addr++] = reg1;
-    code[addr] = reg2;
-
-    int a = 10;
+    code[addr] = reg2;    
 }
 
-void Translator::trnsl_vnot(std::tuple<unsigned int, unsigned int> instr, std::string line)
-{
-}
-
-void Translator::trnsl_vshl(std::tuple<unsigned int, unsigned int> instr, std::string line)
-{
-}
-
-void Translator::trnsl_vshr(std::tuple<unsigned int, unsigned int> instr, std::string line)
-{
-}
-
-void Translator::trnsl_cmp(std::tuple<unsigned int, unsigned int> instr, std::string line)
-{
-    trnsl_vxor(instr, line);
-}
-
-void Translator::trnsl_fcmp(std::tuple<unsigned int, unsigned int> instr, std::string line)
-{
-}
-
-void Translator::trnsl_jz(std::tuple<unsigned int, unsigned int> instr, std::string line)
+void Translator::trnsl_constant(std::tuple<unsigned int, unsigned int> instr, std::string line)
 {
     line = trim(line);
     unsigned int opcode = std::get<0>(instr);
@@ -307,33 +198,21 @@ void Translator::trnsl_jz(std::tuple<unsigned int, unsigned int> instr, std::str
     Memory::memcopy(word, code, 0, addr, 4);
 }
 
-void Translator::trnsl_jnz(std::tuple<unsigned int, unsigned int> instr, std::string line)
+void Translator::trnsl_register(std::tuple<unsigned int, unsigned int> instr, std::string line)
 {
-}
+    line = trim(line);
+    unsigned int opcode = std::get<0>(instr);
+    unsigned int instrSize = std::get<1>(instr) + 1;
 
-void Translator::trnsl_jc(std::tuple<unsigned int, unsigned int> instr, std::string line)
-{
-}
+    // register :
+    unsigned int pos = line.find(" ") + 2;
+    unsigned int pose = line.size();
+    std::string regNumber = line.substr(pos, pose - pos);
+    unsigned char reg = stoi(regNumber);
 
-void Translator::trnsl_jnc(std::tuple<unsigned int, unsigned int> instr, std::string line)
-{
-}
-
-void Translator::trnsl_jbe(std::tuple<unsigned int, unsigned int> instr, std::string line)
-{
-}
-
-void Translator::trnsl_ja(std::tuple<unsigned int, unsigned int> instr, std::string line)
-{
-}
-
-void Translator::trnsl_jmp(std::tuple<unsigned int, unsigned int> instr, std::string line)
-{
-    trnsl_jz(instr, line);
-}
-
-void Translator::trnsl_jmpr(std::tuple<unsigned int, unsigned int> instr, std::string line)
-{
+    unsigned int addr = instr_addr - instrSize;
+    code[addr++] = opcode;
+    code[addr] = reg;    
 }
 
 void Translator::trnsl_halt(std::tuple<unsigned int, unsigned int> instr, std::string line)
