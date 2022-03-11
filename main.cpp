@@ -18,6 +18,10 @@
 // math and physics
 #include "PhysicsEngine.h"
 
+// virtual machine:
+#include "VMachine.h"
+#include "VMTask.h";
+
 // testing
 #include "UnitTests.h"
 
@@ -93,6 +97,14 @@ int main(int argc, char** argv)
     PhysicsEngine* physics = new PhysicsEngine(rocket, MS_PER_UPDATE);
     physics->changeAltitudeOrientation(CelestialBodyType::planet, 3185.0, earth.pointAboveTheSurface(angle, dangle, -10.0));
 
+    // start VM Thread:
+    VMachine* vm = new VMachine();
+    VMTask vmTask(vm);
+    std::thread vmThread(vmTask);
+    vmThread.detach();
+
+    std::cout << "Start simulation! \n";
+
     // simulation loop
     // -----------
     while (!mainWindow.shouldClose())
@@ -137,6 +149,7 @@ int main(int argc, char** argv)
     
     delete text;
     delete physics;
+    delete vm;
 
     return 0;
 }

@@ -37,6 +37,7 @@
     <ClInclude Include="TriangleGeometry.h" />
     <ClInclude Include="UnitTests.h" />
     <ClInclude Include="VMachine.h" />
+    <ClInclude Include="VMTask.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
@@ -58,6 +59,7 @@
     <ClCompile Include="TriangleGeometry.cpp" />
     <ClCompile Include="UnitTests.cpp" />
     <ClCompile Include="VMachine.cpp" />
+    <ClCompile Include="VMTask.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
