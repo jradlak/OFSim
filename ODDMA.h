@@ -53,6 +53,8 @@ private:
 	Rocket* rocket;
 	VMachine* vm;
 
+	bool started;
+
 	void publishState(RocketState state);
 	RocketState getLastState();
 
@@ -60,6 +62,6 @@ private:
 
 	void stateProducer();
 	void stateConsumer();
-	void commandListiner();
+	void commandListener();
 
 };

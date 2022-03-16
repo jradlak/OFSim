@@ -2,6 +2,8 @@
 
 ODDMA::ODDMA(Rocket* _rocket, VMachine* _vm)
 {
+	rocket = _rocket;
+	vm = _vm;
 }
 
 void ODDMA::start()
@@ -33,6 +35,6 @@ void ODDMA::stateConsumer()
 {
 }
 
-void ODDMA::commandListiner()
+void ODDMA::commandListener()
 {
 }
