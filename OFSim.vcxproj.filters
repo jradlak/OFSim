@@ -99,6 +99,9 @@
     <ClInclude Include="VMTask.h">
       <Filter>Pliki nagłówkowe\vm</Filter>
     </ClInclude>
+    <ClInclude Include="ODDMA.h">
+      <Filter>Pliki nagłówkowe\world</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -160,6 +163,9 @@
     </ClCompile>
     <ClCompile Include="VMTask.cpp">
       <Filter>Pliki źródłowe\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="ODDMA.cpp">
+      <Filter>Pliki źródłowe\world</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

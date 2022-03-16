@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="ODDMA.h" />
     <ClInclude Include="Geometry.h" />
     <ClInclude Include="Instructions.h" />
     <ClInclude Include="Memory.h" />
@@ -48,6 +49,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Memory.cpp" />
     <ClCompile Include="ObjectRenderer.cpp" />
+    <ClCompile Include="ODDMA.cpp" />
     <ClCompile Include="PhysicsEngine.cpp" />
     <ClCompile Include="Registers.cpp" />
     <ClCompile Include="Rocket.cpp" />
