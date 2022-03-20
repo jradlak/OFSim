@@ -44,7 +44,7 @@ private:
 	glm::dvec3 rotation;
 	glm::dvec3 rotatinAxis;
 	double rotationAngle;
-
+	
 	double size;
 
 	//physics:

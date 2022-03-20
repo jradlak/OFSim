@@ -19,6 +19,7 @@ public:
 	void updateKeyPressed(int _lastKeyPressed);
 
 	double getAltitude();
+	double getThrustMagnitude();
 
 	float* atmosphereRgb();
 
@@ -55,6 +56,8 @@ private:
 	int MS_PER_UPDATE;
 
 	glm::dvec3 thrustVector;
+	double thrustMagnitude;
+
 	bool thrustCutOff;
 
 	int lastKeyPressed;

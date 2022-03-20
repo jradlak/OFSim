@@ -4,24 +4,29 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <vector>
+#include <queue>
+#include <chrono>
 
+#include "Memory.h"
 #include "VMachine.h"
 #include "Rocket.h"
+#include "PhysicsEngine.h"
 
-struct RocketState
+struct RocketStatus
 {
-	long timestamp;
+	double timestamp;
 	glm::dvec3 velocity;
 	glm::dvec3 position;
 	glm::dvec3 rotation;
 	double altitude;
 	double thrustMagnitude;
+	double mass;
 };
 
 class RocketCommand
 {
 public:
-	long timestamp;
+	double timestamp;
 };
 
 class RocketChangeRotation : RocketCommand 
@@ -39,29 +44,30 @@ public:
 class ODDMA
 {
 public:
-	ODDMA(Rocket* _rocket, VMachine* _vm);
+	ODDMA(Rocket* _rocket, PhysicsEngine* _physics, VMachine* _vm);
 	
 	void start();
 	void stop();
 	
 	~ODDMA() {}
 private:
-	std::vector<RocketState> qStates;
-	//std::vector<RocketCommand> qCommands;
+	std::queue<RocketStatus> qStatuses;
+	
 	long lastCommandTimestamp;
 
 	Rocket* rocket;
+	PhysicsEngine* physics;
 	VMachine* vm;
 
-	bool started;
+	bool threadsStarted;
+	bool statusSemaphore;
 
-	void publishState(RocketState state);
-	RocketState getLastState();
+	void publishState(RocketStatus state);
+	RocketStatus getLastState();
 
 	void sendCommand();
 
 	void stateProducer();
 	void stateConsumer();
 	void commandListener();
-
 };

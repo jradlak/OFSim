@@ -123,6 +123,11 @@ double PhysicsEngine::getAltitude()
     return altitude;
 }
 
+double PhysicsEngine::getThrustMagnitude()
+{
+    return thrustMagnitude;
+}
+
 float* PhysicsEngine::atmosphereRgb()
 {
     float rgb[] = { r, g, b };
