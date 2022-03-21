@@ -21,6 +21,7 @@
 // virtual machine:
 #include "VMachine.h"
 #include "VMTask.h";
+#include "ODDMA.h"
 
 // testing
 #include "UnitTests.h"
@@ -103,6 +104,10 @@ int main(int argc, char** argv)
     std::thread vmThread(vmTask);
     vmThread.detach();
 
+    // start ODDMA:
+    ODDMA* oddma = new ODDMA(&rocket, physics, vm);
+    oddma->start();
+    
     std::cout << "Start simulation! \n";
 
     // simulation loop
@@ -145,11 +150,16 @@ int main(int argc, char** argv)
         glfwPollEvents();
     }
 
+    oddma->stop();
+
     glfwTerminate();
     
     delete text;
     delete physics;
     delete vm;
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    delete oddma;
 
     return 0;
 }

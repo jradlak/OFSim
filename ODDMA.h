@@ -6,6 +6,8 @@
 #include <vector>
 #include <queue>
 #include <chrono>
+#include <thread>
+#include <iostream>
 
 #include "Memory.h"
 #include "VMachine.h"
@@ -54,6 +56,7 @@ private:
 	std::queue<RocketStatus> qStatuses;
 	
 	long lastCommandTimestamp;
+	int commandAddres;
 
 	Rocket* rocket;
 	PhysicsEngine* physics;
@@ -62,12 +65,11 @@ private:
 	bool threadsStarted;
 	bool statusSemaphore;
 
-	void publishState(RocketStatus state);
-	RocketStatus getLastState();
-
 	void sendCommand();
 
 	void stateProducer();
 	void stateConsumer();
 	void commandListener();
+
+	void takeANap();
 };

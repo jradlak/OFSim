@@ -1,6 +1,5 @@
 #include "ODDMA.h"
 
-
 using std::chrono::duration_cast;
 using std::chrono::milliseconds;
 using std::chrono::system_clock;
@@ -16,22 +15,17 @@ ODDMA::ODDMA(Rocket* _rocket, PhysicsEngine* _physics, VMachine* _vm)
 void ODDMA::start()
 {
 	threadsStarted = true;
-	stateProducer();
-	stateConsumer();
+
+	std::thread stateProducerThread = std::thread(&ODDMA::stateProducer, this);
+	std::thread stateConsumerThread = std::thread(&ODDMA::stateConsumer, this);
+
+	stateProducerThread.detach();
+	stateConsumerThread.detach();
 }
 
 void ODDMA::stop()
 {
 	threadsStarted = false;
-}
-
-void ODDMA::publishState(RocketStatus state)
-{
-}
-
-RocketStatus ODDMA::getLastState()
-{
-	return RocketStatus();
 }
 
 void ODDMA::sendCommand()
@@ -61,7 +55,9 @@ void ODDMA::stateProducer()
 		while (statusSemaphore);
 		statusSemaphore = true;
 		qStatuses.push(status);
-		statusSemaphore = false;	
+		statusSemaphore = false;
+
+		takeANap();
  	}
 }
 
@@ -70,46 +66,59 @@ void ODDMA::stateConsumer()
 	while (threadsStarted)
 	{
 		while (statusSemaphore);
-		statusSemaphore = true;
-		RocketStatus status = qStatuses.front();
-		qStatuses.pop();
-		statusSemaphore = false;
+		if (qStatuses.size() > 0)
+		{
+			statusSemaphore = true;
+			RocketStatus status = qStatuses.front();
 
-		Memory* memory = vm->getMemory();
-		int address = memory->size - 8;
-		
-		memory->storeDWord(address, status.rotation.z);
-		address -= 8;
-		memory->storeDWord(address, status.rotation.y);
-		address -= 8;
-		memory->storeDWord(address, status.rotation.x);
-		address -= 8;
+			qStatuses.pop();
+			statusSemaphore = false;
 
-		memory->storeDWord(address, status.velocity.z);
-		address -= 8;
-		memory->storeDWord(address, status.velocity.y);
-		address -= 8;
-		memory->storeDWord(address, status.velocity.x);
-		address -= 8;
+			Memory* memory = vm->getMemory();
+			int address = memory->size - 8;
 
-		memory->storeDWord(address, status.position.z);
-		address -= 8;
-		memory->storeDWord(address, status.position.y);
-		address -= 8;
-		memory->storeDWord(address, status.position.x);
-		address -= 8;
+			memory->storeDWord(address, status.rotation.z);
+			address -= 8;
+			memory->storeDWord(address, status.rotation.y);
+			address -= 8;
+			memory->storeDWord(address, status.rotation.x);
+			address -= 8;
 
-		memory->storeDWord(address, status.mass);
-		address -= 8;
-		memory->storeDWord(address, status.thrustMagnitude);
-		address -= 8;
-		memory->storeDWord(address, status.altitude);
-		address -= 8;
-		memory->storeDWord(address, status.timestamp);
-		address -= 8;
+			memory->storeDWord(address, status.velocity.z);
+			address -= 8;
+			memory->storeDWord(address, status.velocity.y);
+			address -= 8;
+			memory->storeDWord(address, status.velocity.x);
+			address -= 8;
+
+			memory->storeDWord(address, status.position.z);
+			address -= 8;
+			memory->storeDWord(address, status.position.y);
+			address -= 8;
+			memory->storeDWord(address, status.position.x);
+			address -= 8;
+
+			memory->storeDWord(address, status.mass);
+			address -= 8;
+			memory->storeDWord(address, status.thrustMagnitude);
+			address -= 8;
+			memory->storeDWord(address, status.altitude);
+			address -= 8;
+			memory->storeDWord(address, status.timestamp);
+			address -= 8;
+
+			commandAddres = address;
+		}
+
+		takeANap();
 	}
 }
 
 void ODDMA::commandListener()
 {
+}
+
+void ODDMA::takeANap()
+{
+	std::this_thread::sleep_for(std::chrono::milliseconds(2));
 }
