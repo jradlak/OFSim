@@ -142,25 +142,25 @@ void ODDMA::commandListener()
 				{
 				case 1:
 				{
-					RocketChangeDirection changeDirection(Direction::UP, 265);
+					RocketChangeDirection changeDirection(Direction::DIRECTION_UP, 265);
 					sendCommandChangeDirection(changeDirection);
 					break;
 				}
 				case 2:
 				{
-					RocketChangeDirection changeDirection(Direction::DOWN, 264);
+					RocketChangeDirection changeDirection(Direction::DIRECTION_DOWN, 264);
 					sendCommandChangeDirection(changeDirection);
 					break;
 				}
 				case 3:
 				{
-					RocketChangeDirection changeDirection(Direction::LEFT, 263);
+					RocketChangeDirection changeDirection(Direction::DIRECTION_LEFT, 263);
 					sendCommandChangeDirection(changeDirection);
 					break;
 				}
 				case 4:
 				{
-					RocketChangeDirection changeDirection(Direction::RIGHT, 262);
+					RocketChangeDirection changeDirection(Direction::DIRECTION_RIGHT, 262);
 					sendCommandChangeDirection(changeDirection);
 					break;
 				}
@@ -175,7 +175,7 @@ void ODDMA::commandListener()
 				address -= 8;
 				double thrust = memory->fetchDWord(address);
 				RocketChangeThrust changeThrust(thrust);
-				sendCommand(changeThrust);
+				sendCommandChangeThrust(changeThrust);
 				break;
 			}
 			default:

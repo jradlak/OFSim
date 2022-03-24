@@ -30,7 +30,7 @@ enum CommandType {
 };
 
 enum Direction {
-	LEFT, RIGHT, UP, DOWN
+	DIRECTION_LEFT, DIRECTION_RIGHT, DIRECTION_UP, DIRECTION_DOWN
 };
 
 //code = 1
