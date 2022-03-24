@@ -25,22 +25,38 @@ struct RocketStatus
 	double mass;
 };
 
-class RocketCommand
-{
-public:
-	double timestamp;
+enum CommandType {
+	CHANGE_DIRECTION, CHANGE_THRUST
 };
 
-class RocketChangeRotation : RocketCommand 
-{
-public:
-	glm::dvec3 newRotation;
+enum Direction {
+	LEFT, RIGHT, UP, DOWN
 };
 
-class RocketChangeThrust : RocketCommand
+//code = 1
+class RocketChangeDirection
 {
 public:
-	double newThrustMagnitude;
+	RocketChangeDirection(Direction newDirection, int newDirectionCode) 
+	{ 
+		direction = newDirection; 
+		directionCode = newDirectionCode;
+	}
+
+	Direction direction;
+	int directionCode;
+};
+
+//code = 2
+class RocketChangeThrust
+{
+public:
+	RocketChangeThrust(double newThrust) 
+	{
+		thrust = newThrust; 
+	}
+
+	double thrust;
 };
 
 class ODDMA
@@ -56,7 +72,7 @@ private:
 	std::queue<RocketStatus> qStatuses;
 	
 	long lastCommandTimestamp;
-	int commandAddres;
+	int commandAddress;
 
 	Rocket* rocket;
 	PhysicsEngine* physics;
@@ -65,7 +81,8 @@ private:
 	bool threadsStarted;
 	bool statusSemaphore;
 
-	void sendCommand();
+	void sendCommandChangeThrust(RocketChangeThrust command);
+	void sendCommandChangeDirection(RocketChangeDirection command);
 
 	void stateProducer();
 	void stateConsumer();

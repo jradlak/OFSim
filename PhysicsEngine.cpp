@@ -9,6 +9,7 @@ PhysicsEngine::PhysicsEngine(Rocket& _rocket, int _MS_PER_UPDATE)
 	: rocket(_rocket)
 {
 	MS_PER_UPDATE = _MS_PER_UPDATE;
+    thrustMagnitude = 0.24;
 }
 
 void PhysicsEngine::changeAltitudeOrientation(
@@ -28,7 +29,7 @@ void PhysicsEngine::changeAltitudeOrientation(
     glm::quat qlook = Geometry::gLookAt(direction, glm::dvec3(0.0, 1.0, 0.0));
     glm::dvec3 rotation = glm::eulerAngles(qlook) * 180.0f / 3.14159f;
 
-    thrustVector = direction * 0.24;
+    thrustVector = direction * thrustMagnitude;
     
     rocket.updateRotation(rotation);
     rocket.updateTowards(towards);
@@ -116,6 +117,11 @@ void PhysicsEngine::resetForces()
 void PhysicsEngine::updateKeyPressed(int _lastKeyPressed)
 {
     lastKeyPressed = _lastKeyPressed;
+}
+
+void PhysicsEngine::updateThrustMagnitude(double newMagintude)
+{
+    thrustMagnitude = newMagintude;
 }
 
 double PhysicsEngine::getAltitude()

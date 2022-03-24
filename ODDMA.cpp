@@ -28,10 +28,6 @@ void ODDMA::stop()
 	threadsStarted = false;
 }
 
-void ODDMA::sendCommand()
-{
-}
-
 void ODDMA::stateProducer()
 {
 	while (threadsStarted)
@@ -107,18 +103,91 @@ void ODDMA::stateConsumer()
 			memory->storeDWord(address, status.timestamp);
 			address -= 8;
 
-			commandAddres = address;
+			commandAddress = address;
 		}
 
 		takeANap();
 	}
 }
 
+void ODDMA::sendCommandChangeThrust(RocketChangeThrust command)
+{
+	physics->updateThrustMagnitude(command.thrust);
+}
+
+void ODDMA::sendCommandChangeDirection(RocketChangeDirection command)
+{
+	physics->updateKeyPressed(command.directionCode);
+}
+
 void ODDMA::commandListener()
 {
+	while (threadsStarted)
+	{
+		Memory* memory = vm->getMemory();
+		unsigned char commandRecieved = memory->fetchByte(commandAddress);
+		int address = commandAddress;
+		if (commandRecieved == 0)
+		{
+			// read code:
+			address -= 4;
+			unsigned char commandCode = memory->fetchByte(address);
+			switch (commandCode)
+			{
+			case 1: 
+			{
+				// change direction;
+				unsigned char dirCode = memory->fetchByte(address);
+				switch (dirCode)
+				{
+				case 1:
+				{
+					RocketChangeDirection changeDirection(Direction::UP, 265);
+					sendCommandChangeDirection(changeDirection);
+					break;
+				}
+				case 2:
+				{
+					RocketChangeDirection changeDirection(Direction::DOWN, 264);
+					sendCommandChangeDirection(changeDirection);
+					break;
+				}
+				case 3:
+				{
+					RocketChangeDirection changeDirection(Direction::LEFT, 263);
+					sendCommandChangeDirection(changeDirection);
+					break;
+				}
+				case 4:
+				{
+					RocketChangeDirection changeDirection(Direction::RIGHT, 262);
+					sendCommandChangeDirection(changeDirection);
+					break;
+				}
+				default:
+					break;
+				}
+
+				break;
+			}
+			case 2:
+			{
+				address -= 8;
+				double thrust = memory->fetchDWord(address);
+				RocketChangeThrust changeThrust(thrust);
+				sendCommand(changeThrust);
+				break;
+			}
+			default:
+				// 0 - do nothing
+				break;
+			}
+			memory->storeByte(commandAddress, 1); // command recieved
+		}
+	}
 }
 
 void ODDMA::takeANap()
 {
-	std::this_thread::sleep_for(std::chrono::milliseconds(2));
+	std::this_thread::sleep_for(std::chrono::milliseconds(4));
 }

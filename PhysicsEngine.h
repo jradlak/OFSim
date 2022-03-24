@@ -17,6 +17,7 @@ public:
 	unsigned __int64 calculateForces(unsigned __int64 timeInterval);
 
 	void updateKeyPressed(int _lastKeyPressed);
+	void updateThrustMagnitude(double newMagintude);
 
 	double getAltitude();
 	double getThrustMagnitude();
