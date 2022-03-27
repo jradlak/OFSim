@@ -45,7 +45,7 @@ void Translator::translate(std::string sourceLine)
         case 0x0: trnsl_register_to_register(instr, sourceLine); break;
         case 0x1: trnsl_register_to_register(instr, sourceLine); break;
         case 0x3: trnsl_constant_to_register(instr, sourceLine); break;
-        case 0x4: trnsl_constant_to_register(instr, sourceLine); break;
+        case 0x4: trnsl_fconstant_to_register(instr, sourceLine); break;
         case 0x5: trnsl_register_to_register(instr, sourceLine); break;
         case 0x6: trnsl_register_to_register(instr, sourceLine); break;
         case 0x7: trnsl_register_to_register(instr, sourceLine); break;
@@ -146,6 +146,41 @@ void Translator::trnsl_constant_to_register(std::tuple<unsigned int, unsigned in
     Memory::memcopy(word, code, 0, addr, 4);
 }
 
+void Translator::trnsl_fconstant_to_register(std::tuple<unsigned int, unsigned int> instr, std::string line)
+{
+    line = trim(line);
+    unsigned int opcode = std::get<0>(instr);
+    unsigned int instrSize = std::get<1>(instr) + 1;
+
+    // register number:
+    int pos = line.find(" ") + 2;
+    int pose = line.find(",");
+    std::string regNumber = line.substr(pos, pose - pos);
+    unsigned char reg = stoi(regNumber);
+
+    // constant:
+    pos = line.find(",") + 2;
+    pose = line.size();
+    std::string constant = line.substr(pos, pose - pos);
+    double cnst = 0;
+    if (std::isdigit(constant[0]))
+    {
+        cnst = stod(constant);
+    }
+    else
+    {
+        // label pointing to address
+        cnst = labelDict[constant];
+    }
+
+    unsigned int addr = instr_addr - instrSize;
+    code[addr++] = opcode;
+    code[addr++] = reg;
+
+    unsigned char* word = static_cast<unsigned char*>(static_cast<void*>(&cnst));
+    Memory::memcopy(word, code, 0, addr, 8);
+}
+
 void Translator::trnsl_register_to_register(std::tuple<unsigned int, unsigned int> instr, std::string line)
 {
     line = trim(line);
@@ -243,14 +278,16 @@ std::tuple<unsigned int, unsigned int> Translator::recognizeInstr(std::string so
 
 // code below based on: https://stackoverflow.com/questions/216823/how-to-trim-a-stdstring
 // trim from start
-static inline std::string& ltrim(std::string& s) {
+static inline std::string& ltrim(std::string& s) 
+{
     s.erase(s.begin(), std::find_if(s.begin(), s.end(),
         std::not1(std::ptr_fun<int, int>(std::isspace))));
     return s;
 }
 
 // trim from end
-static inline std::string& rtrim(std::string& s) {
+static inline std::string& rtrim(std::string& s) 
+{
     s.erase(std::find_if(s.rbegin(), s.rend(),
         std::not1(std::ptr_fun<int, int>(std::isspace))).base(), s.end());
     return s;

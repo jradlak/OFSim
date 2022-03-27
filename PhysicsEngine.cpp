@@ -9,7 +9,7 @@ PhysicsEngine::PhysicsEngine(Rocket& _rocket, int _MS_PER_UPDATE)
 	: rocket(_rocket)
 {
 	MS_PER_UPDATE = _MS_PER_UPDATE;
-    thrustMagnitude = 0.24;
+    thrustMagnitude = 0.0; //0.24;
 }
 
 void PhysicsEngine::changeAltitudeOrientation(

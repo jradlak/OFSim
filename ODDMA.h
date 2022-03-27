@@ -69,11 +69,13 @@ public:
 	
 	~ODDMA() {}
 private:
+	// address in memory to store commands
+	const unsigned int commandAddress = 65416;
+
 	std::queue<RocketStatus> qStatuses;
 	
 	long lastCommandTimestamp;
-	int commandAddress;
-
+	
 	Rocket* rocket;
 	PhysicsEngine* physics;
 	VMachine* vm;

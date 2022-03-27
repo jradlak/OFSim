@@ -84,7 +84,7 @@ void Instructions::fst(unsigned char* args)
 	unsigned char r_src_addr = args[1];
 	unsigned char r_dst_addr = args[0];
 
-	double value = registers[r_src_addr];
+	double value = registers.fl(r_src_addr);
 	unsigned int dst_addr = registers[r_dst_addr];
 	memory.storeDWord(dst_addr, value);
 }

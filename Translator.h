@@ -37,6 +37,7 @@ private:
 	void findLabel(std::string sourceLine);
 
     void trnsl_constant_to_register(std::tuple<unsigned int, unsigned int> instr, std::string line);
+	void trnsl_fconstant_to_register(std::tuple<unsigned int, unsigned int> instr, std::string line);
     void trnsl_register_to_register(std::tuple<unsigned int, unsigned int> instr, std::string line);
     void trnsl_constant(std::tuple<unsigned int, unsigned int> instr, std::string line);
 	void trnsl_register(std::tuple<unsigned int, unsigned int> instr, std::string line);

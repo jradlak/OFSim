@@ -1,0 +1,20 @@
+; Przypisz adres komendy zmiany ci¹gu
+set r4, 65416
+
+; Wartoœæ ci¹gu do zmiany
+fset f3, 0.24
+
+; Ustawienie w pamiêci flagi - komenda jeszcze nieodebrana
+xor r1, r1
+st r4, r1 
+
+; Ustawienie w pamiêci kodu komendy
+add r4, r1
+set r2, 2
+st r4, r2
+
+; Ustawienie wartoœci ci¹gu w pamiêci
+add r4, r1
+fst r4, f3
+
+halt

@@ -36,7 +36,7 @@ void VMachine::interpret(const char* sourcePath)
 		instructions->call(opcode, args);
 		delete[] args;
 		
-		pc = registers->pc();		
+		pc = registers->pc();
 		if (oldpc == pc)
 		{
 			// there was no jump - update program counter:			

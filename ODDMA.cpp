@@ -4,7 +4,6 @@ using std::chrono::duration_cast;
 using std::chrono::milliseconds;
 using std::chrono::system_clock;
 
-
 ODDMA::ODDMA(Rocket* _rocket, PhysicsEngine* _physics, VMachine* _vm)
 {
 	rocket = _rocket;
@@ -21,6 +20,9 @@ void ODDMA::start()
 
 	stateProducerThread.detach();
 	stateConsumerThread.detach();
+
+	std::thread commandListenerThread = std::thread(&ODDMA::commandListener, this);
+	commandListenerThread.detach();
 }
 
 void ODDMA::stop()
@@ -101,9 +103,7 @@ void ODDMA::stateConsumer()
 			memory->storeDWord(address, status.altitude);
 			address -= 8;
 			memory->storeDWord(address, status.timestamp);
-			address -= 8;
-
-			commandAddress = address;
+			address -= 8;			
 		}
 
 		takeANap();
@@ -130,13 +130,14 @@ void ODDMA::commandListener()
 		if (commandRecieved == 0)
 		{
 			// read code:
-			address -= 4;
+			address++;
 			unsigned char commandCode = memory->fetchByte(address);
 			switch (commandCode)
 			{
 			case 1: 
 			{
 				// change direction;
+				address++;
 				unsigned char dirCode = memory->fetchByte(address);
 				switch (dirCode)
 				{
@@ -168,22 +169,25 @@ void ODDMA::commandListener()
 					break;
 				}
 
+				memory->storeByte(commandAddress, 1); // command recieved
 				break;
 			}
 			case 2:
 			{
-				address -= 8;
+				address++;
 				double thrust = memory->fetchDWord(address);
 				RocketChangeThrust changeThrust(thrust);
 				sendCommandChangeThrust(changeThrust);
+				memory->storeByte(commandAddress, 1); // command recieved
 				break;
 			}
 			default:
 				// 0 - do nothing
 				break;
-			}
-			memory->storeByte(commandAddress, 1); // command recieved
+			}	
 		}
+
+		takeANap();
 	}
 }
 

@@ -196,5 +196,8 @@
     <None Include="orbitalProgram1.oasm">
       <Filter>Pliki zasobów</Filter>
     </None>
+    <None Include="ballisticProgram.oasm">
+      <Filter>Pliki zasobów</Filter>
+    </None>
   </ItemGroup>
 </Project>
