@@ -9,7 +9,7 @@ PhysicsEngine::PhysicsEngine(Rocket& _rocket, int _MS_PER_UPDATE)
 	: rocket(_rocket)
 {
 	MS_PER_UPDATE = _MS_PER_UPDATE;
-    thrustMagnitude = 0.0; //0.24;
+    thrustMagnitude = 0.01; //0.24;
 }
 
 void PhysicsEngine::changeAltitudeOrientation(
@@ -117,11 +117,16 @@ void PhysicsEngine::resetForces()
 void PhysicsEngine::updateKeyPressed(int _lastKeyPressed)
 {
     lastKeyPressed = _lastKeyPressed;
+    if (lastKeyPressed != 0)
+    {
+        mustRecalculateVectors = true;
+    }
 }
 
 void PhysicsEngine::updateThrustMagnitude(double newMagintude)
 {
     thrustMagnitude = newMagintude;
+    changeAltitudeOrientation(altitudeOrientation, celestialBodySize, towards);    
 }
 
 double PhysicsEngine::getAltitude()
@@ -260,30 +265,36 @@ glm::dvec3 PhysicsEngine::changeRocketRotation()
         phi = 359.0;
     }
    
-    if (lastKeyPressed != 0)
-    {
-        glm::dvec3 pos = rocket.getPosition();
-        double r = glm::length(pos - towards);
-        double x = r * cos(glm::radians(phi)) * sin(glm::radians(theta));
-        double z = r * sin(glm::radians(phi)) * sin(glm::radians(theta));
-        double y = r * cos(glm::radians(theta));
-
-        towards.x = pos.x - x;
-        towards.y = pos.y - y;
-        towards.z = pos.z - z;
-        rocket.updateTowards(towards);
-
-        glm::dvec3 direction = glm::normalize(rocket.getPosition() - towards);
-        glm::quat qlook = Geometry::gLookAt(direction, glm::dvec3(0.0, 1.0, 0.0));
-        glm::dvec3 rotation = glm::eulerAngles(qlook) * 180.0f / 3.14159f;
-
-        thrustVector = direction * 0.24;
-        lastKeyPressed = 0;
-
-        return rotation;
+    if (mustRecalculateVectors)
+    {        
+        return recalculateThrustVector();
     }
 
     return glm::dvec3(0);
+}
+
+glm::dvec3 PhysicsEngine::recalculateThrustVector()
+{
+    glm::dvec3 pos = rocket.getPosition();
+    double r = glm::length(pos - towards);
+    double x = r * cos(glm::radians(phi)) * sin(glm::radians(theta));
+    double z = r * sin(glm::radians(phi)) * sin(glm::radians(theta));
+    double y = r * cos(glm::radians(theta));
+
+    towards.x = pos.x - x;
+    towards.y = pos.y - y;
+    towards.z = pos.z - z;
+    rocket.updateTowards(towards);
+
+    glm::dvec3 direction = glm::normalize(rocket.getPosition() - towards);
+    glm::quat qlook = Geometry::gLookAt(direction, glm::dvec3(0.0, 1.0, 0.0));
+    glm::dvec3 rotation = glm::eulerAngles(qlook) * 180.0f / 3.14159f;
+
+    thrustVector = direction * thrustMagnitude;
+    lastKeyPressed = 0;
+    mustRecalculateVectors = false;
+
+    return rotation;
 }
 
 PhysicsEngine::~PhysicsEngine()

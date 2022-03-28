@@ -38,7 +38,8 @@ private:
 	
 	double calculateAltitude();
 	glm::dvec3 changeRocketRotation();
-	
+	glm::dvec3 recalculateThrustVector();
+
 	glm::dvec3 celestialBodyCenter(double bodySize);
 
 	std::vector<glm::dvec3> forces;
@@ -62,6 +63,7 @@ private:
 	bool thrustCutOff;
 
 	int lastKeyPressed;
+	bool mustRecalculateVectors = false;
 
 	glm::dvec3 towards;
 	glm::dvec3 lastPos;

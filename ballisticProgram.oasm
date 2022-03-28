@@ -9,12 +9,14 @@ xor r1, r1
 st r4, r1 
 
 ; Ustawienie w pamiêci kodu komendy
-add r4, r1
+set r5, 1
+add r4, r5
 set r2, 2
 st r4, r2
 
 ; Ustawienie wartoœci ci¹gu w pamiêci
-add r4, r1
+add r4, r5
 fst r4, f3
 
+.end
 halt
