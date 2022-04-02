@@ -4,6 +4,29 @@
 
 //#include "VMachine.h"
 
+// memory structure:
+/*
+Rotation:
+	z	65528
+	y	65520
+	x	65512
+Velocity:	
+	z	65504
+	y	65496
+	x	65488
+Position:	
+	z	65480
+	y	65472
+	x	65464
+	
+	mass	65456
+	thrust magnitude	65448
+	altitude	65440
+	timestamp	65432
+
+*/
+
+
 class Memory
 {
 public:

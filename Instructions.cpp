@@ -271,8 +271,8 @@ void Instructions::fcmp(unsigned char* args)
 {
 	unsigned char r_src_addr = args[1];
 	unsigned char r_dst_addr = args[0];
-	double value1 = registers[r_src_addr];
-	double value2 = registers[r_dst_addr];
+	double value1 = registers.fl(r_src_addr);
+	double value2 = registers.fl(r_dst_addr);
 
 	registers.zf(0);
 	registers.cf(0);
@@ -283,7 +283,7 @@ void Instructions::fcmp(unsigned char* args)
 	}
 	else if (result < 0.0)
 	{
-		registers.cf(1);
+		registers.cf(1); // r_src > r_dst arg[1] > arg[0]
 	}
 
 }

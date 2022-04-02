@@ -1,5 +1,6 @@
-; Przypisz adres komendy zmiany ci¹gu
-set r4, 65416
+; Przypisz adres komendy
+set r6, 65416
+mov r4, r6
 
 ; Wartoœæ ci¹gu do zmiany
 fset f3, 0.24
@@ -17,6 +18,46 @@ st r4, r2
 ; Ustawienie wartoœci ci¹gu w pamiêci
 add r4, r5
 fst r4, f3
+
+check_altitude_loop:
+
+; zapamiêtaj wartoœæ wysokoœci w rejestrze
+; adres w pamiêci: 65440
+
+set r3, 65440
+fld f1, r3
+
+; jeœli wysokoœæ przekroczy 10 km, koñcz program
+; TODO
+
+; jeœli wysokoœæ przekroczy 5 km, zmieñ kierunek ci¹gu
+
+fset f2, 5.0
+fcmp f2, f1
+jc check_altitude_loop
+
+set r5, 1
+mov r4, r6
+add r4, r5
+
+; sprawdzenie, czy komenda ju¿ wykonana:
+set r1, 1
+ld r2, r3
+
+; jeœli tak, skocz do pocz¹tku pêtli
+jz check_altitude_loop
+
+; jeœli nie: ustawienie kierunku ci¹gu
+; Ustawienie w pamiêci flagi - komenda jeszcze nieodebrana
+xor r1, r1
+st r4, r1 
+
+; ustawienie w pamiêci wartoœci komendy
+add r4, r5
+set r2, 1
+st r4, r2
+
+jmp check_altitude_loop
 
 .end
 halt
