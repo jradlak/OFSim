@@ -1,5 +1,8 @@
 #pragma once
 
+#include <chrono>
+#include <thread>
+
 #include "Memory.h"
 #include "Registers.h"
 #include "Instructions.h"

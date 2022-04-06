@@ -20,7 +20,7 @@ int Memory::fetchWord(unsigned int addr)
 	assertConditions(addr + 4);
 	unsigned char result[4] = { };
 	memcopy(mem, result, addr, 0, 4);
-	int val = *reinterpret_cast<int*>(result);
+	unsigned int val = *reinterpret_cast<unsigned int*>(result);
 	leaseSemaphore();
 	return val;
 }

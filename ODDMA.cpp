@@ -118,6 +118,7 @@ void ODDMA::sendCommandChangeThrust(RocketChangeThrust command)
 void ODDMA::sendCommandChangeDirection(RocketChangeDirection command)
 {
 	physics->updateKeyPressed(command.directionCode);
+	std::cout << "Command sended! \n";
 }
 
 void ODDMA::commandListener()
@@ -145,31 +146,34 @@ void ODDMA::commandListener()
 				{
 					RocketChangeDirection changeDirection(Direction::DIRECTION_UP, 265);
 					sendCommandChangeDirection(changeDirection);
+					memory->storeByte(commandAddress, 1); // command recieved
 					break;
 				}
 				case 2:
 				{
 					RocketChangeDirection changeDirection(Direction::DIRECTION_DOWN, 264);
 					sendCommandChangeDirection(changeDirection);
+					memory->storeByte(commandAddress, 1); // command recieved
 					break;
 				}
 				case 3:
 				{
 					RocketChangeDirection changeDirection(Direction::DIRECTION_LEFT, 263);
 					sendCommandChangeDirection(changeDirection);
+					memory->storeByte(commandAddress, 1); // command recieved
 					break;
 				}
 				case 4:
 				{
 					RocketChangeDirection changeDirection(Direction::DIRECTION_RIGHT, 262);
 					sendCommandChangeDirection(changeDirection);
+					memory->storeByte(commandAddress, 1); // command recieved
 					break;
 				}
 				default:
 					break;
 				}
 
-				memory->storeByte(commandAddress, 1); // command recieved
 				break;
 			}
 			case 2:

@@ -6,14 +6,14 @@ mov r4, r6
 fset f3, 0.24
 
 ; Ustawienie w pamiêci flagi - komenda jeszcze nieodebrana
-xor r1, r1
-st r4, r1 
+vxor r1, r1
+bst r4, r1 
 
 ; Ustawienie w pamiêci kodu komendy
 set r5, 1
 add r4, r5
 set r2, 2
-st r4, r2
+bst r4, r2
 
 ; Ustawienie wartoœci ci¹gu w pamiêci
 add r4, r5
@@ -23,41 +23,69 @@ check_altitude_loop:
 
 ; zapamiêtaj wartoœæ wysokoœci w rejestrze
 ; adres w pamiêci: 65440
-
 set r3, 65440
 fld f1, r3
 
-; jeœli wysokoœæ przekroczy 10 km, koñcz program
-; TODO
-
-; jeœli wysokoœæ przekroczy 5 km, zmieñ kierunek ci¹gu
-
-fset f2, 5.0
-fcmp f2, f1
+; sprawdzenie, czy wysokoœæ przekoczy³a 1.3 km,
+fset f2, 1.3
+fcmp f1, f2
 jc check_altitude_loop
 
+; jeœli tak: ustawienie kierunku ci¹gu (seria drobnych korekt kierunku wektora)
+
+zmiana_trajektorii:
+
+; wczytanie adresu komendy do rejestru
 set r5, 1
 mov r4, r6
-add r4, r5
 
-; sprawdzenie, czy komenda ju¿ wykonana:
-set r1, 1
-ld r2, r3
-
-; jeœli tak, skocz do pocz¹tku pêtli
-jz check_altitude_loop
-
-; jeœli nie: ustawienie kierunku ci¹gu
 ; Ustawienie w pamiêci flagi - komenda jeszcze nieodebrana
-xor r1, r1
-st r4, r1 
+vxor r1, r1
+bst r4, r1
 
 ; ustawienie w pamiêci wartoœci komendy
 add r4, r5
 set r2, 1
-st r4, r2
+bst r4, r2
+add r4, r5
+bst r4, r2
 
-jmp check_altitude_loop
+mov r4, r6
 
-.end
+czekaj_na_wykonanie:
+
+; sprawdzenie, czy poprzednia komenda ju¿ wykonana:
+set r1, 1
+bld r2, r4
+cmp r1, r2
+
+; jeœli nie, czekaj (na mo¿liwoœæ wykonania kolejnych komend)
+jnz czekaj_na_wykonanie
+
+; sprawdzenie, czy wysokoœæ przekoczy³a 3 km
+set r3, 65440
+fld f1, r3
+
+fset f2, 3.0
+fcmp f1, f2
+jnc .end
+;jeœli tak - skok do odciêcia zap³onu i zakoñczenie programu
+
+jmp zmiana_trajektorii
+
+.end:
+
+set r6, 65416
+mov r4, r6
+fset f3, 0.0
+
+set r5, 1
+add r4, r5
+set r2, 2
+bst r4, r2
+
+add r4, r5
+fst r4, f3
+
+;rakieta kontynuuje swobodny lot balistyczny do zderzenia z ziemia
 halt

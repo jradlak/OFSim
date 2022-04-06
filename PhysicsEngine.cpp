@@ -223,7 +223,7 @@ glm::dvec3 PhysicsEngine::celestialBodyCenter(double bodySize)
 
 glm::dvec3 PhysicsEngine::changeRocketRotation()
 {    
-    double factor = 0.8;
+    double factor = 8.0;
    
     if (lastKeyPressed == 265) //GLFW_KEY_UP
     {
