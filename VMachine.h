@@ -18,6 +18,8 @@ public:
 
 	void interpret(const char* sourcePath);
 
+	void terminate();
+	
 	Memory* getMemory() { return memory; }
 
 	~VMachine();
@@ -28,6 +30,8 @@ private:
 	Opcodes* opcodes;
 	Instructions* instructions;
 	Translator* translator;
+
+	bool shouldStop = false;
 
 	void interruptHandler();
 };

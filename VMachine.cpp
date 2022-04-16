@@ -17,6 +17,7 @@ void VMachine::interrupt(short code)
 
 void VMachine::interpret(const char* sourcePath)
 {
+	shouldStop = false;
 	translator->translate(sourcePath);
 
 	// load translated code into memory:
@@ -27,7 +28,7 @@ void VMachine::interpret(const char* sourcePath)
 	unsigned int pc = 0;
 	unsigned int oldpc = 0;
 	unsigned int opcode = memory->fetchByte(0);
-	while (opcode != opcodes->getOpcode("halt"))
+	while (opcode != opcodes->getOpcode("halt") && !shouldStop)
 	{
 		// decode and execute instruction:
 		unsigned int args_size = opcodes->getInstrSize(opcode);
@@ -48,6 +49,11 @@ void VMachine::interpret(const char* sourcePath)
 		// fetch another opcode
 		opcode = memory->fetchByte(pc);
 	}	
+}
+
+void VMachine::terminate()
+{
+	shouldStop = true;
 }
 
 VMachine::~VMachine()

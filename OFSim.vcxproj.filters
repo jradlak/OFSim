@@ -102,6 +102,12 @@
     <ClInclude Include="ODDMA.h">
       <Filter>Pliki nagłówkowe\world</Filter>
     </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Pliki nagłówkowe\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>Pliki nagłówkowe\renderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -167,6 +173,12 @@
     <ClCompile Include="ODDMA.cpp">
       <Filter>Pliki źródłowe\world</Filter>
     </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Pliki źródłowe\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>Pliki źródłowe\renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="planet_shader_fs.glsl">
@@ -199,5 +211,6 @@
     <None Include="ballisticProgram.oasm">
       <Filter>Pliki zasobów</Filter>
     </None>
+    <None Include="assimp-vc142-mtd.dll" />
   </ItemGroup>
 </Project>
