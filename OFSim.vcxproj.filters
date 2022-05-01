@@ -108,6 +108,9 @@
     <ClInclude Include="Model.h">
       <Filter>Pliki nagłówkowe\renderer</Filter>
     </ClInclude>
+    <ClInclude Include="ModelRenderer.h">
+      <Filter>Pliki nagłówkowe\renderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -177,6 +180,9 @@
       <Filter>Pliki źródłowe\renderer</Filter>
     </ClCompile>
     <ClCompile Include="Model.cpp">
+      <Filter>Pliki źródłowe\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelRenderer.cpp">
       <Filter>Pliki źródłowe\renderer</Filter>
     </ClCompile>
   </ItemGroup>

@@ -8,7 +8,7 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices)
     setupMesh();
 }
 
-void Mesh::Draw(Shader& shader)
+void Mesh::draw(Shader& shader)
 {
     // draw mesh
     glBindVertexArray(VAO);
@@ -37,7 +37,7 @@ void Mesh::setupMesh()
     
     // vertex normals
     glEnableVertexAttribArray(1);	
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
     
     glBindVertexArray(0);
 }

@@ -117,8 +117,7 @@ void ODDMA::sendCommandChangeThrust(RocketChangeThrust command)
 
 void ODDMA::sendCommandChangeDirection(RocketChangeDirection command)
 {
-	physics->updateKeyPressed(command.directionCode);
-	std::cout << "Command sended! \n";
+	physics->updateKeyPressed(command.directionCode);	
 }
 
 void ODDMA::commandListener()

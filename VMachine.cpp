@@ -36,19 +36,21 @@ void VMachine::interpret(const char* sourcePath)
 		Memory::memcopy(memory->mem, args, pc + 1, 0, args_size);
 		instructions->call(opcode, args);
 		delete[] args;
-		
+
 		pc = registers->pc();
 		if (oldpc == pc)
 		{
 			// there was no jump - update program counter:			
 			pc += args_size + 1;
-			registers->pc(pc);			
+			registers->pc(pc);
 		}
 		oldpc = pc;
 
 		// fetch another opcode
 		opcode = memory->fetchByte(pc);
-	}	
+
+		//std::this_thread::sleep_for(std::chrono::microseconds(1));
+	}
 }
 
 void VMachine::terminate()

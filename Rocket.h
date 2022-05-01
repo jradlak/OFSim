@@ -8,6 +8,7 @@
 
 #include "ObjectRenderer.h"
 #include "TriangleGeometry.h"
+#include "ModelRenderer.h"
 #include "Smoke.h"
 
 class Rocket
@@ -34,11 +35,10 @@ public:
 
 	~Rocket();
 	
-private:
-	ObjectRenderer* objectRenderer;
-	TriangleGeometry* geometry;
+private:	
+	ModelRenderer* modelRenderer;
 	Smoke* smoke;
-
+	
 	glm::dvec3& position;
 	glm::dvec3 towards;
 	glm::dvec3 rotation;
@@ -49,10 +49,5 @@ private:
 
 	//physics:
 	glm::dvec3 velocity;
-	double mass;
-
-	//helper methods: 
-	void makeRocketGeometry();
-	void addTriangle(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3, glm::vec3 normal = glm::vec3(0.0f));
-	glm::vec3 point(double x, double y, double z);
+	double mass;	
 };

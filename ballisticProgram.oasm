@@ -62,6 +62,7 @@ cmp r1, r2
 ; jeœli nie, czekaj (na mo¿liwoœæ wykonania kolejnych komend)
 jnz czekaj_na_wykonanie
 
+czekaj_na_wysokosc:
 ; sprawdzenie, czy wysokoœæ przekoczy³a 3 km
 set r3, 65440
 fld f1, r3
@@ -70,14 +71,16 @@ fset f2, 3.0
 fcmp f1, f2
 jnc .end
 ;jeœli tak - skok do odciêcia zap³onu i zakoñczenie programu
-
-jmp zmiana_trajektorii
+jmp czekaj_na_wysokosc
 
 .end:
 
 set r6, 65416
 mov r4, r6
 fset f3, 0.0
+
+vxor r1, r1
+bst r4, r1 
 
 set r5, 1
 add r4, r5

@@ -84,7 +84,7 @@ int main(int argc, char** argv)
     float dangle = 60.0;
 
     glm::dvec3 rocketPos = earth.pointAboveTheSurface(angle, dangle, 0.1);
-    Rocket rocket("moon_shader", rocketPos, 1);
+    Rocket rocket("moon_shader", rocketPos, 0.1);
 
     camera.Position = rocket.getPosition() + glm::dvec3(0.0, 0.024, 0.0);
     rocket.init();
@@ -151,6 +151,7 @@ int main(int argc, char** argv)
     }
 
     oddma->stop();
+    vm->terminate();
 
     glfwTerminate();
     
