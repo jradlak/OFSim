@@ -18,6 +18,8 @@ public:
 
 	void updateKeyPressed(int _lastKeyPressed);
 	void updateThrustMagnitude(double newMagintude);
+	void rotateVectors(glm::dvec3 newRotation);
+
 
 	double getAltitude();
 	double getThrustMagnitude();
@@ -37,9 +39,7 @@ private:
 	void calculateAtmosphericDragForce();
 	
 	double calculateAltitude();
-	glm::dvec3 changeRocketRotation();
-	glm::dvec3 recalculateThrustVector();
-
+	
 	glm::dvec3 celestialBodyCenter(double bodySize);
 
 	std::vector<glm::dvec3> forces;

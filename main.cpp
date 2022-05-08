@@ -67,7 +67,7 @@ int main(int argc, char** argv)
 
     // celestial bodies positions:
     glm::dvec3 lightPos(0.0, -3185.0, 149600000.0);
-    glm::dvec3 earthPos(0.0, -3185.0, 0.0);
+    glm::dvec3 earthPos(0.0, -3186.0, 0.0);
     glm::dvec3 moonPos(384400.0, -3185.0, 0.0);
 
     CelestialBody sun(star, "light_source", 1392700, lightPos);
@@ -83,8 +83,8 @@ int main(int argc, char** argv)
     float angle = 30.0;
     float dangle = 60.0;
 
-    glm::dvec3 rocketPos = earth.pointAboveTheSurface(angle, dangle, 0.1);
-    Rocket rocket("moon_shader", rocketPos, 0.1);
+    glm::dvec3 rocketPos = glm::dvec3(0.0, 0.0, 0.0); //earth.pointAboveTheSurface(angle, dangle, 0.1);
+    Rocket rocket("moon_shader", rocketPos, 0.000013);
 
     camera.Position = rocket.getPosition() + glm::dvec3(0.0, 0.024, 0.0);
     rocket.init();

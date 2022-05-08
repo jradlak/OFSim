@@ -14,9 +14,12 @@ void ModelRenderer::renderWithRotation(glm::dmat4& projection, glm::dmat4& view,
 	shader->setFloat("logDepthBufFC", logDepthBufFC);
 
 	glm::dmat4 model = glm::dmat4(1.0);
+	
 	model = glm::translate(model, position);
 
 	// calculate rotations:	
+	
+	/*
 	if (rotation.x != 0.0)
 	{
 		model = glm::rotate(model, glm::radians(rotation.x), glm::dvec3(1.0, 0.0, 0.0));
@@ -30,9 +33,11 @@ void ModelRenderer::renderWithRotation(glm::dmat4& projection, glm::dmat4& view,
 	if (rotation.z != 0.0)
 	{
 		model = glm::rotate(model, glm::radians(rotation.z), glm::dvec3(0.0, 0.0, 1.0));
-	}
-	
-	model = glm::scale(model, glm::dvec3(0.000015, 0.000015, 0.000015));
+	}*/
+
+	model = glm::rotate(model, glm::radians(20.0), rotation);
+
+	model = glm::scale(model, glm::dvec3(size));
 	shader->setMat4("model", glm::mat4(model));
 
 	glm::mat4 transformation = glm::mat4((projection * view * model));

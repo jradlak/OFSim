@@ -1,5 +1,8 @@
 #include "PhysicsEngine.h"
 
+#include "glm/ext.hpp"
+#include "glm/gtx/string_cast.hpp"
+
 #include <iostream>
 
 #include <glm/gtx/rotate_vector.hpp>
@@ -60,23 +63,13 @@ unsigned __int64 PhysicsEngine::calculateForces(unsigned __int64 timeInterval)
             updatePhysics(MS_PER_UPDATE / 1000.0f);
             timeInterval -= MS_PER_UPDATE;
         }
-
-        //recalculate thrust vector direction:
-        glm::dvec3 rotation = rocket.getRotation();
-        glm::dvec3 rotat = changeRocketRotation();
-        if (rotat != glm::dvec3(0.0))
-        {
-            rotation = rotat;
-        }
-
+        
         glm::dvec3 deltaP = rocket.getPosition() - lastPos;
         lastPos = rocket.getPosition();
         towards += deltaP;
 
         calculateAtmosphereGradient();
-        calculateAtmosphericDragForce();
-
-        rocket.updateRotation(rotation);
+        calculateAtmosphericDragForce();        
     }
 
     return timeInterval;
@@ -117,9 +110,37 @@ void PhysicsEngine::resetForces()
 void PhysicsEngine::updateKeyPressed(int _lastKeyPressed)
 {
     lastKeyPressed = _lastKeyPressed;
+    glm::dvec3 orgRotation = rocket.getRotation();
     if (lastKeyPressed != 0)
-    {
-        mustRecalculateVectors = true;
+    {  
+        double f = 0.2;
+        double x = 0, y = 0, z = 0;
+        if (lastKeyPressed == 265) //GLFW_KEY_UP
+        {
+            x += f;
+            //y += f;
+        }
+
+        if (lastKeyPressed == 264) //GLFW_KEY_DOWN
+        {
+            x -= f;
+            //y -= f;
+        }
+
+        if (lastKeyPressed == 262) //GLFW_KEY_RIGHT
+        {
+            //z += f;
+            y += f;
+        }
+
+        if (lastKeyPressed == 263) //GLFW_KEY_LEFT
+        {
+            //z -= f;
+            y -= f;
+        }
+
+        orgRotation += glm::dvec3(x, y, z);
+        rotateVectors(orgRotation);
     }
 }
 
@@ -127,6 +148,36 @@ void PhysicsEngine::updateThrustMagnitude(double newMagintude)
 {
     thrustMagnitude = newMagintude;
     changeAltitudeOrientation(altitudeOrientation, celestialBodySize, towards);    
+}
+
+void PhysicsEngine::rotateVectors(glm::dvec3 newRotation)
+{
+    glm::dmat4 trans = glm::dmat4(1.0f);
+
+    // calculate rotations:	
+    if (newRotation.x != 0.0)
+    {
+        trans = glm::rotate(trans, glm::radians(newRotation.x), glm::dvec3(1.0, 0.0, 0.0));
+    }
+
+    if (newRotation.y != 0.0)
+    {
+        trans = glm::rotate(trans, glm::radians(newRotation.y), glm::dvec3(0.0, 1.0, 0.0));
+    }
+    
+    if (newRotation.z != 0.0)
+    {
+        trans = glm::rotate(trans, glm::radians(newRotation.z), glm::dvec3(0.0, 0.0, 1.0));
+    }
+
+    glm::dvec4 resultThrust = trans * glm::dvec4(thrustVector, 0);
+    thrustVector = glm::dvec3(resultThrust);
+
+    glm::dvec4 rocketRotate = trans * glm::dvec4(rocket.getRotation(), 0);
+    glm::dvec3 resultRocket = glm::dvec3(rocketRotate);
+
+    std::cout << glm::to_string(resultRocket) << "\n";
+    rocket.updateRotation(resultRocket);
 }
 
 double PhysicsEngine::getAltitude()
@@ -219,82 +270,6 @@ double PhysicsEngine::calculateAltitude()
 glm::dvec3 PhysicsEngine::celestialBodyCenter(double bodySize)
 {
     return glm::dvec3(0.0, -bodySize, 0.0);
-}
-
-glm::dvec3 PhysicsEngine::changeRocketRotation()
-{    
-    double factor = 8.0;
-   
-    if (lastKeyPressed == 265) //GLFW_KEY_UP
-    {
-        theta += factor;        
-    }
-
-    if (theta > 359.0)
-    {
-        theta = 359.0;
-    }
-
-    if (lastKeyPressed == 264) //GLFW_KEY_DOWN
-    {
-        theta -= factor;        
-    }
-
-    if (theta < 0.1)
-    {
-        theta = 0.1;
-    }
-
-    if (lastKeyPressed == 262) //GLFW_KEY_RIGHT
-    {
-        phi -= factor;        
-    }
-
-    if (phi < 0.1)
-    {
-        phi = 0.1;
-    }
-
-    if (lastKeyPressed == 263) //GLFW_KEY_LEFT
-    {
-        phi += factor;        
-    }
-
-    if (phi > 359.0)
-    {
-        phi = 359.0;
-    }
-   
-    if (mustRecalculateVectors)
-    {        
-        return recalculateThrustVector();
-    }
-
-    return glm::dvec3(0);
-}
-
-glm::dvec3 PhysicsEngine::recalculateThrustVector()
-{
-    glm::dvec3 pos = rocket.getPosition();
-    double r = glm::length(pos - towards);
-    double x = r * cos(glm::radians(phi)) * sin(glm::radians(theta));
-    double z = r * sin(glm::radians(phi)) * sin(glm::radians(theta));
-    double y = r * cos(glm::radians(theta));
-
-    towards.x = pos.x - x;
-    towards.y = pos.y - y;
-    towards.z = pos.z - z;
-    rocket.updateTowards(towards);
-
-    glm::dvec3 direction = glm::normalize(rocket.getPosition() - towards);
-    glm::quat qlook = Geometry::gLookAt(direction, glm::dvec3(0.0, 1.0, 0.0));
-    glm::dvec3 rotation = glm::eulerAngles(qlook) * 180.0f / 3.14159f;
-
-    thrustVector = direction * thrustMagnitude;
-    lastKeyPressed = 0;
-    mustRecalculateVectors = false;
-
-    return rotation;
 }
 
 PhysicsEngine::~PhysicsEngine()
