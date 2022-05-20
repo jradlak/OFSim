@@ -18,7 +18,7 @@ void ModelRenderer::renderWithRotation(glm::dmat4& projection, glm::dmat4& view,
 	model = glm::translate(model, position);
 
 	// calculate rotations:	
-	
+		
 	/*
 	if (rotation.x != 0.0)
 	{
