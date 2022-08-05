@@ -117,7 +117,8 @@ void ODDMA::sendCommandChangeThrust(RocketChangeThrust command)
 
 void ODDMA::sendCommandChangeDirection(RocketChangeDirection command)
 {
-	physics->updateKeyPressed(command.directionCode);	
+	//TODO: switch on!!!
+	//physics->updateKeyPressed(command.directionCode);	
 }
 
 void ODDMA::commandListener()

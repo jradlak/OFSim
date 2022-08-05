@@ -83,9 +83,6 @@
     <None Include="text_fs.glsl" />
     <None Include="text_vs.glsl" />
   </ItemGroup>
-  <ItemGroup>
-    <Object Include="12216_rocket_v1_l2.obj" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>

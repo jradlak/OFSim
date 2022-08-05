@@ -83,7 +83,7 @@ int main(int argc, char** argv)
     float angle = 30.0;
     float dangle = 60.0;
 
-    glm::dvec3 rocketPos = earth.pointAboveTheSurface(angle, dangle, 0.1); //glm::dvec3(0.0, 0.0, 0.0); 
+    glm::dvec3 rocketPos = earth.pointAboveTheSurface(angle, dangle, 0.5); //glm::dvec3(0.0, 0.0, 0.0); 
     Rocket rocket("moon_shader", rocketPos, 0.000013);
 
     camera.Position = rocket.getPosition() + glm::dvec3(0.0, 0.024, 0.0);
@@ -94,7 +94,7 @@ int main(int argc, char** argv)
    
     mainWindow.registerInputCallback(changeRocketRotationByKeyPressed);
 
-    //initialize Physic engine:
+    //initialize Physics engine:
     PhysicsEngine* physics = new PhysicsEngine(rocket, MS_PER_UPDATE);
     physics->changeAltitudeOrientation(CelestialBodyType::planet, 3185.0, earth.pointAboveTheSurface(angle, dangle, -10.0));
 

@@ -155,29 +155,19 @@ void PhysicsEngine::rotateVectors(glm::dvec3 newRotation)
     glm::dmat4 trans = glm::dmat4(1.0f);
 
     // calculate rotations:	
-    if (newRotation.x != 0.0)
-    {
-        trans = glm::rotate(trans, glm::radians(newRotation.x), glm::dvec3(1.0, 0.0, 0.0));
-    }
-
-    if (newRotation.y != 0.0)
-    {
-        trans = glm::rotate(trans, glm::radians(newRotation.y), glm::dvec3(0.0, 1.0, 0.0));
-    }
     
-    if (newRotation.z != 0.0)
-    {
+        trans = glm::rotate(trans, glm::radians(newRotation.x), glm::dvec3(1.0, 0.0, 0.0));
+        trans = glm::rotate(trans, glm::radians(newRotation.y), glm::dvec3(0.0, 1.0, 0.0));
+    
         trans = glm::rotate(trans, glm::radians(newRotation.z), glm::dvec3(0.0, 0.0, 1.0));
-    }
-
+    
     glm::dvec4 resultThrust = trans * glm::dvec4(thrustVector, 0);
     thrustVector = glm::dvec3(resultThrust);
 
-    glm::dvec4 rocketRotate = trans * glm::dvec4(rocket.getRotation(), 0);
-    glm::dvec3 resultRocket = glm::dvec3(rocketRotate);
+    //glm::dvec4 rocketRotate = trans * glm::dvec4(rocket.getRotation(), 0);
+    //glm::dvec3 resultRocket = glm::dvec3(rocketRotate);
 
-    std::cout << glm::to_string(resultRocket) << "\n";
-    rocket.updateRotation(resultRocket);
+    rocket.updateRotation(newRotation);
 }
 
 double PhysicsEngine::getAltitude()
