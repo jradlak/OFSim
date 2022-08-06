@@ -50,3 +50,9 @@ glm::quat Geometry::gLookAt(glm::vec3 direction, glm::vec3 desiredUp)
 	
 	return rot2 * rot1;
 }
+
+glm::dvec3 Geometry::rotateVector(glm::dvec3 v, glm::dvec3 k, double fi)
+{
+	fi = glm::radians(fi);
+	return v * cos(fi) + glm::cross(k, v) * sin(fi) + k * glm::dot(k, v) * (1.0 - cos(fi));
+}

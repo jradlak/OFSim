@@ -98,9 +98,9 @@ void ObjectRenderer::renderWithRotation(glm::dmat4& projection,
 
 	// calculate rotations:
 	
-		model = glm::rotate(model, glm::radians(rotation.x), glm::dvec3(1.0, 0.0, 0.0));
-		model = glm::rotate(model, glm::radians(rotation.y), glm::dvec3(0.0, 1.0, 0.0));
-		model = glm::rotate(model, glm::radians(rotation.z), glm::dvec3(0.0, 0.0, 1.0));
+	model = glm::rotate(model, glm::radians(rotation.x), glm::dvec3(1.0, 0.0, 0.0));
+	model = glm::rotate(model, glm::radians(rotation.y), glm::dvec3(0.0, 1.0, 0.0));
+	model = glm::rotate(model, glm::radians(rotation.z), glm::dvec3(0.0, 0.0, 1.0));
 	
 
 	model = glm::scale(model, glm::dvec3(size));

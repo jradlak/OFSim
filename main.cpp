@@ -27,8 +27,8 @@
 #include "UnitTests.h"
 
 // settings
-const unsigned int SCR_WIDTH = 1280;
-const unsigned int SCR_HEIGHT = 720;
+const unsigned int SCR_WIDTH = 1600;
+const unsigned int SCR_HEIGHT = 900;
 
 Camera camera(glm::vec3(-100.0, -160.0, 1000.0));
 

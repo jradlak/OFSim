@@ -18,8 +18,7 @@ public:
 
 	void updateKeyPressed(int _lastKeyPressed);
 	void updateThrustMagnitude(double newMagintude);
-	void rotateVectors(glm::dvec3 newRotation);
-
+	void rotateVectors(glm::dvec3 newRotation, glm::dvec3 deltaRotation);
 
 	double getAltitude();
 	double getThrustMagnitude();

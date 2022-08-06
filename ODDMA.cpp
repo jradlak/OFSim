@@ -112,6 +112,7 @@ void ODDMA::stateConsumer()
 
 void ODDMA::sendCommandChangeThrust(RocketChangeThrust command)
 {
+	//TODO: switch on!!!
 	physics->updateThrustMagnitude(command.thrust);
 }
 

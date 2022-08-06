@@ -118,29 +118,27 @@ void PhysicsEngine::updateKeyPressed(int _lastKeyPressed)
         if (lastKeyPressed == 265) //GLFW_KEY_UP
         {
             x += f;
-            //y += f;
         }
 
         if (lastKeyPressed == 264) //GLFW_KEY_DOWN
         {
             x -= f;
-            //y -= f;
         }
 
         if (lastKeyPressed == 262) //GLFW_KEY_RIGHT
         {
-            //z += f;
-            y += f;
+            y -= f;
         }
 
         if (lastKeyPressed == 263) //GLFW_KEY_LEFT
         {
-            //z -= f;
-            y -= f;
+            y += f;
         }
 
-        orgRotation += glm::dvec3(x, y, z);
-        rotateVectors(orgRotation);
+        glm::dvec3 deltaRotation = glm::dvec3(x, y, z);
+        orgRotation += deltaRotation;
+        //rotateVectors(glm::dvec3(x, y, z));
+        rotateVectors(orgRotation, deltaRotation);
     }
 }
 
@@ -150,22 +148,30 @@ void PhysicsEngine::updateThrustMagnitude(double newMagintude)
     changeAltitudeOrientation(altitudeOrientation, celestialBodySize, towards);    
 }
 
-void PhysicsEngine::rotateVectors(glm::dvec3 newRotation)
+void PhysicsEngine::rotateVectors(glm::dvec3 newRotation, glm::dvec3 deltaRotation)
 {
-    glm::dmat4 trans = glm::dmat4(1.0f);
+    // calculate rotations:	b
+    
+    //glm::dvec4 resultThrust = glm::dvec4(thrustVector, 0) * trans;
+    
+    // TODO: use Rodrigues' rotation formula to rotate thrust vector
+    // https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula
 
-    // calculate rotations:	
-    
-        trans = glm::rotate(trans, glm::radians(newRotation.x), glm::dvec3(1.0, 0.0, 0.0));
-        trans = glm::rotate(trans, glm::radians(newRotation.y), glm::dvec3(0.0, 1.0, 0.0));
-    
-        trans = glm::rotate(trans, glm::radians(newRotation.z), glm::dvec3(0.0, 0.0, 1.0));
-    
-    glm::dvec4 resultThrust = trans * glm::dvec4(thrustVector, 0);
-    thrustVector = glm::dvec3(resultThrust);
+    // rotate thrust vector:
+    if (deltaRotation.x != 0)
+    {
+        thrustVector = Geometry::rotateVector(thrustVector, glm::dvec3(1.0, 0.0, 0.0), deltaRotation.x);
+    }
 
-    //glm::dvec4 rocketRotate = trans * glm::dvec4(rocket.getRotation(), 0);
-    //glm::dvec3 resultRocket = glm::dvec3(rocketRotate);
+    if (deltaRotation.y != 0)
+    {
+        thrustVector = Geometry::rotateVector(thrustVector, glm::dvec3(0.0, 1.0, 0.0), deltaRotation.y);
+    }
+
+    if (deltaRotation.z != 0)
+    {
+        thrustVector = Geometry::rotateVector(thrustVector, glm::dvec3(0.0, 0.0, 1.0), deltaRotation.z);
+    }
 
     rocket.updateRotation(newRotation);
 }
