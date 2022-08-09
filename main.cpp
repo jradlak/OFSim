@@ -49,12 +49,14 @@ int main(int argc, char** argv)
         return 0;
     }
 
+    // main window preparation:
     Window mainWindow(camera, SCR_WIDTH, SCR_HEIGHT);
     int result = mainWindow.initialize();
     if (result != 0)
     {
         return result;
     }
+    mainWindow.registerInputCallback(changeRocketRotationByKeyPressed);
 
     TextRenderer* text = new TextRenderer;
     result = text->init(SCR_WIDTH, SCR_HEIGHT);
@@ -63,10 +65,7 @@ int main(int argc, char** argv)
         return result;
     }
 
-    glm::dmat4 projection = glm::perspective((double)glm::radians(camera.Zoom),
-        (double)SCR_WIDTH / (double)SCR_HEIGHT, 0.001, 150000000.0);
-
-    // celestial bodies positions:
+    // celestial bodies creation, podition and initialisation
     glm::dvec3 lightPos(0.0, -3185.0, 149600000.0);
     glm::dvec3 earthPos(0.0, -3186.0, 0.0);
     glm::dvec3 moonPos(384400.0, -3185.0, 0.0);
@@ -75,31 +74,25 @@ int main(int argc, char** argv)
     CelestialBody earth(planet, "planet_shader", 6371.0, earthPos);
     CelestialBody earthsMoon(moon, "moon_shader", 1737.0, moonPos);
 
-    camera.Position = glm::dvec3(0.002);
-
     sun.init();
     earth.init();
     earthsMoon.init();
    
+    //rocket and camera orientation:
     float angle = 30.0;
     float dangle = 60.0;
 
     glm::dvec3 rocketPos = earth.pointAboveTheSurface(angle, dangle, 0.5); //glm::dvec3(0.0, 0.0, 0.0); 
     Rocket rocket("moon_shader", rocketPos, 0.000013);
-
     camera.Position = rocket.getPosition() + glm::dvec3(0.0, 0.024, 0.0);
     rocket.init();
-    
-    unsigned __int64 lag = 0, previous = currentTime();
-    int MS_PER_UPDATE = 12;
-   
-    mainWindow.registerInputCallback(changeRocketRotationByKeyPressed);
-
+     
     //initialize Physics engine:
+    int MS_PER_UPDATE = 12;
     PhysicsEngine* physics = new PhysicsEngine(rocket, MS_PER_UPDATE);
     physics->changeAltitudeOrientation(CelestialBodyType::planet, 3185.0, earth.pointAboveTheSurface(angle, dangle, -10.0));
 
-    // start VM Thread:
+    // initialise and start VM Thread:
     VMachine* vm = new VMachine();
     VMTask vmTask(vm);
     std::thread vmThread(vmTask);
@@ -111,17 +104,21 @@ int main(int argc, char** argv)
     
     std::cout << "Start simulation! \n";
 
-    // simulation loop
+    unsigned __int64 lag = 0, previous = currentTime();
+    glm::dmat4 projection = glm::perspective((double)glm::radians(camera.Zoom),
+        (double)SCR_WIDTH / (double)SCR_HEIGHT, 0.001, 150000000.0);
+
+    // simulation loop:
     // -----------
     while (!mainWindow.shouldClose())
     {
+        // calculate lag:
         unsigned __int64 current = currentTime();
         unsigned __int64 elapsed = current - previous;
         previous = current;
         lag += elapsed;
 
         // input
-        // -----
         mainWindow.processInput();
 
         // update physics:
@@ -141,16 +138,19 @@ int main(int argc, char** argv)
         earthsMoon.render(projection, view, lightPos);
         sun.render(projection, view, lightPos);
 
-        // render other objects
+        // render rocket:
         rocket.render(projection, view, lightPos);
 
+        // render HUD:
         renderTextHUD(text, rocket, physics->getAltitude(), physics->getAtmosphereDragForceMagnitude());
 
+        // sync and swap:
         syncFramerate(current, MS_PER_UPDATE);
         mainWindow.swapBuffers();
         glfwPollEvents();
     }
 
+    // clean up:
     oddma->stop();
     vm->terminate();
 
