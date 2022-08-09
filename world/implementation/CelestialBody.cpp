@@ -1,4 +1,4 @@
-#include "CelestialBody.h"
+#include "..\CelestialBody.h"
 #include "Math.h"
 
 CelestialBody::CelestialBody(CelestialBodyType _bodyType, std::string shaderName, double _size, glm::dvec3& _position)

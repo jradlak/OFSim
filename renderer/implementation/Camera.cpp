@@ -1,4 +1,4 @@
-#include "Camera.h"
+#include "..\Camera.h"
 
 // based on: https://learnopengl.com/code_viewer_gh.php?code=includes/learnopengl/camera.h
 

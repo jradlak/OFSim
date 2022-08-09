@@ -1,4 +1,4 @@
-#include "Smoke.h"
+#include "..\Smoke.h"
 
 const int SMOKE_SIZE = 128;
 

@@ -6,9 +6,9 @@
 
 #include <vector>
 
-#include "ObjectRenderer.h"
-#include "TriangleGeometry.h"
-#include "ModelRenderer.h"
+#include "..\renderer\ObjectRenderer.h"
+#include "..\renderer\TriangleGeometry.h"
+#include "..\renderer\ModelRenderer.h"
 #include "Smoke.h"
 
 class Rocket

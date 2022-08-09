@@ -11,8 +11,8 @@
 
 #include "Memory.h"
 #include "VMachine.h"
-#include "Rocket.h"
-#include "PhysicsEngine.h"
+#include "..\world\Rocket.h"
+#include "..\math_and_physics\PhysicsEngine.h"
 
 struct RocketStatus
 {

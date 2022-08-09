@@ -1,4 +1,4 @@
-#include "Rocket.h"
+#include "..\Rocket.h"
 
 Rocket::Rocket(std::string shaderName, glm::dvec3& _position, double _size)
 	: position(_position), size(_size)

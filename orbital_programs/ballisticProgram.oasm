@@ -63,11 +63,11 @@ cmp r1, r2
 jnz czekaj_na_wykonanie
 
 czekaj_na_wysokosc:
-; sprawdzenie, czy wysokoœæ przekoczy³a 30 km
+; sprawdzenie, czy wysokoœæ przekoczy³a 130 km
 set r3, 65440
 fld f1, r3
 
-fset f2, 30.0
+fset f2, 130.0
 fcmp f1, f2
 jnc .end
 ;jeœli tak - skok do odciêcia zap³onu i zakoñczenie programu

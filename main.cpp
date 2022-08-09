@@ -11,17 +11,17 @@
 #include <chrono> 
 
 // world rendering
-#include "Camera.h"
-#include "Window.h"
-#include "TextRenderer.h"
+#include "renderer\Camera.h"
+#include "renderer\Window.h"
+#include "renderer\TextRenderer.h"
 
 // math and physics
-#include "PhysicsEngine.h"
+#include "math_and_physics\PhysicsEngine.h"
 
 // virtual machine:
-#include "VMachine.h"
-#include "VMTask.h";
-#include "ODDMA.h"
+#include "vmachine\VMachine.h"
+#include "vmachine\VMTask.h";
+#include "vmachine\ODDMA.h"
 
 // testing
 #include "UnitTests.h"
@@ -35,6 +35,7 @@ Camera camera(glm::vec3(-100.0, -160.0, 1000.0));
 int lastKeyPressed = 0;
 
 unsigned __int64 currentTime();
+int main(int argc, char** argv);
 void switchGLStateForWorldRendering(float r, float g, float b);
 void renderTextHUD(TextRenderer* text, Rocket& rocket, double altitude, double atmosphereDragForceMagnitude);
 void syncFramerate(unsigned __int64 startTime, int ms_per_update);

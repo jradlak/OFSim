@@ -1,4 +1,4 @@
-#include "Memory.h"
+#include "..\Memory.h"
 
 unsigned char Memory::fetchByte(unsigned int addr)
 {

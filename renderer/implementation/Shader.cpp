@@ -1,4 +1,4 @@
-#include "Shader.h"
+#include "..\Shader.h"
 
 //based on: https://learnopengl.com/code_viewer_gh.php?code=includes/learnopengl/shader_s.h
 

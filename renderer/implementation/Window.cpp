@@ -1,7 +1,7 @@
 #include <iostream>
 #include <map>
 
-#include "Window.h"
+#include "..\Window.h"
 
 Window::Window(Camera& _camera, unsigned int _width, unsigned int _height)
         :camera(_camera)

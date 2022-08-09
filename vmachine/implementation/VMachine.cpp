@@ -1,6 +1,6 @@
 #pragma once
 
-#include "VMachine.h"
+#include "..\VMachine.h"
 
 VMachine::VMachine()
 {

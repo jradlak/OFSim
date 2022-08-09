@@ -1,4 +1,4 @@
-#include "Model.h"
+#include "..\Model.h"
 
 // based on: https://learnopengl.com/Model-Loading/Model
 

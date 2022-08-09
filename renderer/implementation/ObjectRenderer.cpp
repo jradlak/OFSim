@@ -1,8 +1,8 @@
-#include "ObjectRenderer.h"
+#include "..\ObjectRenderer.h"
 
 ObjectRenderer::ObjectRenderer(std::string shaderName)
 {
-	shader = new Shader((shaderName + "_vs.glsl").c_str(), (shaderName + "_fs.glsl").c_str());
+	shader = new Shader(("shaders/" + shaderName + "_vs.glsl").c_str(), ("shaders/" + shaderName + "_fs.glsl").c_str());
 	logDepthBufFC = 2.0 / log(150000000000000000.0 + 1.0) / 0.69315;
 }
 

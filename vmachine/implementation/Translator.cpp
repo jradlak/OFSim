@@ -1,4 +1,4 @@
-#include "Translator.h"
+#include "..\Translator.h"
 
 static inline std::string& ltrim(std::string& s);
 static inline std::string& rtrim(std::string& s);

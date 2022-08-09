@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Memory.h"
-#include "Registers.h"
-#include "Instructions.h"
-#include "VMachine.h"
-#include "Translator.h"
-#include "Opcodes.h"
+#include "vmachine\Memory.h"
+#include "vmachine\Registers.h"
+#include "vmachine\Instructions.h"
+#include "vmachine\VMachine.h"
+#include "vmachine\Translator.h"
+#include "vmachine\Opcodes.h"
 
 class UnitTests
 {

@@ -1,4 +1,4 @@
-#include "Geometry.h"
+#include "..\Geometry.h"
 
 // based on: https://github.com/opengl-tutorials/ogl/blob/master/common/quaternion_utils.cpp
 

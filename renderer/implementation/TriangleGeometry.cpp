@@ -1,4 +1,4 @@
-#include "TriangleGeometry.h"
+#include "..\TriangleGeometry.h"
 
 TriangleGeometry::TriangleGeometry()
 {

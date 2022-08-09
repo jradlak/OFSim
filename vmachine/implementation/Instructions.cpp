@@ -1,4 +1,4 @@
-#include "Instructions.h"
+#include "..\Instructions.h"
 
 void Instructions::mov(unsigned char* args)
 {

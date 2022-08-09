@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Geometry.h"
-#include "CelestialBody.h"
-#include "Rocket.h"
+#include "..\world\CelestialBody.h"
+#include "..\world\Rocket.h"
 
 class PhysicsEngine
 {
