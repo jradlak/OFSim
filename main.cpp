@@ -23,6 +23,11 @@
 #include "vmachine\VMTask.h";
 #include "vmachine\ODDMA.h"
 
+// gui:
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
+
 // testing
 #include "UnitTests.h"
 
@@ -108,6 +113,14 @@ int main(int argc, char** argv)
     glm::dmat4 projection = glm::perspective((double)glm::radians(camera.Zoom),
         (double)SCR_WIDTH / (double)SCR_HEIGHT, 0.001, 150000000.0);
 
+    // ImGui initialization:
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    ImGui::StyleColorsDark();
+    ImGui_ImplGlfw_InitForOpenGL(mainWindow.getWindow(), true);
+    ImGui_ImplOpenGL3_Init("#version 330");
+
     // simulation loop:
     // -----------
     while (!mainWindow.shouldClose())
@@ -129,6 +142,11 @@ int main(int argc, char** argv)
         float* rgb = physics->atmosphereRgb();
         switchGLStateForWorldRendering(rgb[0], rgb[1], rgb[2]);
 
+        // imgui frame:
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
         // camera/view transformation:
         camera.Position = rocket.getPosition() + glm::dvec3(0.0, 0.024, 0.0);
         glm::dmat4 view = camera.getViewMatrix();
@@ -140,6 +158,14 @@ int main(int argc, char** argv)
 
         // render rocket:
         rocket.render(projection, view, lightPos);
+
+        // render imgui:
+        ImGui::Begin("My name is Window, ImGUI Window");
+        ImGui::Text("Hello there adventurer!");
+        ImGui::End();
+
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         // render HUD:
         renderTextHUD(text, rocket, physics->getAltitude(), physics->getAtmosphereDragForceMagnitude());
@@ -155,7 +181,11 @@ int main(int argc, char** argv)
     vm->terminate();
 
     glfwTerminate();
-    
+
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+
     delete text;
     delete physics;
     delete vm;

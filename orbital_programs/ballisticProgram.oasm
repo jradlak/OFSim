@@ -67,7 +67,7 @@ czekaj_na_wysokosc:
 set r3, 65440
 fld f1, r3
 
-fset f2, 130.0
+fset f2, 230.0
 fcmp f1, f2
 jnc .end
 ;jeœli tak - skok do odciêcia zap³onu i zakoñczenie programu
