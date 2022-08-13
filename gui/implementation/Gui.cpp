@@ -20,13 +20,14 @@ void Gui::newFrame()
 
 void Gui::renderTelemetry(TelemetryData& telemetryData)
 {
-    ImGui::SetNextWindowSize(ImVec2(400, 120), ImGuiCond_Once);
+    ImGui::SetNextWindowSize(ImVec2(450, 120), ImGuiCond_Once);
     ImGui::SetNextWindowPos(ImVec2(100, 700), ImGuiCond_Once);
 
     ImGui::Begin("TELEMETRIA");
     
     std::string ssAltitude = "Wysokosc punktu widzenia: " + std::to_string(telemetryData.altitude) + " km";
     ImGui::Text(ssAltitude.c_str());
+
 
     std::string ssMass = "Masa rakiety: " + std::to_string(telemetryData.mass) + "t";
     ImGui::Text(ssMass.c_str());
@@ -36,6 +37,12 @@ void Gui::renderTelemetry(TelemetryData& telemetryData)
 
     std::string ssVelocity = "Predkosc bezwgledna rakiety: " + std::to_string(telemetryData.velocity) + "km/s";
     ImGui::Text(ssVelocity.c_str());
+
+    std::string ssPosition = "Pozycja rakiety: (" + 
+        std::to_string(telemetryData.position.x) + ", " +
+        std::to_string(telemetryData.position.y) + ", " +
+        std::to_string(telemetryData.position.z) + ")";
+    ImGui::Text(ssPosition.c_str());
 
     ImGui::End();
 

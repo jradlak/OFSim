@@ -149,28 +149,28 @@ Window::Window(Camera& _camera, unsigned int _width, unsigned int _height)
         {
             Window* theWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));
             xoffset = 10;
-            theWindow->camera.processMouseMovement(xoffset, yoffset);
+            theWindow->camera.processCameraRotation(xoffset, yoffset);
         }
         
         if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
         {
             Window* theWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));
             xoffset = -10;
-            theWindow->camera.processMouseMovement(xoffset, yoffset);
+            theWindow->camera.processCameraRotation(xoffset, yoffset);
         }
 
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
         {
             Window* theWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));
             yoffset = 10;
-            theWindow->camera.processMouseMovement(xoffset, yoffset);
+            theWindow->camera.processCameraRotation(xoffset, yoffset);
         }
 
         if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
         {
             Window* theWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));
             yoffset = -10;
-            theWindow->camera.processMouseMovement(xoffset, yoffset);
+            theWindow->camera.processCameraRotation(xoffset, yoffset);
         }
     }
 

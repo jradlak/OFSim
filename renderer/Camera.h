@@ -20,11 +20,11 @@ enum Camera_Movement {
 };
 
 // Default camera values
-const double YAW         = 90.0;
-const double PITCH       = -90.0;
+const double YAW         = 30.0;
+const double PITCH       = -70.0;
 const double SPEED       = 0.005;
 const double SENSITIVITY = 0.1;
-const double ZOOM        = 45.0;
+const double ZOOM        = 55.0;
 
 class Camera
 {
@@ -51,7 +51,7 @@ public:
     Camera(double posX, double posY, double posZ, double upX, double upY, double upZ, double yaw, double pitch, double roll); 
     glm::dmat4 getViewMatrix();
     void processKeyboard(Camera_Movement direction, double deltaTime);    
-    void processMouseMovement(double xoffset, double yoffset, bool constrainPitch = true);
+    void processCameraRotation(double xoffset, double yoffset, bool constrainPitch = true);
     
 private:
     void updateCameraVectors();

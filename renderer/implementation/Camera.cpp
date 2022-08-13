@@ -74,7 +74,7 @@ void Camera::processKeyboard(Camera_Movement direction, double deltaTime)
     updateCameraVectors();
 }
 
-void Camera::processMouseMovement(double xoffset, double yoffset, bool constrainPitch)
+void Camera::processCameraRotation(double xoffset, double yoffset, bool constrainPitch)
 {
     xoffset *= MouseSensitivity;
     yoffset *= MouseSensitivity;
