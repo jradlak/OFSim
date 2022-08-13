@@ -151,7 +151,7 @@ Window::Window(Camera& _camera, unsigned int _width, unsigned int _height)
             xoffset = 10;
             theWindow->camera.processMouseMovement(xoffset, yoffset);
         }
-
+        
         if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
         {
             Window* theWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));

@@ -13,7 +13,6 @@
 // world rendering
 #include "renderer\Camera.h"
 #include "renderer\Window.h"
-#include "renderer\TextRenderer.h"
 
 // math and physics
 #include "math_and_physics\PhysicsEngine.h"
@@ -40,7 +39,7 @@ int lastKeyPressed = 0;
 unsigned __int64 currentTime();
 int main(int argc, char** argv);
 void switchGLStateForWorldRendering(float r, float g, float b);
-void renderTextHUD(TextRenderer* text, Rocket& rocket, double altitude, double atmosphereDragForceMagnitude);
+void renderTextHUD(Gui* gui, Rocket& rocket, double altitude, double atmosphereDragForceMagnitude);
 void syncFramerate(unsigned __int64 startTime, int ms_per_update);
 void changeRocketRotationByKeyPressed(int keyPressed);
 bool runTests(int argc, char** argv);
@@ -60,13 +59,6 @@ int main(int argc, char** argv)
         return result;
     }
     mainWindow.registerInputCallback(changeRocketRotationByKeyPressed);
-
-    TextRenderer* text = new TextRenderer;
-    result = text->init(SCR_WIDTH, SCR_HEIGHT);
-    if (result != 0)
-    {
-        return result;
-    }
 
     // celestial bodies creation, podition and initialisation
     glm::dvec3 lightPos(0.0, -3185.0, 149600000.0);
@@ -149,10 +141,8 @@ int main(int argc, char** argv)
         // render rocket:
         rocket.render(projection, view, lightPos);
        
-        gui->render();
-
         // render HUD:
-        renderTextHUD(text, rocket, physics->getAltitude(), physics->getAtmosphereDragForceMagnitude());
+        renderTextHUD(gui, rocket, physics->getAltitude(), physics->getAtmosphereDragForceMagnitude());
 
         // sync and swap:
         syncFramerate(current, MS_PER_UPDATE);
@@ -168,7 +158,6 @@ int main(int argc, char** argv)
 
     gui->cleanUp();
 
-    delete text;
     delete physics;
     delete vm;
     delete gui;
@@ -191,34 +180,24 @@ void switchGLStateForWorldRendering(float r, float g, float b)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void renderTextHUD(TextRenderer* text, Rocket& rocket, double altitude, double atmosphereDragForceMagnitude)
+void renderTextHUD(Gui* gui, Rocket& rocket, double altitude, double atmosphereDragForceMagnitude)
 {
-    glEnable(GL_CULL_FACE);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glDisable(GL_DEPTH_TEST);
-
-    std::stringstream ssAltitude;
-    ssAltitude << "Wysokosc punktu widzenia: " << altitude << " km";
-    text->renderText(ssAltitude.str(), 25.0f, 125.0f, 0.5f, glm::vec3(0.5, 0.8f, 0.2f));
+    TelemetryData data;
     
-    std::stringstream ssMass;
-    ssMass << "Masa rakiety: " << rocket.getMass() << " t";
-    text->renderText(ssMass.str(), 25.0f, 100.0f, 0.5f, glm::vec3(0.5, 0.8f, 0.2f));
-
-    std::stringstream ssPresure;
-    ssPresure << "Cisnienie dynamiczne atmosfery: " << atmosphereDragForceMagnitude * 10.0 << "";
-    text->renderText(ssPresure.str(), 25.0f, 75.0f, 0.5f, glm::vec3(0.5, 0.8f, 0.2f));
-
+    data.altitude = altitude;
+    data.mass = rocket.getMass();
+    data.atmPressure = atmosphereDragForceMagnitude;
     glm::dvec3 velocity = rocket.getVelocity();
-    std::stringstream ssVeloticy;
-    ssVeloticy << "Predkosc bezgledna rakiety: " << glm::length(velocity) << " km/s";
-    text->renderText(ssVeloticy.str(), 25.0f, 50.0f, 0.5f, glm::vec3(0.5, 0.8f, 0.2f));
+    data.velocity = glm::length(velocity);
 
-    glm::dvec3 position = rocket.getPosition();
-    std::stringstream ssPosition;
-    ssPosition << "Pozycja rakiety: (" << position.x << ", " << position.y << "," << position.y << ")";
-    text->renderText(ssPosition.str(), 25.0f, 25.0f, 0.5f, glm::vec3(0.5, 0.8f, 0.2f));    
+    //glm::dvec3 position = rocket.getPosition();
+    //std::stringstream ssPosition;
+    //ssPosition << "Pozycja rakiety: (" << position.x << ", " << position.y << "," << position.y << ")";
+    data.position = rocket.getPosition();
+
+    //text->renderText(ssPosition.str(), 25.0f, 25.0f, 0.5f, glm::vec3(0.5, 0.8f, 0.2f));  
+
+    gui->renderTelemetry(data);
 }
 
 void syncFramerate(unsigned __int64 startTime, int ms_per_update)

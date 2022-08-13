@@ -63,9 +63,6 @@
     <ClInclude Include="renderer\TriangleGeometry.h">
       <Filter>Pliki nagłówkowe\world</Filter>
     </ClInclude>
-    <ClInclude Include="renderer\TextRenderer.h">
-      <Filter>Pliki nagłówkowe\renderer</Filter>
-    </ClInclude>
     <ClInclude Include="math_and_physics\Geometry.h">
       <Filter>Pliki nagłówkowe\math</Filter>
     </ClInclude>
@@ -167,9 +164,6 @@
     <ClCompile Include="renderer\implementation\TriangleGeometry.cpp">
       <Filter>Pliki źródłowe\world</Filter>
     </ClCompile>
-    <ClCompile Include="renderer\implementation\TextRenderer.cpp">
-      <Filter>Pliki źródłowe\renderer</Filter>
-    </ClCompile>
     <ClCompile Include="math_and_physics\implementation\PhysicsEngine.cpp">
       <Filter>Pliki źródłowe\math</Filter>
     </ClCompile>
@@ -260,12 +254,6 @@
       <Filter>Pliki zasobów</Filter>
     </None>
     <None Include="shaders\moon_shader_vs.glsl">
-      <Filter>Pliki zasobów</Filter>
-    </None>
-    <None Include="shaders\text_vs.glsl">
-      <Filter>Pliki zasobów</Filter>
-    </None>
-    <None Include="shaders\text_fs.glsl">
       <Filter>Pliki zasobów</Filter>
     </None>
     <None Include="orbital_programs\orbitalProgram1.oasm">

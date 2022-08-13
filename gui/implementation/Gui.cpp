@@ -18,20 +18,29 @@ void Gui::newFrame()
     ImGui::NewFrame();
 }
 
-void Gui::render()
+void Gui::renderTelemetry(TelemetryData& telemetryData)
 {
-    // render imgui:
-    ImGui::Begin("My name is Window, ImGUI Window");
-    ImGui::Text("Hello there adventurer!");
+    ImGui::SetNextWindowSize(ImVec2(400, 120), ImGuiCond_Once);
+    ImGui::SetNextWindowPos(ImVec2(100, 700), ImGuiCond_Once);
+
+    ImGui::Begin("TELEMETRIA");
+    
+    std::string ssAltitude = "Wysokosc punktu widzenia: " + std::to_string(telemetryData.altitude) + " km";
+    ImGui::Text(ssAltitude.c_str());
+
+    std::string ssMass = "Masa rakiety: " + std::to_string(telemetryData.mass) + "t";
+    ImGui::Text(ssMass.c_str());
+
+    std::string ssPressure = "Cisnienie dynamiczne atmosfery: " + std::to_string(telemetryData.atmPressure * 10);
+    ImGui::Text(ssPressure.c_str());
+
+    std::string ssVelocity = "Predkosc bezwgledna rakiety: " + std::to_string(telemetryData.velocity) + "km/s";
+    ImGui::Text(ssVelocity.c_str());
+
     ImGui::End();
 
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-}
-
-void Gui::renderTelemetry(TelemetryData& telemetryData)
-{
-
 }
 
 void Gui::cleanUp()
