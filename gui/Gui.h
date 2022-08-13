@@ -6,6 +6,8 @@
 
 #include "..\renderer\Window.h"
 
+#include "TelemetryData.h"
+
 class Gui
 {
 public:
@@ -16,6 +18,8 @@ public:
 	
 	void newFrame();
 	void render();
+
+	void renderTelemetry(TelemetryData& telemetryData);
 	
 	void cleanUp();
 };

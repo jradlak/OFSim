@@ -51,10 +51,10 @@ Window::Window(Camera& _camera, unsigned int _width, unsigned int _height)
         }
 
         glfwSetFramebufferSizeCallback(mainWindow, framebuffer_size_callback);
-        glfwSetCursorPosCallback(mainWindow, mouse_callback);        
+        //glfwSetCursorPosCallback(mainWindow, mouse_callback);        
 
         // tell GLFW to capture our mouse
-        glfwSetInputMode(mainWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        //glfwSetInputMode(mainWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 
         // configure global opengl state
@@ -126,6 +126,8 @@ Window::Window(Camera& _camera, unsigned int _width, unsigned int _height)
         {
             processInputCall((int)GLFW_KEY_RIGHT);
         }
+
+        cameraRotationHandler(mainWindow);
     }
 
     void Window::registerInputCallback(inputCall funct)
@@ -138,24 +140,38 @@ Window::Window(Camera& _camera, unsigned int _width, unsigned int _height)
         glViewport(0, 0, width, height);
     }
 
-    void Window::mouse_callback(GLFWwindow* window, double xpos, double ypos)
+    void Window::cameraRotationHandler(GLFWwindow* window)
     {
-        Window* theWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));
-
-        if (theWindow->firstMouse)
+        double xoffset = 0;
+        double yoffset = 0;
+        
+        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         {
-            theWindow->lastX = xpos;
-            theWindow->lastY = ypos;
-            theWindow->firstMouse = false;
+            Window* theWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));
+            xoffset = 10;
+            theWindow->camera.processMouseMovement(xoffset, yoffset);
         }
 
-        float xoffset = xpos - theWindow->lastX;
-        float yoffset = theWindow->lastY - ypos; // reversed since y-coordinates go from bottom to top
+        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        {
+            Window* theWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));
+            xoffset = -10;
+            theWindow->camera.processMouseMovement(xoffset, yoffset);
+        }
 
-        theWindow->lastX = xpos;
-        theWindow->lastY = ypos;
+        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        {
+            Window* theWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));
+            yoffset = 10;
+            theWindow->camera.processMouseMovement(xoffset, yoffset);
+        }
 
-        theWindow->camera.processMouseMovement(xoffset, yoffset);
+        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        {
+            Window* theWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));
+            yoffset = -10;
+            theWindow->camera.processMouseMovement(xoffset, yoffset);
+        }
     }
 
     Window::~Window()

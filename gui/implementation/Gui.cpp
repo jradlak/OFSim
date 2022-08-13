@@ -29,6 +29,11 @@ void Gui::render()
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
+void Gui::renderTelemetry(TelemetryData& telemetryData)
+{
+
+}
+
 void Gui::cleanUp()
 {
     ImGui_ImplOpenGL3_Shutdown();

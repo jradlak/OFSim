@@ -50,4 +50,6 @@ private:
     // glfw: whenever the mouse scroll wheel scrolls, this callback is called
     // ----------------------------------------------------------------------
     static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+
+    static void cameraRotationHandler(GLFWwindow* window);
 };
