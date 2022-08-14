@@ -10,6 +10,7 @@
 #include "..\renderer\Window.h"
 
 #include "TelemetryData.h"
+#include <string>
 
 class Gui
 {
@@ -20,6 +21,8 @@ public:
 	void initialization(Window* mainWindow);
 	
 	void newFrame();
+
+	void renderCodeEditor(static char text[]);
 
 	void renderTelemetry(TelemetryData& telemetryData);
 	

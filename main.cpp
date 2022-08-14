@@ -1,3 +1,7 @@
+#ifdef _MSC_VER
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+
 #include <iostream>
 #include <map>
 #include <string>
@@ -43,6 +47,8 @@ void renderTextHUD(Gui* gui, Rocket& rocket, double altitude, double atmosphereD
 void syncFramerate(unsigned __int64 startTime, int ms_per_update);
 void changeRocketRotationByKeyPressed(int keyPressed);
 bool runTests(int argc, char** argv);
+
+std::string loadSourceCode(std::string sourcePath);
 
 int main(int argc, char** argv)
 {
@@ -106,6 +112,11 @@ int main(int argc, char** argv)
     Gui* gui = new Gui();
     gui->initialization(&mainWindow);
 
+    std::string sourceCode = loadSourceCode("orbital_programs/ballisticProgram.oasm");
+    static char* srcStr = (char*)sourceCode.c_str();
+    static char orbitalProgramSourceCode[1024 * 16];
+    strcpy(orbitalProgramSourceCode, srcStr);
+
     // simulation loop:
     // -----------
     while (!mainWindow.shouldClose())
@@ -142,6 +153,7 @@ int main(int argc, char** argv)
         rocket.render(projection, view, lightPos);
        
         // render HUD:
+        gui->renderCodeEditor(orbitalProgramSourceCode);
         renderTextHUD(gui, rocket, physics->getAltitude(), physics->getAtmosphereDragForceMagnitude());
 
         // sync and swap:
@@ -198,6 +210,30 @@ void renderTextHUD(Gui* gui, Rocket& rocket, double altitude, double atmosphereD
     //text->renderText(ssPosition.str(), 25.0f, 25.0f, 0.5f, glm::vec3(0.5, 0.8f, 0.2f));  
 
     gui->renderTelemetry(data);
+}
+
+std::string loadSourceCode(std::string sourcePath)
+{
+    std::ifstream sourceFile;
+
+    std::string sourceCode = "";
+
+    sourceFile.open(sourcePath.c_str(), std::ios::in);
+
+    if (sourceFile.is_open()) {
+        std::string line;
+
+        while (sourceFile)
+        {
+            std::getline(sourceFile, line, '\r');
+            sourceFile >> line;
+            sourceCode += line + "\n";
+        }
+
+        sourceFile.close();
+    }
+
+    return sourceCode;  
 }
 
 void syncFramerate(unsigned __int64 startTime, int ms_per_update)

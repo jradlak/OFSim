@@ -18,16 +18,31 @@ void Gui::newFrame()
     ImGui::NewFrame();
 }
 
+void Gui::renderCodeEditor(static char text[])
+{
+    ImGui::SetNextWindowSize(ImVec2(450, 500), ImGuiCond_Once);
+    ImGui::SetNextWindowPos(ImVec2(100, 150), ImGuiCond_Once);
+
+    ImGui::Begin("Kod zrodlowy programu lotu:");
+
+    //ImGui::InputTextMultiline()
+    static ImGuiInputTextFlags flags = ImGuiInputTextFlags_AllowTabInput;
+    //static char text2[1024 * 16] = 
+
+    ImGui::InputTextMultiline("##source", text, 1024*16, ImVec2(-FLT_MIN, ImGui::GetTextLineHeight() * 35), flags);
+
+    ImGui::End();
+}
+
 void Gui::renderTelemetry(TelemetryData& telemetryData)
 {
     ImGui::SetNextWindowSize(ImVec2(450, 120), ImGuiCond_Once);
     ImGui::SetNextWindowPos(ImVec2(100, 700), ImGuiCond_Once);
 
-    ImGui::Begin("TELEMETRIA");
+    ImGui::Begin("Telemetria:");
     
     std::string ssAltitude = "Wysokosc punktu widzenia: " + std::to_string(telemetryData.altitude) + " km";
     ImGui::Text(ssAltitude.c_str());
-
 
     std::string ssMass = "Masa rakiety: " + std::to_string(telemetryData.mass) + "t";
     ImGui::Text(ssMass.c_str());

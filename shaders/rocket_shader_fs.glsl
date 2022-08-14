@@ -14,7 +14,7 @@ uniform vec3 objectColor;
 vec3 computeColor()
 {
     //TODO: make better color
-    return (0.95f, 0.65f, 0.65f);
+    return (0.55f, 0.55f, 0.55f);
 }
 
 void main()
