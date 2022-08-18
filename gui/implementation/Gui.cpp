@@ -1,4 +1,7 @@
 #include "..\Gui.h"
+#include "..\ImageUtils.h"
+
+#include <iostream>
 
 void Gui::initialization(Window* mainWindow)
 {
@@ -18,10 +21,24 @@ void Gui::newFrame()
     ImGui::NewFrame();
 }
 
+void Gui::renderSimulationControlWindow()
+{
+    ImGui::SetNextWindowSize(ImVec2(450, 100), ImGuiCond_Once);
+    ImGui::SetNextWindowPos(ImVec2(100, 50), ImGuiCond_Once);
+
+    ImGui::Begin("Kontrola symulacji:");
+
+    if (ImGui::ImageButton((void*)(intptr_t)out_texture, ImVec2(50, 50))) {
+        std::cout << "Kliknieto!! \n";
+    }
+
+    ImGui::End();
+}
+
 void Gui::renderCodeEditor(static char text[])
 {
     ImGui::SetNextWindowSize(ImVec2(450, 500), ImGuiCond_Once);
-    ImGui::SetNextWindowPos(ImVec2(100, 150), ImGuiCond_Once);
+    ImGui::SetNextWindowPos(ImVec2(100, 200), ImGuiCond_Once);
 
     ImGui::Begin("Kod zrodlowy programu lotu:");
 
@@ -37,7 +54,7 @@ void Gui::renderCodeEditor(static char text[])
 void Gui::renderTelemetry(TelemetryData& telemetryData)
 {
     ImGui::SetNextWindowSize(ImVec2(450, 120), ImGuiCond_Once);
-    ImGui::SetNextWindowPos(ImVec2(100, 700), ImGuiCond_Once);
+    ImGui::SetNextWindowPos(ImVec2(100, 750), ImGuiCond_Once);
 
     ImGui::Begin("Telemetria:");
     
@@ -63,6 +80,12 @@ void Gui::renderTelemetry(TelemetryData& telemetryData)
 
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
+void Gui::loadButtonTexture()
+{    
+    bool ret = ImageUtils::loadTextureFromFile("textures/fruits.png", &out_texture, &out_width, &out_height);
+    IM_ASSERT(ret);
 }
 
 void Gui::cleanUp()

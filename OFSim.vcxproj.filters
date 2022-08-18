@@ -141,6 +141,9 @@
     <ClInclude Include="gui\TelemetryData.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
+    <ClInclude Include="gui\ImageUtils.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -265,5 +268,10 @@
     <None Include="assimp-vc142-mtd.dll" />
     <None Include="shaders\rocket_shader_fs.glsl" />
     <None Include="shaders\rocket_shader_vs.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="textures\fruits.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
   </ItemGroup>
 </Project>

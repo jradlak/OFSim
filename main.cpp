@@ -111,6 +111,7 @@ int main(int argc, char** argv)
 
     Gui* gui = new Gui();
     gui->initialization(&mainWindow);
+    gui->loadButtonTexture();
 
     std::string sourceCode = loadSourceCode("orbital_programs/ballisticProgram.oasm");
     static char* srcStr = (char*)sourceCode.c_str();
@@ -153,6 +154,7 @@ int main(int argc, char** argv)
         rocket.render(projection, view, lightPos);
        
         // render HUD:
+        gui->renderSimulationControlWindow();
         gui->renderCodeEditor(orbitalProgramSourceCode);
         renderTextHUD(gui, rocket, physics->getAltitude(), physics->getAtmosphereDragForceMagnitude());
 

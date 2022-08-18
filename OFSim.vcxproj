@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="gui\Gui.h" />
+    <ClInclude Include="gui\ImageUtils.h" />
     <ClInclude Include="gui\TelemetryData.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
@@ -99,6 +100,9 @@
     <None Include="shaders\planet_shader_vs.glsl" />
     <None Include="shaders\rocket_shader_fs.glsl" />
     <None Include="shaders\rocket_shader_vs.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="textures\fruits.png" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

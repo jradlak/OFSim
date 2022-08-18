@@ -6,11 +6,10 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 
-
 #include "..\renderer\Window.h"
 
-#include "TelemetryData.h"
 #include <string>
+#include "TelemetryData.h"
 
 class Gui
 {
@@ -22,9 +21,18 @@ public:
 	
 	void newFrame();
 
+	void renderSimulationControlWindow();
+
 	void renderCodeEditor(static char text[]);
 
 	void renderTelemetry(TelemetryData& telemetryData);
 	
+	void loadButtonTexture();
+
 	void cleanUp();
+
+private:
+	GLuint out_texture = 0;
+	int out_width = 0;
+	int out_height = 0;
 };
