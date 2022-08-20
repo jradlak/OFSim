@@ -18,21 +18,33 @@ public:
 	~Gui() {}
 
 	void initialization(Window* mainWindow);
-	
+
 	void newFrame();
 
-	void renderSimulationControlWindow();
+	void renderSimulationControlWindow(unsigned __int64 time);
 
 	void renderCodeEditor(static char text[]);
 
 	void renderTelemetry(TelemetryData& telemetryData);
-	
-	void loadButtonTexture();
+
+	void loadButtonTextures();
 
 	void cleanUp();
 
+	int getTimeFactor() { return timeFactor; }
+
 private:
-	GLuint out_texture = 0;
+	GLuint play_texture = 0;
+	GLuint pause_texture = 0;
+	GLuint pp_texture = 0;
+
+	GLuint stop_texture = 0;	
+	GLuint fwd_texture = 0;
+
+	bool plaing = false;
+
 	int out_width = 0;
 	int out_height = 0;
+
+	int timeFactor = 0;
 };

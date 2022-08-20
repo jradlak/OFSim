@@ -21,16 +21,50 @@ void Gui::newFrame()
     ImGui::NewFrame();
 }
 
-void Gui::renderSimulationControlWindow()
+void Gui::renderSimulationControlWindow(unsigned __int64 time)
 {
     ImGui::SetNextWindowSize(ImVec2(450, 100), ImGuiCond_Once);
     ImGui::SetNextWindowPos(ImVec2(100, 50), ImGuiCond_Once);
 
-    ImGui::Begin("Kontrola symulacji:");
+    ImGui::Begin("Kontrola symulacji: ");
 
-    if (ImGui::ImageButton((void*)(intptr_t)out_texture, ImVec2(50, 50))) {
-        std::cout << "Kliknieto!! \n";
+    unsigned __int64 seconds = time / 1000;
+    unsigned __int64 millis = time % 1000;
+
+    std::string strClock = "Zegar: " + std::to_string(seconds) + "." + std::to_string(millis) + "s";
+    ImGui::Text(strClock.c_str());
+
+    if (ImGui::ImageButton((void*)(intptr_t)pp_texture, ImVec2(32, 32))) {
+        if (plaing)
+        {
+            std::cout << "Kliknieto pause!! \n";
+            pp_texture = play_texture;
+            plaing = false;
+            timeFactor = 0;
+        }
+        else
+        {
+            std::cout << "Kliknieto play!! \n";
+            pp_texture = pause_texture;
+            plaing = true;
+            timeFactor = 1;
+        }
+    } 
+    
+    ImGui::SameLine();
+
+    if (ImGui::ImageButton((void*)(intptr_t)stop_texture, ImVec2(32, 32))) {
+        std::cout << "Kliknieto stop!! \n";
+        pp_texture = play_texture;
+        plaing = false;
     }
+
+    ImGui::SameLine();
+
+    if (ImGui::ImageButton((void*)(intptr_t)fwd_texture, ImVec2(32, 32))) {
+        std::cout << "Kliknieto fwd!! \n";
+    }
+    
 
     ImGui::End();
 }
@@ -82,10 +116,18 @@ void Gui::renderTelemetry(TelemetryData& telemetryData)
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void Gui::loadButtonTexture()
+void Gui::loadButtonTextures()
 {    
-    bool ret = ImageUtils::loadTextureFromFile("textures/fruits.png", &out_texture, &out_width, &out_height);
+    bool ret = ImageUtils::loadTextureFromFile("textures/play.png", &play_texture, &out_width, &out_height);
     IM_ASSERT(ret);
+    ret = ImageUtils::loadTextureFromFile("textures/stop.png", &stop_texture, &out_width, &out_height);
+    IM_ASSERT(ret);
+    ret = ImageUtils::loadTextureFromFile("textures/pause.png", &pause_texture, &out_width, &out_height);
+    IM_ASSERT(ret);
+    ret = ImageUtils::loadTextureFromFile("textures/fwd.png", &fwd_texture, &out_width, &out_height);
+    IM_ASSERT(ret);
+
+    pp_texture = play_texture;
 }
 
 void Gui::cleanUp()

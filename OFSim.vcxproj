@@ -103,6 +103,9 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="textures\fruits.png" />
+    <Image Include="textures\fwd.png" />
+    <Image Include="textures\pause.png" />
+    <Image Include="textures\stop.png" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

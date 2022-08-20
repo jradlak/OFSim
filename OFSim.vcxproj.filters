@@ -273,5 +273,14 @@
     <Image Include="textures\fruits.png">
       <Filter>Pliki zasobów</Filter>
     </Image>
+    <Image Include="textures\fwd.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="textures\pause.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="textures\stop.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
   </ItemGroup>
 </Project>

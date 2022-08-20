@@ -111,7 +111,7 @@ int main(int argc, char** argv)
 
     Gui* gui = new Gui();
     gui->initialization(&mainWindow);
-    gui->loadButtonTexture();
+    gui->loadButtonTextures();
 
     std::string sourceCode = loadSourceCode("orbital_programs/ballisticProgram.oasm");
     static char* srcStr = (char*)sourceCode.c_str();
@@ -120,14 +120,27 @@ int main(int argc, char** argv)
 
     // simulation loop:
     // -----------
+    unsigned __int64 startTime = currentTime();
+    unsigned __int64 runningTime = 0;
+
+    unsigned __int64 timePaused = 0;
     while (!mainWindow.shouldClose())
     {
-        // calculate lag:
-        unsigned __int64 current = currentTime();
-        unsigned __int64 elapsed = current - previous;
-        previous = current;
-        lag += elapsed;
-
+        int factor = gui->getTimeFactor();
+        // calculate lag:       
+        if (factor == 0)
+        {
+            timePaused = currentTime() - previous;
+        }
+        else
+        {
+            unsigned __int64 current = currentTime() - timePaused;
+            unsigned __int64 elapsed = current - previous;
+            previous = current;
+            lag += elapsed;
+            runningTime = current - startTime;
+        }
+        
         // input
         mainWindow.processInput();
 
@@ -154,12 +167,12 @@ int main(int argc, char** argv)
         rocket.render(projection, view, lightPos);
        
         // render HUD:
-        gui->renderSimulationControlWindow();
+        gui->renderSimulationControlWindow(runningTime);
         gui->renderCodeEditor(orbitalProgramSourceCode);
         renderTextHUD(gui, rocket, physics->getAltitude(), physics->getAtmosphereDragForceMagnitude());
 
         // sync and swap:
-        syncFramerate(current, MS_PER_UPDATE);
+        syncFramerate(currentTime(), MS_PER_UPDATE);
         mainWindow.swapBuffers();
         glfwPollEvents();
     }

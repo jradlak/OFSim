@@ -42,34 +42,36 @@ unsigned __int64 PhysicsEngine::calculateForces(unsigned __int64 timeInterval)
 {
     altitude = calculateAltitude();
     if (altitude > 0.9)
-    {                      
-        double mass = rocket.getMass();                
-        if (mass < 3.0)
-        {
-            thrustCutOff = true;            
-        }
-        else 
-        {
-            rocket.updateMass(mass -= 0.0004);
-        }
-
-        if (!thrustCutOff)
-        {
-            addForce(thrustVector);
-        }
-
+    {
         while (timeInterval > MS_PER_UPDATE)
         {
+            double mass = rocket.getMass();
+
+            if (!thrustCutOff)
+            {
+                addForce(thrustVector);
+            }
+
+
+            if (mass < 3.0)
+            {
+                thrustCutOff = true;
+            }
+            else
+            {
+                rocket.updateMass(mass -= 0.0004);
+            }
+
             updatePhysics(MS_PER_UPDATE / 1000.0f);
             timeInterval -= MS_PER_UPDATE;
-        }
-        
-        glm::dvec3 deltaP = rocket.getPosition() - lastPos;
-        lastPos = rocket.getPosition();
-        towards += deltaP;
 
-        calculateAtmosphereGradient();
-        calculateAtmosphericDragForce();        
+            glm::dvec3 deltaP = rocket.getPosition() - lastPos;
+            lastPos = rocket.getPosition();
+            towards += deltaP;
+
+            calculateAtmosphereGradient();
+            calculateAtmosphericDragForce();
+        }
     }
 
     return timeInterval;
