@@ -34,6 +34,10 @@ void Gui::renderSimulationControlWindow(unsigned __int64 time)
     std::string strClock = "Zegar: " + std::to_string(seconds) + "." + std::to_string(millis) + "s";
     ImGui::Text(strClock.c_str());
 
+    ImGui::SameLine();
+    std::string strTimeFactor = "Kompresja czasu: " + std::to_string(timeFactor) + "x";
+    ImGui::Text(strTimeFactor.c_str());
+
     if (ImGui::ImageButton((void*)(intptr_t)pp_texture, ImVec2(32, 32))) {
         if (plaing)
         {
@@ -63,6 +67,15 @@ void Gui::renderSimulationControlWindow(unsigned __int64 time)
 
     if (ImGui::ImageButton((void*)(intptr_t)fwd_texture, ImVec2(32, 32))) {
         std::cout << "Kliknieto fwd!! \n";
+
+        if (timeFactor == 8)
+        {
+            timeFactor = 1;
+        } 
+        else if (timeFactor > 0)
+        {
+            timeFactor *= 2;
+        }
     }
     
 

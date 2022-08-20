@@ -135,10 +135,10 @@ int main(int argc, char** argv)
         else
         {
             unsigned __int64 current = currentTime() - timePaused;
-            unsigned __int64 elapsed = current - previous;
+            unsigned __int64 elapsed = (current - previous) * factor;
             previous = current;
             lag += elapsed;
-            runningTime = current - startTime;
+            runningTime += elapsed;
         }
         
         // input

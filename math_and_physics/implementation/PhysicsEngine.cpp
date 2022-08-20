@@ -52,7 +52,6 @@ unsigned __int64 PhysicsEngine::calculateForces(unsigned __int64 timeInterval)
                 addForce(thrustVector);
             }
 
-
             if (mass < 3.0)
             {
                 thrustCutOff = true;
