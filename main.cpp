@@ -25,6 +25,7 @@
 #include "vmachine\VMachine.h"
 #include "vmachine\VMTask.h";
 #include "vmachine\ODDMA.h"
+#include "vmachine\CommandBus.h"
 
 // GUI:
 #include "gui\Gui.h"
@@ -93,14 +94,17 @@ int main(int argc, char** argv)
     PhysicsEngine* physics = new PhysicsEngine(rocket, MS_PER_UPDATE);
     physics->changeAltitudeOrientation(CelestialBodyType::planet, 3185.0, earth.pointAboveTheSurface(angle, dangle, -10.0));
 
-    // initialise and start VM Thread:
-    VMachine* vm = new VMachine();
+    // initialize Command Bus:
+    CommandBus* commandBus = new CommandBus();
+
+    // initialize and start VM Thread:
+    VMachine* vm = new VMachine(commandBus);
     VMTask vmTask(vm);
     std::thread vmThread(vmTask);
     vmThread.detach();
 
-    // start ODDMA:
-    ODDMA* oddma = new ODDMA(&rocket, physics, vm);
+    // initialize start ODDMA:
+    ODDMA* oddma = new ODDMA(&rocket, physics, vm, commandBus);
     oddma->start();
     
     std::cout << "Start simulation! \n";
@@ -191,6 +195,7 @@ int main(int argc, char** argv)
 
     std::this_thread::sleep_for(std::chrono::milliseconds(10));
     delete oddma;
+    delete commandBus;
 
     return 0;
 }

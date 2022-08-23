@@ -49,6 +49,7 @@ public:
 		opcodes.push_back(std::make_tuple(0x22, "jmp", 0x4));
 		opcodes.push_back(std::make_tuple(0x23, "jmpr", 0x1));
 		opcodes.push_back(std::make_tuple(0x24, "halt", 0x0));
+		opcodes.push_back(std::make_tuple(0x25, "cmd", 0x2));
 	}
 
 	unsigned int getOpcode(std::string name)

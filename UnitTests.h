@@ -31,8 +31,9 @@ private:
 	Registers* registers;
 	Instructions* instructions;
 
-
 	Opcodes* opcodes;
 	Translator* translator;
 	VMachine* vm;
+
+	CommandBus* commandBus;
 };

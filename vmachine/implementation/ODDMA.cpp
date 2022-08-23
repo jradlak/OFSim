@@ -4,11 +4,12 @@ using std::chrono::duration_cast;
 using std::chrono::milliseconds;
 using std::chrono::system_clock;
 
-ODDMA::ODDMA(Rocket* _rocket, PhysicsEngine* _physics, VMachine* _vm)
+ODDMA::ODDMA(Rocket* _rocket, PhysicsEngine* _physics, VMachine* _vm, CommandBus* _commandBus)
 {
 	rocket = _rocket;
 	physics = _physics;
 	vm = _vm;
+	commandBus = _commandBus;
 }
 
 void ODDMA::start()
@@ -23,6 +24,12 @@ void ODDMA::start()
 
 	std::thread commandListenerThread = std::thread(&ODDMA::commandListener, this);
 	commandListenerThread.detach();
+}
+
+void ODDMA::executeInstruction(int instrCode, double value)
+{
+	std::cout << "Instruction executed, code: " + std::to_string(instrCode)
+		+ ", value: " + std::to_string(value) + "\n";
 }
 
 void ODDMA::stop()
@@ -126,6 +133,9 @@ void ODDMA::commandListener()
 {
 	while (threadsStarted)
 	{
+		RocketCommand rocketCommand = commandBus->getCommad();
+		executeInstruction(rocketCommand.code(), rocketCommand.value());
+
 		Memory* memory = vm->getMemory();
 		unsigned char commandRecieved = memory->fetchByte(commandAddress);
 		int address = commandAddress;

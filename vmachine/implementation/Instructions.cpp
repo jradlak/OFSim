@@ -358,6 +358,19 @@ void Instructions::halt(unsigned char* args)
 	// do nthng!
 }
 
+void Instructions::cmd(unsigned char* args)
+{
+	// in first argument: register with instruction code
+	// in second argument: floating point register with instruction value 
+	unsigned char r_dst_addr = args[0];
+	unsigned int cmd_code = registers[r_dst_addr];
+	unsigned char r_src_addr = args[1];
+	double value = registers.fl(r_src_addr);
+	
+	RocketCommand cmd(cmd_code, value);
+	commandBus.publishCommand(cmd);	
+}
+
 void Instructions::call(unsigned int opcode, unsigned char* args)
 {
 	switch (opcode)
@@ -398,5 +411,6 @@ void Instructions::call(unsigned int opcode, unsigned char* args)
 		case 0x22: jmp(args); break;
 		case 0x23: jmpr(args); break;
 		case 0x24: halt(args); break;
+		case 0x25: cmd(args); break;	
 	}
 }

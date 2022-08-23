@@ -19,6 +19,11 @@ bst r4, r2
 add r4, r5
 fst r4, f3
 
+; Ustawienie nowej instrukcji dla rakiety:
+set r8, 13
+fset r9, 22.03
+cmd r8, r9
+
 check_altitude_loop:
 
 ; zapamiêtaj wartosc wysokosci w rejestrze

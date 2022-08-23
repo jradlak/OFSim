@@ -12,7 +12,7 @@
 class VMachine
 {
 public:
-	VMachine();
+	VMachine(CommandBus* commandBus);
 
 	void interrupt(short code);
 
@@ -21,7 +21,7 @@ public:
 	void terminate();
 	
 	Memory* getMemory() { return memory; }
-
+	
 	~VMachine();
 
 private:

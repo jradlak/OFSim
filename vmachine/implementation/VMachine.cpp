@@ -2,12 +2,12 @@
 
 #include "..\VMachine.h"
 
-VMachine::VMachine()
+VMachine::VMachine(CommandBus* commandBus)
 {
 	memory = new Memory();
 	registers = new Registers();
 	opcodes = new Opcodes();
-	instructions = new Instructions(*memory, *registers);
+	instructions = new Instructions(*memory, *registers, *commandBus);
 	translator = new Translator();
 }
 

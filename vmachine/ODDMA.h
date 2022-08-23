@@ -62,9 +62,12 @@ public:
 class ODDMA
 {
 public:
-	ODDMA(Rocket* _rocket, PhysicsEngine* _physics, VMachine* _vm);
+	ODDMA(Rocket* _rocket, PhysicsEngine* _physics, VMachine* _vm, CommandBus* _commandBus);
 	
 	void start();
+	
+	void executeInstruction(int instrCode, double value);
+
 	void stop();
 	
 	~ODDMA() {}
@@ -79,6 +82,7 @@ private:
 	Rocket* rocket;
 	PhysicsEngine* physics;
 	VMachine* vm;
+	CommandBus* commandBus;
 
 	bool threadsStarted;
 	bool statusSemaphore;

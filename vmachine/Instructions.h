@@ -2,12 +2,13 @@
 
 #include "Registers.h"
 #include "Memory.h"
+#include "CommandBus.h"
 
 class Instructions
 {
 public:
-	Instructions(Memory& _memory, Registers& _registers)
-		:memory(_memory), registers(_registers) {}
+	Instructions(Memory& _memory, Registers& _registers, CommandBus& _commandBus)
+		:memory(_memory), registers(_registers), commandBus(_commandBus) {}
 	
 	// copy data operations:
 	void mov(unsigned char* args);
@@ -66,9 +67,12 @@ public:
 
 	void call(unsigned int opcode, unsigned char* args);
 
+	void cmd(unsigned char* args);  // execute spaceship command
+
 	~Instructions() {}
 	
 private:
 	Memory& memory;
 	Registers& registers;	
+	CommandBus& commandBus;
 };

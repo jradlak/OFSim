@@ -217,11 +217,12 @@ void UnitTests::setup()
 {
 	memory = new Memory();
 	registers = new Registers();
-	instructions = new Instructions(*memory, *registers);
+	commandBus = new CommandBus();
+	instructions = new Instructions(*memory, *registers, *commandBus);
 
 	opcodes = new Opcodes();
 	translator = new Translator();
-	vm = new VMachine();
+	vm = new VMachine(commandBus);
 }
 
 void UnitTests::cleanUp()
@@ -233,6 +234,8 @@ void UnitTests::cleanUp()
 	delete instructions;
 	delete registers;
 	delete memory;
+
+	delete commandBus;
 }
 
 void print(const char* text)
