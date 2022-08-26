@@ -26,12 +26,6 @@ void ODDMA::start()
 	commandListenerThread.detach();
 }
 
-void ODDMA::executeInstruction(int instrCode, double value)
-{
-	std::cout << "Instruction executed, code: " + std::to_string(instrCode)
-		+ ", value: " + std::to_string(value) + "\n";
-}
-
 void ODDMA::stop()
 {
 	threadsStarted = false;
@@ -117,16 +111,59 @@ void ODDMA::stateConsumer()
 	}
 }
 
-void ODDMA::sendCommandChangeThrust(RocketChangeThrust command)
+void ODDMA::sendCommandChangeThrust(double thrustMagnitude)
 {
-	//TODO: switch on!!!
-	physics->updateThrustMagnitude(command.thrust);
+	physics->updateThrustMagnitude(thrustMagnitude);
 }
 
-void ODDMA::sendCommandChangeDirection(RocketChangeDirection command)
+void ODDMA::sendCommandChangeDirectionX(double angle)
 {
-	//TODO: switch on!!!
-	//physics->updateKeyPressed(command.directionCode);	
+	glm::dvec3 delta = glm::dvec3(angle, 0, 0);
+	physics->rotateRocket(delta);
+}
+
+void ODDMA::sendCommandChangeDirectionY(double angle)
+{
+	glm::dvec3 delta = glm::dvec3(0, angle, 0);
+	physics->rotateRocket(delta);
+}
+
+void ODDMA::sendCommandChangeDirectionZ(double angle)
+{
+	glm::dvec3 delta = glm::dvec3(0, 0, angle);
+	physics->rotateRocket(delta);
+}
+
+void ODDMA::executeInstruction(int instrCode, double value)
+{
+	switch (instrCode)
+	{
+		case 1:
+		{
+			sendCommandChangeThrust(value);
+			break;
+		}
+		case 2:
+		{
+			sendCommandChangeDirectionX(value);
+			break;
+		}
+		case 3:
+		{
+			sendCommandChangeDirectionY(value);
+			break;
+		}
+		case 4:
+		{
+			sendCommandChangeDirectionZ(value);
+			break;
+		}
+		default:
+			break;
+	}
+
+	std::cout << "Instruction executed, code: " + std::to_string(instrCode)
+		+ ", value: " + std::to_string(value) + "\n";
 }
 
 void ODDMA::commandListener()
@@ -135,72 +172,6 @@ void ODDMA::commandListener()
 	{
 		RocketCommand rocketCommand = commandBus->getCommad();
 		executeInstruction(rocketCommand.code(), rocketCommand.value());
-
-		Memory* memory = vm->getMemory();
-		unsigned char commandRecieved = memory->fetchByte(commandAddress);
-		int address = commandAddress;
-		if (commandRecieved == 0)
-		{
-			// read code:
-			address++;
-			unsigned char commandCode = memory->fetchByte(address);
-			switch (commandCode)
-			{
-			case 1: 
-			{
-				// change direction;
-				address++;
-				unsigned char dirCode = memory->fetchByte(address);
-				switch (dirCode)
-				{
-				case 1:
-				{
-					RocketChangeDirection changeDirection(Direction::DIRECTION_UP, 265);
-					sendCommandChangeDirection(changeDirection);
-					memory->storeByte(commandAddress, 1); // command recieved
-					break;
-				}
-				case 2:
-				{
-					RocketChangeDirection changeDirection(Direction::DIRECTION_DOWN, 264);
-					sendCommandChangeDirection(changeDirection);
-					memory->storeByte(commandAddress, 1); // command recieved
-					break;
-				}
-				case 3:
-				{
-					RocketChangeDirection changeDirection(Direction::DIRECTION_LEFT, 263);
-					sendCommandChangeDirection(changeDirection);
-					memory->storeByte(commandAddress, 1); // command recieved
-					break;
-				}
-				case 4:
-				{
-					RocketChangeDirection changeDirection(Direction::DIRECTION_RIGHT, 262);
-					sendCommandChangeDirection(changeDirection);
-					memory->storeByte(commandAddress, 1); // command recieved
-					break;
-				}
-				default:
-					break;
-				}
-
-				break;
-			}
-			case 2:
-			{
-				address++;
-				double thrust = memory->fetchDWord(address);
-				RocketChangeThrust changeThrust(thrust);
-				sendCommandChangeThrust(changeThrust);
-				memory->storeByte(commandAddress, 1); // command recieved
-				break;
-			}
-			default:
-				// 0 - do nothing
-				break;
-			}	
-		}
 
 		takeANap();
 	}

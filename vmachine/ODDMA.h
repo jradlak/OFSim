@@ -87,8 +87,10 @@ private:
 	bool threadsStarted;
 	bool statusSemaphore;
 
-	void sendCommandChangeThrust(RocketChangeThrust command);
-	void sendCommandChangeDirection(RocketChangeDirection command);
+	void sendCommandChangeThrust(double thrustMagnitude);
+	void sendCommandChangeDirectionX(double angle);
+	void sendCommandChangeDirectionY(double angle);
+	void sendCommandChangeDirectionZ(double angle);
 
 	void stateProducer();
 	void stateConsumer();

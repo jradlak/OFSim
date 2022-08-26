@@ -177,6 +177,13 @@ void PhysicsEngine::rotateVectors(glm::dvec3 newRotation, glm::dvec3 deltaRotati
     rocket.updateRotation(newRotation);
 }
 
+void PhysicsEngine::rotateRocket(glm::dvec3 deltaRotation)
+{
+    glm::dvec3 orgRotation = rocket.getRotation();
+    orgRotation += deltaRotation;
+    rotateVectors(orgRotation, deltaRotation);
+}
+
 double PhysicsEngine::getAltitude()
 {
     return altitude;

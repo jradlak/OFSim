@@ -3,26 +3,11 @@ set r6, 65416
 mov r4, r6
 
 ; Wartosc ciagu do zmiany
-fset f3, 0.24
-
-; Ustawienie w pamieci flagi - komenda jeszcze nieodebrana
-vxor r1, r1
-bst r4, r1 
-
-; Ustawienie w pamieci kodu komendy
-set r5, 1
-add r4, r5
-set r2, 2
-bst r4, r2
-
-; Ustawienie wartosci ci¹gu w pamiêci
-add r4, r5
-fst r4, f3
+fset f3, 0.18
 
 ; Ustawienie nowej instrukcji dla rakiety:
-set r8, 13
-fset r9, 22.03
-cmd r8, r9
+set r8, 1
+cmd r8, f3
 
 check_altitude_loop:
 
@@ -38,34 +23,28 @@ jc check_altitude_loop
 
 ; jesli tak: ustawienie kierunku ci¹gu (seria drobnych korekt kierunku wektora)
 
-zmiana_trajektorii:
 
-; wczytanie adresu komendy do rejestru
+set r3, 3
+set r1, 2
+set r4, 20
 set r5, 1
-mov r4, r6
+set r2, 0
 
-; Ustawienie w pamiêci flagi - komenda jeszcze nieodebrana
-vxor r1, r1
-bst r4, r1
+zmiana_trajektoriiY:
+fset f9, -1.0
+cmd r3, f9 
+sub r4, r5
+cmp r4, r2
+jnc zmiana_trajektoriiY
 
-; ustawienie w pamieci wartoœci komendy
-add r4, r5
-set r2, 1
-bst r4, r2
-add r4, r5
-bst r4, r2
+set r4, 10
+zmiana_trajektoriiX:
+fset f8, 1.0
+cmd r1, f8
+sub r4, r5
+cmp r4, r2
+jnc zmiana_trajektoriiX
 
-mov r4, r6
-
-czekaj_na_wykonanie:
-
-; sprawdzenie, czy poprzednia komenda ju¿ wykonana:
-set r1, 1
-bld r2, r4
-cmp r1, r2
-
-; jesli nie, czekaj (na mozliwosc wykonania kolejnych komend)
-jnz czekaj_na_wykonanie
 
 czekaj_na_wysokosc:
 ; sprawdzenie, czy wysokosc przekoczyla 130 km
@@ -75,8 +54,9 @@ fld f1, r3
 fset f2, 230.0
 fcmp f1, f2
 jnc .end
-;jesli tak - skok do odciecia zaplonu i zakonczenie programu
+;jesli tak - koniec
 jmp czekaj_na_wysokosc
+
 
 .end:
 

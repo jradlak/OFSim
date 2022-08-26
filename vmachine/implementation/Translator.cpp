@@ -164,7 +164,7 @@ void Translator::trnsl_fconstant_to_register(std::tuple<unsigned int, unsigned i
     pose = line.size();
     std::string constant = line.substr(pos, pose - pos);
     double cnst = 0;
-    if (std::isdigit(constant[0]))
+    if (std::isdigit(constant[0]) || constant[0] == '-')
     {
         cnst = stod(constant);
     }
