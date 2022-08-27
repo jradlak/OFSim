@@ -2,7 +2,7 @@
 
 #include "..\VMachine.h"
 
-VMachine::VMachine(CommandBus* commandBus)
+VMachine::VMachine(CommunicationBus* commandBus)
 {
 	memory = new Memory();
 	registers = new Registers();

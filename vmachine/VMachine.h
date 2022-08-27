@@ -12,7 +12,7 @@
 class VMachine
 {
 public:
-	VMachine(CommandBus* commandBus);
+	VMachine(CommunicationBus* commandBus);
 
 	void interrupt(short code);
 

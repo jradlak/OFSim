@@ -144,7 +144,7 @@
     <ClInclude Include="gui\ImageUtils.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="vmachine\CommandBus.h">
+    <ClInclude Include="vmachine\CommunicationBus.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="vmachine\RocketCommand.h">
@@ -245,7 +245,7 @@
     <ClCompile Include="gui\implementation\Gui.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="vmachine\implementation\CommandBus.cpp">
+    <ClCompile Include="vmachine\implementation\CommunicationBus.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>

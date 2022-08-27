@@ -35,7 +35,7 @@
     <ClInclude Include="renderer\Mesh.h" />
     <ClInclude Include="renderer\Model.h" />
     <ClInclude Include="renderer\ModelRenderer.h" />
-    <ClInclude Include="vmachine\CommandBus.h" />
+    <ClInclude Include="vmachine\CommunicationBus.h" />
     <ClInclude Include="vmachine\ODDMA.h" />
     <ClInclude Include="math_and_physics\Geometry.h" />
     <ClInclude Include="vmachine\Instructions.h" />
@@ -67,7 +67,7 @@
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="renderer\implementation\Camera.cpp" />
-    <ClCompile Include="vmachine\implementation\CommandBus.cpp" />
+    <ClCompile Include="vmachine\implementation\CommunicationBus.cpp" />
     <ClCompile Include="world\implementation\CelestialBody.cpp" />
     <ClCompile Include="math_and_physics\implementation\Geometry.cpp" />
     <ClCompile Include="vmachine\implementation\Instructions.cpp" />

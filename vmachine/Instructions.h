@@ -2,12 +2,12 @@
 
 #include "Registers.h"
 #include "Memory.h"
-#include "CommandBus.h"
+#include "CommunicationBus.h"
 
 class Instructions
 {
 public:
-	Instructions(Memory& _memory, Registers& _registers, CommandBus& _commandBus)
+	Instructions(Memory& _memory, Registers& _registers, CommunicationBus& _commandBus)
 		:memory(_memory), registers(_registers), commandBus(_commandBus) {}
 	
 	// copy data operations:
@@ -74,5 +74,5 @@ public:
 private:
 	Memory& memory;
 	Registers& registers;	
-	CommandBus& commandBus;
+	CommunicationBus& commandBus;
 };

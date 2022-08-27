@@ -217,7 +217,7 @@ void UnitTests::setup()
 {
 	memory = new Memory();
 	registers = new Registers();
-	commandBus = new CommandBus();
+	commandBus = new CommunicationBus();
 	instructions = new Instructions(*memory, *registers, *commandBus);
 
 	opcodes = new Opcodes();

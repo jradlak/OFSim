@@ -35,5 +35,5 @@ private:
 	Translator* translator;
 	VMachine* vm;
 
-	CommandBus* commandBus;
+	CommunicationBus* commandBus;
 };

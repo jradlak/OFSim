@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <map>
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
@@ -8,8 +9,8 @@
 
 #include "..\renderer\Window.h"
 
-#include <string>
 #include "TelemetryData.h"
+#include "..\vmachine\RocketCommand.h"
 
 class Gui
 {
@@ -26,6 +27,8 @@ public:
 	void renderCodeEditor(static char text[]);
 
 	void renderTelemetry(TelemetryData& telemetryData);
+
+	void renderCommandHistory(std::map<unsigned __int64, RocketCommand> &commandHistory);
 
 	void loadButtonTextures();
 

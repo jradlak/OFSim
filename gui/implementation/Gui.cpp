@@ -129,6 +129,51 @@ void Gui::renderTelemetry(TelemetryData& telemetryData)
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
+void Gui::renderCommandHistory(std::map<unsigned __int64, RocketCommand>& commandHistory)
+{
+    ImGui::SetNextWindowSize(ImVec2(450, 240), ImGuiCond_Once);
+    ImGui::SetNextWindowPos(ImVec2(1050, 630), ImGuiCond_Once);
+
+    ImGui::Begin("Wykonane komendy:");
+
+    std::map<unsigned __int64, RocketCommand>::reverse_iterator itr;
+    for (itr = commandHistory.rbegin(); itr != commandHistory.rend(); ++itr) 
+    {
+        unsigned __int64 ctime = itr->first;
+        unsigned __int64 seconds = ctime / 1000;
+        unsigned __int64 millis = ctime % 1000;
+
+        RocketCommand cmd = itr->second;
+        
+        int code = cmd.code();
+        double value = cmd.value();
+        std::string cmdTxt = "";
+        switch (code)
+        {
+            case 1:
+                cmdTxt = "zmiana wartosci ciagu: ";
+                break;
+            case 2:
+                cmdTxt = "zmiana kierunku ciagu w osi X: ";
+                break;
+            case 3:
+                cmdTxt = "zmiana kierunku ciagu w osi Y: ";
+                break;
+            case 4:
+                cmdTxt = "zmiana kierunku cigu w osi Z: ";
+                break;
+        }
+
+        std::string message = std::to_string(seconds) + "." + std::to_string(millis) + "s: "
+            + cmdTxt + " "
+            + std::to_string(value);
+
+        ImGui::Text(message.c_str());
+    }
+
+    ImGui::End();
+}
+
 void Gui::loadButtonTextures()
 {    
     bool ret = ImageUtils::loadTextureFromFile("textures/play.png", &play_texture, &out_width, &out_height);

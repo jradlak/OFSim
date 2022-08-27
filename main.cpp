@@ -25,7 +25,7 @@
 #include "vmachine\VMachine.h"
 #include "vmachine\VMTask.h";
 #include "vmachine\ODDMA.h"
-#include "vmachine\CommandBus.h"
+#include "vmachine\CommunicationBus.h"
 
 // GUI:
 #include "gui\Gui.h"
@@ -44,7 +44,7 @@ int lastKeyPressed = 0;
 unsigned __int64 currentTime();
 int main(int argc, char** argv);
 void switchGLStateForWorldRendering(float r, float g, float b);
-void renderTextHUD(Gui* gui, Rocket& rocket, double altitude, double atmosphereDragForceMagnitude);
+void renderTelemetry(Gui* gui, Rocket& rocket, double altitude, double atmosphereDragForceMagnitude);
 void syncFramerate(unsigned __int64 startTime, int ms_per_update);
 void changeRocketRotationByKeyPressed(int keyPressed);
 bool runTests(int argc, char** argv);
@@ -94,8 +94,8 @@ int main(int argc, char** argv)
     PhysicsEngine* physics = new PhysicsEngine(rocket, MS_PER_UPDATE);
     physics->changeAltitudeOrientation(CelestialBodyType::planet, 3185.0, earth.pointAboveTheSurface(angle, dangle, -10.0));
 
-    // initialize Command Bus:
-    CommandBus* commandBus = new CommandBus();
+    // initialize communication Bus:
+    CommunicationBus* commandBus = new CommunicationBus();
 
     // initialize and start VM Thread:
     VMachine* vm = new VMachine(commandBus);
@@ -173,7 +173,9 @@ int main(int argc, char** argv)
         // render HUD:
         gui->renderSimulationControlWindow(runningTime);
         gui->renderCodeEditor(orbitalProgramSourceCode);
-        renderTextHUD(gui, rocket, physics->getAltitude(), physics->getAtmosphereDragForceMagnitude());
+        std::map<unsigned __int64, RocketCommand>& commandHistory = commandBus->getCommandHistory();
+        gui->renderCommandHistory(commandHistory);
+        renderTelemetry(gui, rocket, physics->getAltitude(), physics->getAtmosphereDragForceMagnitude());
 
         // sync and swap:
         syncFramerate(currentTime(), MS_PER_UPDATE);
@@ -212,7 +214,7 @@ void switchGLStateForWorldRendering(float r, float g, float b)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void renderTextHUD(Gui* gui, Rocket& rocket, double altitude, double atmosphereDragForceMagnitude)
+void renderTelemetry(Gui* gui, Rocket& rocket, double altitude, double atmosphereDragForceMagnitude)
 {
     TelemetryData data;
     
@@ -222,13 +224,7 @@ void renderTextHUD(Gui* gui, Rocket& rocket, double altitude, double atmosphereD
     glm::dvec3 velocity = rocket.getVelocity();
     data.velocity = glm::length(velocity);
 
-    //glm::dvec3 position = rocket.getPosition();
-    //std::stringstream ssPosition;
-    //ssPosition << "Pozycja rakiety: (" << position.x << ", " << position.y << "," << position.y << ")";
     data.position = rocket.getPosition();
-
-    //text->renderText(ssPosition.str(), 25.0f, 25.0f, 0.5f, glm::vec3(0.5, 0.8f, 0.2f));  
-
     gui->renderTelemetry(data);
 }
 
