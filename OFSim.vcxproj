@@ -45,6 +45,7 @@
     <ClInclude Include="math_and_physics\PhysicsEngine.h" />
     <ClInclude Include="vmachine\Registers.h" />
     <ClInclude Include="vmachine\RocketCommand.h" />
+    <ClInclude Include="world\Launchpad.h" />
     <ClInclude Include="world\Rocket.h" />
     <ClInclude Include="renderer\Shader.h" />
     <ClInclude Include="world\Smoke.h" />
@@ -90,6 +91,7 @@
     <ClCompile Include="vmachine\implementation\VMachine.cpp" />
     <ClCompile Include="vmachine\implementation\VMTask.cpp" />
     <ClCompile Include="renderer\implementation\Window.cpp" />
+    <ClCompile Include="world\implementation\Launchpad.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="assimp-vc142-mtd.dll" />

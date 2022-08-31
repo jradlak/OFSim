@@ -25,7 +25,7 @@ public:
 	void updateMass(double newMass);
 	void updatePosition(glm::dvec3 newPosition);
 	void updateVelocity(glm::dvec3 newVelocity);
-	void updateRotation(glm::dvec3 axis, double angle);
+	
 	void updateRotation(glm::dvec3 rotation);
 	void updateTowards(glm::dvec3 newTowards);
 	
@@ -42,9 +42,8 @@ private:
 	glm::dvec3& position;
 	glm::dvec3 towards;
 	glm::dvec3 rotation;
-	glm::dvec3 rotatinAxis;
-	double rotationAngle;
 	
+
 	double size;
 
 	//physics:

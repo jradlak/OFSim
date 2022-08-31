@@ -8,9 +8,7 @@ Rocket::Rocket(std::string shaderName, glm::dvec3& _position, double _size)
 	smoke = new Smoke();
 
 	mass = 10.0;
-
-	rotatinAxis = glm::dvec3(0.0);
-	rotationAngle = 0.0;
+	
 	rotation = glm::dvec3(0.0);
 }
 
@@ -73,12 +71,6 @@ void Rocket::updatePosition(glm::dvec3 newPosition)
 void Rocket::updateVelocity(glm::dvec3 newVelocity)
 {
 	velocity = newVelocity;
-}
-
-void Rocket::updateRotation(glm::dvec3 axis, double angle)
-{
-	rotatinAxis = axis;
-	rotationAngle = angle;
 }
 
 void Rocket::updateRotation(glm::dvec3 _rotation)

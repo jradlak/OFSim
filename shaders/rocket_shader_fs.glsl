@@ -11,11 +11,6 @@ uniform vec3 lightPos;
 uniform vec3 lightColor;
 uniform vec3 objectColor;
 
-vec3 computeColor()
-{
-    //TODO: make better color
-    return (0.55f, 0.55f, 0.55f);
-}
 
 void main()
 {
@@ -29,7 +24,7 @@ void main()
     float diff = max(dot(norm, lightDir), 0.0);
     vec3 diffuse = diff * lightColor;
             
-    vec3 result = (ambient + diffuse) * computeColor();
+    vec3 result = (ambient + diffuse) * objectColor;
     FragColor = vec4(result, 1.0);
     
     gl_FragDepth = log2(vFragDepth) * logDepthBufFC * 0.5;

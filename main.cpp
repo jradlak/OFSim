@@ -27,6 +27,8 @@
 #include "vmachine\ODDMA.h"
 #include "vmachine\CommunicationBus.h"
 
+#include "world/Launchpad.h"
+
 // GUI:
 #include "gui\Gui.h"
 
@@ -88,11 +90,16 @@ int main(int argc, char** argv)
     Rocket rocket("rocket_shader", rocketPos, 0.000013);
     camera.Position = rocket.getPosition() + glm::dvec3(0.0, 0.024, 0.0);
     rocket.init();
-     
+ 
     //initialize Physics engine:
     int MS_PER_UPDATE = 12;
     PhysicsEngine* physics = new PhysicsEngine(rocket, MS_PER_UPDATE);
     physics->changeAltitudeOrientation(CelestialBodyType::planet, 3185.0, earth.pointAboveTheSurface(angle, dangle, -10.0));
+
+    // earth objects
+    glm::dvec3 launchpadPos = earth.pointAboveTheSurface(angle, dangle, 0.52);
+    Launchpad launchpad("rocket_shader", launchpadPos, 0.07);
+    launchpad.updateRotation(rocket.getRotation());
 
     // initialize communication Bus:
     CommunicationBus* commandBus = new CommunicationBus();
@@ -170,6 +177,9 @@ int main(int argc, char** argv)
         // render rocket:
         rocket.render(projection, view, lightPos);
        
+        // render earth's objects:
+        launchpad.render(projection, view, lightPos);
+
         // render HUD:
         gui->renderSimulationControlWindow(runningTime);
         gui->renderCodeEditor(orbitalProgramSourceCode);
