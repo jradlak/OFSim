@@ -94,19 +94,6 @@ Window::Window(Camera& _camera, unsigned int _width, unsigned int _height)
         if (glfwGetKey(mainWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)
             glfwSetWindowShouldClose(mainWindow, true);
 
-        if (glfwGetKey(mainWindow, GLFW_KEY_W) == GLFW_PRESS)
-            camera.processKeyboard(FORWARD, deltaTime);
-        if (glfwGetKey(mainWindow, GLFW_KEY_S) == GLFW_PRESS)
-            camera.processKeyboard(BACKWARD, deltaTime);
-        if (glfwGetKey(mainWindow, GLFW_KEY_A) == GLFW_PRESS)
-            camera.processKeyboard(LEFT, deltaTime);
-        if (glfwGetKey(mainWindow, GLFW_KEY_D) == GLFW_PRESS)
-            camera.processKeyboard(RIGHT, deltaTime);
-        if (glfwGetKey(mainWindow, GLFW_KEY_Q) == GLFW_PRESS)
-            camera.processKeyboard(ROLL_LEFT, deltaTime);
-        if (glfwGetKey(mainWindow, GLFW_KEY_E) == GLFW_PRESS)
-            camera.processKeyboard(ROLL_RIGHT, deltaTime);
-
         if (glfwGetKey(mainWindow, GLFW_KEY_UP) == GLFW_PRESS) 
         {
             processInputCall((int)GLFW_KEY_UP);

@@ -88,7 +88,7 @@ int main(int argc, char** argv)
 
     glm::dvec3 rocketPos = earth.pointAboveTheSurface(angle, dangle, 0.5); //glm::dvec3(0.0, 0.0, 0.0); 
     Rocket rocket("rocket_shader", rocketPos, 0.000013);
-    camera.Position = rocket.getPosition() + glm::dvec3(0.0, 0.024, 0.0);
+    camera.position = rocket.getPosition() + glm::dvec3(0.0, 0.024, 0.0);
     rocket.init();
  
     //initialize Physics engine:
@@ -134,7 +134,7 @@ int main(int argc, char** argv)
     unsigned __int64 startTime = currentTime();
     unsigned __int64 runningTime = 0;
 
-    unsigned __int64 timePaused = 0;
+    unsigned __int64 timePaused = 0;    
     while (!mainWindow.shouldClose())
     {
         int factor = gui->getTimeFactor();
@@ -166,7 +166,9 @@ int main(int argc, char** argv)
         gui->newFrame();
 
         // camera/view transformation:
-        camera.Position = rocket.getPosition() + glm::dvec3(0.0, 0.024, 0.0);
+        
+        //camera.position = rocket.getPosition() + glm::dvec3(0.0, 0.024, 0.0);
+        camera.updatePosition(rocket.getPosition(), rocket.getRotation());
         glm::dmat4 view = camera.getViewMatrix();
 
         // render celestial bodies:

@@ -1,12 +1,13 @@
 #include "..\Camera.h"
+#include "..\..\math_and_physics\Geometry.h"
 
 // based on: https://learnopengl.com/code_viewer_gh.php?code=includes/learnopengl/camera.h
 
 Camera::Camera(glm::dvec3 position, glm::dvec3 up,
     double yaw, double pitch, float roll)
-    : Front(glm::dvec3(0.0f, 0.0f, -1.0)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM)
+    : Front(glm::dvec3(0.0f, 0.0f, -1.0)), MovementSpeed(SPEED), movementSensitivity(SENSITIVITY), Zoom(ZOOM)
 {
-    Position = position;
+    position = position;
     WorldUp = up;
     Yaw = yaw;
     Pitch = pitch;
@@ -15,9 +16,9 @@ Camera::Camera(glm::dvec3 position, glm::dvec3 up,
 }
 
 Camera::Camera(double posX, double posY, double posZ, double upX, double upY, double upZ, double yaw, double pitch, double roll)
-    : Front(glm::dvec3(0.0, 0.0, -1.0)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM)
+    : Front(glm::dvec3(0.0, 0.0, -1.0)), MovementSpeed(SPEED), movementSensitivity(SENSITIVITY), Zoom(ZOOM)
 {
-    Position = glm::dvec3(posX, posY, posZ);
+    position = glm::dvec3(posX, posY, posZ);
     WorldUp = glm::dvec3(upX, upY, upZ);
     Yaw = yaw;
     Pitch = pitch;
@@ -27,61 +28,19 @@ Camera::Camera(double posX, double posY, double posZ, double upX, double upY, do
 
 glm::dmat4 Camera::getViewMatrix()
 {
-    return glm::lookAt(Position, Position + Front, Up);;
-}
-
-void Camera::processKeyboard(Camera_Movement direction, double deltaTime)
-{
-    double velocity = MovementSpeed * deltaTime;
-    if (direction == FORWARD)
-    {
-        Position += Front * velocity;
-    }
-
-    if (direction == BACKWARD)
-    {
-        Position -= Front * velocity;
-    }
-
-    if (direction == LEFT)
-    {
-        Position -= Right * velocity;
-    }
-
-    if (direction == RIGHT)
-    {
-        Position += Right * velocity;
-    }
-
-    if (direction == ROLL_LEFT)
-    {
-        Roll -= 1.0f;
-        if (Roll < -89.0)
-        {
-            Roll = -89.0;
-        }
-    }
-
-    if (direction == ROLL_RIGHT)
-    {
-        Roll += 1.0f;
-        if (Roll > 89.0)
-        {
-            Roll = 89.0;
-        }
-    }
-
-    updateCameraVectors();
+    return glm::lookAt(rotationPosition + glm::dvec3(0.016, 0.0, 0.012), position, Up);
 }
 
 void Camera::processCameraRotation(double xoffset, double yoffset, bool constrainPitch)
 {
-    xoffset *= MouseSensitivity;
-    yoffset *= MouseSensitivity;
+    xoffset *= movementSensitivity;
+    yoffset *= movementSensitivity;
 
-    Yaw += xoffset;
-    Pitch += yoffset;
-
+    //Yaw += xoffset;
+    //Pitch += yoffset;
+    
+    rotationAngle += xoffset;
+    /*
     if (constrainPitch)
     {
         if (Pitch > 89.0)
@@ -93,9 +52,21 @@ void Camera::processCameraRotation(double xoffset, double yoffset, bool constrai
         {
             Pitch = -89.0;
         }
-    }
+    }*/
 
-    updateCameraVectors();
+    //updateCameraVectors();
+}
+
+void Camera::updatePosition(glm::dvec3 newPosition, glm::dvec3 rocketRotation)
+{    
+    const float radius = 0.020;
+    //rotationPosition = newPosition + glm::dvec3(0.0, 0.024, 0.0);
+    double camX = cos(glm::radians(rotationAngle)) * radius;
+    double camZ = sin(glm::radians(rotationAngle)) * radius;
+
+    rotationPosition = glm::dvec3(-camZ / 2.0, camX, camZ) + newPosition;
+    
+    position = newPosition;
 }
 
 void Camera::updateCameraVectors()

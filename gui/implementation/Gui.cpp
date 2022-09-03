@@ -68,7 +68,7 @@ void Gui::renderSimulationControlWindow(unsigned __int64 time)
     if (ImGui::ImageButton((void*)(intptr_t)fwd_texture, ImVec2(32, 32))) {
         std::cout << "Kliknieto fwd!! \n";
 
-        if (timeFactor == 8)
+        if (timeFactor == 16)
         {
             timeFactor = 1;
         } 

@@ -64,7 +64,7 @@ unsigned __int64 PhysicsEngine::calculateForces(unsigned __int64 timeInterval)
             updatePhysics(MS_PER_UPDATE / 1000.0f);
             timeInterval -= MS_PER_UPDATE;
 
-            glm::dvec3 deltaP = rocket.getPosition() - lastPos;
+            deltaP = rocket.getPosition() - lastPos;
             lastPos = rocket.getPosition();
             towards += deltaP;
 

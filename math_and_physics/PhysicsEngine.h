@@ -21,13 +21,14 @@ public:
 	void rotateVectors(glm::dvec3 newRotation, glm::dvec3 deltaRotation);
 	void rotateRocket(glm::dvec3 deltaRotation);
 
-
 	double getAltitude();
 	double getThrustMagnitude();
 
 	float* atmosphereRgb();
 
 	double getAtmosphereDragForceMagnitude();
+
+	glm::dvec3 getDeltaPosition() { return deltaP; }
 
 	~PhysicsEngine();
 
@@ -68,6 +69,8 @@ private:
 
 	glm::dvec3 towards;
 	glm::dvec3 lastPos;
+
+	glm::dvec3 deltaP;
 
 	double theta = 30.0; // todo: znaleŸæ wartoœci pocz¹tkowe
 	double phi = 30.0;

@@ -43,7 +43,6 @@ private:
 	glm::dvec3 towards;
 	glm::dvec3 rotation;
 	
-
 	double size;
 
 	//physics:
