@@ -169,6 +169,7 @@ int main(int argc, char** argv)
         
         //camera.position = rocket.getPosition() + glm::dvec3(0.0, 0.024, 0.0);
         camera.updatePosition(rocket.getPosition(), rocket.getRotation());
+        camera.processCameraRotation(3.0, 0);
         glm::dmat4 view = camera.getViewMatrix();
 
         // render celestial bodies:

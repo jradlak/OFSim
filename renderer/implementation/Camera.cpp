@@ -36,23 +36,7 @@ void Camera::processCameraRotation(double xoffset, double yoffset, bool constrai
     xoffset *= movementSensitivity;
     yoffset *= movementSensitivity;
 
-    //Yaw += xoffset;
-    //Pitch += yoffset;
-    
-    rotationAngle += xoffset;
-    /*
-    if (constrainPitch)
-    {
-        if (Pitch > 89.0)
-        {
-            Pitch = 89.0;
-        }
-
-        if (Pitch < -89.0)
-        {
-            Pitch = -89.0;
-        }
-    }*/
+    rotationAngle += xoffset;    
 
     //updateCameraVectors();
 }

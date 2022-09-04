@@ -27,9 +27,9 @@ void Rocket::render(glm::dmat4& projection, glm::dmat4& view, glm::dvec3& _light
 	shader->setVec3("lightPos", _lightPos);
 
 	modelRenderer->renderWithRotation(projection, view, size, position, rotation);
-
+	 
 	glm::dvec3 direction = glm::normalize(position - towards);
-	glm::dvec3 smokePosition = position - (direction / 100.0) + glm::dvec3(0.004, 0.01, 0.0015);
+	glm::dvec3 smokePosition = position - (direction / 100.0) + glm::dvec3(0.004, 0.0015, 0.0);
 	
 	//TODO: needs better solution
 	if (mass > 3.0)

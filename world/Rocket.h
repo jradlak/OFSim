@@ -37,7 +37,6 @@ public:
 	
 private:	
 	ModelRenderer* modelRenderer;
-	Smoke* smoke;
 	
 	glm::dvec3& position;
 	glm::dvec3 towards;
@@ -45,7 +44,12 @@ private:
 	
 	double size;
 
+	// smoke:
+	Smoke* smoke;
+	
 	//physics:
 	glm::dvec3 velocity;
-	double mass;	
+	double mass;
+
+	
 };
