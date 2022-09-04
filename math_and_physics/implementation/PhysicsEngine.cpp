@@ -8,6 +8,7 @@
 #include <glm/gtx/rotate_vector.hpp>
 #include <glm/gtx/euler_angles.hpp> 
 
+
 PhysicsEngine::PhysicsEngine(Rocket& _rocket, int _MS_PER_UPDATE)
 	: rocket(_rocket)
 {
@@ -30,9 +31,9 @@ void PhysicsEngine::changeAltitudeOrientation(
 
     glm::dvec3 direction = glm::normalize(rocket.getPosition() - towards);
     glm::quat qlook = Geometry::gLookAt(direction, glm::dvec3(0.0, 1.0, 0.0));
-    glm::dvec3 rotation = glm::eulerAngles(qlook) * 180.0f / 3.14159f;
+    glm::dvec3 rotation = glm::eulerAngles(qlook) * 180.0f / 3.14159265358979323846f;
 
-    thrustVector = direction * thrustMagnitude;
+    thrustVector = direction * thrustMagnitude; 
     
     rocket.updateRotation(rotation);
     rocket.updateTowards(towards);
@@ -146,18 +147,13 @@ void PhysicsEngine::updateKeyPressed(int _lastKeyPressed)
 void PhysicsEngine::updateThrustMagnitude(double newMagintude)
 {
     thrustMagnitude = newMagintude;
-    changeAltitudeOrientation(altitudeOrientation, celestialBodySize, towards);    
+    thrustVector = glm::normalize(thrustVector);
+    thrustVector *= thrustMagnitude;
+    thrustCutOff = false;    
 }
 
 void PhysicsEngine::rotateVectors(glm::dvec3 newRotation, glm::dvec3 deltaRotation)
-{
-    // calculate rotations:	b
-    
-    //glm::dvec4 resultThrust = glm::dvec4(thrustVector, 0) * trans;
-    
-    // TODO: use Rodrigues' rotation formula to rotate thrust vector
-    // https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula
-
+{    
     // rotate thrust vector:
     if (deltaRotation.x != 0)
     {

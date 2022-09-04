@@ -45,7 +45,7 @@
     <ClInclude Include="math_and_physics\PhysicsEngine.h" />
     <ClInclude Include="vmachine\Registers.h" />
     <ClInclude Include="vmachine\RocketCommand.h" />
-    <ClInclude Include="world\Launchpad.h" />
+    <ClInclude Include="world\Model3D.h" />
     <ClInclude Include="world\Rocket.h" />
     <ClInclude Include="renderer\Shader.h" />
     <ClInclude Include="world\Smoke.h" />
@@ -91,7 +91,7 @@
     <ClCompile Include="vmachine\implementation\VMachine.cpp" />
     <ClCompile Include="vmachine\implementation\VMTask.cpp" />
     <ClCompile Include="renderer\implementation\Window.cpp" />
-    <ClCompile Include="world\implementation\Launchpad.cpp" />
+    <ClCompile Include="world\implementation\Model3D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="assimp-vc142-mtd.dll" />
@@ -103,8 +103,8 @@
     <None Include="orbital_programs\orbitalProgram1.oasm" />
     <None Include="shaders\planet_shader_fs.glsl" />
     <None Include="shaders\planet_shader_vs.glsl" />
-    <None Include="shaders\rocket_shader_fs.glsl" />
-    <None Include="shaders\rocket_shader_vs.glsl" />
+    <None Include="shaders\model3d_shader_fs.glsl" />
+    <None Include="shaders\model3d_shader_vs.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="textures\fruits.png" />

@@ -44,9 +44,9 @@ sub r4, r5
 cmp r4, r2
 jnc zmiana_trajektoriiX
 
-; kolejna zmiana trajektory, gdy wysokosc przekroczy 20 km:
+; kolejna zmiana trajektory, gdy wysokosc przekroczy 15 km:
 set r3, 65440
-fset f2, 20
+fset f2, 15
 
 check_altitude:
 

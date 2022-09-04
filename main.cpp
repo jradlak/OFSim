@@ -27,7 +27,7 @@
 #include "vmachine\ODDMA.h"
 #include "vmachine\CommunicationBus.h"
 
-#include "world/Launchpad.h"
+#include "world/Model3D.h"
 
 // GUI:
 #include "gui\Gui.h"
@@ -87,7 +87,7 @@ int main(int argc, char** argv)
     float dangle = 60.0;
 
     glm::dvec3 rocketPos = earth.pointAboveTheSurface(angle, dangle, 0.5); //glm::dvec3(0.0, 0.0, 0.0); 
-    Rocket rocket("rocket_shader", rocketPos, 0.000013);
+    Rocket rocket("model3d_shader", rocketPos, 0.000013);
     camera.position = rocket.getPosition() + glm::dvec3(0.0, 0.024, 0.0);
     rocket.init();
  
@@ -95,11 +95,14 @@ int main(int argc, char** argv)
     int MS_PER_UPDATE = 12;
     PhysicsEngine* physics = new PhysicsEngine(rocket, MS_PER_UPDATE);
     physics->changeAltitudeOrientation(CelestialBodyType::planet, 3185.0, earth.pointAboveTheSurface(angle, dangle, -10.0));
-
+    
     // earth objects
-    glm::dvec3 launchpadPos = earth.pointAboveTheSurface(angle, dangle, 0.52);
-    Launchpad launchpad("rocket_shader", launchpadPos, 0.07);
-    launchpad.updateRotation(rocket.getRotation());
+    glm::dvec3 launchpadPos = earth.pointAboveTheSurface(angle, dangle, 0.51);
+    Model3D launchpad("model3d_shader", "models/launchpad2.obj", launchpadPos, 0.05);
+    
+    glm::dvec3 treePos = earth.pointAboveTheSurface(angle - 0.0004, dangle - 0.0004, 0.50);
+    Model3D tree("model3d_shader", "models/tree.obj", treePos, 0.000043);
+    tree.updateColor(0.2, 0.7, 0.1);
 
     // initialize communication Bus:
     CommunicationBus* commandBus = new CommunicationBus();
@@ -135,6 +138,13 @@ int main(int argc, char** argv)
     unsigned __int64 runningTime = 0;
 
     unsigned __int64 timePaused = 0;    
+
+    glm::dvec3 newRotation = glm::dvec3(-50.000021, 48.8000050, 0.0);
+    glm::dvec3 deltaRotation = newRotation - rocket.getRotation();
+    physics->rotateRocket(deltaRotation);    
+    launchpad.updateRotation(rocket.getRotation());
+    tree.updateRotation(rocket.getRotation());
+
     while (!mainWindow.shouldClose())
     {
         int factor = gui->getTimeFactor();
@@ -182,12 +192,14 @@ int main(int argc, char** argv)
        
         // render earth's objects:
         launchpad.render(projection, view, lightPos);
+        tree.render(projection, view, lightPos);
 
         // render HUD:
         gui->renderSimulationControlWindow(runningTime);
         gui->renderCodeEditor(orbitalProgramSourceCode);
         std::map<unsigned __int64, RocketCommand>& commandHistory = commandBus->getCommandHistory();
         gui->renderCommandHistory(commandHistory);
+        //gui->renderDiagnostics(rocket.getPosition(), rocket.getRotation());
         renderTelemetry(gui, rocket, physics->getAltitude(), physics->getAtmosphereDragForceMagnitude());
 
         // sync and swap:

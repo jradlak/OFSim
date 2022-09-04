@@ -150,7 +150,7 @@
     <ClInclude Include="vmachine\RocketCommand.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="world\Launchpad.h">
+    <ClInclude Include="world\Model3D.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
   </ItemGroup>
@@ -251,7 +251,7 @@
     <ClCompile Include="vmachine\implementation\CommunicationBus.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="world\implementation\Launchpad.cpp">
+    <ClCompile Include="world\implementation\Model3D.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>
@@ -281,8 +281,8 @@
       <Filter>Pliki zasobów</Filter>
     </None>
     <None Include="assimp-vc142-mtd.dll" />
-    <None Include="shaders\rocket_shader_fs.glsl" />
-    <None Include="shaders\rocket_shader_vs.glsl" />
+    <None Include="shaders\model3d_shader_fs.glsl" />
+    <None Include="shaders\model3d_shader_vs.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="textures\fruits.png">

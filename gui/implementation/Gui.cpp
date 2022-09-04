@@ -174,6 +174,28 @@ void Gui::renderCommandHistory(std::map<unsigned __int64, RocketCommand>& comman
     ImGui::End();
 }
 
+void Gui::renderDiagnostics(glm::dvec3 position, glm::dvec3 rotation)
+{
+    ImGui::SetNextWindowSize(ImVec2(450, 240), ImGuiCond_Once);
+    ImGui::SetNextWindowPos(ImVec2(1050, 330), ImGuiCond_Once);
+
+    ImGui::Begin("Diagnostyka obiektów:");
+    std::string positionTxt = "Position (x, y, z): "
+        + std::to_string(position.x) + ", "
+        + std::to_string(position.y) + ", "
+        + std::to_string(position.z);
+    
+    std::string rotationTxt = "Rotation (x, y, z): "
+        + std::to_string(rotation.x) + ", "
+        + std::to_string(rotation.y) + ", "
+        + std::to_string(rotation.z);
+
+    ImGui::Text(positionTxt.c_str());
+    ImGui::Text(rotationTxt.c_str());
+
+    ImGui::End();
+}
+
 void Gui::loadButtonTextures()
 {    
     bool ret = ImageUtils::loadTextureFromFile("textures/play.png", &play_texture, &out_width, &out_height);
