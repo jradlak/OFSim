@@ -31,6 +31,14 @@ int computeColor2()
     return (x - 3 * (x / 3)) * (y - 3 * (y / 3)) * (z - 3 * (z / 3));
 }
 
+int computeColor3()
+{
+    highp int x = int(FragPos.x);
+    highp int y = int(FragPos.y);
+    highp int z = int(FragPos.z);
+
+    return (x - 3 * (x / 3)) * (y - 3 * (y / 3)) * (z - 3 * (z / 3));
+}
 void main()
 {
     // ambient
@@ -52,7 +60,14 @@ void main()
     {
         if (computeColor2() != 0)
         {
-            currColor = vec3(0.6, 0.6, 0.6);
+            if (computeColor3() == 0) 
+            {
+                currColor = vec3(0.7, 0.7, 0.7);
+            }
+            else 
+            {
+                currColor = vec3(0.6, 0.6, 0.6);
+            }
         }
     }
 

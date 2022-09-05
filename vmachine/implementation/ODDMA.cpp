@@ -28,7 +28,7 @@ void ODDMA::start()
 
 void ODDMA::stop()
 {
-	threadsStarted = false;
+	threadsStarted = false;	
 }
 
 void ODDMA::stateProducer()
@@ -43,7 +43,7 @@ void ODDMA::stateProducer()
 		double mass = rocket->getMass();
 
 		RocketStatus status;
-		status.timestamp = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+		status.timestamp = runningTime; //duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
 		status.mass = mass;
 		status.thrustMagnitude = thrust;
 		status.altitude = altitude;
@@ -102,9 +102,8 @@ void ODDMA::stateConsumer()
 			memory->storeDWord(address, status.thrustMagnitude);
 			address -= 8;
 			memory->storeDWord(address, status.altitude);
-			address -= 8;
-			memory->storeDWord(address, status.timestamp);
 			address -= 8;			
+			memory->storeDWord(address, status.timestamp);					
 		}
 
 		takeANap();
@@ -170,7 +169,7 @@ void ODDMA::commandListener()
 {
 	while (threadsStarted)
 	{
-		RocketCommand rocketCommand = commandBus->getCommad();
+		RocketCommand rocketCommand = commandBus->getCommad(runningTime);
 		executeInstruction(rocketCommand.code(), rocketCommand.value());
 
 		takeANap();

@@ -68,6 +68,8 @@ public:
 	
 	void executeInstruction(int instrCode, double value);
 
+	void provideRunningTime(unsigned __int64 _runningTime) { runningTime = _runningTime; }
+
 	void stop();
 	
 	~ODDMA() {}
@@ -79,6 +81,8 @@ private:
 	
 	long lastCommandTimestamp;
 	
+	unsigned __int64 runningTime;
+
 	Rocket* rocket;
 	PhysicsEngine* physics;
 	VMachine* vm;

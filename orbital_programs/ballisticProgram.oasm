@@ -1,11 +1,18 @@
-; Przypisz adres komendy
-set r6, 65416
-mov r4, r6
+; adres aktualnego timestampu w pamiêci
+set r1, 65432
+
+; odczekaj 1 sekunde
+fset f2, 1000
+
+czekaj_2_sekundy:
+fld f1, r1
+fcmp f1, f2
+jc czekaj_2_sekundy
 
 ; Wartosc ciagu do zmiany
 fset f3, 0.24
 
-; Ustawienie nowej instrukcji dla rakiety:
+; Instrukcja zmiana ciagu
 set r8, 1
 cmd r8, f3
 

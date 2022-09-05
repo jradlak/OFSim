@@ -20,6 +20,8 @@ public:
 
 	void terminate();
 	
+	void setPause(bool _pause) { pause = _pause; }
+
 	Memory* getMemory() { return memory; }
 	
 	~VMachine();
@@ -32,6 +34,7 @@ private:
 	Translator* translator;
 
 	bool shouldStop = false;
+	bool pause = true;
 
 	void interruptHandler();
 };

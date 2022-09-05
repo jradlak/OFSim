@@ -30,6 +30,8 @@ void VMachine::interpret(const char* sourcePath)
 	unsigned int opcode = memory->fetchByte(0);
 	while (opcode != opcodes->getOpcode("halt") && !shouldStop)
 	{
+		while (pause); // wait
+
 		// decode and execute instruction:
 		unsigned int args_size = opcodes->getInstrSize(opcode);
 		unsigned char* args = new unsigned char[args_size];

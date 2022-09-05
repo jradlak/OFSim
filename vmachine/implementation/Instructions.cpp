@@ -285,7 +285,6 @@ void Instructions::fcmp(unsigned char* args)
 	{
 		registers.cf(1); // r_src > r_dst arg[1] > arg[0]
 	}
-
 }
 
 void Instructions::jz(unsigned char* args)

@@ -3,8 +3,7 @@
 unsigned __int64 getCurrentTime();
 
 CommunicationBus::CommunicationBus()
-{
-	startTime = getCurrentTime();
+{	
 }
 
 void CommunicationBus::publishCommand(RocketCommand cmd)
@@ -14,7 +13,7 @@ void CommunicationBus::publishCommand(RocketCommand cmd)
 	cc.notify_one();
 }
 
-RocketCommand CommunicationBus::getCommad()
+RocketCommand CommunicationBus::getCommad(unsigned __int64 runningTime)
 {
 	std::unique_lock<std::mutex> lock(mc);
 	while (commands.empty())
@@ -25,7 +24,7 @@ RocketCommand CommunicationBus::getCommad()
 	RocketCommand cmd = commands.front();
 	commands.pop();
 	
-	commandHistory.insert(std::pair<unsigned __int64, RocketCommand>(getCurrentTime() - startTime, cmd));
+	commandHistory.insert(std::pair<unsigned __int64, RocketCommand>(runningTime, cmd));
 
 	return cmd;
 }
@@ -33,11 +32,4 @@ RocketCommand CommunicationBus::getCommad()
 std::map<unsigned __int64, RocketCommand>& CommunicationBus::getCommandHistory()
 {
 	return commandHistory;
-}
-
-unsigned __int64 getCurrentTime()
-{
-	return std::chrono::duration_cast<std::chrono::milliseconds>(
-		std::chrono::system_clock::now().time_since_epoch()
-		).count();
 }

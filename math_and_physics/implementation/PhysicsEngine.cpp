@@ -57,7 +57,8 @@ unsigned __int64 PhysicsEngine::calculateForces(unsigned __int64 timeInterval)
             {
                 thrustCutOff = true;
             }
-            else
+            
+            if (!thrustCutOff)
             {
                 rocket.updateMass(mass -= 0.0004);
             }
@@ -149,7 +150,12 @@ void PhysicsEngine::updateThrustMagnitude(double newMagintude)
     thrustMagnitude = newMagintude;
     thrustVector = glm::normalize(thrustVector);
     thrustVector *= thrustMagnitude;
-    thrustCutOff = false;    
+    thrustCutOff = false;
+    
+    if (newMagintude == 0.0)
+    {
+        thrustCutOff = true;
+    }        
 }
 
 void PhysicsEngine::rotateVectors(glm::dvec3 newRotation, glm::dvec3 deltaRotation)

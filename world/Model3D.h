@@ -22,6 +22,7 @@ public:
 
 	void updatePosition(glm::dvec3 newPosiotion);
 
+
 	~Model3D();
 
 private:
