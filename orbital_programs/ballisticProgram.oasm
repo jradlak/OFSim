@@ -30,7 +30,7 @@ set r5, 1
 set r2, 0
 
 zmiana_trajektoriiY:
-fset f9, -1.0
+fset f9, -1.27
 cmd r3, f9 
 sub r4, r5
 cmp r4, r2
@@ -38,7 +38,7 @@ jnc zmiana_trajektoriiY
 
 set r4, 10
 zmiana_trajektoriiX:
-fset f8, 1.0
+fset f8, 1.27
 cmd r1, f8
 sub r4, r5
 cmp r4, r2
@@ -59,7 +59,7 @@ set r3, 3
 set r4, 20
 
 druga_zmiana_trajektoriiY:
-fset f9, -1.0
+fset f9, -1.27
 cmd r3, f9 
 sub r4, r5
 cmp r4, r2
@@ -67,15 +67,15 @@ jnc druga_zmiana_trajektoriiY
 
 set r4, 10
 druga_zmiana_trajektoriiX:
-fset f8, 1.0
+fset f8, 1.27
 cmd r1, f8
 sub r4, r5
 cmp r4, r2
 jnc druga_zmiana_trajektoriiX
 
-; ostatnia zmiana trajektory, gdy wysokosc przekroczy 50 km:
+; ostatnia zmiana trajektory, gdy wysokosc przekroczy 38 km:
 set r3, 65440
-fset f2, 40
+fset f2, 38
 
 last_check_altitude:
 
@@ -86,7 +86,7 @@ jc last_check_altitude
 
 
 set r3, 3
-set r4, 50
+set r4, 32
 
 ostatnia_zmiana_trajektoriiY:
 fset f9, -1.0

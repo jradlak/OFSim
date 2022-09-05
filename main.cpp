@@ -43,12 +43,18 @@ Camera camera(glm::vec3(-100.0, -160.0, 1000.0));
 
 int lastKeyPressed = 0;
 
+typedef Model3D* ModelPtr;
+
 unsigned __int64 currentTime();
 int main(int argc, char** argv);
 void switchGLStateForWorldRendering(float r, float g, float b);
 void renderTelemetry(Gui* gui, Rocket& rocket, double altitude, double atmosphereDragForceMagnitude);
 void syncFramerate(unsigned __int64 startTime, int ms_per_update);
 void changeRocketRotationByKeyPressed(int keyPressed);
+
+void makeModel(Model3D& model, float angle, float dangle, glm::dvec3 rotation, CelestialBody& earth);
+ModelPtr* makeForest(int n, float angle, float dangle, glm::dvec3 rotation, CelestialBody& earth);
+
 bool runTests(int argc, char** argv);
 
 std::string loadSourceCode(std::string sourcePath);
@@ -86,7 +92,7 @@ int main(int argc, char** argv)
     float angle = 30.0;
     float dangle = 60.0;
 
-    glm::dvec3 rocketPos = earth.pointAboveTheSurface(angle, dangle, 0.5); //glm::dvec3(0.0, 0.0, 0.0); 
+    glm::dvec3 rocketPos = earth.pointAboveTheSurface(angle, dangle, -0.2); //glm::dvec3(0.0, 0.0, 0.0); 
     Rocket rocket("model3d_shader", rocketPos, 0.000013);
     camera.position = rocket.getPosition() + glm::dvec3(0.0, 0.024, 0.0);
     rocket.init();
@@ -94,16 +100,8 @@ int main(int argc, char** argv)
     //initialize Physics engine:
     int MS_PER_UPDATE = 12;
     PhysicsEngine* physics = new PhysicsEngine(rocket, MS_PER_UPDATE);
-    physics->changeAltitudeOrientation(CelestialBodyType::planet, 3185.0, earth.pointAboveTheSurface(angle, dangle, -10.0));
-    
-    // earth objects
-    glm::dvec3 launchpadPos = earth.pointAboveTheSurface(angle, dangle, 0.51);
-    Model3D launchpad("model3d_shader", "models/launchpad2.obj", launchpadPos, 0.05);
-    
-    glm::dvec3 treePos = earth.pointAboveTheSurface(angle - 0.0004, dangle - 0.0004, 0.50);
-    Model3D tree("model3d_shader", "models/tree.obj", treePos, 0.000043);
-    tree.updateColor(0.2, 0.7, 0.1);
-
+    physics->changeAltitudeOrientation(CelestialBodyType::planet, 3185.0, earth.pointAboveTheSurface(angle, dangle, -50.0));
+       
     // initialize communication Bus:
     CommunicationBus* commandBus = new CommunicationBus();
 
@@ -142,8 +140,38 @@ int main(int argc, char** argv)
     glm::dvec3 newRotation = glm::dvec3(-50.000021, 48.8000050, 0.0);
     glm::dvec3 deltaRotation = newRotation - rocket.getRotation();
     physics->rotateRocket(deltaRotation);    
+
+    // earth objects
+    glm::dvec3 launchpadPos = earth.pointAboveTheSurface(angle, dangle, -0.187);
+    Model3D launchpad("model3d_shader", "models/launchpad2.obj", launchpadPos, 0.05);
     launchpad.updateRotation(rocket.getRotation());
-    tree.updateRotation(rocket.getRotation());
+    const int numberOfObjects = 10;
+    
+    Model3D tree1("model3d_shader", "models/tree.obj", launchpadPos, 0.00007);
+    makeModel(tree1, angle, dangle, rocket.getRotation(), earth);
+    Model3D tree2("model3d_shader", "models/tree.obj", launchpadPos, 0.00007);
+    makeModel(tree2, angle, dangle, rocket.getRotation(), earth);
+    Model3D tree3("model3d_shader", "models/tree.obj", launchpadPos, 0.00007);
+    makeModel(tree3, angle, dangle, rocket.getRotation(), earth);
+    Model3D tree4("model3d_shader", "models/tree.obj", launchpadPos, 0.00007);
+    makeModel(tree4, angle, dangle, rocket.getRotation(), earth);
+    Model3D tree5("model3d_shader", "models/tree.obj", launchpadPos, 0.00007);
+    makeModel(tree5, angle, dangle, rocket.getRotation(), earth);
+    Model3D tree6("model3d_shader", "models/tree.obj", launchpadPos, 0.00007);
+    makeModel(tree6, angle, dangle, rocket.getRotation(), earth);
+
+    Model3D tree7("model3d_shader", "models/tree.obj", launchpadPos, 0.00007);
+    makeModel(tree7, angle, dangle, rocket.getRotation(), earth);
+    Model3D tree8("model3d_shader", "models/tree.obj", launchpadPos, 0.00007);
+    makeModel(tree8, angle, dangle, rocket.getRotation(), earth);
+    Model3D tree9("model3d_shader", "models/tree.obj", launchpadPos, 0.00007);
+    makeModel(tree9, angle, dangle, rocket.getRotation(), earth);
+    Model3D tree10("model3d_shader", "models/tree.obj", launchpadPos, 0.00007);
+    makeModel(tree10, angle, dangle, rocket.getRotation(), earth);
+    Model3D tree11("model3d_shader", "models/tree.obj", launchpadPos, 0.00007);
+    makeModel(tree11, angle, dangle, rocket.getRotation(), earth);
+    Model3D tree12("model3d_shader", "models/tree.obj", launchpadPos, 0.00007);
+    makeModel(tree12, angle, dangle, rocket.getRotation(), earth);
 
     while (!mainWindow.shouldClose())
     {
@@ -192,7 +220,16 @@ int main(int argc, char** argv)
        
         // render earth's objects:
         launchpad.render(projection, view, lightPos);
-        tree.render(projection, view, lightPos);
+        tree1.render(projection, view, lightPos);        
+        tree2.render(projection, view, lightPos);
+        tree3.render(projection, view, lightPos);
+        tree4.render(projection, view, lightPos);
+        tree5.render(projection, view, lightPos);
+        tree6.render(projection, view, lightPos);
+        tree7.render(projection, view, lightPos);
+        tree8.render(projection, view, lightPos);
+        tree9.render(projection, view, lightPos);
+        tree10.render(projection, view, lightPos);
 
         // render HUD:
         gui->renderSimulationControlWindow(runningTime);
@@ -223,7 +260,7 @@ int main(int argc, char** argv)
     std::this_thread::sleep_for(std::chrono::milliseconds(10));
     delete oddma;
     delete commandBus;
-
+    
     return 0;
 }
 
@@ -296,6 +333,21 @@ unsigned __int64 currentTime()
 void changeRocketRotationByKeyPressed(int keyPressed)
 {   
     lastKeyPressed = keyPressed;
+}
+
+void makeModel(Model3D& model, float angle, float dangle, glm::dvec3 rotation, CelestialBody& earth)
+{
+    float rangle = (rand() % 26 + 4) / 10000.0;
+    float rdangle = (rand() % 26 + 4) / 10000.0;
+    int min1 = rand() % 2;
+    if (min1 == 0) rangle *= -1;
+    int min2 = rand() % 2;
+    if (min2 == 0) rdangle *= -1;
+
+    glm::dvec3 treePos = earth.pointAboveTheSurface(angle + rangle, dangle + rdangle, -0.2);    
+    model.updateColor(0.2, 0.7, 0.1);
+    model.updateRotation(rotation);
+    model.updatePosition(treePos);
 }
 
 bool runTests(int argc, char** argv)

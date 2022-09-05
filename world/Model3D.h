@@ -11,7 +11,7 @@ public:
 	Model3D(
 		std::string shaderName, 
 		std::string modelName,
-		glm::dvec3& _position,
+		glm::dvec3 _position,
 		double _size);
 
 	void render(glm::dmat4& projection, glm::dmat4& view, glm::dvec3& _lightPos);
@@ -20,12 +20,14 @@ public:
 
 	void updateRotation(glm::dvec3 newRotation);
 
+	void updatePosition(glm::dvec3 newPosiotion);
+
 	~Model3D();
 
 private:
 	ModelRenderer* modelRenderer;
 
-	glm::dvec3& position;	
+	glm::dvec3 position;	
 	glm::dvec3 rotation;
 
 	//model color;

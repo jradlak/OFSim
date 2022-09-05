@@ -42,7 +42,7 @@ void PhysicsEngine::changeAltitudeOrientation(
 unsigned __int64 PhysicsEngine::calculateForces(unsigned __int64 timeInterval)
 {
     altitude = calculateAltitude();
-    if (altitude > 0.9)
+    if (altitude > 0.2)
     {
         while (timeInterval > MS_PER_UPDATE)
         {
@@ -53,7 +53,7 @@ unsigned __int64 PhysicsEngine::calculateForces(unsigned __int64 timeInterval)
                 addForce(thrustVector);
             }
 
-            if (mass < 3.0)
+            if (mass < 3.2)
             {
                 thrustCutOff = true;
             }
@@ -239,8 +239,8 @@ void PhysicsEngine::calculateAtmosphericDragForce()
     if (glm::length(rocket.getVelocity()) > 0.0) 
     {
         glm::dvec3 forceDirection = glm::normalize(rocket.getVelocity()) * -1.0;
-        double velocityMagnitude = 1.8 * glm::length(rocket.getVelocity());
-        double altitudeMagnitude = 1.0 / altitude;
+        double velocityMagnitude = 1.1 * glm::length(rocket.getVelocity());
+        double altitudeMagnitude = 1.0 / (altitude * 1.2);
         if (altitude > 20.0)
         {
             altitudeMagnitude *= 1.0 / altitude;

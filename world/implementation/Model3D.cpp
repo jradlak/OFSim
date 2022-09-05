@@ -3,7 +3,7 @@
 Model3D::Model3D(
 	std::string shaderName,
 	std::string modelName,
-	glm::dvec3& _position, 
+	glm::dvec3 _position, 
 	double _size)
 	: position(_position), size(_size)
 {
@@ -32,6 +32,11 @@ void Model3D::updateColor(float _r, float _g, float _b)
 void Model3D::updateRotation(glm::dvec3 newRotation)
 {
 	rotation = newRotation;
+}
+
+void Model3D::updatePosition(glm::dvec3 newPosition)
+{
+	position = newPosition;
 }
 
 Model3D::~Model3D()
