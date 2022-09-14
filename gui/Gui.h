@@ -34,10 +34,11 @@ public:
 
 	void loadButtonTextures();
 
-
 	void cleanUp();
 
 	int getTimeFactor() { return timeFactor; }
+
+	void setTimeFactor(int factor) { timeFactor = factor; }
 
 private:
 	GLuint play_texture = 0;

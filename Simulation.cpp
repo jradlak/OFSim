@@ -46,20 +46,29 @@ int lastKeyPressed = 0;
 typedef Model3D* ModelPtr;
 
 unsigned __int64 currentTime();
-int main(int argc, char** argv);
+int simulate(int argc, char** argv);
 void switchGLStateForWorldRendering(float r, float g, float b);
 void renderTelemetry(Gui* gui, Rocket& rocket, double altitude, double atmosphereDragForceMagnitude);
 void syncFramerate(unsigned __int64 startTime, int ms_per_update);
+
 void changeRocketRotationByKeyPressed(int keyPressed);
 
 void makeModel(Model3D& cloud, Model3D& model, float angle, float dangle, glm::dvec3 rotation, CelestialBody& earth);
 ModelPtr* makeForest(int n, float angle, float dangle, glm::dvec3 rotation, CelestialBody& earth);
+
+void reset(Rocket& rocket, PhysicsEngine* physics, VMachine* vm, glm::dvec3 rocketPos, glm::dvec3 towards);
 
 bool runTests(int argc, char** argv);
 
 std::string loadSourceCode(std::string sourcePath);
 
 int main(int argc, char** argv)
+{    
+    while (simulate(argc, argv) != 0);
+    return 0;
+}
+
+int simulate(int argc, char** argv)
 {
     if (runTests(argc, argv))
     {
@@ -87,7 +96,7 @@ int main(int argc, char** argv)
     sun.init();
     earth.init();
     earthsMoon.init();
-   
+
     //rocket and camera orientation:
     float angle = 30.0;
     float dangle = 60.0;
@@ -96,25 +105,26 @@ int main(int argc, char** argv)
     Rocket rocket("model3d_shader", rocketPos, 0.000013);
     camera.position = rocket.getPosition() + glm::dvec3(0.0, 0.024, 0.0);
     rocket.init();
- 
+
     //initialize Physics engine:
     int MS_PER_UPDATE = 12;
+    glm::dvec3 towards = earth.pointAboveTheSurface(angle, dangle, -50.0);
     PhysicsEngine* physics = new PhysicsEngine(rocket, MS_PER_UPDATE);
-    physics->changeAltitudeOrientation(CelestialBodyType::planet, 3185.0, earth.pointAboveTheSurface(angle, dangle, -50.0));
-       
+    physics->changeAltitudeOrientation(CelestialBodyType::planet, 3185.0, towards);
+
     // initialize communication Bus:
     CommunicationBus* commandBus = new CommunicationBus();
 
     // initialize and start VM Thread:
     VMachine* vm = new VMachine(commandBus);
-    VMTask vmTask(vm);
-    std::thread vmThread(vmTask);
-    vmThread.detach();
+    VMTask* vmTask = new VMTask(vm);
+    std::thread* vmThread = new std::thread(*vmTask);
+    vmThread->detach();
 
     // initialize start ODDMA:
     ODDMA* oddma = new ODDMA(&rocket, physics, vm, commandBus);
     oddma->start();
-    
+
     std::cout << "Start simulation! \n";
 
     unsigned __int64 lag = 0, previous = currentTime();
@@ -135,22 +145,22 @@ int main(int argc, char** argv)
     unsigned __int64 startTime = currentTime();
     unsigned __int64 runningTime = 0;
 
-    unsigned __int64 timePaused = 0;    
+    unsigned __int64 timePaused = 0;
 
     glm::dvec3 newRotation = glm::dvec3(-50.000021, 48.8000050, 0.0);
     glm::dvec3 deltaRotation = newRotation - rocket.getRotation();
-    physics->rotateRocket(deltaRotation);    
+    physics->rotateRocket(deltaRotation);
 
     // earth objects
     glm::dvec3 launchpadPos = earth.pointAboveTheSurface(angle, dangle, -0.187);
     Model3D launchpad("model3d_shader", "models/launchpad2.obj", launchpadPos, 0.05);
     launchpad.updateRotation(rocket.getRotation());
     const int numberOfObjects = 10;
-    
+
     Model3D tree1("model3d_shader", "models/tree.obj", launchpadPos, 0.00007);
     Model3D cloud1("model3d_shader", "models/Cloud.obj", launchpadPos, 0.0017);
     makeModel(cloud1, tree1, angle, dangle, rocket.getRotation(), earth);
-        
+
     Model3D tree2("model3d_shader", "models/tree.obj", launchpadPos, 0.00007);
     Model3D cloud2("model3d_shader", "models/Cloud.obj", launchpadPos, 0.0037);
     makeModel(cloud2, tree2, angle, dangle, rocket.getRotation(), earth);
@@ -162,7 +172,7 @@ int main(int argc, char** argv)
     Model3D tree4("model3d_shader", "models/tree.obj", launchpadPos, 0.00007);
     Model3D cloud4("model3d_shader", "models/Cloud.obj", launchpadPos, 0.0017);
     makeModel(cloud4, tree4, angle, dangle, rocket.getRotation(), earth);
-    
+
     Model3D tree5("model3d_shader", "models/tree.obj", launchpadPos, 0.00007);
     Model3D cloud5("model3d_shader", "models/Cloud.obj", launchpadPos, 0.0037);
     makeModel(cloud5, tree5, angle, dangle, rocket.getRotation(), earth);
@@ -181,7 +191,7 @@ int main(int argc, char** argv)
 
     Model3D tree9("model3d_shader", "models/tree.obj", launchpadPos, 0.00007);
     Model3D cloud9("model3d_shader", "models/Cloud.obj", launchpadPos, 0.0037);
-    makeModel(cloud9, tree9,  angle, dangle, rocket.getRotation(), earth);
+    makeModel(cloud9, tree9, angle, dangle, rocket.getRotation(), earth);
 
     Model3D tree10("model3d_shader", "models/tree.obj", launchpadPos, 0.00007);
     Model3D cloud10("model3d_shader", "models/Cloud.obj", launchpadPos, 0.0027);
@@ -194,8 +204,10 @@ int main(int argc, char** argv)
     Model3D tree12("model3d_shader", "models/tree.obj", launchpadPos, 0.00007);
     Model3D cloud12("model3d_shader", "models/Cloud.obj", launchpadPos, 0.0037);
     makeModel(cloud12, tree12, angle, dangle, rocket.getRotation(), earth);
-    
-    while (!mainWindow.shouldClose())
+
+    int simulationStopped = 0;
+
+    while (!mainWindow.shouldClose() && !simulationStopped)
     {
         int factor = gui->getTimeFactor();
         // calculate lag:       
@@ -205,16 +217,47 @@ int main(int argc, char** argv)
             timePaused = currentTime() - previous;
             vm->setPause(true);
         }
-        else
+        else if (factor > 0)
         {
             unsigned __int64 current = currentTime() - timePaused;
             unsigned __int64 elapsed = (current - previous) * factor;
             previous = current;
             lag += elapsed;
-            runningTime += elapsed;            
+            runningTime += elapsed;
             vm->setPause(false);
+            oddma->provideRunningTime(runningTime);
         }
-        
+        else if (factor == -1)
+        {
+            simulationStopped = 1;
+            //gui->setTimeFactor(0);
+            /*
+            runningTime = 0;
+            commandBus->clear();
+            reset(rocket, physics, vm, earth.pointAboveTheSurface(angle, dangle, -0.2), earth.pointAboveTheSurface(angle, dangle, -50.0));
+            gui->setTimeFactor(0);
+
+            oddma->stop();
+
+            delete commandBus;
+            delete oddma;
+            delete vmThread;
+            delete vmTask;
+            delete vm;
+
+            commandBus = new CommunicationBus();
+            VMachine* vm = new VMachine(commandBus);
+            VMTask* vmTask = new VMTask(vm);
+            std::thread* vmThread = new std::thread(*vmTask);
+            vmThread->detach();
+
+            oddma = new ODDMA(&rocket, physics, vm, commandBus);
+            oddma->start();
+
+            camera.position = rocket.getPosition() + glm::dvec3(0.0, 0.024, 0.0);
+            */
+        }
+
         // input
         mainWindow.processInput();
 
@@ -222,14 +265,14 @@ int main(int argc, char** argv)
         physics->updateKeyPressed(lastKeyPressed);
         lag = physics->calculateForces(lag);
         lastKeyPressed = 0;
-       
-        float* rgb = physics->atmosphereRgb();        
+
+        float* rgb = physics->atmosphereRgb();
         switchGLStateForWorldRendering(rgb[0], rgb[1], rgb[2]);
 
         gui->newFrame();
 
         // camera/view transformation:
-                
+
         camera.updatePosition(rocket.getPosition(), rocket.getRotation());
         camera.processCameraRotation(3.0, 0);
         glm::dmat4 view = camera.getViewMatrix();
@@ -241,13 +284,13 @@ int main(int argc, char** argv)
 
         // render rocket:
         rocket.render(projection, view, lightPos);
-       
+
         // render earth's objects:
         launchpad.render(projection, view, lightPos);
-        
-        tree1.render(projection, view, lightPos);                        
+
+        tree1.render(projection, view, lightPos);
         tree2.render(projection, view, lightPos);
-        
+
         tree3.render(projection, view, lightPos);
         tree4.render(projection, view, lightPos);
         tree5.render(projection, view, lightPos);
@@ -258,7 +301,7 @@ int main(int argc, char** argv)
         tree10.render(projection, view, lightPos);
         tree11.render(projection, view, lightPos);
         tree12.render(projection, view, lightPos);
-        
+
         cloud1.render(projection, view, lightPos);
         cloud2.render(projection, view, lightPos);
         cloud3.render(projection, view, lightPos);
@@ -271,7 +314,7 @@ int main(int argc, char** argv)
         cloud10.render(projection, view, lightPos);
         cloud11.render(projection, view, lightPos);
         cloud12.render(projection, view, lightPos);
-       
+
         // render HUD:
         gui->renderSimulationControlWindow(runningTime);
         gui->renderCodeEditor(orbitalProgramSourceCode);
@@ -301,116 +344,132 @@ int main(int argc, char** argv)
     std::this_thread::sleep_for(std::chrono::milliseconds(10));
     delete oddma;
     delete commandBus;
-    
-    return 0;
+
+    delete vmThread;
+    delete vmTask;
+
+    return simulationStopped;
 }
 
-void switchGLStateForWorldRendering(float r, float g, float b)
-{
-    glEnable(GL_DEPTH_TEST);
-    glDisable(GL_CULL_FACE);
-    glDisable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    void switchGLStateForWorldRendering(float r, float g, float b)
+    {
+        glEnable(GL_DEPTH_TEST);
+        glDisable(GL_CULL_FACE);
+        glDisable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    glClearColor(r, g, b, 1.0f);
-    
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-}
+        glClearColor(r, g, b, 1.0f);
 
-void renderTelemetry(Gui* gui, Rocket& rocket, double altitude, double atmosphereDragForceMagnitude)
-{
-    TelemetryData data;
-    
-    data.altitude = altitude;
-    data.mass = rocket.getMass();
-    data.atmPressure = atmosphereDragForceMagnitude;
-    glm::dvec3 velocity = rocket.getVelocity();
-    data.velocity = glm::length(velocity);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    }
 
-    data.position = rocket.getPosition();
-    gui->renderTelemetry(data);
-}
+    void renderTelemetry(Gui* gui, Rocket& rocket, double altitude, double atmosphereDragForceMagnitude)
+    {
+        TelemetryData data;
 
-std::string loadSourceCode(std::string sourcePath)
-{
-    std::ifstream sourceFile;
+        data.altitude = altitude;
+        data.mass = rocket.getMass();
+        data.atmPressure = atmosphereDragForceMagnitude;
+        glm::dvec3 velocity = rocket.getVelocity();
+        data.velocity = glm::length(velocity);
 
-    std::string sourceCode = "";
+        data.position = rocket.getPosition();
+        gui->renderTelemetry(data);
+    }
 
-    sourceFile.open(sourcePath.c_str(), std::ios::in);
+    std::string loadSourceCode(std::string sourcePath)
+    {
+        std::ifstream sourceFile;
 
-    if (sourceFile.is_open()) {
-        std::string line;
+        std::string sourceCode = "";
 
-        while (sourceFile)
-        {
-            std::getline(sourceFile, line, '\r');
-            sourceFile >> line;
-            sourceCode += line + "\n";
+        sourceFile.open(sourcePath.c_str(), std::ios::in);
+
+        if (sourceFile.is_open()) {
+            std::string line;
+
+            while (sourceFile)
+            {
+                std::getline(sourceFile, line, '\r');
+                sourceFile >> line;
+                sourceCode += line + "\n";
+            }
+
+            sourceFile.close();
         }
 
-        sourceFile.close();
+        return sourceCode;
     }
 
-    return sourceCode;  
-}
-
-void syncFramerate(unsigned __int64 startTime, int ms_per_update)
-{
-    unsigned __int64 endTime = startTime + ms_per_update;
-    while (currentTime() < endTime)
+    void syncFramerate(unsigned __int64 startTime, int ms_per_update)
     {
-        std::this_thread::sleep_for(std::chrono::milliseconds(1));
-    }
-}
-
-unsigned __int64 currentTime()
-{
-    return std::chrono::duration_cast<std::chrono::milliseconds>(
-        std::chrono::system_clock::now().time_since_epoch()
-        ).count();
-}
-
-void changeRocketRotationByKeyPressed(int keyPressed)
-{   
-    lastKeyPressed = keyPressed;
-}
-
-void makeModel(Model3D& cloud, Model3D& model, float angle, float dangle, glm::dvec3 rotation, CelestialBody& earth)
-{
-    float rangle = (rand() % 26 + 4) / 10000.0;
-    float rdangle = (rand() % 26 + 4) / 10000.0;
-    int min1 = rand() % 2;
-    if (min1 == 0) rangle *= -1;
-    int min2 = rand() % 2;
-    if (min2 == 0) rdangle *= -1;
-
-    glm::dvec3 treePos = earth.pointAboveTheSurface(angle + rangle, dangle + rdangle, -0.2);    
-    model.updateColor(0.2, 0.7, 0.1);
-    model.updateRotation(rotation);
-    model.updatePosition(treePos);
-    
-    rangle *= -20;
-    rdangle *= -20;
-    glm::dvec3 cloudPos = earth.pointAboveTheSurface(angle + rangle, dangle + rdangle, 0.01);
-    cloud.updateColor(0.8, 0.8, 0.8);
-    cloud.updateRotation(rotation);
-    cloud.updatePosition(cloudPos);       
-}
-
-bool runTests(int argc, char** argv)
-{
-    if (argc > 1)
-    {
-        if (strcmp(argv[1], "-testingMode") == 0)
+        unsigned __int64 endTime = startTime + ms_per_update;
+        while (currentTime() < endTime)
         {
-            UnitTests* tests = new UnitTests();
-            tests->run();
-            delete tests;
-
-            return true;
+            std::this_thread::sleep_for(std::chrono::milliseconds(1));
         }
     }
 
-    return false;
-}
+    unsigned __int64 currentTime()
+    {
+        return std::chrono::duration_cast<std::chrono::milliseconds>(
+            std::chrono::system_clock::now().time_since_epoch()
+            ).count();
+    }
+
+    void reset(Rocket& rocket, PhysicsEngine* physics, VMachine* vm, glm::dvec3 rocketPos, glm::dvec3 towards)
+    {
+        physics->changeAltitudeOrientation(CelestialBodyType::planet, 3185.0, towards);
+        physics->restart();
+
+        glm::dvec3 newRotation = glm::dvec3(-50.000021, 48.8000050, 0.0);
+        glm::dvec3 deltaRotation = newRotation - rocket.getRotation();
+        physics->rotateRocket(deltaRotation);
+
+        rocket.reset(rocketPos);
+        vm->reset();
+    }
+
+    void makeModel(Model3D& cloud, Model3D& model, float angle, float dangle, glm::dvec3 rotation, CelestialBody& earth)
+    {
+        float rangle = (rand() % 26 + 4) / 10000.0;
+        float rdangle = (rand() % 26 + 4) / 10000.0;
+        int min1 = rand() % 2;
+        if (min1 == 0) rangle *= -1;
+        int min2 = rand() % 2;
+        if (min2 == 0) rdangle *= -1;
+
+        glm::dvec3 treePos = earth.pointAboveTheSurface(angle + rangle, dangle + rdangle, -0.2);
+        model.updateColor(0.2, 0.7, 0.1);
+        model.updateRotation(rotation);
+        model.updatePosition(treePos);
+
+        rangle *= -20;
+        rdangle *= -20;
+        glm::dvec3 cloudPos = earth.pointAboveTheSurface(angle + rangle, dangle + rdangle, 0.01);
+        cloud.updateColor(0.8, 0.8, 0.8);
+        cloud.updateRotation(rotation);
+        cloud.updatePosition(cloudPos);
+    }
+
+    bool runTests(int argc, char** argv)
+    {
+        if (argc > 1)
+        {
+            if (strcmp(argv[1], "-testingMode") == 0)
+            {
+                UnitTests* tests = new UnitTests();
+                tests->run();
+                delete tests;
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    void changeRocketRotationByKeyPressed(int keyPressed)
+    {
+        lastKeyPressed = keyPressed;
+    }

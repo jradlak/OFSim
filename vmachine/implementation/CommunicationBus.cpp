@@ -1,7 +1,5 @@
 #include "../CommunicationBus.h"
 
-unsigned __int64 getCurrentTime();
-
 CommunicationBus::CommunicationBus()
 {	
 }
@@ -32,4 +30,11 @@ RocketCommand CommunicationBus::getCommad(unsigned __int64 runningTime)
 std::map<unsigned __int64, RocketCommand>& CommunicationBus::getCommandHistory()
 {
 	return commandHistory;
+}
+
+void CommunicationBus::clear()
+{
+	//std::queue<RocketCommand> empty;
+	//std::swap(commands, empty);	
+	commandHistory.clear();	
 }

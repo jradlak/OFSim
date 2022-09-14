@@ -24,6 +24,8 @@ public:
 	unsigned int pc();
 	void pc(unsigned int value);
 
+	void clear();
+
 	~Registers() { }
 
 private:

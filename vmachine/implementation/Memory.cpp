@@ -59,6 +59,13 @@ void Memory::memcopy(unsigned char* src, unsigned char* dst, unsigned int addr_s
 	}
 }
 
+void Memory::clear()
+{
+	for (int i = 65528; i < size; i++) {
+		mem[i] = 0;
+	}
+}
+
 void Memory::assertConditions(unsigned int addr)
 {
 	if (addr > size)

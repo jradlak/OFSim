@@ -90,6 +90,7 @@ private:
 
 	bool threadsStarted;
 	bool statusSemaphore;
+	int threadsStopped = 0;
 
 	void sendCommandChangeThrust(double thrustMagnitude);
 	void sendCommandChangeDirectionX(double angle);

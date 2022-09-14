@@ -21,6 +21,9 @@ public:
 	void rotateVectors(glm::dvec3 newRotation, glm::dvec3 deltaRotation);
 	void rotateRocket(glm::dvec3 deltaRotation);
 
+	void resetForces();
+	void restart();
+
 	double getAltitude();
 	double getThrustMagnitude();
 
@@ -35,7 +38,6 @@ public:
 private:
 	void updatePhysics(double deltaTime);
 	void addForce(glm::vec3 force);
-	void resetForces();
 
 	void calculateAtmosphereGradient();
 	void calculateAtmosphericDragForce();

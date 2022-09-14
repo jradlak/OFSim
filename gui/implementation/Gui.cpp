@@ -61,6 +61,7 @@ void Gui::renderSimulationControlWindow(unsigned __int64 time)
         std::cout << "Kliknieto stop!! \n";
         pp_texture = play_texture;
         plaing = false;
+        timeFactor = -1;
     }
 
     ImGui::SameLine();

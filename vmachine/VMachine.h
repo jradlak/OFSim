@@ -16,11 +16,13 @@ public:
 
 	void interrupt(short code);
 
-	void interpret(const char* sourcePath);
+	void interpret(const char* _sourcePath);
 
 	void terminate();
 	
 	void setPause(bool _pause) { pause = _pause; }
+
+	void reset();
 
 	Memory* getMemory() { return memory; }
 	
@@ -32,6 +34,8 @@ private:
 	Opcodes* opcodes;
 	Instructions* instructions;
 	Translator* translator;
+
+	const char* sourcePath;
 
 	bool shouldStop = false;
 	bool pause = true;

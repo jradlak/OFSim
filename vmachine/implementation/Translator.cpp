@@ -83,6 +83,7 @@ void Translator::translate(std::string sourceLine)
     }
     else
     {
+        // text data
         std::string line = trim(sourceLine);
         unsigned int pos = line.find(" ");
         std::string token = line.substr(0, pos);

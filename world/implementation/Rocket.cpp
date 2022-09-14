@@ -17,6 +17,13 @@ void Rocket::init()
 	
 }
 
+void Rocket::reset(glm::dvec3 _position)
+{
+	mass = 10;	
+	velocity = glm::dvec3(0.0, 0.0, 0.0);	
+	position = _position;
+}
+
 void Rocket::render(glm::dmat4& projection, glm::dmat4& view, glm::dvec3& _lightPos)
 {
 	//TODO: make it cleaner!!!	

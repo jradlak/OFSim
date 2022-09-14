@@ -29,6 +29,7 @@ void ODDMA::start()
 void ODDMA::stop()
 {
 	threadsStarted = false;	
+	while (threadsStopped != 2); //waiting to all threds finish
 }
 
 void ODDMA::stateProducer()
@@ -58,6 +59,8 @@ void ODDMA::stateProducer()
 
 		takeANap();
  	}
+
+	threadsStopped++;
 }
 
 void ODDMA::stateConsumer()
@@ -108,6 +111,8 @@ void ODDMA::stateConsumer()
 
 		takeANap();
 	}
+
+	threadsStopped++;
 }
 
 void ODDMA::sendCommandChangeThrust(double thrustMagnitude)
@@ -169,8 +174,11 @@ void ODDMA::commandListener()
 {
 	while (threadsStarted)
 	{
-		RocketCommand rocketCommand = commandBus->getCommad(runningTime);
-		executeInstruction(rocketCommand.code(), rocketCommand.value());
+		if (commandBus->anyCommands())
+		{
+			RocketCommand rocketCommand = commandBus->getCommad(runningTime);
+			executeInstruction(rocketCommand.code(), rocketCommand.value());
+		}
 
 		takeANap();
 	}

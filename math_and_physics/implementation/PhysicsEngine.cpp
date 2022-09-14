@@ -110,6 +110,16 @@ void PhysicsEngine::resetForces()
     forces.clear();
 }
 
+void PhysicsEngine::restart()
+{
+    thrustMagnitude = 0.0;
+    thrustCutOff = true;
+
+    calculateAltitude();
+    calculateAtmosphereGradient();
+    calculateAtmosphericDragForce();
+}
+
 void PhysicsEngine::updateKeyPressed(int _lastKeyPressed)
 {
     lastKeyPressed = _lastKeyPressed;

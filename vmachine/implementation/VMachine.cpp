@@ -15,10 +15,11 @@ void VMachine::interrupt(short code)
 {
 }
 
-void VMachine::interpret(const char* sourcePath)
+void VMachine::interpret(const char* _sourcePath)
 {
+	sourcePath = _sourcePath;
 	shouldStop = false;
-	translator->translate(sourcePath);
+	translator->translate(_sourcePath);
 
 	// load translated code into memory:
 	unsigned int codeSize = translator->getCodeSize();
@@ -39,7 +40,7 @@ void VMachine::interpret(const char* sourcePath)
 		instructions->call(opcode, args);
 		delete[] args;
 
-		pc = registers->pc();
+		pc = registers->pc(); 
 		if (oldpc == pc)
 		{
 			// there was no jump - update program counter:			
@@ -50,14 +51,21 @@ void VMachine::interpret(const char* sourcePath)
 
 		// fetch another opcode
 		opcode = memory->fetchByte(pc);
-
-		//std::this_thread::sleep_for(std::chrono::microseconds(1));
 	}
+
+	int a = 10;
 }
 
 void VMachine::terminate()
 {
 	shouldStop = true;
+}
+
+void VMachine::reset()
+{
+	registers->clear();
+	memory->clear();
+	terminate();
 }
 
 VMachine::~VMachine()

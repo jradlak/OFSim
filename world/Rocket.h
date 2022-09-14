@@ -29,6 +29,8 @@ public:
 	void updateRotation(glm::dvec3 rotation);
 	void updateTowards(glm::dvec3 newTowards);
 	
+	void reset(glm::dvec3 _position);
+
 	double getMass();
 	glm::dvec3 getVelocity();
 	glm::dvec3 getRotation();

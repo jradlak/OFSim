@@ -19,11 +19,14 @@ public:
 
 	std::map<unsigned __int64, RocketCommand>& getCommandHistory();
 
+	bool anyCommands() { return commands.size() > 0; }
+
+	void clear();
+
 	~CommunicationBus() {}
 
 private:
 	std::queue<RocketCommand> commands;	
-	std::queue<std::string> messages;
 
 	mutable std::mutex mc;
 	std::condition_variable cc;

@@ -1,4 +1,4 @@
-; adres aktualnego timestampu w pamiêci
+; adres aktualnego timestampu w pamieci
 set r1, 65432
 
 ; odczekaj 1 sekunde
@@ -28,7 +28,7 @@ fset f2, 1.5
 fcmp f1, f2
 jc check_altitude_loop
 
-; jesli tak: ustawienie kierunku ci¹gu (seria drobnych korekt kierunku wektora)
+; jesli tak: ustawienie kierunku ciagu (seria drobnych korekt kierunku wektora)
 
 set r3, 3
 set r1, 2
@@ -66,7 +66,7 @@ set r3, 3
 set r4, 20
 
 druga_zmiana_trajektoriiY:
-fset f9, -1.27
+fset f9, -1.29
 cmd r3, f9 
 sub r4, r5
 cmp r4, r2
@@ -74,15 +74,15 @@ jnc druga_zmiana_trajektoriiY
 
 set r4, 10
 druga_zmiana_trajektoriiX:
-fset f8, 1.27
+fset f8, 1.29
 cmd r1, f8
 sub r4, r5
 cmp r4, r2
 jnc druga_zmiana_trajektoriiX
 
-; ostatnia zmiana trajektory, gdy wysokosc przekroczy 38 km:
+; kolejna zmiana trajektorii, gdy wysokosc przekroczy 36 km:
 set r3, 65440
-fset f2, 38
+fset f2, 36
 
 last_check_altitude:
 
@@ -90,7 +90,6 @@ fld f1, r3
 fcmp f1, f2
 
 jc last_check_altitude
-
 
 set r3, 3
 set r4, 32
@@ -111,22 +110,47 @@ cmp r4, r2
 jnc ostatnia_zmiana_trajektoriiX
 
 
-.end:
+; ostatnia zmiana trajektorii, gdy wysokosc przekroczy 70 km:
+set r3, 65440
+fset f2, 70
 
-set r6, 65416
-mov r4, r6
-fset f3, 0.0
+last_last_check_altitude:
 
-vxor r1, r1
-bst r4, r1 
+fld f1, r3
+fcmp f1, f2
 
-set r5, 1
-add r4, r5
-set r2, 2
-bst r4, r2
+jc last_last_check_altitude
 
-add r4, r5
-fst r4, f3
+set r3, 3
+set r4, 6
+
+last_ostatnia_zmiana_trajektoriiY:
+fset f9, -1.0
+cmd r3, f9 
+sub r4, r5
+cmp r4, r2
+jnc last_ostatnia_zmiana_trajektoriiY
+
+set r4, 4
+last_ostatnia_zmiana_trajektoriiX:
+fset f8, 1.0
+cmd r1, f8
+sub r4, r5
+cmp r4, r2
+jnc last_ostatnia_zmiana_trajektoriiX
+
+
+; oczekiwanie po wykonaniu wszystkich instruckji
+set r3, 65440
+fset f2, 10000
+
+finish_check_altitude:
+
+fld f1, r3
+fcmp f1, f2
+
+jc finish_check_altitude
+
 
 ;rakieta kontynuuje swobodny lot balistyczny do zderzenia z ziemia
 halt
