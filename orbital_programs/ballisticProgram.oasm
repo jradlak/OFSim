@@ -4,10 +4,10 @@ set r1, 65432
 ; odczekaj 1 sekunde
 fset f2, 1000
 
-czekaj_2_sekundy:
+czekaj_1_sekunde:
 fld f1, r1
 fcmp f1, f2
-jc czekaj_2_sekundy
+jc czekaj_1_sekunde
 
 ; Wartosc ciagu do zmiany
 fset f3, 0.24
@@ -139,8 +139,49 @@ sub r4, r5
 cmp r4, r2
 jnc last_ostatnia_zmiana_trajektoriiX
 
+; czekaj a¿ minie 204 sekundy od startu:
+set r1, 65432
+fset f2, 200000
 
-; oczekiwanie po wykonaniu wszystkich instruckji
+czekaj_200_sekundy:
+fld f1, r1
+fcmp f1, f2
+jc czekaj_200_sekundy
+
+; po minieciu 200 sekund, wy³¹cz silnik g³ówny:
+; Wartosc ciagu do zmiany
+fset f3, 0.001
+
+; Instrukcja zmiana ciagu
+set r8, 1
+cmd r8, f3
+
+; odczekanie kolejnych X sekund i obrocenie rakiety ty³em do kierunku lotu
+fset f2, 314000
+czekaj_314_sekundy:
+fld f1, r1
+fcmp f1, f2
+jc czekaj_314_sekundy
+
+set r3, 6
+set r4, 172
+
+odwrocenie_trajektorii:
+fset f9, -1.0
+cmd r3, f9 
+sub r4, r5
+cmp r4, r2
+jnc odwrocenie_trajektorii
+
+; uruchomienie ci¹gu hamujacego:
+; Wartosc ciagu do zmiany
+fset f3, 0.24
+
+; Instrukcja zmiana ciagu
+set r8, 1
+cmd r8, f3
+
+; oczekiwanie po wykonaniu wszystkich instrukcji
 set r3, 65440
 fset f2, 10000
 

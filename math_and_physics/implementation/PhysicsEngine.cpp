@@ -53,7 +53,7 @@ unsigned __int64 PhysicsEngine::calculateForces(unsigned __int64 timeInterval)
                 addForce(thrustVector);
             }
 
-            if (mass < 3.2)
+            if (mass < 3.0)
             {
                 thrustCutOff = true;
             }
@@ -162,7 +162,9 @@ void PhysicsEngine::updateThrustMagnitude(double newMagintude)
     thrustVector *= thrustMagnitude;
     thrustCutOff = false;
     
-    if (newMagintude == 0.0)
+    rocket.updateThrustMagnitude(newMagintude);
+    
+    if (newMagintude <= 0.01)
     {
         thrustCutOff = true;
     }        
@@ -227,7 +229,7 @@ double PhysicsEngine::getAtmosphereDragForceMagnitude()
 void PhysicsEngine::calculateAtmosphereGradient()
 {
     //atmosphere gradient simulation:
-    float factor = 0;
+    float factor = 0; 
     if (altitude > 4.0) {
         factor = 0.001 * altitude * altitude;
     }

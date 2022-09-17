@@ -97,6 +97,10 @@ private:
 	void sendCommandChangeDirectionY(double angle);
 	void sendCommandChangeDirectionZ(double angle);
 
+	void sendCommandChangeGyroRotationX(double angle);
+	void sendCommandChangeGyroRotationY(double angle);
+	void sendCommandChangeGyroRotationZ(double angle);
+
 	void stateProducer();
 	void stateConsumer();
 	void commandListener();

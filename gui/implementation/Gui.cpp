@@ -178,6 +178,15 @@ void Gui::renderCommandHistory(std::map<unsigned __int64, RocketCommand>& comman
             case 4:
                 cmdTxt = "zmiana kierunku cigu w osi Z: ";
                 break;
+            case 5:
+                cmdTxt = "zmiana rotacji zyroskopowej w osi X ";
+                break;
+            case 6:
+                cmdTxt = "zmiana rotacji zyroskopowej w osi Y ";
+                break;
+            case 7:
+                cmdTxt = "zmiana rotacji zyroskopowej w osi Z ";
+                break;
         }
 
         std::string message = std::to_string(seconds) + "." + std::to_string(millis) + "s: "

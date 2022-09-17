@@ -122,20 +122,56 @@ void ODDMA::sendCommandChangeThrust(double thrustMagnitude)
 
 void ODDMA::sendCommandChangeDirectionX(double angle)
 {
-	glm::dvec3 delta = glm::dvec3(angle, 0, 0);
-	physics->rotateRocket(delta);
+	if (physics->getThrustMagnitude() > 0.01)
+	{
+		glm::dvec3 delta = glm::dvec3(angle, 0, 0);
+		physics->rotateRocket(delta);
+	}
 }
 
 void ODDMA::sendCommandChangeDirectionY(double angle)
 {
-	glm::dvec3 delta = glm::dvec3(0, angle, 0);
-	physics->rotateRocket(delta);
+	if (physics->getThrustMagnitude() > 0.01)
+	{
+		glm::dvec3 delta = glm::dvec3(0, angle, 0);
+		physics->rotateRocket(delta);
+	}
 }
 
 void ODDMA::sendCommandChangeDirectionZ(double angle)
 {
-	glm::dvec3 delta = glm::dvec3(0, 0, angle);
-	physics->rotateRocket(delta);
+	if (physics->getThrustMagnitude() > 0.01)
+	{
+		glm::dvec3 delta = glm::dvec3(0, 0, angle);
+		physics->rotateRocket(delta);
+	}
+}
+
+void ODDMA::sendCommandChangeGyroRotationX(double angle)
+{
+	if (physics->getThrustMagnitude() <= 0.01)
+	{
+		glm::dvec3 delta = glm::dvec3(angle, 0, 0);
+		physics->rotateRocket(delta);
+	}
+}
+
+void ODDMA::sendCommandChangeGyroRotationY(double angle)
+{
+	if (physics->getThrustMagnitude() <= 0.01)
+	{
+		glm::dvec3 delta = glm::dvec3(0, angle, 0);
+		physics->rotateRocket(delta);
+	}
+}
+
+void ODDMA::sendCommandChangeGyroRotationZ(double angle)
+{
+	if (physics->getThrustMagnitude() <= 0.01)
+	{
+		glm::dvec3 delta = glm::dvec3(0, 0, angle);
+		physics->rotateRocket(delta);
+	}
 }
 
 void ODDMA::executeInstruction(int instrCode, double value)
@@ -160,6 +196,21 @@ void ODDMA::executeInstruction(int instrCode, double value)
 		case 4:
 		{
 			sendCommandChangeDirectionZ(value);
+			break;
+		}
+		case 5:
+		{
+			sendCommandChangeGyroRotationX(value);
+			break;
+		}
+		case 6:
+		{
+			sendCommandChangeGyroRotationY(value);
+			break;
+		}
+		case 7:
+		{
+			sendCommandChangeGyroRotationZ(value);
 			break;
 		}
 		default:
