@@ -24,7 +24,7 @@ void Gui::newFrame()
 void Gui::renderSimulationControlWindow(unsigned __int64 time)
 {
     ImGui::SetNextWindowSize(ImVec2(450, 100), ImGuiCond_Once);
-    ImGui::SetNextWindowPos(ImVec2(100, 50), ImGuiCond_Once);
+    ImGui::SetNextWindowPos(ImVec2(100, 25), ImGuiCond_Once);
 
     ImGui::Begin("Kontrola symulacji: ");
 
@@ -86,7 +86,7 @@ void Gui::renderSimulationControlWindow(unsigned __int64 time)
 void Gui::renderCodeEditor(static char text[])
 {
     ImGui::SetNextWindowSize(ImVec2(450, 500), ImGuiCond_Once);
-    ImGui::SetNextWindowPos(ImVec2(100, 200), ImGuiCond_Once);
+    ImGui::SetNextWindowPos(ImVec2(100, 175), ImGuiCond_Once);
 
     ImGui::Begin("Kod zrodlowy programu lotu:");
 
@@ -101,8 +101,8 @@ void Gui::renderCodeEditor(static char text[])
 
 void Gui::renderTelemetry(TelemetryData& telemetryData)
 {
-    ImGui::SetNextWindowSize(ImVec2(450, 120), ImGuiCond_Once);
-    ImGui::SetNextWindowPos(ImVec2(100, 750), ImGuiCond_Once);
+    ImGui::SetNextWindowSize(ImVec2(450, 150), ImGuiCond_Once);
+    ImGui::SetNextWindowPos(ImVec2(100, 725), ImGuiCond_Once);
 
     ImGui::Begin("Telemetria:");
     
@@ -124,6 +124,21 @@ void Gui::renderTelemetry(TelemetryData& telemetryData)
         std::to_string(telemetryData.position.z) + ")";
     ImGui::Text(ssPosition.c_str());
 
+    std::string ssApogeum = "Apogeum orbity: ";
+    if (telemetryData.apogeum != 0)
+    {
+        ssApogeum = "Apogeum orbity: " + std::to_string(telemetryData.apogeum) + " km";
+    }
+
+    std::string ssPerygeum = "Perygeum orbity: ";
+    if (telemetryData.perygeum != 0)
+    {
+        ssPerygeum = "Perygeum orbity: " + std::to_string(telemetryData.perygeum) + " km";
+    }
+
+    ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), ssApogeum.c_str());
+    ImGui::TextColored(ImVec4(1.0f, 0.0f, 1.0f, 1.0f), ssPerygeum.c_str());
+
     ImGui::End();
 
     ImGui::Render();
@@ -133,7 +148,7 @@ void Gui::renderTelemetry(TelemetryData& telemetryData)
 void Gui::renderCommandHistory(std::map<unsigned __int64, RocketCommand>& commandHistory)
 {
     ImGui::SetNextWindowSize(ImVec2(450, 240), ImGuiCond_Once);
-    ImGui::SetNextWindowPos(ImVec2(1050, 630), ImGuiCond_Once);
+    ImGui::SetNextWindowPos(ImVec2(1050, 635), ImGuiCond_Once);
 
     ImGui::Begin("Wykonane komendy:");
 

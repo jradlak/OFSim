@@ -48,13 +48,12 @@ typedef Model3D* ModelPtr;
 unsigned __int64 currentTime();
 int simulate(int argc, char** argv);
 void switchGLStateForWorldRendering(float r, float g, float b);
-void renderTelemetry(Gui* gui, Rocket& rocket, double altitude, double atmosphereDragForceMagnitude);
+void renderTelemetry(Gui* gui, Rocket& rocket, double altitude, double apogeum, double perygeum, double atmosphereDragForceMagnitude);
 void syncFramerate(unsigned __int64 startTime, int ms_per_update);
 
 void changeRocketRotationByKeyPressed(int keyPressed);
 
 void makeModel(Model3D& cloud, Model3D& model, float angle, float dangle, glm::dvec3 rotation, CelestialBody& earth);
-ModelPtr* makeForest(int n, float angle, float dangle, glm::dvec3 rotation, CelestialBody& earth);
 
 void reset(Rocket& rocket, PhysicsEngine* physics, VMachine* vm, glm::dvec3 rocketPos, glm::dvec3 towards);
 
@@ -206,7 +205,11 @@ int simulate(int argc, char** argv)
     makeModel(cloud12, tree12, angle, dangle, rocket.getRotation(), earth);
 
     int simulationStopped = 0;
-
+    double lastAltitude = 0;
+    double apogeum = 0;
+    double perygeum = 0;
+    int lastAltitudeDirection = 1;
+    int altitudeDirection = 1;
     while (!mainWindow.shouldClose() && !simulationStopped)
     {
         int factor = gui->getTimeFactor();
@@ -321,7 +324,30 @@ int simulate(int argc, char** argv)
         std::map<unsigned __int64, RocketCommand>& commandHistory = commandBus->getCommandHistory();
         gui->renderCommandHistory(commandHistory);
         //gui->renderDiagnostics(rocket.getPosition(), rocket.getRotation());
-        renderTelemetry(gui, rocket, physics->getAltitude(), physics->getAtmosphereDragForceMagnitude());
+        renderTelemetry(gui, rocket, physics->getAltitude(), apogeum, perygeum, physics->getAtmosphereDragForceMagnitude());
+        
+        if (lastAltitude < physics->getAltitude() && lastAltitude > 4)
+        {
+            altitudeDirection = 1;
+        } 
+        
+        if (lastAltitude > physics->getAltitude() && lastAltitude > 4)
+        {
+            altitudeDirection = -1;
+        }
+
+        if (lastAltitudeDirection == 1 && altitudeDirection == -1) 
+        {
+            apogeum = lastAltitude;
+        }
+
+        if (lastAltitudeDirection == -1 && altitudeDirection == 1)
+        {
+            perygeum = lastAltitude;
+        }
+
+        lastAltitudeDirection = altitudeDirection;
+        lastAltitude = physics->getAltitude();
 
         // sync and swap:
         syncFramerate(currentTime(), MS_PER_UPDATE);
@@ -363,9 +389,9 @@ int simulate(int argc, char** argv)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    void renderTelemetry(Gui* gui, Rocket& rocket, double altitude, double atmosphereDragForceMagnitude)
+    void renderTelemetry(Gui* gui, Rocket& rocket, double altitude, double apogeum, double perygeum, double atmosphereDragForceMagnitude)
     {
-        TelemetryData data;
+        TelemetryData data;      
 
         data.altitude = altitude;
         data.mass = rocket.getMass();
@@ -374,6 +400,10 @@ int simulate(int argc, char** argv)
         data.velocity = glm::length(velocity);
 
         data.position = rocket.getPosition();
+      
+        data.apogeum = apogeum;               
+        data.perygeum = perygeum;
+        
         gui->renderTelemetry(data);
     }
 
