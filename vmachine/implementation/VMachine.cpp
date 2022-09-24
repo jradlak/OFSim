@@ -51,9 +51,9 @@ void VMachine::interpret(const char* _sourcePath)
 
 		// fetch another opcode
 		opcode = memory->fetchByte(pc);
-	}
 
-	int a = 10;
+		takeANap();
+	}	
 }
 
 void VMachine::terminate()
@@ -68,6 +68,11 @@ void VMachine::reset()
 	terminate();
 }
 
+void VMachine::takeANap()
+{	
+	//std::this_thread::sleep_for(std::chrono::microseconds(5));
+}
+
 VMachine::~VMachine()
 {
 	delete translator;
@@ -76,6 +81,8 @@ VMachine::~VMachine()
 	delete memory;
 	delete registers;	
 }
+
+
 
 void VMachine::interruptHandler()
 {

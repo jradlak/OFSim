@@ -41,4 +41,5 @@ private:
 	bool pause = true;
 
 	void interruptHandler();
+	void takeANap();
 };

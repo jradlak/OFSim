@@ -1,5 +1,8 @@
 #include "..\Model3D.h"
 
+// TODO: Make new class, which encapsulate all clouds and use Model Renderer only in one instance!!
+// Compare it with Smoke implementation
+
 Model3D::Model3D(
 	std::string shaderName,
 	std::string modelName,
