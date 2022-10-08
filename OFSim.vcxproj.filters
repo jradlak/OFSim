@@ -153,7 +153,7 @@
     <ClInclude Include="world\Model3D.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="world\Clouds.h">
+    <ClInclude Include="world\CloudsAndTrees.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
   </ItemGroup>
@@ -257,7 +257,7 @@
     <ClCompile Include="world\implementation\Model3D.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="world\implementation\Clouds.cpp">
+    <ClCompile Include="world\implementation\CloudsAndTrees.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>

@@ -28,6 +28,8 @@
 #include "vmachine\CommunicationBus.h"
 
 #include "world/Model3D.h"
+#include "world/CloudsAndTrees.h"
+
 
 // GUI:
 #include "gui\Gui.h"
@@ -52,8 +54,6 @@ void renderTelemetry(Gui* gui, Rocket& rocket, double altitude, double apogeum, 
 void syncFramerate(unsigned __int64 startTime, int ms_per_update);
 
 void changeRocketRotationByKeyPressed(int keyPressed);
-
-void makeModel(Model3D& cloud, Model3D& model, float angle, float dangle, glm::dvec3 rotation, CelestialBody& earth);
 
 void reset(Rocket& rocket, PhysicsEngine* physics, VMachine* vm, glm::dvec3 rocketPos, glm::dvec3 towards);
 
@@ -156,53 +156,9 @@ int simulate(int argc, char** argv)
     launchpad.updateRotation(rocket.getRotation());
     const int numberOfObjects = 10;
 
-    Model3D tree1("model3d_shader", "models/tree.obj", launchpadPos, 0.00007);
-    Model3D cloud1("model3d_shader", "models/Cloud.obj", launchpadPos, 0.0017);
-    makeModel(cloud1, tree1, angle, dangle, rocket.getRotation(), earth);
-
-    Model3D tree2("model3d_shader", "models/tree.obj", launchpadPos, 0.00007);
-    Model3D cloud2("model3d_shader", "models/Cloud.obj", launchpadPos, 0.0037);
-    makeModel(cloud2, tree2, angle, dangle, rocket.getRotation(), earth);
-
-    Model3D tree3("model3d_shader", "models/tree.obj", launchpadPos, 0.00007);
-    Model3D cloud3("model3d_shader", "models/Cloud.obj", launchpadPos, 0.0027);
-    makeModel(cloud3, tree3, angle, dangle, rocket.getRotation(), earth);
-
-    Model3D tree4("model3d_shader", "models/tree.obj", launchpadPos, 0.00007);
-    Model3D cloud4("model3d_shader", "models/Cloud.obj", launchpadPos, 0.0017);
-    makeModel(cloud4, tree4, angle, dangle, rocket.getRotation(), earth);
-
-    Model3D tree5("model3d_shader", "models/tree.obj", launchpadPos, 0.00007);
-    Model3D cloud5("model3d_shader", "models/Cloud.obj", launchpadPos, 0.0037);
-    makeModel(cloud5, tree5, angle, dangle, rocket.getRotation(), earth);
-
-    Model3D tree6("model3d_shader", "models/tree.obj", launchpadPos, 0.00007);
-    Model3D cloud6("model3d_shader", "models/Cloud.obj", launchpadPos, 0.0027);
-    makeModel(cloud6, tree6, angle, dangle, rocket.getRotation(), earth);
-
-    Model3D tree7("model3d_shader", "models/tree.obj", launchpadPos, 0.00007);
-    Model3D cloud7("model3d_shader", "models/Cloud.obj", launchpadPos, 0.0007);
-    makeModel(cloud7, tree7, angle, dangle, rocket.getRotation(), earth);
-
-    Model3D tree8("model3d_shader", "models/tree.obj", launchpadPos, 0.00007);
-    Model3D cloud8("model3d_shader", "models/Cloud.obj", launchpadPos, 0.0017);
-    makeModel(cloud8, tree8, angle, dangle, rocket.getRotation(), earth);
-
-    Model3D tree9("model3d_shader", "models/tree.obj", launchpadPos, 0.00007);
-    Model3D cloud9("model3d_shader", "models/Cloud.obj", launchpadPos, 0.0037);
-    makeModel(cloud9, tree9, angle, dangle, rocket.getRotation(), earth);
-
-    Model3D tree10("model3d_shader", "models/tree.obj", launchpadPos, 0.00007);
-    Model3D cloud10("model3d_shader", "models/Cloud.obj", launchpadPos, 0.0027);
-    makeModel(cloud10, tree10, angle, dangle, rocket.getRotation(), earth);
-
-    Model3D tree11("model3d_shader", "models/tree.obj", launchpadPos, 0.00007);
-    Model3D cloud11("model3d_shader", "models/Cloud.obj", launchpadPos, 0.0017);
-    makeModel(cloud11, tree11, angle, dangle, rocket.getRotation(), earth);
-
-    Model3D tree12("model3d_shader", "models/tree.obj", launchpadPos, 0.00007);
-    Model3D cloud12("model3d_shader", "models/Cloud.obj", launchpadPos, 0.0037);
-    makeModel(cloud12, tree12, angle, dangle, rocket.getRotation(), earth);
+    //const int _numberOfClouds, CelestialBody& _earth, double _angle, double _dangle
+    CloudsAndTrees clouds(12, earth, angle, dangle);
+    clouds.provideInitialRotation(rocket.getRotation());
 
     int simulationStopped = 0;
     double lastAltitude = 0;
@@ -291,33 +247,8 @@ int simulate(int argc, char** argv)
         // render earth's objects:
         launchpad.render(projection, view, lightPos);
 
-        tree1.render(projection, view, lightPos);
-        tree2.render(projection, view, lightPos);
-
-        tree3.render(projection, view, lightPos);
-        tree4.render(projection, view, lightPos);
-        tree5.render(projection, view, lightPos);
-        tree6.render(projection, view, lightPos);
-        tree7.render(projection, view, lightPos);
-        tree8.render(projection, view, lightPos);
-        tree9.render(projection, view, lightPos);
-        tree10.render(projection, view, lightPos);
-        tree11.render(projection, view, lightPos);
-        tree12.render(projection, view, lightPos);
-
-        cloud1.render(projection, view, lightPos);
-        cloud2.render(projection, view, lightPos);
-        cloud3.render(projection, view, lightPos);
-        cloud4.render(projection, view, lightPos);
-        cloud5.render(projection, view, lightPos);
-        cloud6.render(projection, view, lightPos);
-        cloud7.render(projection, view, lightPos);
-        cloud8.render(projection, view, lightPos);
-        cloud9.render(projection, view, lightPos);
-        cloud10.render(projection, view, lightPos);
-        cloud11.render(projection, view, lightPos);
-        cloud12.render(projection, view, lightPos);
-
+        clouds.render(projection, view, lightPos);
+       
         // render HUD:
         gui->renderSimulationControlWindow(runningTime);
         gui->renderCodeEditor(orbitalProgramSourceCode);
@@ -458,28 +389,6 @@ int simulate(int argc, char** argv)
 
         rocket.reset(rocketPos);
         vm->reset();
-    }
-
-    void makeModel(Model3D& cloud, Model3D& model, float angle, float dangle, glm::dvec3 rotation, CelestialBody& earth)
-    {
-        float rangle = (rand() % 26 + 4) / 10000.0;
-        float rdangle = (rand() % 26 + 4) / 10000.0;
-        int min1 = rand() % 2;
-        if (min1 == 0) rangle *= -1;
-        int min2 = rand() % 2;
-        if (min2 == 0) rdangle *= -1;
-
-        glm::dvec3 treePos = earth.pointAboveTheSurface(angle + rangle, dangle + rdangle, -0.2);
-        model.updateColor(0.2, 0.7, 0.1);
-        model.updateRotation(rotation);
-        model.updatePosition(treePos);
-
-        rangle *= -20;
-        rdangle *= -20;
-        glm::dvec3 cloudPos = earth.pointAboveTheSurface(angle + rangle, dangle + rdangle, 0.01);
-        cloud.updateColor(0.8, 0.8, 0.8);
-        cloud.updateRotation(rotation);
-        cloud.updatePosition(cloudPos);
     }
 
     bool runTests(int argc, char** argv)
