@@ -1,9 +1,13 @@
 #pragma once
+#include "..\renderer\Renderable.h"
 
-class SolarSystem
+
+class SolarSystem : public Renderable
 {
 public:
 	SolarSystem();
+
+
 
 	~SolarSystem();
 };

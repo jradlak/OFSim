@@ -7,7 +7,7 @@ CelestialBody::CelestialBody(CelestialBodyType _bodyType, std::string shaderName
 	bodyType = _bodyType;
 	diameter = _size;
 	objectRenderer = new ObjectRenderer(shaderName);
-
+	
 	if (_bodyType == planet) 
 	{
 		sphere = new Sphere(0.5f, 256, 128);
@@ -15,12 +15,18 @@ CelestialBody::CelestialBody(CelestialBodyType _bodyType, std::string shaderName
 	else
 	{
 		sphere = new Sphere(0.5f, 32, 16);
-	}
+	}	
 }
 
 void CelestialBody::init()
 {
 	objectRenderer->init(sphere->getVertices(), sphere->getIndices());
+}
+
+void CelestialBody::init(glm::dvec3 _objectColor)
+{
+	init();
+	objectColor = _objectColor;	
 }
 
 void CelestialBody::render(glm::dmat4& projection, glm::dmat4& view, glm::dvec3& _lightPos)
@@ -30,6 +36,10 @@ void CelestialBody::render(glm::dmat4& projection, glm::dmat4& view, glm::dvec3&
 	
 	if (bodyType != star)
 	{
+		
+		shader->setVec3("objectColor", objectColor.x, objectColor.y, objectColor.z);
+
+		/*
 		if (bodyType == moon) 
 		{
 			shader->setVec3("objectColor", 0.55f, 0.55f, 0.55f);
@@ -38,6 +48,7 @@ void CelestialBody::render(glm::dmat4& projection, glm::dmat4& view, glm::dvec3&
 		{
 			shader->setVec3("objectColor", 0.25f, 0.75f, 0.55f);
 		}
+		*/
 		
 		shader->setVec3("lightColor", 1.0f, 1.0f, 1.0f);
 		shader->setVec3("lightPos", _lightPos);

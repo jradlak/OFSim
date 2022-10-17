@@ -22,6 +22,7 @@ public:
 	~CelestialBody();
 
 	void init();
+	void init(glm::dvec3 _objectColor);
 
 	void render(glm::dmat4& projection, glm::dmat4& view, glm::dvec3& _lightPos);
 
@@ -35,4 +36,5 @@ private:
 
 	glm::dvec3& position;
 	double diameter;
+	glm::dvec3 objectColor;
 };

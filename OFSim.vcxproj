@@ -35,6 +35,7 @@
     <ClInclude Include="renderer\Mesh.h" />
     <ClInclude Include="renderer\Model.h" />
     <ClInclude Include="renderer\ModelRenderer.h" />
+    <ClInclude Include="renderer\Renderable.h" />
     <ClInclude Include="world\Planet.h" />
     <ClInclude Include="world\SolarSystem.h" />
     <ClInclude Include="vmachine\CommunicationBus.h" />
@@ -48,7 +49,7 @@
     <ClInclude Include="vmachine\Registers.h" />
     <ClInclude Include="vmachine\RocketCommand.h" />
     <ClInclude Include="world\CloudsAndTrees.h" />
-    <ClInclude Include="world\Model3D.h" />
+    <ClInclude Include="renderer\Model3D.h" />
     <ClInclude Include="world\Rocket.h" />
     <ClInclude Include="renderer\Shader.h" />
     <ClInclude Include="world\Smoke.h" />
@@ -71,7 +72,7 @@
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="renderer\implementation\Camera.cpp" />
-    <ClCompile Include="world\implementation\Planetcpp.cpp" />
+    <ClCompile Include="world\implementation\Planet.cpp" />
     <ClCompile Include="world\implementation\SolarSystem.cpp" />
     <ClCompile Include="vmachine\implementation\CommunicationBus.cpp" />
     <ClCompile Include="world\implementation\CelestialBody.cpp" />
@@ -97,7 +98,7 @@
     <ClCompile Include="vmachine\implementation\VMachine.cpp" />
     <ClCompile Include="vmachine\implementation\VMTask.cpp" />
     <ClCompile Include="renderer\implementation\Window.cpp" />
-    <ClCompile Include="world\implementation\Model3D.cpp" />
+    <ClCompile Include="renderer\implementation\Model3D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="assimp-vc142-mtd.dll" />

@@ -17,7 +17,6 @@ void CloudsAndTrees::render(glm::dmat4& projection, glm::dmat4& view, glm::dvec3
     cloudShader->setVec3("lightColor", 1.0f, 1.0f, 1.0f);
     cloudShader->setVec3("lightPos", lightPos);
 
-
     Shader* treeShader = treeRenderer->getShader();
     treeShader->use();
     treeShader->setVec3("objectColor", 0.2, 0.7, 0.1);

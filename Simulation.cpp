@@ -27,7 +27,7 @@
 #include "vmachine\ODDMA.h"
 #include "vmachine\CommunicationBus.h"
 
-#include "world/Model3D.h"
+#include "renderer/Model3D.h"
 #include "world/CloudsAndTrees.h"
 
 

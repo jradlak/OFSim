@@ -150,7 +150,7 @@
     <ClInclude Include="vmachine\RocketCommand.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="world\Model3D.h">
+    <ClInclude Include="renderer\Model3D.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="world\CloudsAndTrees.h">
@@ -160,6 +160,9 @@
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="world\Planet.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="renderer\Renderable.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
   </ItemGroup>
@@ -260,7 +263,7 @@
     <ClCompile Include="vmachine\implementation\CommunicationBus.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="world\implementation\Model3D.cpp">
+    <ClCompile Include="renderer\implementation\Model3D.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="world\implementation\CloudsAndTrees.cpp">
@@ -269,7 +272,7 @@
     <ClCompile Include="world\implementation\SolarSystem.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="world\implementation\Planetcpp.cpp">
+    <ClCompile Include="world\implementation\Planet.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>
