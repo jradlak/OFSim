@@ -5,6 +5,6 @@
 
 class Renderable {
 public:
-    virtual void init() = 0;
+    //virtual void init() = 0;
     virtual void render(glm::dmat4 projections, glm::dmat4 view, glm::dvec3 lightPos) = 0;
 };

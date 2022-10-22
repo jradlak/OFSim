@@ -23,10 +23,11 @@ void CelestialBody::init()
 	objectRenderer->init(sphere->getVertices(), sphere->getIndices());
 }
 
-void CelestialBody::init(glm::dvec3 _objectColor)
+void CelestialBody::init(glm::dvec3 _objectColor, double _gravity)
 {
 	init();
 	objectColor = _objectColor;	
+	gravity = _gravity;
 }
 
 void CelestialBody::render(glm::dmat4& projection, glm::dmat4& view, glm::dvec3& _lightPos)
@@ -35,21 +36,8 @@ void CelestialBody::render(glm::dmat4& projection, glm::dmat4& view, glm::dvec3&
 	shader->use();
 	
 	if (bodyType != star)
-	{
-		
-		shader->setVec3("objectColor", objectColor.x, objectColor.y, objectColor.z);
-
-		/*
-		if (bodyType == moon) 
-		{
-			shader->setVec3("objectColor", 0.55f, 0.55f, 0.55f);
-		} 
-		else 
-		{
-			shader->setVec3("objectColor", 0.25f, 0.75f, 0.55f);
-		}
-		*/
-		
+	{		
+		shader->setVec3("objectColor", objectColor.x, objectColor.y, objectColor.z);		
 		shader->setVec3("lightColor", 1.0f, 1.0f, 1.0f);
 		shader->setVec3("lightPos", _lightPos);
 	}

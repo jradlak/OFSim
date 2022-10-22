@@ -36,8 +36,9 @@
     <ClInclude Include="renderer\Model.h" />
     <ClInclude Include="renderer\ModelRenderer.h" />
     <ClInclude Include="renderer\Renderable.h" />
-    <ClInclude Include="world\Planet.h" />
-    <ClInclude Include="world\SolarSystem.h" />
+    <ClInclude Include="world\solar_system\Moon.h" />
+    <ClInclude Include="world\solar_system\Planet.h" />
+    <ClInclude Include="world\solar_system\SolarSystem.h" />
     <ClInclude Include="vmachine\CommunicationBus.h" />
     <ClInclude Include="vmachine\ODDMA.h" />
     <ClInclude Include="math_and_physics\Geometry.h" />
@@ -53,8 +54,9 @@
     <ClInclude Include="world\Rocket.h" />
     <ClInclude Include="renderer\Shader.h" />
     <ClInclude Include="world\Smoke.h" />
+    <ClInclude Include="world\solar_system\Sun.h" />
     <ClInclude Include="world\Sphere.h" />
-    <ClInclude Include="world\CelestialBody.h" />
+    <ClInclude Include="world\solar_system\CelestialBody.h" />
     <ClInclude Include="vmachine\Translator.h" />
     <ClInclude Include="renderer\TriangleGeometry.h" />
     <ClInclude Include="UnitTests.h" />
@@ -72,10 +74,11 @@
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="renderer\implementation\Camera.cpp" />
-    <ClCompile Include="world\implementation\Planet.cpp" />
-    <ClCompile Include="world\implementation\SolarSystem.cpp" />
+    <ClCompile Include="world\solar_system\implementation\Moon.cpp" />
+    <ClCompile Include="world\solar_system\implementation\Planet.cpp" />
+    <ClCompile Include="world\solar_system\implementation\SolarSystem.cpp" />
     <ClCompile Include="vmachine\implementation\CommunicationBus.cpp" />
-    <ClCompile Include="world\implementation\CelestialBody.cpp" />
+    <ClCompile Include="world\solar_system\implementation\CelestialBody.cpp" />
     <ClCompile Include="math_and_physics\implementation\Geometry.cpp" />
     <ClCompile Include="vmachine\implementation\Instructions.cpp" />
     <ClCompile Include="Simulation.cpp" />
@@ -99,6 +102,7 @@
     <ClCompile Include="vmachine\implementation\VMTask.cpp" />
     <ClCompile Include="renderer\implementation\Window.cpp" />
     <ClCompile Include="renderer\implementation\Model3D.cpp" />
+    <ClCompile Include="world\solar_system\implementation\Sun.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="assimp-vc142-mtd.dll" />

@@ -9,12 +9,12 @@
 #include <vector>
 #include <string>
 
-#include "Sphere.h"
+#include "..\Sphere.h"
 #include "..\renderer\ObjectRenderer.h"
 
 enum CelestialBodyType { star, planet, moon };
 
-class CelestialBody
+class CelestialBody 
 {
 public:
 	CelestialBody(CelestialBodyType _bodyType, std::string shaderName, double _size, glm::dvec3& _position);
@@ -22,7 +22,7 @@ public:
 	~CelestialBody();
 
 	void init();
-	void init(glm::dvec3 _objectColor);
+	void init(glm::dvec3 _objectColor, double _gravity);
 
 	void render(glm::dmat4& projection, glm::dmat4& view, glm::dvec3& _lightPos);
 
@@ -36,5 +36,8 @@ private:
 
 	glm::dvec3& position;
 	double diameter;
+	
 	glm::dvec3 objectColor;
+	
+	double gravity;
 };

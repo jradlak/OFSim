@@ -42,7 +42,7 @@
     <ClInclude Include="renderer\Window.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="world\CelestialBody.h">
+    <ClInclude Include="world\solar_system\CelestialBody.h">
       <Filter>Pliki nagłówkowe\world</Filter>
     </ClInclude>
     <ClInclude Include="world\Sphere.h">
@@ -156,13 +156,19 @@
     <ClInclude Include="world\CloudsAndTrees.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="world\SolarSystem.h">
+    <ClInclude Include="world\solar_system\SolarSystem.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="world\Planet.h">
+    <ClInclude Include="world\solar_system\Planet.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="renderer\Renderable.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="world\solar_system\Moon.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="world\solar_system\Sun.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
   </ItemGroup>
@@ -173,7 +179,7 @@
     <ClCompile Include="renderer\implementation\Window.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="world\implementation\CelestialBody.cpp">
+    <ClCompile Include="world\solar_system\implementation\CelestialBody.cpp">
       <Filter>Pliki źródłowe\world</Filter>
     </ClCompile>
     <ClCompile Include="world\implementation\Sphere.cpp">
@@ -269,10 +275,16 @@
     <ClCompile Include="world\implementation\CloudsAndTrees.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="world\implementation\SolarSystem.cpp">
+    <ClCompile Include="world\solar_system\implementation\SolarSystem.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="world\implementation\Planet.cpp">
+    <ClCompile Include="world\solar_system\implementation\Planet.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="world\solar_system\implementation\Moon.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="world\solar_system\implementation\Sun.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>
