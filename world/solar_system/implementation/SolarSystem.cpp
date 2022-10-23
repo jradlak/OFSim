@@ -36,7 +36,7 @@ void SolarSystem::provideRocketInformation(double _angle, double _dangle, Rocket
 
 void SolarSystem::initCloudsAndTreesForEarth(double _angle, double _dangle, glm::dvec3 _rotation)
 {
-	this->earth->initCloudsAndTrees(12, _angle, _dangle, _rotation);
+	this->earth->init(12, _angle, _dangle, _rotation);
 }
 
 glm::dvec3 SolarSystem::pointAboveEarthSurface(double theta, double phi, double distance)

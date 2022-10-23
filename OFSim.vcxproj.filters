@@ -150,7 +150,7 @@
     <ClInclude Include="vmachine\RocketCommand.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="renderer\Model3D.h">
+    <ClInclude Include="world\Launchpad.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="world\solar_system\CloudsAndTrees.h">
@@ -269,7 +269,7 @@
     <ClCompile Include="vmachine\implementation\CommunicationBus.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="renderer\implementation\Model3D.cpp">
+    <ClCompile Include="world\implementation\Launchpad.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="world\solar_system\implementation\CloudsAndTrees.cpp">

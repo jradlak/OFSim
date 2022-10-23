@@ -3,18 +3,19 @@
 #include <glm/glm.hpp>
 #include <string>
 
+#include "..\renderer\Renderable.h"
 #include "..\renderer\ModelRenderer.h"
 
-class Model3D
+class Launchpad : public Renderable
 {
 public:
-	Model3D(
+	Launchpad(
 		std::string shaderName, 
 		std::string modelName,
 		glm::dvec3 _position,
 		double _size);
 
-	void render(glm::dmat4& projection, glm::dmat4& view, glm::dvec3& _lightPos);
+	void render(glm::dmat4 projection, glm::dmat4 view, glm::dvec3 _lightPos);
 
 	void updateColor(float _r, float _g, float _b);
 
@@ -23,7 +24,7 @@ public:
 	void updatePosition(glm::dvec3 newPosiotion);
 
 
-	~Model3D();
+	~Launchpad();
 
 private:
 	ModelRenderer* modelRenderer;

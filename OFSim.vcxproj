@@ -50,7 +50,7 @@
     <ClInclude Include="vmachine\Registers.h" />
     <ClInclude Include="vmachine\RocketCommand.h" />
     <ClInclude Include="world\solar_system\CloudsAndTrees.h" />
-    <ClInclude Include="renderer\Model3D.h" />
+    <ClInclude Include="world\Launchpad.h" />
     <ClInclude Include="world\Rocket.h" />
     <ClInclude Include="renderer\Shader.h" />
     <ClInclude Include="world\Smoke.h" />
@@ -101,7 +101,7 @@
     <ClCompile Include="vmachine\implementation\VMachine.cpp" />
     <ClCompile Include="vmachine\implementation\VMTask.cpp" />
     <ClCompile Include="renderer\implementation\Window.cpp" />
-    <ClCompile Include="renderer\implementation\Model3D.cpp" />
+    <ClCompile Include="world\implementation\Launchpad.cpp" />
     <ClCompile Include="world\solar_system\implementation\Sun.cpp" />
   </ItemGroup>
   <ItemGroup>

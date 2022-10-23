@@ -27,7 +27,7 @@
 #include "vmachine\ODDMA.h"
 #include "vmachine\CommunicationBus.h"
 
-#include "renderer/Model3D.h"
+#include "world/Launchpad.h"
 
 #include "world/solar_system/CelestialBody.h"
 #include "world/solar_system/SolarSystem.h"
@@ -46,8 +46,6 @@ Camera camera(glm::vec3(-100.0, -160.0, 1000.0));
 
 int lastKeyPressed = 0;
 
-typedef Model3D* ModelPtr;
-
 unsigned __int64 currentTime();
 int simulate(int argc, char** argv);
 void switchGLStateForWorldRendering(float r, float g, float b);
@@ -55,8 +53,6 @@ void renderTelemetry(Gui* gui, Rocket& rocket, double altitude, double apogeum, 
 void syncFramerate(unsigned __int64 startTime, int ms_per_update);
 
 void changeRocketRotationByKeyPressed(int keyPressed);
-
-void reset(Rocket& rocket, PhysicsEngine* physics, VMachine* vm, glm::dvec3 rocketPos, glm::dvec3 towards);
 
 bool runTests(int argc, char** argv);
 
@@ -132,8 +128,6 @@ int simulate(int argc, char** argv)
     static char orbitalProgramSourceCode[1024 * 16];
     strcpy(orbitalProgramSourceCode, srcStr);
 
-    // simulation loop:
-    // -----------
     unsigned __int64 startTime = currentTime();
     unsigned __int64 runningTime = 0;
 
@@ -143,12 +137,6 @@ int simulate(int argc, char** argv)
     glm::dvec3 deltaRotation = newRotation - rocket.getRotation();
     physics->rotateRocket(deltaRotation);
 
-    // earth objects
-    glm::dvec3 launchpadPos = solarSystem->pointAboveEarthSurface(angle, dangle, -0.187);
-    Model3D launchpad("model3d_shader", "models/launchpad2.obj", launchpadPos, 0.05);
-    launchpad.updateRotation(rocket.getRotation());
-    const int numberOfObjects = 10;
-    
     solarSystem->provideRocketInformation(angle, dangle, &rocket);
 
     int simulationStopped = 0;
@@ -157,6 +145,9 @@ int simulate(int argc, char** argv)
     double perygeum = 0;
     int lastAltitudeDirection = 1;
     int altitudeDirection = 1;
+
+    // simulation loop:
+    // -----------
     while (!mainWindow.shouldClose() && !simulationStopped)
     {
         int factor = gui->getTimeFactor();
@@ -204,15 +195,9 @@ int simulate(int argc, char** argv)
         // render whole solar system:       
         solarSystem->render(projection, view, lightPos);
 
-
         // render rocket:
         rocket.render(projection, view, lightPos);
-
-        // render earth's objects:
-        launchpad.render(projection, view, lightPos);
-
-        //clouds.render(projection, view, lightPos);
-       
+             
         // render HUD:
         gui->renderSimulationControlWindow(runningTime);
         gui->renderCodeEditor(orbitalProgramSourceCode);
@@ -342,19 +327,6 @@ int simulate(int argc, char** argv)
         return std::chrono::duration_cast<std::chrono::milliseconds>(
             std::chrono::system_clock::now().time_since_epoch()
             ).count();
-    }
-
-    void reset(Rocket& rocket, PhysicsEngine* physics, VMachine* vm, glm::dvec3 rocketPos, glm::dvec3 towards)
-    {
-        physics->changeAltitudeOrientation(CelestialBodyType::planet, 3185.0, towards);
-        physics->restart();
-
-        glm::dvec3 newRotation = glm::dvec3(-50.000021, 48.8000050, 0.0);
-        glm::dvec3 deltaRotation = newRotation - rocket.getRotation();
-        physics->rotateRocket(deltaRotation);
-
-        rocket.reset(rocketPos);
-        vm->reset();
     }
 
     bool runTests(int argc, char** argv)
