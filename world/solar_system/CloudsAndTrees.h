@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 
-#include "solar_system\CelestialBody.h"
+#include "CelestialBody.h"
 #include "..\renderer\ModelRenderer.h"
 
 class CloudsAndTrees

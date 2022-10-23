@@ -153,7 +153,7 @@
     <ClInclude Include="renderer\Model3D.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="world\CloudsAndTrees.h">
+    <ClInclude Include="world\solar_system\CloudsAndTrees.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="world\solar_system\SolarSystem.h">
@@ -272,7 +272,7 @@
     <ClCompile Include="renderer\implementation\Model3D.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="world\implementation\CloudsAndTrees.cpp">
+    <ClCompile Include="world\solar_system\implementation\CloudsAndTrees.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="world\solar_system\implementation\SolarSystem.cpp">

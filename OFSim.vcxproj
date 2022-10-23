@@ -49,7 +49,7 @@
     <ClInclude Include="math_and_physics\PhysicsEngine.h" />
     <ClInclude Include="vmachine\Registers.h" />
     <ClInclude Include="vmachine\RocketCommand.h" />
-    <ClInclude Include="world\CloudsAndTrees.h" />
+    <ClInclude Include="world\solar_system\CloudsAndTrees.h" />
     <ClInclude Include="renderer\Model3D.h" />
     <ClInclude Include="world\Rocket.h" />
     <ClInclude Include="renderer\Shader.h" />
@@ -90,7 +90,7 @@
     <ClCompile Include="vmachine\implementation\ODDMA.cpp" />
     <ClCompile Include="math_and_physics\implementation\PhysicsEngine.cpp" />
     <ClCompile Include="vmachine\implementation\Registers.cpp" />
-    <ClCompile Include="world\implementation\CloudsAndTrees.cpp" />
+    <ClCompile Include="world\solar_system\implementation\CloudsAndTrees.cpp" />
     <ClCompile Include="world\implementation\Rocket.cpp" />
     <ClCompile Include="renderer\implementation\Shader.cpp" />
     <ClCompile Include="world\implementation\Smoke.cpp" />

@@ -28,8 +28,9 @@
 #include "vmachine\CommunicationBus.h"
 
 #include "renderer/Model3D.h"
-#include "world/CloudsAndTrees.h"
 
+#include "world/solar_system/CelestialBody.h"
+#include "world/solar_system/SolarSystem.h"
 
 // GUI:
 #include "gui\Gui.h"
@@ -83,31 +84,23 @@ int simulate(int argc, char** argv)
     }
     mainWindow.registerInputCallback(changeRocketRotationByKeyPressed);
 
-    // celestial bodies creation, podition and initialisation
     glm::dvec3 lightPos(0.0, -3185.0, 149600000.0);
-    glm::dvec3 earthPos(0.0, -3186.0, 0.0);
-    glm::dvec3 moonPos(384400.0, -3185.0, 0.0);
-
-    CelestialBody sun(star, "light_source", 1392700, lightPos);
-    CelestialBody earth(planet, "planet_shader", 6371.0, earthPos);
-    CelestialBody earthsMoon(moon, "moon_shader", 1737.0, moonPos);
-
-    sun.init();
-    earth.init();
-    earthsMoon.init();
-
+    
+    //glm::dvec3 lightPos(0.0, -3185.0, 149600000.0);   
+    SolarSystem* solarSystem = new SolarSystem(lightPos);
+    
     //rocket and camera orientation:
     float angle = 30.0;
     float dangle = 60.0;
 
-    glm::dvec3 rocketPos = earth.pointAboveTheSurface(angle, dangle, -0.2); //glm::dvec3(0.0, 0.0, 0.0); 
+    glm::dvec3 rocketPos = solarSystem->pointAboveEarthSurface(angle, dangle, -0.2);
     Rocket rocket("model3d_shader", rocketPos, 0.000013);
     camera.position = rocket.getPosition() + glm::dvec3(0.0, 0.024, 0.0);
     rocket.init();
 
     //initialize Physics engine:
     int MS_PER_UPDATE = 12;
-    glm::dvec3 towards = earth.pointAboveTheSurface(angle, dangle, -50.0);
+    glm::dvec3 towards = solarSystem->pointAboveEarthSurface(angle, dangle, -50.0);
     PhysicsEngine* physics = new PhysicsEngine(rocket, MS_PER_UPDATE);
     physics->changeAltitudeOrientation(CelestialBodyType::planet, 3185.0, towards);
 
@@ -151,14 +144,12 @@ int simulate(int argc, char** argv)
     physics->rotateRocket(deltaRotation);
 
     // earth objects
-    glm::dvec3 launchpadPos = earth.pointAboveTheSurface(angle, dangle, -0.187);
+    glm::dvec3 launchpadPos = solarSystem->pointAboveEarthSurface(angle, dangle, -0.187);
     Model3D launchpad("model3d_shader", "models/launchpad2.obj", launchpadPos, 0.05);
     launchpad.updateRotation(rocket.getRotation());
     const int numberOfObjects = 10;
-
-    //const int _numberOfClouds, CelestialBody& _earth, double _angle, double _dangle
-    CloudsAndTrees clouds(12, earth, angle, dangle);
-    clouds.provideInitialRotation(rocket.getRotation());
+    
+    solarSystem->provideRocketInformation(angle, dangle, &rocket);
 
     int simulationStopped = 0;
     double lastAltitude = 0;
@@ -188,33 +179,7 @@ int simulate(int argc, char** argv)
         }
         else if (factor == -1)
         {
-            simulationStopped = 1;
-            //gui->setTimeFactor(0);
-            /*
-            runningTime = 0;
-            commandBus->clear();
-            reset(rocket, physics, vm, earth.pointAboveTheSurface(angle, dangle, -0.2), earth.pointAboveTheSurface(angle, dangle, -50.0));
-            gui->setTimeFactor(0);
-
-            oddma->stop();
-
-            delete commandBus;
-            delete oddma;
-            delete vmThread;
-            delete vmTask;
-            delete vm;
-
-            commandBus = new CommunicationBus();
-            VMachine* vm = new VMachine(commandBus);
-            VMTask* vmTask = new VMTask(vm);
-            std::thread* vmThread = new std::thread(*vmTask);
-            vmThread->detach();
-
-            oddma = new ODDMA(&rocket, physics, vm, commandBus);
-            oddma->start();
-
-            camera.position = rocket.getPosition() + glm::dvec3(0.0, 0.024, 0.0);
-            */
+            simulationStopped = 1;          
         }
 
         // input
@@ -236,10 +201,9 @@ int simulate(int argc, char** argv)
         camera.processCameraRotation(3.0, 0);
         glm::dmat4 view = camera.getViewMatrix();
 
-        // render celestial bodies:
-        earth.render(projection, view, lightPos);
-        earthsMoon.render(projection, view, lightPos);
-        sun.render(projection, view, lightPos);
+        // render whole solar system:       
+        solarSystem->render(projection, view, lightPos);
+
 
         // render rocket:
         rocket.render(projection, view, lightPos);
@@ -247,7 +211,7 @@ int simulate(int argc, char** argv)
         // render earth's objects:
         launchpad.render(projection, view, lightPos);
 
-        clouds.render(projection, view, lightPos);
+        //clouds.render(projection, view, lightPos);
        
         // render HUD:
         gui->renderSimulationControlWindow(runningTime);
@@ -304,6 +268,8 @@ int simulate(int argc, char** argv)
 
     delete vmThread;
     delete vmTask;
+
+    delete solarSystem;
 
     return simulationStopped;
 }

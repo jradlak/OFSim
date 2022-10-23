@@ -1,7 +1,7 @@
 #include "..\CelestialBody.h"
 #include "Math.h"
 
-CelestialBody::CelestialBody(CelestialBodyType _bodyType, std::string shaderName, double _size, glm::dvec3& _position)
+CelestialBody::CelestialBody(CelestialBodyType _bodyType, std::string shaderName, double _size, glm::dvec3 _position)
 	: position(_position)
 {	
 	bodyType = _bodyType;
@@ -54,7 +54,8 @@ glm::dvec3 CelestialBody::pointAboveTheSurface(double theta, double phi, double 
 	double z = r * sin(glm::radians(theta)) * sin(glm::radians(phi));
 	double y = r * cos(glm::radians(phi));
 
-	return position + glm::dvec3(x, y, z);
+	glm::dvec3 result = position + glm::dvec3(x, y, z);
+	return result;
 }
 
 CelestialBody::~CelestialBody()

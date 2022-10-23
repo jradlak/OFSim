@@ -17,7 +17,7 @@ enum CelestialBodyType { star, planet, moon };
 class CelestialBody 
 {
 public:
-	CelestialBody(CelestialBodyType _bodyType, std::string shaderName, double _size, glm::dvec3& _position);
+	CelestialBody(CelestialBodyType _bodyType, std::string shaderName, double _size, glm::dvec3 _position);
 	
 	~CelestialBody();
 
@@ -34,7 +34,7 @@ private:
 	
 	ObjectRenderer* objectRenderer;
 
-	glm::dvec3& position;
+	glm::dvec3 position;
 	double diameter;
 	
 	glm::dvec3 objectColor;
