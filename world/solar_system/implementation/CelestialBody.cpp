@@ -30,7 +30,7 @@ void CelestialBody::init(glm::dvec3 _objectColor, double _gravity)
 	gravity = _gravity;
 }
 
-void CelestialBody::render(glm::dmat4& projection, glm::dmat4& view, glm::dvec3& _lightPos)
+void CelestialBody::render(glm::dmat4& projection, glm::dmat4& view, const glm::dvec3& _lightPos)
 {
 	Shader* shader = objectRenderer->getShader();
 	shader->use();

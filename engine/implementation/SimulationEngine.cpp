@@ -1,5 +1,7 @@
 #include "..\SimulationEngine.h"
 
+#include "../world/SolarSystemConstants.h"
+
 SimulationEngine::SimulationEngine()
 {
 	camera = new Camera(glm::vec3(-100.0, -160.0, 1000.0));
@@ -55,7 +57,7 @@ void SimulationEngine::mainLoop()
 		// render renderables:
 		for (int i = 0; i < renderables.size(); i++)
 		{
-			renderables[i]->render(projection, view, lightPos);
+			renderables[i]->render(projection, view, SolarSystemConstants::lightPos);
 		}
 	}
 }

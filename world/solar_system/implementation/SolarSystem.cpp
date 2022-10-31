@@ -4,12 +4,11 @@
 #include "..\Sun.h"
 #include "..\..\SolarSystemConstants.h"
 
-
 SolarSystem::SolarSystem()
 {	
-	this->earth = new Planet(6371.0, earthPos);
-	Renderable* moon = new Moon(1737.0, moonPos);
-	Renderable* sun = new Sun(1392700.0, lightPos);
+	this->earth = new Planet(6371.0, SolarSystemConstants::earthPos);
+	Renderable* moon = new Moon(1737.0, SolarSystemConstants::moonPos);
+	Renderable* sun = new Sun(1392700.0, SolarSystemConstants::lightPos);
 
 	clestialBodies.push_back(this->earth);
 	clestialBodies.push_back(moon);
@@ -20,7 +19,7 @@ void SolarSystem::render(glm::dmat4 projection, glm::dmat4 view, glm::dvec3 _lig
 {
 	for (int i = 0; i < this->clestialBodies.size(); i++)
 	{
-		this->clestialBodies[i]->render(projection, view, lightPos);
+		this->clestialBodies[i]->render(projection, view, SolarSystemConstants::lightPos);
 	}
 }
 

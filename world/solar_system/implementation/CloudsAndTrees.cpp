@@ -9,7 +9,7 @@ CloudsAndTrees::CloudsAndTrees(const int _numberOfClouds, CelestialBody& _earth,
     calculatePositionsAndSizes();
 }
 
-void CloudsAndTrees::render(glm::dmat4& projection, glm::dmat4& view, glm::dvec3& lightPos)
+void CloudsAndTrees::render(glm::dmat4 projection, glm::dmat4 view, const glm::dvec3 lightPos)
 {
     Shader* cloudShader = cloudRenderer->getShader();
     cloudShader->use();

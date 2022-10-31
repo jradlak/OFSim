@@ -7,8 +7,8 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <string>
-#include <vector>
 
+#include <vector>
 #include "Shader.h"
 #include "Model.h"
 

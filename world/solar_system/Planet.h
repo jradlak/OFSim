@@ -8,9 +8,9 @@
 class Planet : public Renderable 
 {
 public:
-	Planet(double _size, glm::dvec3& _position);
+	Planet(double _size, const glm::dvec3& _position);
 
-	void render(glm::dmat4 projection, glm::dmat4 view, glm::dvec3 lightPos);
+	void render(glm::dmat4 projection, glm::dmat4 view, const glm::dvec3 lightPos);
 	
 	void init(int number, double _angle, double _dangle, glm::dvec3 _rotation);
 
