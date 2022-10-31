@@ -33,8 +33,6 @@ std::map<unsigned __int64, RocketCommand>& CommunicationBus::getCommandHistory()
 }
 
 void CommunicationBus::clear()
-{
-	//std::queue<RocketCommand> empty;
-	//std::swap(commands, empty);	
+{	
 	commandHistory.clear();	
 }

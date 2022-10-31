@@ -24,7 +24,7 @@ void Rocket::reset(glm::dvec3 _position)
 	position = _position;
 }
 
-void Rocket::render(glm::dmat4& projection, glm::dmat4& view, glm::dvec3& _lightPos)
+void Rocket::render(glm::dmat4 projection, glm::dmat4 view, glm::dvec3 _lightPos)
 {
 	//TODO: make it cleaner!!!	
 	Shader* shader = modelRenderer->getShader();

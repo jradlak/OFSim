@@ -83,7 +83,7 @@ int simulate(int argc, char** argv)
     glm::dvec3 lightPos(0.0, -3185.0, 149600000.0);
     
     //glm::dvec3 lightPos(0.0, -3185.0, 149600000.0);   
-    SolarSystem* solarSystem = new SolarSystem(lightPos);
+    SolarSystem* solarSystem = new SolarSystem();
     
     //rocket and camera orientation:
     float angle = 30.0;

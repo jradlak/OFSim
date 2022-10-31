@@ -21,7 +21,7 @@ public:
 	void initialization(Window* mainWindow);
 
 	void newFrame();
-
+	
 	void renderSimulationControlWindow(unsigned __int64 time);
 
 	void renderCodeEditor(static char text[]);

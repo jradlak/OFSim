@@ -36,6 +36,9 @@
     <ClInclude Include="renderer\Model.h" />
     <ClInclude Include="renderer\ModelRenderer.h" />
     <ClInclude Include="renderer\Renderable.h" />
+    <ClInclude Include="engine\SimulationEngine.h" />
+    <ClInclude Include="engine\Task.h" />
+    <ClInclude Include="world\SolarSystemConstants.h" />
     <ClInclude Include="world\solar_system\Moon.h" />
     <ClInclude Include="world\solar_system\Planet.h" />
     <ClInclude Include="world\solar_system\SolarSystem.h" />
@@ -74,6 +77,7 @@
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="renderer\implementation\Camera.cpp" />
+    <ClCompile Include="engine\implementation\SimulationEngine.cpp" />
     <ClCompile Include="world\solar_system\implementation\Moon.cpp" />
     <ClCompile Include="world\solar_system\implementation\Planet.cpp" />
     <ClCompile Include="world\solar_system\implementation\SolarSystem.cpp" />
