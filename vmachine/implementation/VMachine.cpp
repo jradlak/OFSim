@@ -11,20 +11,18 @@ VMachine::VMachine(CommunicationBus* commandBus)
 	translator = new Translator();
 }
 
-void VMachine::interrupt(short code)
+void VMachine::translateSourceCode(const char* _sourcePath)
 {
-}
-
-void VMachine::interpret(const char* _sourcePath)
-{
-	sourcePath = _sourcePath;
-	shouldStop = false;
+	sourcePath = _sourcePath;	
 	translator->translate(_sourcePath);
 
 	// load translated code into memory:
 	unsigned int codeSize = translator->getCodeSize();
 	Memory::memcopy(translator->code, memory->mem, 0, 0, codeSize);
+}
 
+void VMachine::executionLoop()
+{
 	// code execution:
 	unsigned int pc = 0;
 	unsigned int oldpc = 0;
@@ -40,7 +38,7 @@ void VMachine::interpret(const char* _sourcePath)
 		instructions->call(opcode, args);
 		delete[] args;
 
-		pc = registers->pc(); 
+		pc = registers->pc();
 		if (oldpc == pc)
 		{
 			// there was no jump - update program counter:			
@@ -51,26 +49,52 @@ void VMachine::interpret(const char* _sourcePath)
 
 		// fetch another opcode
 		opcode = memory->fetchByte(pc);
-
-		takeANap();
-	}	
+	}
 }
 
-void VMachine::terminate()
+
+void VMachine::stop()
 {
 	shouldStop = true;
 }
 
-void VMachine::reset()
+void VMachine::setPause()
 {
+	pause = true;
+}
+
+void VMachine::unPause()
+{
+	pause = false;
+}
+
+void VMachine::restart()
+{
+	stop();
+	takeANap();
 	registers->clear();
 	memory->clear();
-	terminate();
+
+	translateSourceCode(sourcePath);
+	start();
+}
+
+void VMachine::init()
+{
+}
+
+void VMachine::start()
+{
+	shouldStop = false;
+	
+	takeANap();
+	std::thread executionLoopThred = std::thread(&VMachine::executionLoop, this);
+	executionLoopThred.detach();	
 }
 
 void VMachine::takeANap()
 {	
-	//std::this_thread::sleep_for(std::chrono::microseconds(5));
+	std::this_thread::sleep_for(std::chrono::milliseconds(100));
 }
 
 VMachine::~VMachine()
@@ -80,10 +104,4 @@ VMachine::~VMachine()
 	delete opcodes;
 	delete memory;
 	delete registers;	
-}
-
-
-
-void VMachine::interruptHandler()
-{
 }

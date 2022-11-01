@@ -23,7 +23,6 @@
 
 // virtual machine:
 #include "vmachine\VMachine.h"
-#include "vmachine\VMTask.h";
 #include "vmachine\ODDMA.h"
 #include "vmachine\CommunicationBus.h"
 
@@ -103,11 +102,9 @@ int simulate(int argc, char** argv)
     // initialize communication Bus:
     CommunicationBus* commandBus = new CommunicationBus();
 
-    // initialize and start VM Thread:
     VMachine* vm = new VMachine(commandBus);
-    VMTask* vmTask = new VMTask(vm);
-    std::thread* vmThread = new std::thread(*vmTask);
-    vmThread->detach();
+    vm->translateSourceCode("orbital_programs/ballisticProgram.oasm");
+    vm->start();
 
     // initialize start ODDMA:
     ODDMA* oddma = new ODDMA(&rocket, physics, vm, commandBus);
@@ -156,7 +153,7 @@ int simulate(int argc, char** argv)
         if (factor == 0)
         {
             timePaused = currentTime() - previous;
-            vm->setPause(true);
+            vm->setPause();
         }
         else if (factor > 0)
         {
@@ -165,7 +162,7 @@ int simulate(int argc, char** argv)
             previous = current;
             lag += elapsed;
             runningTime += elapsed;
-            vm->setPause(false);
+            vm->unPause();
             oddma->provideRunningTime(runningTime);
         }
         else if (factor == -1)
@@ -237,7 +234,7 @@ int simulate(int argc, char** argv)
 
     // clean up:
     oddma->stop();
-    vm->terminate();
+    vm->stop();
 
     glfwTerminate();
 
@@ -250,10 +247,7 @@ int simulate(int argc, char** argv)
     std::this_thread::sleep_for(std::chrono::milliseconds(10));
     delete oddma;
     delete commandBus;
-
-    delete vmThread;
-    delete vmTask;
-
+   
     delete solarSystem;
 
     return simulationStopped;

@@ -64,7 +64,6 @@
     <ClInclude Include="renderer\TriangleGeometry.h" />
     <ClInclude Include="UnitTests.h" />
     <ClInclude Include="vmachine\VMachine.h" />
-    <ClInclude Include="vmachine\VMTask.h" />
     <ClInclude Include="renderer\Window.h" />
   </ItemGroup>
   <ItemGroup>
@@ -103,7 +102,6 @@
     <ClCompile Include="renderer\implementation\TriangleGeometry.cpp" />
     <ClCompile Include="UnitTests.cpp" />
     <ClCompile Include="vmachine\implementation\VMachine.cpp" />
-    <ClCompile Include="vmachine\implementation\VMTask.cpp" />
     <ClCompile Include="renderer\implementation\Window.cpp" />
     <ClCompile Include="world\implementation\Launchpad.cpp" />
     <ClCompile Include="world\solar_system\implementation\Sun.cpp" />

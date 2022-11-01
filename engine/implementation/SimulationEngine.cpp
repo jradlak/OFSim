@@ -21,6 +21,9 @@ SimulationEngine::SimulationEngine()
 	physics = new PhysicsEngine(*rocket, MS_PER_UPDATE);
 	physics->changeAltitudeOrientation(CelestialBodyType::planet, 3185.0, towards);
 
+	// initialize communication Bus:
+	communicationBus = new CommunicationBus();
+
 	// register renderables:
 	renderables.push_back(solarSystem);
 	renderables.push_back(rocket);

@@ -93,9 +93,6 @@
     <ClInclude Include="vmachine\Opcodes.h">
       <Filter>Pliki nagłówkowe\vm</Filter>
     </ClInclude>
-    <ClInclude Include="vmachine\VMTask.h">
-      <Filter>Pliki nagłówkowe\vm</Filter>
-    </ClInclude>
     <ClInclude Include="vmachine\ODDMA.h">
       <Filter>Pliki nagłówkowe\world</Filter>
     </ClInclude>
@@ -234,9 +231,6 @@
       <Filter>Pliki źródłowe\vm</Filter>
     </ClCompile>
     <ClCompile Include="vmachine\implementation\Translator.cpp">
-      <Filter>Pliki źródłowe\vm</Filter>
-    </ClCompile>
-    <ClCompile Include="vmachine\implementation\VMTask.cpp">
       <Filter>Pliki źródłowe\vm</Filter>
     </ClCompile>
     <ClCompile Include="vmachine\implementation\ODDMA.cpp">
