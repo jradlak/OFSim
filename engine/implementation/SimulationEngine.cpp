@@ -66,20 +66,61 @@ void SimulationEngine::init()
 
 void SimulationEngine::start()
 {
+	simulationStopped = false;
+	mainLoop();
 }
 
 void SimulationEngine::stop()
 {
+	simulationStopped = true;
 }
 
 void SimulationEngine::restart()
 {
+	stop();
+	// take a nap
+	start();
 }
 
 void SimulationEngine::mainLoop()
 {
 	while (!mainWindow->shouldClose())
 	{
+		int factor = gui->getTimeFactor();
+		// calculate lag:       
+
+		if (factor == 0)
+		{
+			timePaused = currentTime() - previous;
+			vm->setPause();
+		}
+		else if (factor > 0)
+		{
+			unsigned __int64 current = currentTime() - timePaused;
+			unsigned __int64 elapsed = (current - previous) * factor;
+			previous = current;
+			lag += elapsed;
+			runningTime += elapsed;
+			vm->unPause();
+			oddma->provideRunningTime(runningTime);
+		}
+		else if (factor == -1)
+		{
+			simulationStopped = 1;
+		}
+
+		// input
+		mainWindow->processInput();
+
+		// update physics:
+		physics->updateKeyPressed(lastKeyPressed);
+		lag = physics->calculateForces(lag);
+		lastKeyPressed = 0;
+
+		float* rgb = physics->atmosphereRgb();
+		switchGLStateForWorldRendering(rgb[0], rgb[1], rgb[2]);
+
+		gui->newFrame();
 
 		// camera/view transformation:
 		camera->updatePosition(rocket->getPosition(), rocket->getRotation());
@@ -91,6 +132,22 @@ void SimulationEngine::mainLoop()
 		{
 			renderables[i]->render(projection, view, SolarSystemConstants::lightPos);
 		}
+
+		// render HUD:
+		gui->renderSimulationControlWindow(runningTime);
+		gui->renderCodeEditor(orbitalProgramSourceCode);
+		std::map<unsigned __int64, RocketCommand>& commandHistory = communicationBus->getCommandHistory();
+		gui->renderCommandHistory(commandHistory);
+		//gui->renderDiagnostics(rocket.getPosition(), rocket.getRotation());
+		renderTelemetry(gui, rocket, physics->getAltitude(), apogeum, perygeum, physics->getAtmosphereDragForceMagnitude());
+
+		lastAltitudeDirection = altitudeDirection;
+		lastAltitude = physics->getAltitude();
+
+		// sync and swap:
+		syncFramerate(currentTime(), MS_PER_UPDATE);
+		mainWindow->swapBuffers();
+		glfwPollEvents();
 	}
 }
 
@@ -161,6 +218,68 @@ void SimulationEngine::initWindowContext()
 	}		                                               
 }
 
+void SimulationEngine::switchGLStateForWorldRendering(float r, float g, float b)
+{
+	glEnable(GL_DEPTH_TEST);
+	glDisable(GL_CULL_FACE);
+	glDisable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	glClearColor(r, g, b, 1.0f);
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void SimulationEngine::calcApogeumAndPerygeum()
+{
+	if (lastAltitude < physics->getAltitude() && lastAltitude > 4)
+	{
+		altitudeDirection = 1;
+	}
+
+	if (lastAltitude > physics->getAltitude() && lastAltitude > 4)
+	{
+		altitudeDirection = -1;
+	}
+
+	if (lastAltitudeDirection == 1 && altitudeDirection == -1)
+	{
+		apogeum = lastAltitude;
+	}
+
+	if (lastAltitudeDirection == -1 && altitudeDirection == 1)
+	{
+		perygeum = lastAltitude;
+	}
+}
+
+void SimulationEngine::renderTelemetry(Gui* gui, Rocket* rocket, double altitude, double apogeum, double perygeum, double atmosphereDragForceMagnitude)
+{
+	TelemetryData data;
+
+	data.altitude = altitude;
+	data.mass = rocket->getMass();
+	data.atmPressure = atmosphereDragForceMagnitude;
+	glm::dvec3 velocity = rocket->getVelocity();
+	data.velocity = glm::length(velocity);
+
+	data.position = rocket->getPosition();
+
+	data.apogeum = apogeum;
+	data.perygeum = perygeum;
+
+	gui->renderTelemetry(data);
+}
+
+void SimulationEngine::syncFramerate(unsigned __int64 startTime, int ms_per_update)
+{
+	unsigned __int64 endTime = startTime + ms_per_update;
+	while (currentTime() < endTime)
+	{
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
+	}
+}
+
 SimulationEngine::~SimulationEngine()
 {
 	delete mainWindow;
@@ -176,4 +295,3 @@ SimulationEngine::~SimulationEngine()
 	delete oddma;
 	delete gui;
 }
-

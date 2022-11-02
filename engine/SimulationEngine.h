@@ -75,11 +75,19 @@ private:
 	int lastAltitudeDirection = 1;
 	int altitudeDirection = 1;
 
+	int lastKeyPressed = 0;
+
 	void initialPhysicsInformation();
 	void initialOrbitalInformation();
 
 	void initWindowContext();
 	void mainLoop();
+
+	void switchGLStateForWorldRendering(float r, float g, float b);
+	void renderTelemetry(Gui* gui, Rocket* rocket, double altitude, double apogeum, double perygeum, double atmosphereDragForceMagnitude);
+	void calcApogeumAndPerygeum();
+
+	void syncFramerate(unsigned __int64 startTime, int ms_per_update);
 
 	void createGui();
 	void loadSourceCode(std::string sourcePath);
