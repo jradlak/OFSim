@@ -7,9 +7,12 @@
 #include "Task.h"
 #include "../renderer/Camera.h"
 #include "../renderer/Window.h"
+#include "../gui/Gui.h"
 #include "../world/solar_system/SolarSystem.h"
 #include "../math_and_physics/PhysicsEngine.h"
 #include "../vmachine/CommunicationBus.h"
+#include "../vmachine/VMachine.h"
+#include "../vmachine/ODDMA.h"
 
 class SimulationEngine : public Task
 {
@@ -38,6 +41,7 @@ private:
 	// render matrices:
 	glm::dmat4 projection;	
 
+	SolarSystem* solarSystem;
 	Rocket* rocket;
 	PhysicsEngine* physics;
 	
@@ -45,12 +49,42 @@ private:
 	float angle = 30.0;
 	float dangle = 60.0;
 	
+	// frame times:
+	unsigned __int64 lag;
+	unsigned __int64 previous;
+
+	static char orbitalProgramSourceCode[1024 * 16];
+
 	Camera* camera;
 	Window* mainWindow;
-	
+	Gui* gui;
+
 	// task and communication:
 	CommunicationBus* communicationBus;
+	VMachine* vm;
+	ODDMA* oddma;
 	
+	// simulation time variables:
+	unsigned __int64 startTime;
+	unsigned __int64 runningTime;
+	unsigned __int64 timePaused;
+	
+	// orbital orientation variables:
+	int simulationStopped = 0;
+	double lastAltitude = 0;
+	double apogeum = 0;
+	double perygeum = 0;
+	int lastAltitudeDirection = 1;
+	int altitudeDirection = 1;
+
+	void initialPhysicsInformation();
+	void initialOrbitalInformation();
+
 	void initWindowContext();
 	void mainLoop();
+
+	void createGui();
+	void loadSourceCode(std::string sourcePath);
+
+	unsigned __int64 currentTime();
 };

@@ -127,7 +127,6 @@ int simulate(int argc, char** argv)
 
     unsigned __int64 startTime = currentTime();
     unsigned __int64 runningTime = 0;
-
     unsigned __int64 timePaused = 0;
 
     glm::dvec3 newRotation = glm::dvec3(-50.000021, 48.8000050, 0.0);
