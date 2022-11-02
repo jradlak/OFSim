@@ -1,6 +1,12 @@
+#ifdef _MSC_VER
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+
 #include "..\SimulationEngine.h"
 
 #include "../world/SolarSystemConstants.h"
+
+static char orbitalProgramSourceCode[1024 * 16];
 
 SimulationEngine::SimulationEngine()
 {

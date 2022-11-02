@@ -53,8 +53,6 @@ private:
 	unsigned __int64 lag;
 	unsigned __int64 previous;
 
-	static char orbitalProgramSourceCode[1024 * 16];
-
 	Camera* camera;
 	Window* mainWindow;
 	Gui* gui;
