@@ -30,7 +30,7 @@ SimulationEngine::SimulationEngine()
 	// initialize communication Bus:
 	communicationBus = new CommunicationBus();
 
-	// initialize Virtual Machine:
+	// initialize and start Virtual Machine:
 	vm = new VMachine(communicationBus);
 	vm->translateSourceCode("orbital_programs/ballisticProgram.oasm");
 	vm->start();
@@ -85,7 +85,7 @@ void SimulationEngine::restart()
 void SimulationEngine::mainLoop()
 {
 	while (!mainWindow->shouldClose())
-	{
+	{		
 		int factor = gui->getTimeFactor();
 		// calculate lag:       
 

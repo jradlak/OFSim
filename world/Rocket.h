@@ -16,7 +16,7 @@
 class Rocket : public Renderable
 {
 public:
-	Rocket(std::string shaderName, glm::dvec3& _position, double _size);
+	Rocket(std::string shaderName, glm::dvec3 _position, double _size);
 
 	void init();
 	
@@ -43,7 +43,7 @@ public:
 private:	
 	ModelRenderer* modelRenderer;
 	
-	glm::dvec3& position;
+	glm::dvec3 position;
 	glm::dvec3 towards;
 	glm::dvec3 rotation;
 	

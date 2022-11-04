@@ -57,11 +57,13 @@ bool runTests(int argc, char** argv);
 
 std::string loadSourceCode(std::string sourcePath);
 
+/*
 int main(int argc, char** argv)
 {    
     while (simulate(argc, argv) != 0);
     return 0;
 }
+*/
 
 int simulate(int argc, char** argv)
 {

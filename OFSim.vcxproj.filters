@@ -293,6 +293,9 @@
     <ClCompile Include="engine\implementation\SimulationEngine.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
+    <ClCompile Include="Application.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\planet_shader_fs.glsl">
