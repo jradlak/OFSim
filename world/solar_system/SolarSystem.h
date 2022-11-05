@@ -13,7 +13,8 @@ public:
 
 	void render(glm::dmat4 projection, glm::dmat4 view, glm::dvec3 _lightPos);
 
-	void provideRocketInformation(double _angle, double _dangle, Rocket* _rocket);
+	void provideRocket(Rocket* _rocket);
+	void provideRocketInformationAndInit(double _angle, double _dangle, Rocket* _rocket);
 	
 	glm::dvec3 pointAboveEarthSurface(double theta, double phi, double distance);
 

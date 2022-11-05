@@ -43,6 +43,7 @@ public:
 private:
 
 	void executionLoop();
+	void waitUntilExecutionFinished();
 
 	Memory* memory;
 	Registers* registers;
@@ -52,6 +53,11 @@ private:
 
 	const char* sourcePath;
 
+	unsigned int pc = 0;
+	unsigned int oldpc = 0;
+
 	bool shouldStop = false;
 	bool pause = true;	
+
+	bool threadFinished = 0;
 };

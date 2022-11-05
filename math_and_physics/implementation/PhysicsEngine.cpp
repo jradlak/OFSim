@@ -35,6 +35,8 @@ void PhysicsEngine::changeAltitudeOrientation(
 
     thrustVector = direction * thrustMagnitude; 
     
+    initialTowards = towards;
+
     rocket.updateRotation(rotation);
     rocket.updateTowards(towards);
 }
@@ -110,12 +112,16 @@ void PhysicsEngine::resetForces()
     forces.clear();
 }
 
-void PhysicsEngine::restart()
+void PhysicsEngine::reset()
 {
-    thrustMagnitude = 0.0;
+    resetForces();
+    thrustMagnitude = 0.01;
     thrustCutOff = true;
 
-    calculateAltitude();
+    rocket.reset();
+    changeAltitudeOrientation(CelestialBodyType::planet, 3185.0, initialTowards);
+        
+    altitude = calculateAltitude();
     calculateAtmosphereGradient();
     calculateAtmosphericDragForce();
 }
@@ -149,8 +155,7 @@ void PhysicsEngine::updateKeyPressed(int _lastKeyPressed)
         }
 
         glm::dvec3 deltaRotation = glm::dvec3(x, y, z);
-        orgRotation += deltaRotation;
-        //rotateVectors(glm::dvec3(x, y, z));
+        orgRotation += deltaRotation;        
         rotateVectors(orgRotation, deltaRotation);
     }
 }

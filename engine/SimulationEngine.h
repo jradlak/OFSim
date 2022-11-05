@@ -78,6 +78,7 @@ private:
 	int lastKeyPressed = 0;
 
 	void initialPhysicsInformation();
+	void initialRocketRotation();
 	void initialOrbitalInformation();
 
 	void initWindowContext();

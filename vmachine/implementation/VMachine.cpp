@@ -23,9 +23,8 @@ void VMachine::translateSourceCode(const char* _sourcePath)
 
 void VMachine::executionLoop()
 {
-	// code execution:
-	unsigned int pc = 0;
-	unsigned int oldpc = 0;
+	// code execution:	
+	threadFinished = 0;
 	unsigned int opcode = memory->fetchByte(0);
 	while (opcode != opcodes->getOpcode("halt") && !shouldStop)
 	{
@@ -50,12 +49,22 @@ void VMachine::executionLoop()
 		// fetch another opcode
 		opcode = memory->fetchByte(pc);
 	}
+
+	threadFinished = 1;
 }
 
+void VMachine::waitUntilExecutionFinished()
+{
+	while (threadFinished == 0);
+}
 
 void VMachine::stop()
 {
 	shouldStop = true;
+	waitUntilExecutionFinished();
+	takeANap();	
+	registers->clear();
+	memory->clear();
 }
 
 void VMachine::setPause()
@@ -71,11 +80,7 @@ void VMachine::unPause()
 void VMachine::restart()
 {
 	stop();
-	takeANap();
-	registers->clear();
-	memory->clear();
-
-	translateSourceCode(sourcePath);
+	takeANap();	
 	start();
 }
 
@@ -84,12 +89,12 @@ void VMachine::init()
 }
 
 void VMachine::start()
-{
-	shouldStop = false;
-	
+{	
 	takeANap();
+	shouldStop = false;
+	//translateSourceCode(sourcePath);
 	std::thread executionLoopThred = std::thread(&VMachine::executionLoop, this);
-	executionLoopThred.detach();	
+	executionLoopThred.detach();		
 }
 
 void VMachine::takeANap()
