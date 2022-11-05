@@ -85,7 +85,6 @@
     <ClCompile Include="world\solar_system\implementation\CelestialBody.cpp" />
     <ClCompile Include="math_and_physics\implementation\Geometry.cpp" />
     <ClCompile Include="vmachine\implementation\Instructions.cpp" />
-    <ClCompile Include="Simulation.cpp" />
     <ClCompile Include="vmachine\implementation\Memory.cpp" />
     <ClCompile Include="renderer\implementation\Mesh.cpp" />
     <ClCompile Include="renderer\implementation\Model.cpp" />

@@ -179,9 +179,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Simulation.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
     <ClCompile Include="renderer\implementation\Window.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>

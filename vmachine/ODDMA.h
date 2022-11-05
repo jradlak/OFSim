@@ -59,6 +59,7 @@ public:
 	double thrust;
 };
 
+// Orbital Data Direct Memory Access controller - ODDMA controller
 class ODDMA : public Task
 {
 public:

@@ -141,6 +141,8 @@ void SimulationEngine::mainLoop()
 		//gui->renderDiagnostics(rocket.getPosition(), rocket.getRotation());
 		renderTelemetry(gui, rocket, physics->getAltitude(), apogeum, perygeum, physics->getAtmosphereDragForceMagnitude());
 
+		calcApogeumAndPerygeum();
+
 		lastAltitudeDirection = altitudeDirection;
 		lastAltitude = physics->getAltitude();
 
@@ -282,6 +284,9 @@ void SimulationEngine::syncFramerate(unsigned __int64 startTime, int ms_per_upda
 
 SimulationEngine::~SimulationEngine()
 {
+	oddma->stop();
+	vm->stop();
+
 	delete mainWindow;
 	delete camera;
 
@@ -289,9 +294,9 @@ SimulationEngine::~SimulationEngine()
 	{	
 		delete renderables[i];
 	}
-
-	delete vm;
-	delete communicationBus;
+		
 	delete oddma;
 	delete gui;
+	delete vm;
+	delete communicationBus;
 }
