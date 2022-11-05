@@ -29,7 +29,17 @@ void ODDMA::start()
 void ODDMA::stop()
 {
 	threadsStarted = false;	
-	while (threadsStopped != 2); //waiting to all threds finish
+	while (threadsStopped != 2); //waiting for all threds to finish
+}
+
+void ODDMA::init()
+{
+}
+
+void ODDMA::restart()
+{
+	stop();
+	start();
 }
 
 void ODDMA::stateProducer()

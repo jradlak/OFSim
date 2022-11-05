@@ -1,6 +1,6 @@
 #include "..\Rocket.h"
 
-Rocket::Rocket(std::string shaderName, glm::dvec3& _position, double _size)
+Rocket::Rocket(std::string shaderName, glm::dvec3 _position, double _size)
 	: position(_position), size(_size)
 {	
 	modelRenderer = new ModelRenderer(shaderName, "models/12216_rocket_v1_l2.obj");
@@ -24,7 +24,7 @@ void Rocket::reset(glm::dvec3 _position)
 	position = _position;
 }
 
-void Rocket::render(glm::dmat4& projection, glm::dmat4& view, glm::dvec3& _lightPos)
+void Rocket::render(glm::dmat4 projection, glm::dmat4 view, glm::dvec3 _lightPos)
 {
 	//TODO: make it cleaner!!!	
 	Shader* shader = modelRenderer->getShader();

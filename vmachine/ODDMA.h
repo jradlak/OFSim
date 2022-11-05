@@ -59,18 +59,23 @@ public:
 	double thrust;
 };
 
-class ODDMA
+// Orbital Data Direct Memory Access controller - ODDMA controller
+class ODDMA : public Task
 {
 public:
 	ODDMA(Rocket* _rocket, PhysicsEngine* _physics, VMachine* _vm, CommunicationBus* _commandBus);
 	
 	void start();
 	
+	void stop();
+
+	void init();
+
+	void restart();
+
 	void executeInstruction(int instrCode, double value);
 
 	void provideRunningTime(unsigned __int64 _runningTime) { runningTime = _runningTime; }
-
-	void stop();
 	
 	~ODDMA() {}
 private:

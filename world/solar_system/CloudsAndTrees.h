@@ -3,8 +3,9 @@
 
 #include "CelestialBody.h"
 #include "..\renderer\ModelRenderer.h"
+#include "..\renderer\Renderable.h"
 
-class CloudsAndTrees
+class CloudsAndTrees : public Renderable
 {
 public:
 	CloudsAndTrees(const int _numberOfClouds, CelestialBody& _earth,
@@ -12,7 +13,7 @@ public:
 
 	void provideInitialRotation(glm::dvec3 _initialRotation) { initialRotation = _initialRotation; }
 
-	void render(glm::dmat4& projection, glm::dmat4& view, glm::dvec3& lightPos);
+	void render(glm::dmat4 projection, glm::dmat4 view, const glm::dvec3 lightPos);
 
 	~CloudsAndTrees() {}
 

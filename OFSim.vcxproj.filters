@@ -93,9 +93,6 @@
     <ClInclude Include="vmachine\Opcodes.h">
       <Filter>Pliki nagłówkowe\vm</Filter>
     </ClInclude>
-    <ClInclude Include="vmachine\VMTask.h">
-      <Filter>Pliki nagłówkowe\vm</Filter>
-    </ClInclude>
     <ClInclude Include="vmachine\ODDMA.h">
       <Filter>Pliki nagłówkowe\world</Filter>
     </ClInclude>
@@ -171,11 +168,17 @@
     <ClInclude Include="world\solar_system\Sun.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
+    <ClInclude Include="engine\SimulationEngine.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\Task.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="world\SolarSystemConstants.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Simulation.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
     <ClCompile Include="renderer\implementation\Window.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
@@ -225,9 +228,6 @@
       <Filter>Pliki źródłowe\vm</Filter>
     </ClCompile>
     <ClCompile Include="vmachine\implementation\Translator.cpp">
-      <Filter>Pliki źródłowe\vm</Filter>
-    </ClCompile>
-    <ClCompile Include="vmachine\implementation\VMTask.cpp">
       <Filter>Pliki źródłowe\vm</Filter>
     </ClCompile>
     <ClCompile Include="vmachine\implementation\ODDMA.cpp">
@@ -285,6 +285,12 @@
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="world\solar_system\implementation\Sun.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\implementation\SimulationEngine.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="Application.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>

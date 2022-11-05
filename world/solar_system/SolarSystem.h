@@ -9,7 +9,7 @@
 class SolarSystem : public Renderable
 {
 public:
-	SolarSystem(glm::dvec3 _lightPos);
+	SolarSystem();
 
 	void render(glm::dmat4 projection, glm::dmat4 view, glm::dvec3 _lightPos);
 
@@ -23,8 +23,7 @@ private:
 	std::vector<Renderable*> clestialBodies;
 	Planet* earth;
 	Rocket* rocket;
-	glm::dvec3 lightPos;	
-
+	
 	void initCloudsAndTreesForEarth(double _angle, double _dangle, glm::dvec3 _rotation);
 };
 

@@ -9,26 +9,41 @@
 #include "Translator.h"
 #include "Opcodes.h"
 
-class VMachine
+#include "../engine/Task.h"
+
+class VMachine : public Task
 {
 public:
 	VMachine(CommunicationBus* commandBus);
-
-	void interrupt(short code);
-
-	void interpret(const char* _sourcePath);
-
-	void terminate();
 	
-	void setPause(bool _pause) { pause = _pause; }
+	void translateSourceCode(const char* _sourcePath);
+	
+	// Task methods:
+	
+	void init();
 
-	void reset();
+	void start();
+
+	void stop();
+
+	void setPause();
+
+	void unPause();
+
+	void restart();
+	
+	///////////////////
+
+	void takeANap();
 
 	Memory* getMemory() { return memory; }
 	
 	~VMachine();
 
 private:
+
+	void executionLoop();
+
 	Memory* memory;
 	Registers* registers;
 	Opcodes* opcodes;
@@ -38,8 +53,5 @@ private:
 	const char* sourcePath;
 
 	bool shouldStop = false;
-	bool pause = true;
-
-	void interruptHandler();
-	void takeANap();
+	bool pause = true;	
 };

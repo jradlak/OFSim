@@ -36,6 +36,9 @@
     <ClInclude Include="renderer\Model.h" />
     <ClInclude Include="renderer\ModelRenderer.h" />
     <ClInclude Include="renderer\Renderable.h" />
+    <ClInclude Include="engine\SimulationEngine.h" />
+    <ClInclude Include="engine\Task.h" />
+    <ClInclude Include="world\SolarSystemConstants.h" />
     <ClInclude Include="world\solar_system\Moon.h" />
     <ClInclude Include="world\solar_system\Planet.h" />
     <ClInclude Include="world\solar_system\SolarSystem.h" />
@@ -61,10 +64,10 @@
     <ClInclude Include="renderer\TriangleGeometry.h" />
     <ClInclude Include="UnitTests.h" />
     <ClInclude Include="vmachine\VMachine.h" />
-    <ClInclude Include="vmachine\VMTask.h" />
     <ClInclude Include="renderer\Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Application.cpp" />
     <ClCompile Include="gui\implementation\Gui.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />
@@ -74,6 +77,7 @@
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="renderer\implementation\Camera.cpp" />
+    <ClCompile Include="engine\implementation\SimulationEngine.cpp" />
     <ClCompile Include="world\solar_system\implementation\Moon.cpp" />
     <ClCompile Include="world\solar_system\implementation\Planet.cpp" />
     <ClCompile Include="world\solar_system\implementation\SolarSystem.cpp" />
@@ -81,7 +85,6 @@
     <ClCompile Include="world\solar_system\implementation\CelestialBody.cpp" />
     <ClCompile Include="math_and_physics\implementation\Geometry.cpp" />
     <ClCompile Include="vmachine\implementation\Instructions.cpp" />
-    <ClCompile Include="Simulation.cpp" />
     <ClCompile Include="vmachine\implementation\Memory.cpp" />
     <ClCompile Include="renderer\implementation\Mesh.cpp" />
     <ClCompile Include="renderer\implementation\Model.cpp" />
@@ -99,7 +102,6 @@
     <ClCompile Include="renderer\implementation\TriangleGeometry.cpp" />
     <ClCompile Include="UnitTests.cpp" />
     <ClCompile Include="vmachine\implementation\VMachine.cpp" />
-    <ClCompile Include="vmachine\implementation\VMTask.cpp" />
     <ClCompile Include="renderer\implementation\Window.cpp" />
     <ClCompile Include="world\implementation\Launchpad.cpp" />
     <ClCompile Include="world\solar_system\implementation\Sun.cpp" />

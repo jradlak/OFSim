@@ -196,7 +196,9 @@ void UnitTests::shouldTestVM()
 	print("shouldTestVM testing... ");
 	setup();
 
-	vm->interpret("orbital_programs/orbitalProgram1.oasm");
+	vm->translateSourceCode("orbital_programs/orbitalProgram1.oasm");
+	vm->start();
+
 	Memory* memory = vm->getMemory();
 
 	unsigned char H = memory->mem[256];
