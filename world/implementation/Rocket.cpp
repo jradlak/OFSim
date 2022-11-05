@@ -1,7 +1,7 @@
 #include "..\Rocket.h"
 
 Rocket::Rocket(std::string shaderName, glm::dvec3 _position, double _size)
-	: position(_position), size(_size)
+	: position(_position), initialPosition(_position), size(_size)
 {	
 	modelRenderer = new ModelRenderer(shaderName, "models/12216_rocket_v1_l2.obj");
 	
@@ -17,11 +17,11 @@ void Rocket::init()
 	
 }
 
-void Rocket::reset(glm::dvec3 _position)
+void Rocket::reset()
 {
 	mass = 10;	
 	velocity = glm::dvec3(0.0, 0.0, 0.0);	
-	position = _position;
+	position = initialPosition;
 }
 
 void Rocket::render(glm::dmat4 projection, glm::dmat4 view, glm::dvec3 _lightPos)

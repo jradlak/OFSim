@@ -23,7 +23,12 @@ void SolarSystem::render(glm::dmat4 projection, glm::dmat4 view, glm::dvec3 _lig
 	}
 }
 
-void SolarSystem::provideRocketInformation(double _angle, double _dangle, Rocket* _rocket)
+void SolarSystem::provideRocket(Rocket* _rocket)
+{
+	rocket = _rocket;
+}
+
+void SolarSystem::provideRocketInformationAndInit(double _angle, double _dangle, Rocket* _rocket)
 {
 	rocket = _rocket;
 	initCloudsAndTreesForEarth(_angle, _dangle, rocket->getRotation());

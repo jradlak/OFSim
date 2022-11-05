@@ -241,3 +241,14 @@ void Gui::cleanUp()
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
 }
+
+int Gui::getTimeFactor()
+{
+    if (timeFactor == -1) 
+    {
+        timeFactor = 0;
+        return -1;
+    }
+
+    return timeFactor;
+}

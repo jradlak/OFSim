@@ -4,7 +4,6 @@
 #include "..\world\solar_system\CelestialBody.h"
 #include "..\world\Rocket.h"
 
-
 class PhysicsEngine
 {
 public:
@@ -23,7 +22,7 @@ public:
 	void rotateRocket(glm::dvec3 deltaRotation);
 
 	void resetForces();
-	void restart();
+	void reset();
 
 	double getAltitude();
 	double getThrustMagnitude();
@@ -72,6 +71,8 @@ private:
 
 	glm::dvec3 towards;
 	glm::dvec3 lastPos;
+
+	glm::dvec3 initialTowards;
 
 	glm::dvec3 deltaP;
 

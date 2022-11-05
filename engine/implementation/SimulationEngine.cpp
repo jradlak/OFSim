@@ -76,10 +76,17 @@ void SimulationEngine::stop()
 }
 
 void SimulationEngine::restart()
-{
-	stop();
-	// take a nap
-	start();
+{	
+	vm->unPause();
+	runningTime = 0;
+	//oddma->stop();
+	vm->stop();
+	communicationBus->clear();
+	physics->reset();
+	initialRocketRotation();
+	initialOrbitalInformation();
+	vm->start();
+	//oddma->start();
 }
 
 void SimulationEngine::mainLoop()
@@ -105,17 +112,20 @@ void SimulationEngine::mainLoop()
 			oddma->provideRunningTime(runningTime);
 		}
 		else if (factor == -1)
-		{
-			simulationStopped = 1;
+		{			
+			restart();
 		}
 
 		// input
 		mainWindow->processInput();
 
 		// update physics:
-		physics->updateKeyPressed(lastKeyPressed);
-		lag = physics->calculateForces(lag);
-		lastKeyPressed = 0;
+		if (simulationStopped != 1) 
+		{
+			physics->updateKeyPressed(lastKeyPressed);
+			lag = physics->calculateForces(lag);
+			lastKeyPressed = 0;
+		}
 
 		float* rgb = physics->atmosphereRgb();
 		switchGLStateForWorldRendering(rgb[0], rgb[1], rgb[2]);
@@ -194,11 +204,16 @@ void SimulationEngine::loadSourceCode(std::string sourcePath)
 
 void SimulationEngine::initialPhysicsInformation()
 {
+	initialRocketRotation();
+	solarSystem->provideRocketInformationAndInit(angle, dangle, rocket);
+}
+
+void SimulationEngine::initialRocketRotation()
+{
 	glm::dvec3 newRotation = glm::dvec3(-50.000021, 48.8000050, 0.0);
 	glm::dvec3 deltaRotation = newRotation - rocket->getRotation();
-	
+
 	physics->rotateRocket(deltaRotation);
-	solarSystem->provideRocketInformation(angle, dangle, rocket);
 }
 
 void SimulationEngine::initialOrbitalInformation()

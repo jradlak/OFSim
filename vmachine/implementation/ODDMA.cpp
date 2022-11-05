@@ -28,8 +28,10 @@ void ODDMA::start()
 
 void ODDMA::stop()
 {
-	threadsStarted = false;	
+	threadsStarted = false;		
 	while (threadsStopped != 2); //waiting for all threds to finish
+	std::queue<RocketStatus> empty;
+	std::swap(qStatuses, empty);
 }
 
 void ODDMA::init()

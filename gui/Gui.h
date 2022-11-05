@@ -36,7 +36,7 @@ public:
 
 	void cleanUp();
 
-	int getTimeFactor() { return timeFactor; }
+	int getTimeFactor();
 
 	void setTimeFactor(int factor) { timeFactor = factor; }
 

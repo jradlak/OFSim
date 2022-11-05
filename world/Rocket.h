@@ -32,7 +32,7 @@ public:
 	void updateTowards(glm::dvec3 newTowards);
 	void updateThrustMagnitude(double newMagnitude) { thrustMagnitude = newMagnitude; }
 
-	void reset(glm::dvec3 _position);
+	void reset();
 
 	double getMass();
 	glm::dvec3 getVelocity();
@@ -44,6 +44,7 @@ private:
 	ModelRenderer* modelRenderer;
 	
 	glm::dvec3 position;
+	glm::dvec3 initialPosition;
 	glm::dvec3 towards;
 	glm::dvec3 rotation;
 	
