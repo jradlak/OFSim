@@ -6,6 +6,7 @@
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+#include "imgui_stdlib.h"
 
 #include "..\renderer\Window.h"
 
@@ -24,7 +25,7 @@ public:
 	
 	void renderSimulationControlWindow(unsigned __int64 time);
 
-	void renderCodeEditor(static char text[]);
+	void renderCodeEditor(std::string& text);
 
 	void renderTelemetry(TelemetryData& telemetryData);
 

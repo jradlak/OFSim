@@ -94,6 +94,7 @@ Window::Window(Camera& _camera, unsigned int _width, unsigned int _height)
         if (glfwGetKey(mainWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)
             glfwSetWindowShouldClose(mainWindow, true);
 
+        /*
         if (glfwGetKey(mainWindow, GLFW_KEY_UP) == GLFW_PRESS) 
         {
             processInputCall((int)GLFW_KEY_UP);
@@ -113,6 +114,7 @@ Window::Window(Camera& _camera, unsigned int _width, unsigned int _height)
         {
             processInputCall((int)GLFW_KEY_RIGHT);
         }
+        */
 
         cameraRotationHandler(mainWindow);
     }

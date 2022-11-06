@@ -1,12 +1,6 @@
-#ifdef _MSC_VER
-#define _CRT_SECURE_NO_WARNINGS
-#endif
-
 #include "..\SimulationEngine.h"
 
 #include "../world/SolarSystemConstants.h"
-
-static char orbitalProgramSourceCode[1024 * 16];
 
 SimulationEngine::SimulationEngine()
 {
@@ -32,7 +26,7 @@ SimulationEngine::SimulationEngine()
 
 	// initialize and start Virtual Machine:
 	vm = new VMachine(communicationBus);
-	vm->translateSourceCode("orbital_programs/ballisticProgram.oasm");
+	vm->translateSourceCode(SOURCE_CODE_FILE_NAME.c_str());
 	vm->start();
 
 	// initialize and start ODDMA:
@@ -41,7 +35,7 @@ SimulationEngine::SimulationEngine()
 
 	// initialize GUI:
 	createGui();
-	loadSourceCode("orbital_programs/ballisticProgram.oasm");
+	loadSourceCode(SOURCE_CODE_FILE_NAME);
 
 	// init time variables:
 	startTime = currentTime();
@@ -83,6 +77,10 @@ void SimulationEngine::restart()
 	vm->stop();
 	communicationBus->clear();
 	physics->reset();
+
+	saveSourceCode(SOURCE_CODE_FILE_NAME);	
+	loadSourceCode(SOURCE_CODE_FILE_NAME);
+
 	initialRocketRotation();
 	initialOrbitalInformation();
 	vm->start();
@@ -113,7 +111,7 @@ void SimulationEngine::mainLoop()
 		}
 		else if (factor == -1)
 		{			
-			restart();
+			restart();			
 		}
 
 		// input
@@ -147,8 +145,7 @@ void SimulationEngine::mainLoop()
 		gui->renderSimulationControlWindow(runningTime);
 		gui->renderCodeEditor(orbitalProgramSourceCode);
 		std::map<unsigned __int64, RocketCommand>& commandHistory = communicationBus->getCommandHistory();
-		gui->renderCommandHistory(commandHistory);
-		//gui->renderDiagnostics(rocket.getPosition(), rocket.getRotation());
+		gui->renderCommandHistory(commandHistory);		
 		renderTelemetry(gui, rocket, physics->getAltitude(), apogeum, perygeum, physics->getAtmosphereDragForceMagnitude());
 
 		calcApogeumAndPerygeum();
@@ -181,8 +178,6 @@ void SimulationEngine::loadSourceCode(std::string sourcePath)
 {
 	std::ifstream sourceFile;
 
-	std::string sourceCode = "";
-
 	sourceFile.open(sourcePath.c_str(), std::ios::in);
 
 	if (sourceFile.is_open()) {
@@ -192,14 +187,24 @@ void SimulationEngine::loadSourceCode(std::string sourcePath)
 		{
 			std::getline(sourceFile, line, '\r');
 			sourceFile >> line;
-			sourceCode += line + "\n";
+			orbitalProgramSourceCode += line + "\n";
 		}
 
 		sourceFile.close();
-	}
+	}	
+}
 
-	static char* srcStr = (char*)sourceCode.c_str();	
-	strcpy(orbitalProgramSourceCode, srcStr);
+void SimulationEngine::saveSourceCode(std::string sourcePath)
+{
+	std::ofstream destFile;
+	destFile.open(sourcePath, std::ios::out);
+	
+	if (destFile.is_open())
+	{
+		destFile << orbitalProgramSourceCode;
+	}
+	
+	destFile.close();
 }
 
 void SimulationEngine::initialPhysicsInformation()

@@ -92,7 +92,7 @@ void VMachine::start()
 {	
 	takeANap();
 	shouldStop = false;
-	//translateSourceCode(sourcePath);
+	translateSourceCode(sourcePath);
 	std::thread executionLoopThred = std::thread(&VMachine::executionLoop, this);
 	executionLoopThred.detach();		
 }

@@ -83,7 +83,7 @@ void Gui::renderSimulationControlWindow(unsigned __int64 time)
     ImGui::End();
 }
 
-void Gui::renderCodeEditor(static char text[])
+void Gui::renderCodeEditor(std::string& text)
 {
     ImGui::SetNextWindowSize(ImVec2(450, 500), ImGuiCond_Once);
     ImGui::SetNextWindowPos(ImVec2(100, 175), ImGuiCond_Once);
@@ -94,7 +94,7 @@ void Gui::renderCodeEditor(static char text[])
     static ImGuiInputTextFlags flags = ImGuiInputTextFlags_AllowTabInput;
     //static char text2[1024 * 16] = 
 
-    ImGui::InputTextMultiline("##source", text, 1024*16, ImVec2(-FLT_MIN, ImGui::GetTextLineHeight() * 35), flags);
+    ImGui::InputTextMultiline("##source", &text, ImVec2(-FLT_MIN, ImGui::GetTextLineHeight() * 35), flags);
 
     ImGui::End();
 }

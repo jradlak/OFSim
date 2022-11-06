@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <iostream>
+#include <string>
 
 #include "../renderer/Renderable.h"
 #include "Task.h"
@@ -31,9 +32,11 @@ public:
 
 private:
 	const int MS_PER_UPDATE = 12;
-
+	
 	const unsigned int SCR_WIDTH = 1600;
 	const unsigned int SCR_HEIGHT = 900;
+
+	std::string SOURCE_CODE_FILE_NAME = "orbital_programs/ballisticProgram.oasm";
 
 	std::vector<Renderable*> renderables;		
 	std::vector<Task*> backgroundTasks;
@@ -77,6 +80,8 @@ private:
 
 	int lastKeyPressed = 0;
 
+	std::string orbitalProgramSourceCode;
+
 	void initialPhysicsInformation();
 	void initialRocketRotation();
 	void initialOrbitalInformation();
@@ -91,7 +96,9 @@ private:
 	void syncFramerate(unsigned __int64 startTime, int ms_per_update);
 
 	void createGui();
+	
 	void loadSourceCode(std::string sourcePath);
+	void saveSourceCode(std::string sourcePath);
 
 	unsigned __int64 currentTime();
 };
