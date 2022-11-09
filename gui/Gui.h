@@ -10,7 +10,7 @@
 
 #include "..\renderer\Window.h"
 
-#include "TelemetryData.h"
+#include "..\engine\TelemetryData.h"
 #include "..\vmachine\RocketCommand.h"
 
 class Gui

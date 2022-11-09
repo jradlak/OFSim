@@ -100,5 +100,7 @@ private:
 	void loadSourceCode(std::string sourcePath);
 	void saveSourceCode(std::string sourcePath);
 
+	TelemetryData collectTelemetry();
+
 	unsigned __int64 currentTime();
 };

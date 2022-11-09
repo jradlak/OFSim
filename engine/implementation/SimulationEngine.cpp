@@ -207,6 +207,21 @@ void SimulationEngine::saveSourceCode(std::string sourcePath)
 	destFile.close();
 }
 
+TelemetryData SimulationEngine::collectTelemetry()
+{
+	TelemetryData data;
+	data.altitude = physics->getAltitude();
+	data.apogeum = apogeum;
+	data.perygeum = perygeum;
+	data.atmPressure = physics->getAtmosphereDragForceMagnitude();
+	data.mass = rocket->getMass();
+	data.velocity = rocket->getVelocity();
+	data.acceleration = 0; // TODO!
+	//renderTelemetry(Gui* gui, Rocket* rocket, double altitude, double apogeum, double perygeum, double atmosphereDragForceMagnitude);
+	//rocket, physics->getAltitude(), apogeum, perygeum, physics->getAtmosphereDragForceMagnitude()
+	return TelemetryData();
+}
+
 void SimulationEngine::initialPhysicsInformation()
 {
 	initialRocketRotation();
