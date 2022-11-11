@@ -305,6 +305,9 @@
     <ClCompile Include="imgui\imgui_stdlib.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
+    <ClCompile Include="engine\implementation\TelemetryCollector.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\planet_shader_fs.glsl">

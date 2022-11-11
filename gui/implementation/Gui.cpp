@@ -145,6 +145,27 @@ void Gui::renderTelemetry(TelemetryData& telemetryData)
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
+void Gui::plotTelemetry(std::vector<double> velocityHistory, double maxVelo)
+{
+    ImGui::SetNextWindowSize(ImVec2(450, 150), ImGuiCond_Once);
+    ImGui::SetNextWindowPos(ImVec2(575, 725), ImGuiCond_Once);
+    ImGui::Begin("Wykresy telemetrii:");
+
+    int n = velocityHistory.size();
+    float* arr = new float[n];
+
+    for (int i = 0; i < n; i++)
+    {
+        arr[i] = (float)velocityHistory[i];
+    }
+
+    ImGui::PlotHistogram("Predkosc", arr, n, 0, NULL, 0.0f, (float)maxVelo, ImVec2(0, 80.0f));
+
+    delete[] arr;
+
+    ImGui::End();
+}
+
 void Gui::renderCommandHistory(std::map<unsigned __int64, RocketCommand>& commandHistory)
 {
     ImGui::SetNextWindowSize(ImVec2(450, 240), ImGuiCond_Once);

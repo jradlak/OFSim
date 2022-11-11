@@ -29,6 +29,8 @@ public:
 
 	void renderTelemetry(TelemetryData& telemetryData);
 
+	void plotTelemetry(std::vector<double> velocityHistory, double maxVelo);
+
 	void renderCommandHistory(std::map<unsigned __int64, RocketCommand> &commandHistory);
 
 	void renderDiagnostics(glm::dvec3 position, glm::dvec3 rotation = glm::dvec3(0.0, 0.0, 0.0));

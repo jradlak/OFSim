@@ -21,8 +21,9 @@ SimulationEngine::SimulationEngine()
 	physics = new PhysicsEngine(*rocket, MS_PER_UPDATE);
 	physics->changeAltitudeOrientation(CelestialBodyType::planet, 3185.0, towards);
 
-	// initialize communication Bus:
+	// initialize communication Bus and telemetry collector:
 	communicationBus = new CommunicationBus();
+	telemetryCollector = new TelemetryCollector();
 
 	// initialize and start Virtual Machine:
 	vm = new VMachine(communicationBus);
@@ -146,8 +147,11 @@ void SimulationEngine::mainLoop()
 		gui->renderCodeEditor(orbitalProgramSourceCode);
 		std::map<unsigned __int64, RocketCommand>& commandHistory = communicationBus->getCommandHistory();
 		gui->renderCommandHistory(commandHistory);		
+		
+		collectTelemetry();
+		gui->plotTelemetry(telemetryCollector->getVelicityHistory(), telemetryCollector->getMaxVelocity());
 		renderTelemetry(gui, rocket, physics->getAltitude(), apogeum, perygeum, physics->getAtmosphereDragForceMagnitude());
-
+		
 		calcApogeumAndPerygeum();
 
 		lastAltitudeDirection = altitudeDirection;
@@ -180,6 +184,7 @@ void SimulationEngine::loadSourceCode(std::string sourcePath)
 
 	sourceFile.open(sourcePath.c_str(), std::ios::in);
 
+	orbitalProgramSourceCode = "";
 	if (sourceFile.is_open()) {
 		std::string line;
 
@@ -197,7 +202,7 @@ void SimulationEngine::loadSourceCode(std::string sourcePath)
 void SimulationEngine::saveSourceCode(std::string sourcePath)
 {
 	std::ofstream destFile;
-	destFile.open(sourcePath, std::ios::out);
+	destFile.open(sourcePath, std::ios::out | std::ios::trunc);
 	
 	if (destFile.is_open())
 	{
@@ -207,25 +212,29 @@ void SimulationEngine::saveSourceCode(std::string sourcePath)
 	destFile.close();
 }
 
-TelemetryData SimulationEngine::collectTelemetry()
+void SimulationEngine::collectTelemetry()
 {
-	TelemetryData data;
-	data.altitude = physics->getAltitude();
-	data.apogeum = apogeum;
-	data.perygeum = perygeum;
-	data.atmPressure = physics->getAtmosphereDragForceMagnitude();
-	data.mass = rocket->getMass();
-	data.velocity = rocket->getVelocity();
-	data.acceleration = 0; // TODO!
-	//renderTelemetry(Gui* gui, Rocket* rocket, double altitude, double apogeum, double perygeum, double atmosphereDragForceMagnitude);
-	//rocket, physics->getAltitude(), apogeum, perygeum, physics->getAtmosphereDragForceMagnitude()
-	return TelemetryData();
+	unsigned __int64 tickTock = runningTime / 1000;
+	if (runningTime > 0)
+	{
+		TelemetryData data;
+		data.time = tickTock;
+		data.altitude = physics->getAltitude();
+		data.apogeum = apogeum;
+		data.perygeum = perygeum;
+		data.atmPressure = physics->getAtmosphereDragForceMagnitude();
+		data.mass = rocket->getMass();
+		data.velocity = glm::length(rocket->getVelocity());
+		data.acceleration = 0; // TODO!
+		
+		telemetryCollector->registerTelemetry(data);
+	}
 }
 
 void SimulationEngine::initialPhysicsInformation()
 {
 	initialRocketRotation();
-	solarSystem->provideRocketInformationAndInit(angle, dangle, rocket);
+	solarSystem->provideRocketInformationAndInit(angle, dangle, rocket);	
 }
 
 void SimulationEngine::initialRocketRotation()
@@ -293,7 +302,7 @@ void SimulationEngine::calcApogeumAndPerygeum()
 void SimulationEngine::renderTelemetry(Gui* gui, Rocket* rocket, double altitude, double apogeum, double perygeum, double atmosphereDragForceMagnitude)
 {
 	TelemetryData data;
-
+	
 	data.altitude = altitude;
 	data.mass = rocket->getMass();
 	data.atmPressure = atmosphereDragForceMagnitude;
@@ -334,4 +343,5 @@ SimulationEngine::~SimulationEngine()
 	delete gui;
 	delete vm;
 	delete communicationBus;
+	delete telemetryCollector;
 }

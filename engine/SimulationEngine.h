@@ -6,6 +6,7 @@
 
 #include "../renderer/Renderable.h"
 #include "Task.h"
+#include "TelemetryCollector.h"
 #include "../renderer/Camera.h"
 #include "../renderer/Window.h"
 #include "../gui/Gui.h"
@@ -64,7 +65,8 @@ private:
 	CommunicationBus* communicationBus;
 	VMachine* vm;
 	ODDMA* oddma;
-	
+	TelemetryCollector* telemetryCollector;
+
 	// simulation time variables:
 	unsigned __int64 startTime;
 	unsigned __int64 runningTime;
@@ -100,7 +102,7 @@ private:
 	void loadSourceCode(std::string sourcePath);
 	void saveSourceCode(std::string sourcePath);
 
-	TelemetryData collectTelemetry();
+	void collectTelemetry();
 
 	unsigned __int64 currentTime();
 };
