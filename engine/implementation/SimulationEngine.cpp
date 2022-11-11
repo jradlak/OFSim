@@ -149,7 +149,9 @@ void SimulationEngine::mainLoop()
 		gui->renderCommandHistory(commandHistory);		
 		
 		collectTelemetry();
-		gui->plotTelemetry(telemetryCollector->getVelicityHistory(), telemetryCollector->getMaxVelocity());
+		gui->plotTelemetry(
+			telemetryCollector->getVelicityHistory(), telemetryCollector->getMaxVelocity(),
+			telemetryCollector->getAltitudeHistory(), telemetryCollector->getMaxAltitude());
 		renderTelemetry(gui, rocket, physics->getAltitude(), apogeum, perygeum, physics->getAtmosphereDragForceMagnitude());
 		
 		calcApogeumAndPerygeum();
