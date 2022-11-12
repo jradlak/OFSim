@@ -80,8 +80,6 @@ private:
 	int lastAltitudeDirection = 1;
 	int altitudeDirection = 1;
 
-	int lastKeyPressed = 0;
-
 	std::string orbitalProgramSourceCode;
 
 	void initialPhysicsInformation();

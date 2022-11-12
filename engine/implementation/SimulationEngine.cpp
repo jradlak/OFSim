@@ -2,11 +2,16 @@
 
 #include "../world/SolarSystemConstants.h"
 
+int lastKeyPressed = 0;
+void keyPressedCallback(int keyPressed);
+
 SimulationEngine::SimulationEngine()
 {
 	camera = new Camera(glm::vec3(-100.0, -160.0, 1000.0));
 	mainWindow = new Window(*camera, SCR_WIDTH, SCR_HEIGHT);
 	initWindowContext();
+
+	mainWindow->registerInputCallback(keyPressedCallback);
 
 	solarSystem = new SolarSystem();
 	
@@ -120,12 +125,19 @@ void SimulationEngine::mainLoop()
 
 		// update physics:
 		if (simulationStopped != 1) 
-		{
+		{	
 			physics->updateKeyPressed(lastKeyPressed);
 			lag = physics->calculateForces(lag);
+					
+			if (lastKeyPressed == 77)
+			{
+				physics->predictTrajectory(runningTime);
+			}
+			
 			lastKeyPressed = 0;
 		}
 
+		
 		float* rgb = physics->atmosphereRgb();
 		switchGLStateForWorldRendering(rgb[0], rgb[1], rgb[2]);
 
@@ -347,4 +359,9 @@ SimulationEngine::~SimulationEngine()
 	delete vm;
 	delete communicationBus;
 	delete telemetryCollector;
+}
+
+void keyPressedCallback(int keyPressed)
+{
+	lastKeyPressed = keyPressed;
 }
