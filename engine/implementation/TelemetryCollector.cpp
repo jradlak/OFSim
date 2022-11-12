@@ -9,7 +9,7 @@ void TelemetryCollector::registerTelemetry(TelemetryData data)
 		velocityHistory.push_back(data.velocity);
 		altitideHistory.push_back(data.altitude);
 
-		if (velocityHistory.size() > 512)
+		if (velocityHistory.size() > 2048)
 		{
 			velocityHistory.erase(velocityHistory.begin());
 			altitideHistory.erase(altitideHistory.begin());
@@ -24,6 +24,20 @@ void TelemetryCollector::registerTelemetry(TelemetryData data)
 		{
 			maxAltitude = data.altitude;
 		}
+
+		double dVelocity = data.velocity - lastVelocity;
+		acceletationHistory.push_back(dVelocity);
+		if (dVelocity > maxAcceleration)
+		{
+			maxAcceleration = dVelocity;
+		}
+
+		if (dVelocity < minAcceleration)
+		{
+			minAcceleration = dVelocity;
+		}
+
+		lastVelocity = data.velocity;
 	}
 }
 
@@ -35,4 +49,9 @@ std::vector<double> TelemetryCollector::getVelicityHistory()
 std::vector<double> TelemetryCollector::getAltitudeHistory()
 {
 	return altitideHistory;
+}
+
+std::vector<double> TelemetryCollector::getAccelarationHistory()
+{
+	return acceletationHistory;
 }

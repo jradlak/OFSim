@@ -31,7 +31,8 @@ public:
 
 	void plotTelemetry(
 		std::vector<double> velocityHistory, double maxVelo,
-		std::vector<double> altitudeHistory, double maxAlt);
+		std::vector<double> altitudeHistory, double maxAlt,
+		std::vector<double> accelerationHistory, double maxAcc, double minAcc);
 
 	void renderCommandHistory(std::map<unsigned __int64, RocketCommand> &commandHistory);
 
