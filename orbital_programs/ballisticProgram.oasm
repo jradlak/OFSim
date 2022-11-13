@@ -148,7 +148,7 @@ fld f1, r1
 fcmp f1, f2
 jc czekaj_200_sekundy
 
-; po minieciu 200 sekund, wyłšcz silnik główny:
+; po minieciu 200 sekund, wylacz silnik glówny:
 ; Wartosc ciagu do zmiany
 fset f3, 0.001
 
@@ -173,7 +173,7 @@ sub r4, r5
 cmp r4, r2
 jnc odwrocenie_trajektorii
 
-; uruchomienie cišgu hamujacego:
+; uruchomienie ciagu hamujacego:
 ; Wartosc ciagu do zmiany
 fset f3, 0.24
 
@@ -1584,6 +1584,7 @@ jc finish_check_altitude
 
 ;rakieta kontynuuje swobodny lot balistyczny do zderzenia z ziemia
 halt
+
 
 
 
