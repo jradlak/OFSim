@@ -102,6 +102,40 @@ void PhysicsEngine::updatePhysics(double deltaTime)
     resetForces();
 }
 
+void PhysicsEngine::predictTrajectory(unsigned __int64 elapsedTime)
+{    
+    glm::dvec3 currentVelocity = rocket.getVelocity();
+    glm::dvec3 position = rocket.getPosition();
+
+    elapsedTime /= 1000;
+    int n = 256;
+    double currentTime = 1800.0 - elapsedTime;
+    double deltaTime = (double)currentTime / n;
+
+    for (int index = 0; index < n; index++)
+    {
+        glm::dvec3 gravityForceVector = glm::normalize(position - celestialBodyCenter(celestialBodySize)) * -0.00981;
+
+        currentVelocity += gravityForceVector * deltaTime;
+        position += currentVelocity * deltaTime;
+        currentTime += deltaTime;
+
+        double altitude = glm::length(position - celestialBodyCenter(celestialBodySize)) - celestialBodySize + 0.5;
+        if (altitude < 0.3)
+        {
+            break;
+        }
+
+        trajectoryPredictionX.push_back(position.x);
+        trajectoryPredictionY.push_back(position.y);
+        trajectoryPredictionZ.push_back(position.z);
+
+        velocityMagnitude.push_back(glm::length(currentVelocity));
+    }   
+
+    int a = 10;
+}
+
 void PhysicsEngine::addForce(glm::vec3 force)
 {
     forces.push_back(force);
@@ -153,7 +187,7 @@ void PhysicsEngine::updateKeyPressed(int _lastKeyPressed)
         {
             y += f;
         }
-
+       
         glm::dvec3 deltaRotation = glm::dvec3(x, y, z);
         orgRotation += deltaRotation;        
         rotateVectors(orgRotation, deltaRotation);

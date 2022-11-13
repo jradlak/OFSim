@@ -21,6 +21,8 @@ public:
 	void rotateVectors(glm::dvec3 newRotation, glm::dvec3 deltaRotation);
 	void rotateRocket(glm::dvec3 deltaRotation);
 
+	void predictTrajectory(unsigned __int64 elapsedTime);
+
 	void resetForces();
 	void reset();
 
@@ -32,6 +34,10 @@ public:
 	double getAtmosphereDragForceMagnitude();
 
 	glm::dvec3 getDeltaPosition() { return deltaP; }
+
+	std::vector<double> getTrajectoryPredictionX() { return trajectoryPredictionX; }
+	std::vector<double> getTrajectoryPredictionY() { return trajectoryPredictionY; }
+	std::vector<double> getTrajectoryPredictionZ() { return trajectoryPredictionZ; }
 
 	~PhysicsEngine();
 
@@ -45,7 +51,7 @@ private:
 	double calculateAltitude();
 	
 	glm::dvec3 celestialBodyCenter(double bodySize);
-
+	
 	std::vector<glm::dvec3> forces;
 
 	CelestialBodyType altitudeOrientation;
@@ -78,4 +84,9 @@ private:
 
 	double theta = 30.0; // todo: znaleŸæ wartoœci pocz¹tkowe
 	double phi = 30.0;
+
+	std::vector<double> trajectoryPredictionX;
+	std::vector<double> trajectoryPredictionY;
+	std::vector<double> trajectoryPredictionZ;
+	std::vector<double> velocityMagnitude;
 };

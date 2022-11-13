@@ -145,6 +145,38 @@ void Gui::renderTelemetry(TelemetryData& telemetryData)
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
+void Gui::plotTelemetry(
+    std::vector<double> velocityHistory, double maxVelo,
+    std::vector<double> altitudeHistory, double maxAlt,
+    std::vector<double> accelerationHistory, double maxAcc, double minAcc)
+{
+    ImGui::SetNextWindowSize(ImVec2(450, 460), ImGuiCond_Once);
+    ImGui::SetNextWindowPos(ImVec2(1050, 150), ImGuiCond_Once);
+    ImGui::Begin("Wykresy telemetrii:");
+
+    int n = velocityHistory.size();
+    float* arrVelo = new float[n];
+    float* arrAlt = new float[n];
+    float* arrAcc = new float[n];
+
+    for (int i = 0; i < n; i++)
+    {
+        arrVelo[i] = (float)velocityHistory[i];
+        arrAlt[i] = (float)altitudeHistory[i];
+        arrAcc[i] = (float)accelerationHistory[i];
+    }
+
+    ImGui::PlotHistogram("Predkosc", arrVelo, n, 0, NULL, 0.0f, (float)maxVelo, ImVec2(370, 110.0f));
+    ImGui::PlotHistogram("Przysp.", arrAcc, n, 0, NULL, (float)minAcc, (float)maxAcc, ImVec2(370, 110.0f));
+    ImGui::PlotHistogram("Wysokosc", arrAlt, n, 0, NULL, 0.0f, (float)maxAlt, ImVec2(370, 110.0f));
+    
+    delete[] arrVelo;
+    delete[] arrAlt;
+    delete[] arrAcc;
+
+    ImGui::End();
+}
+
 void Gui::renderCommandHistory(std::map<unsigned __int64, RocketCommand>& commandHistory)
 {
     ImGui::SetNextWindowSize(ImVec2(450, 240), ImGuiCond_Once);
