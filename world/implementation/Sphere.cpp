@@ -9,21 +9,18 @@ Sphere::Sphere()
 {
     radius = 0.5f;
     sectorCount = 32;
-    stackCount = 16;
-
-    //int _size = rand() % 10 + 10;
-    //size = _size / 10000.0f;
+    stackCount = 16;    
     size = 0.0f;
 
     build();
 }
-
 
 Sphere::Sphere(float _radius, unsigned int _sectorCount, unsigned int _stackCount)
 {
     radius = _radius;
     sectorCount = _sectorCount;
     stackCount = _stackCount;
+    size = _radius;
 
     build();
 }

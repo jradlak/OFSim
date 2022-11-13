@@ -39,6 +39,8 @@ SimulationEngine::SimulationEngine()
 	oddma = new ODDMA(rocket, physics, vm, communicationBus);
 	oddma->start();
 
+	trajectoryPrediction = new TrajectoryPrediction();
+
 	// initialize GUI:
 	createGui();
 	loadSourceCode(SOURCE_CODE_FILE_NAME);
@@ -132,12 +134,24 @@ void SimulationEngine::mainLoop()
 			if (lastKeyPressed == 77)
 			{
 				physics->predictTrajectory(runningTime);
+				trajectoryPrediction->initWithPositions(
+					physics->getTrajectoryPredictionX(),
+					physics->getTrajectoryPredictionY(),
+					physics->getTrajectoryPredictionZ());
+
+				if (trajectoryPredictionMode == false)
+				{
+					trajectoryPredictionMode = true;
+				}
+				else 
+				{
+					trajectoryPredictionMode = false;
+				}
 			}
 			
 			lastKeyPressed = 0;
 		}
 
-		
 		float* rgb = physics->atmosphereRgb();
 		switchGLStateForWorldRendering(rgb[0], rgb[1], rgb[2]);
 
@@ -152,6 +166,11 @@ void SimulationEngine::mainLoop()
 		for (int i = 0; i < renderables.size(); i++)
 		{
 			renderables[i]->render(projection, view, SolarSystemConstants::lightPos);
+		}
+
+		if (trajectoryPredictionMode)
+		{
+			trajectoryPrediction->render(projection, view, SolarSystemConstants::lightPos);
 		}
 
 		// render HUD:
@@ -359,6 +378,7 @@ SimulationEngine::~SimulationEngine()
 	delete vm;
 	delete communicationBus;
 	delete telemetryCollector;
+	delete trajectoryPrediction;
 }
 
 void keyPressedCallback(int keyPressed)

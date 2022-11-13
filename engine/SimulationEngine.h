@@ -9,6 +9,7 @@
 #include "TelemetryCollector.h"
 #include "../renderer/Camera.h"
 #include "../renderer/Window.h"
+#include "../renderer/TrajectoryPrediction.h"
 #include "../gui/Gui.h"
 #include "../world/solar_system/SolarSystem.h"
 #include "../math_and_physics/PhysicsEngine.h"
@@ -48,6 +49,7 @@ private:
 	SolarSystem* solarSystem;
 	Rocket* rocket;
 	PhysicsEngine* physics;
+	TrajectoryPrediction* trajectoryPrediction;
 	
 	// rocket and camera orientation:
 	float angle = 30.0;
@@ -80,6 +82,7 @@ private:
 	int lastAltitudeDirection = 1;
 	int altitudeDirection = 1;
 
+	bool trajectoryPredictionMode = false;
 	std::string orbitalProgramSourceCode;
 
 	void initialPhysicsInformation();
