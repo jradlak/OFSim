@@ -20,9 +20,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\imgui\misc\cpp\imgui_stdlib.h" />
+    <ClInclude Include="engine\TelemetryCollector.h" />
     <ClInclude Include="gui\Gui.h" />
     <ClInclude Include="gui\ImageUtils.h" />
-    <ClInclude Include="gui\TelemetryData.h" />
+    <ClInclude Include="engine\TelemetryData.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
     <ClInclude Include="imgui\imgui_impl_glfw.h" />
@@ -70,6 +71,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
+    <ClCompile Include="engine\implementation\TelemetryCollector.cpp" />
     <ClCompile Include="gui\implementation\Gui.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />

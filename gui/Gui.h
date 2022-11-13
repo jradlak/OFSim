@@ -10,7 +10,7 @@
 
 #include "..\renderer\Window.h"
 
-#include "TelemetryData.h"
+#include "..\engine\TelemetryData.h"
 #include "..\vmachine\RocketCommand.h"
 
 class Gui
@@ -28,6 +28,11 @@ public:
 	void renderCodeEditor(std::string& text);
 
 	void renderTelemetry(TelemetryData& telemetryData);
+
+	void plotTelemetry(
+		std::vector<double> velocityHistory, double maxVelo,
+		std::vector<double> altitudeHistory, double maxAlt,
+		std::vector<double> accelerationHistory, double maxAcc, double minAcc);
 
 	void renderCommandHistory(std::map<unsigned __int64, RocketCommand> &commandHistory);
 
