@@ -141,9 +141,10 @@ void SimulationEngine::mainLoop()
 
 				if (trajectoryPredictionMode == false)
 				{
+					camera->updatePosition(solarSystem->pointAboveEarthSurface(angle + 2, dangle + 2, 800), rocket->getRotation());
 					trajectoryPredictionMode = true;
 				}
-				else 
+				else
 				{
 					trajectoryPredictionMode = false;
 				}
@@ -158,8 +159,17 @@ void SimulationEngine::mainLoop()
 		gui->newFrame();
 
 		// camera/view transformation:
-		camera->updatePosition(rocket->getPosition(), rocket->getRotation());
-		camera->processCameraRotation(3.0, 0);
+		if (!trajectoryPredictionMode)
+		{
+			camera->updatePosition(rocket->getPosition(), rocket->getRotation());
+			camera->processCameraRotation(3.0, 0);
+		}
+		else 
+		{
+			
+			//camera->processCameraRotation(3.0, 0);
+		}
+
 		glm::dmat4 view = camera->getViewMatrix();
 
 		// render renderables:

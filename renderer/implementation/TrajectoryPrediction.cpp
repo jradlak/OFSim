@@ -19,7 +19,7 @@ void TrajectoryPrediction::initWithPositions(
 
 	for (int i = 0; i < px.size(); i++)
 	{
-		Sphere* sphere = new Sphere(0.5, 32, 16);
+		Sphere* sphere = new Sphere(3, 32, 16);
 		sphere->updatePosition(glm::dvec3(px[i], py[i], pz[i]));
 		spheres.push_back(sphere);
 	}
@@ -35,7 +35,7 @@ void TrajectoryPrediction::render(glm::dmat4 projection, glm::dmat4 view, const 
 {
 	Shader* shader = renderer->getShader();
 	shader->use();
-	shader->setVec3("objectColor", 0.85f, 0.85f, 0.85f);
+	shader->setVec3("objectColor", 0.95f, 0.15f, 0.15f);
 	shader->setVec3("lightColor", 1.0f, 1.0f, 1.0f);
 	shader->setVec3("lightPos", lightPos);
 

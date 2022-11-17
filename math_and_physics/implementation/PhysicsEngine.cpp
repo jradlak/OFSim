@@ -103,13 +103,17 @@ void PhysicsEngine::updatePhysics(double deltaTime)
 }
 
 void PhysicsEngine::predictTrajectory(unsigned __int64 elapsedTime)
-{    
+{   
+    trajectoryPredictionX.clear();
+    trajectoryPredictionY.clear();
+    trajectoryPredictionZ.clear();
+
     glm::dvec3 currentVelocity = rocket.getVelocity();
     glm::dvec3 position = rocket.getPosition();
 
     elapsedTime /= 1000;
-    int n = 256;
-    double currentTime = 1800.0 - elapsedTime;
+    int n = 512;
+    double currentTime = 3600.0 - elapsedTime;
     double deltaTime = (double)currentTime / n;
 
     for (int index = 0; index < n; index++)

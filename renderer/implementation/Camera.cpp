@@ -36,9 +36,10 @@ void Camera::processCameraRotation(double xoffset, double yoffset, bool constrai
     xoffset *= movementSensitivity;
     yoffset *= movementSensitivity;
 
-    rotationAngle += xoffset;    
+    rotationAngle += xoffset;        
 
-    //updateCameraVectors();
+    glm::dvec3 pos = position + yoffset * 100;
+    updatePosition(pos, glm::dvec3(0));
 }
 
 void Camera::updatePosition(glm::dvec3 newPosition, glm::dvec3 rocketRotation)
