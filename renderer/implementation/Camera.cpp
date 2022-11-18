@@ -28,18 +28,84 @@ Camera::Camera(double posX, double posY, double posZ, double upX, double upY, do
 
 glm::dmat4 Camera::getViewMatrix()
 {
-    return glm::lookAt(rotationPosition + glm::dvec3(0.016, 0.0, 0.012), position, Up);
+    if (automaticRotation) 
+    {
+        return glm::lookAt(rotationPosition + glm::dvec3(0.016, 0.0, 0.012), position, Up);
+    }
+    else 
+    {
+        return glm::lookAt(position, position + Front, Up);
+    }
 }
 
 void Camera::processCameraRotation(double xoffset, double yoffset, bool constrainPitch)
 {
+    automaticRotation = true;
+
     xoffset *= movementSensitivity;
     yoffset *= movementSensitivity;
 
     rotationAngle += xoffset;        
+    //Pitch += yoffset;
+    
+    //glm::dvec3 pos = position + yoffset * 10;
+    //updatePosition(pos, glm::dvec3(0));
+}
 
-    glm::dvec3 pos = position + yoffset * 100;
-    updatePosition(pos, glm::dvec3(0));
+void Camera::processKeyboard(Camera_Movement direction, double deltaTime)
+{
+    if (automaticRotation) return;
+
+    double velocity = MovementSpeed * deltaTime;
+    if (direction == FORWARD)
+    {
+        position += Front * velocity;
+    }
+
+    if (direction == BACKWARD)
+    {
+        position -= Front * velocity;
+    }
+
+    if (direction == LEFT)
+    {
+        position -= Right * velocity;
+    }
+
+    if (direction == RIGHT)
+    {
+        position += Right * velocity;
+    }
+
+    updateCameraVectors();
+}
+
+void Camera::processMouseRotation(double xoffset, double yoffset, bool constrainPitch)
+{
+    if (automaticRotation) return;
+
+    xoffset *= movementSensitivity;
+    yoffset *= movementSensitivity;
+
+    Yaw += xoffset;
+    Pitch += yoffset;
+
+    
+    if (constrainPitch)
+    {
+        if (Pitch > 89.0)
+        {
+            Pitch = 89.0;
+        }
+
+        if (Pitch < -89.0)
+        {
+            Pitch = -89.0;
+        }
+    }
+    
+
+    updateCameraVectors();
 }
 
 void Camera::updatePosition(glm::dvec3 newPosition, glm::dvec3 rocketRotation)
@@ -65,6 +131,6 @@ void Camera::updateCameraVectors()
     Right = glm::normalize(glm::cross(Front, WorldUp));
     Up = glm::normalize(glm::cross(Right, Front));
 
-    glm::mat4 roll_mat = glm::rotate(glm::mat4(1.0f), glm::radians(Roll), glm::vec3(Front));
-    Up = glm::mat3(roll_mat) * Up;
+    //glm::mat4 roll_mat = glm::rotate(glm::mat4(1.0f), glm::radians(Roll), glm::vec3(Front));
+    //Up = glm::mat3(roll_mat) * Up;
 }

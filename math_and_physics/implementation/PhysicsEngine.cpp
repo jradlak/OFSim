@@ -135,9 +135,7 @@ void PhysicsEngine::predictTrajectory(unsigned __int64 elapsedTime)
         trajectoryPredictionZ.push_back(position.z);
 
         velocityMagnitude.push_back(glm::length(currentVelocity));
-    }   
-
-    int a = 10;
+    }
 }
 
 void PhysicsEngine::addForce(glm::vec3 force)

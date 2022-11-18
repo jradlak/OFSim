@@ -133,6 +133,7 @@ void SimulationEngine::mainLoop()
 					
 			if (lastKeyPressed == 77)
 			{
+				camera->setAutomaticRotation(false);
 				physics->predictTrajectory(runningTime);
 				trajectoryPrediction->initWithPositions(
 					physics->getTrajectoryPredictionX(),
@@ -141,7 +142,7 @@ void SimulationEngine::mainLoop()
 
 				if (trajectoryPredictionMode == false)
 				{
-					camera->updatePosition(solarSystem->pointAboveEarthSurface(angle + 2, dangle + 2, 800), rocket->getRotation());
+					camera->updatePosition(solarSystem->pointAboveEarthSurface(30, 30, 800), rocket->getRotation());
 					trajectoryPredictionMode = true;
 				}
 				else
@@ -161,6 +162,7 @@ void SimulationEngine::mainLoop()
 		// camera/view transformation:
 		if (!trajectoryPredictionMode)
 		{
+			camera->setAutomaticRotation(true);
 			camera->updatePosition(rocket->getPosition(), rocket->getRotation());
 			camera->processCameraRotation(3.0, 0);
 		}

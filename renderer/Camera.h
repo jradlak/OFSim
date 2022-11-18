@@ -22,7 +22,7 @@ enum Camera_Movement {
 // Default camera values
 const double YAW         = 30.0;
 const double PITCH       = -70.0;
-const double SPEED       = 0.005;
+const double SPEED       = 800;
 const double SENSITIVITY = 0.1;
 const double ZOOM        = 80.0;
 
@@ -49,6 +49,8 @@ public:
     double movementSensitivity;
     double Zoom;
 
+    bool automaticRotation = true;
+
     Camera(glm::dvec3 position = glm::dvec3(0.0, 0.0, 0.0), glm::dvec3 up = glm::dvec3(0.0, 1.0, 0.0),
         double yaw = YAW, double pitch = PITCH, float roll = 0.0f);
     Camera(double posX, double posY, double posZ, double upX, double upY, double upZ, double yaw, double pitch, double roll); 
@@ -56,6 +58,11 @@ public:
     void processCameraRotation(double xoffset, double yoffset, bool constrainPitch = true);
     
     void updatePosition(glm::dvec3 newPosition, glm::dvec3 rocketRotation);
+
+    void processKeyboard(Camera_Movement direction, double deltaTime);
+    void processMouseRotation(double xoffset, double yoffset, bool constrainPitch = true);
+
+    void setAutomaticRotation(bool autorotation) { automaticRotation = autorotation; }
 
 private:
     void updateCameraVectors();
