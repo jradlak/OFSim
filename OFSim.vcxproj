@@ -116,6 +116,8 @@
   <ItemGroup>
     <None Include="assimp-vc142-mtd.dll" />
     <None Include="orbital_programs\ballisticProgram.oasm" />
+    <None Include="shaders\ball_shader_fs.glsl" />
+    <None Include="shaders\ball_shader_vs.glsl" />
     <None Include="shaders\light_source_fs.glsl" />
     <None Include="shaders\light_source_vs.glsl" />
     <None Include="shaders\moon_shader_fs.glsl" />
@@ -125,9 +127,13 @@
     <None Include="shaders\planet_shader_vs.glsl" />
     <None Include="shaders\model3d_shader_fs.glsl" />
     <None Include="shaders\model3d_shader_vs.glsl" />
+    <None Include="shaders\planet_textured_shader_fs.glsl" />
+    <None Include="shaders\planet_textured_shader_vs.glsl" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="textures\fruits.png" />
+    <Image Include="textures\8k_earth_daymap.jpg" />
+    <Image Include="textures\8k_stars_milky_way.jpg" />
+    <Image Include="textures\earth2048.bmp" />
     <Image Include="textures\fwd.png" />
     <Image Include="textures\pause.png" />
     <Image Include="textures\stop.png" />

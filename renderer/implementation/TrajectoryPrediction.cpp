@@ -2,7 +2,7 @@
 
 TrajectoryPrediction::TrajectoryPrediction()
 {
-	renderer = new ObjectRenderer("moon_shader");
+	renderer = new ObjectRenderer("ball_shader");
 }
 
 void TrajectoryPrediction::initWithPositions(

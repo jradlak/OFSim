@@ -23,6 +23,8 @@ public:
 
 private:
     std::vector<float> verticesAndNormals;
+    std::vector<float> texCoords;
+
     std::vector<int> indices;
 
     unsigned int sectorCount, stackCount;

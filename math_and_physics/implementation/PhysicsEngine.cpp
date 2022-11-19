@@ -113,7 +113,7 @@ void PhysicsEngine::predictTrajectory(unsigned __int64 elapsedTime)
 
     elapsedTime /= 1000;
     int n = 512;
-    double currentTime = 3600.0 - elapsedTime;
+    double currentTime = 4000.0 - elapsedTime;
     double deltaTime = (double)currentTime / n;
 
     for (int index = 0; index < n; index++)

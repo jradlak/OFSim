@@ -186,6 +186,9 @@
     <ClInclude Include="engine\TelemetryCollector.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
+    <ClInclude Include="renderer\TrajectoryPrediction.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="renderer\implementation\Window.cpp">
@@ -308,6 +311,9 @@
     <ClCompile Include="engine\implementation\TelemetryCollector.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
+    <ClCompile Include="renderer\implementation\TrajectoryPrediction.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\planet_shader_fs.glsl">
@@ -337,11 +343,12 @@
     <None Include="assimp-vc142-mtd.dll" />
     <None Include="shaders\model3d_shader_fs.glsl" />
     <None Include="shaders\model3d_shader_vs.glsl" />
+    <None Include="shaders\ball_shader_fs.glsl" />
+    <None Include="shaders\ball_shader_vs.glsl" />
+    <None Include="shaders\planet_textured_shader_vs.glsl" />
+    <None Include="shaders\planet_textured_shader_fs.glsl" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="textures\fruits.png">
-      <Filter>Pliki zasobów</Filter>
-    </Image>
     <Image Include="textures\fwd.png">
       <Filter>Pliki zasobów</Filter>
     </Image>
@@ -349,6 +356,15 @@
       <Filter>Pliki zasobów</Filter>
     </Image>
     <Image Include="textures\stop.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="textures\8k_earth_daymap.jpg">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="textures\8k_stars_milky_way.jpg">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="textures\earth2048.bmp">
       <Filter>Pliki zasobów</Filter>
     </Image>
   </ItemGroup>

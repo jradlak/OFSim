@@ -1,12 +1,12 @@
 #include "..\CelestialBody.h"
 #include "Math.h"
 
-CelestialBody::CelestialBody(CelestialBodyType _bodyType, std::string shaderName, double _size, glm::dvec3 _position)
-	: position(_position)
+CelestialBody::CelestialBody(CelestialBodyType _bodyType, std::string shaderName, double _size, glm::dvec3 _position, bool _textured)
+	: position(_position), textured(_textured)
 {	
 	bodyType = _bodyType;
 	diameter = _size;
-	objectRenderer = new ObjectRenderer(shaderName);
+	objectRenderer = new ObjectRenderer(shaderName, _textured);
 	
 	if (_bodyType == planet) 
 	{
@@ -28,6 +28,15 @@ void CelestialBody::init(glm::dvec3 _objectColor, double _gravity)
 	init();
 	objectColor = _objectColor;	
 	gravity = _gravity;
+}
+
+void CelestialBody::init(glm::dvec3 _objectColor, double _gravity, std::string textureFile)
+{
+	init(_objectColor, _gravity);
+	if (textured)
+	{
+		objectRenderer->loadTexture(textureFile);
+	}
 }
 
 void CelestialBody::render(glm::dmat4& projection, glm::dmat4& view, const glm::dvec3& _lightPos)

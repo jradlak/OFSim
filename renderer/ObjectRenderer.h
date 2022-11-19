@@ -8,13 +8,16 @@
 
 #include <string>
 #include <vector>
+#include <stb_image.h>
+
 
 #include "Shader.h"
+
 
 class ObjectRenderer
 {
 public:
-	ObjectRenderer(std::string shaderName);
+	ObjectRenderer(std::string shaderName, bool _textured = false);
 
 	void init(std::vector<float> vertices, std::vector<int> indices);
 
@@ -33,6 +36,8 @@ public:
 		glm::dvec3 position,
 		glm::dvec3 rotation = glm::dvec3(0.0, 0.0, 0.0));
 
+	void loadTexture(std::string fileName);
+
 	~ObjectRenderer();
 
 private:
@@ -41,6 +46,9 @@ private:
 	unsigned int indexCount;
 
 	double logDepthBufFC;
+	
+	bool textured;
+	unsigned int texture1;
 
 	void clear();
 };

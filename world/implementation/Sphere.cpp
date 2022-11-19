@@ -32,6 +32,7 @@ void Sphere::build()
 
     float x, y, z, xy;
     float nx, ny, nz, lengthInv = 1.0f / radius;
+    float s, t;
 
     float sectorStep = 2 * M_PI / sectorCount;
     float stackStep = M_PI / stackCount;
@@ -60,6 +61,12 @@ void Sphere::build()
             verticesAndNormals.push_back(nx);
             verticesAndNormals.push_back(ny);
             verticesAndNormals.push_back(nz);
+
+            // vertex tex coord (s, t) range between [0, 1]
+            s = (float)j / sectorCount;
+            t = (float)i / stackCount;
+            texCoords.push_back(s);
+            texCoords.push_back(t);
         }
     }
 
