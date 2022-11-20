@@ -8,11 +8,13 @@ void TelemetryCollector::registerTelemetry(TelemetryData data)
 
 		velocityHistory.push_back(data.velocity);
 		altitideHistory.push_back(data.altitude);
+		atmPressureHistory.push_back(data.atmPressure);
 
 		if (velocityHistory.size() > 2048)
 		{
 			velocityHistory.erase(velocityHistory.begin());
 			altitideHistory.erase(altitideHistory.begin());
+			atmPressureHistory.erase(atmPressureHistory.begin());
 		}
 
 		if (data.velocity > maxVelocity)
@@ -23,6 +25,11 @@ void TelemetryCollector::registerTelemetry(TelemetryData data)
 		if (data.altitude > maxAltitude)
 		{
 			maxAltitude = data.altitude;
+		}
+
+		if (data.atmPressure > maxAtmPressure)
+		{
+			maxAtmPressure = data.atmPressure;
 		}
 
 		double dVelocity = data.velocity - lastVelocity;
@@ -54,4 +61,9 @@ std::vector<double> TelemetryCollector::getAltitudeHistory()
 std::vector<double> TelemetryCollector::getAccelarationHistory()
 {
 	return acceletationHistory;
+}
+
+std::vector<double> TelemetryCollector::getAtmPressureHistory()
+{
+	return atmPressureHistory;
 }

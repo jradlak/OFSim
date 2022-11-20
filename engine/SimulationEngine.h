@@ -35,8 +35,8 @@ public:
 private:
 	const int MS_PER_UPDATE = 12;
 	
-	const unsigned int SCR_WIDTH = 1600;
-	const unsigned int SCR_HEIGHT = 900;
+	const unsigned int SCR_WIDTH = 1800;
+	const unsigned int SCR_HEIGHT = 1000;
 
 	std::string SOURCE_CODE_FILE_NAME = "orbital_programs/ballisticProgram.oasm";
 

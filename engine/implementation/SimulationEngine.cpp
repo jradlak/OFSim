@@ -195,6 +195,7 @@ void SimulationEngine::mainLoop()
 		gui->plotTelemetry(
 			telemetryCollector->getVelicityHistory(), telemetryCollector->getMaxVelocity(),
 			telemetryCollector->getAltitudeHistory(), telemetryCollector->getMaxAltitude(),
+			telemetryCollector->getAtmPressureHistory(), telemetryCollector->getMaxAtmPressure(),
 			telemetryCollector->getAccelarationHistory(), telemetryCollector->getMaxAcceleration(), telemetryCollector->getMinAcceleration());
 		renderTelemetry(gui, rocket, physics->getAltitude(), apogeum, perygeum, physics->getAtmosphereDragForceMagnitude());
 		

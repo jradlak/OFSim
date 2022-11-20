@@ -13,11 +13,14 @@ public:
 	std::vector<double> getVelicityHistory();
 	std::vector<double> getAltitudeHistory();
 	std::vector<double> getAccelarationHistory();
+	std::vector<double> getAtmPressureHistory();
 
 	double getMaxVelocity() { return maxVelocity; }
 	double getMaxAltitude() { return maxAltitude; }
+	double getMaxAtmPressure() { return maxAtmPressure; }
 	double getMaxAcceleration() { return maxAcceleration; }
 	double getMinAcceleration() { return minAcceleration; }
+
 
 	~TelemetryCollector() {}
 
@@ -26,6 +29,7 @@ private:
 	std::vector<double> velocityHistory;
 	std::vector<double> altitideHistory;
 	std::vector<double> acceletationHistory;
+	std::vector<double> atmPressureHistory;
 
 	double maxVelocity = 0;
 	double lastVelocity = 0;
@@ -34,6 +38,8 @@ private:
 	
 	double maxAcceleration = 0;
 	double minAcceleration = 0;
+
+	double maxAtmPressure = 0;
 
 	unsigned __int64 lastTick = 0;
 };

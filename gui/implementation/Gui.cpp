@@ -24,7 +24,7 @@ void Gui::newFrame()
 void Gui::renderSimulationControlWindow(unsigned __int64 time)
 {
     ImGui::SetNextWindowSize(ImVec2(450, 100), ImGuiCond_Once);
-    ImGui::SetNextWindowPos(ImVec2(100, 25), ImGuiCond_Once);
+    ImGui::SetNextWindowPos(ImVec2(100, 110), ImGuiCond_Once);
 
     ImGui::Begin("Kontrola symulacji: ");
 
@@ -77,16 +77,15 @@ void Gui::renderSimulationControlWindow(unsigned __int64 time)
         {
             timeFactor *= 2;
         }
-    }
-    
+    }   
 
     ImGui::End();
 }
 
 void Gui::renderCodeEditor(std::string& text)
 {
-    ImGui::SetNextWindowSize(ImVec2(450, 500), ImGuiCond_Once);
-    ImGui::SetNextWindowPos(ImVec2(100, 175), ImGuiCond_Once);
+    ImGui::SetNextWindowSize(ImVec2(450, 750), ImGuiCond_Once);
+    ImGui::SetNextWindowPos(ImVec2(100, 220), ImGuiCond_Once);
 
     ImGui::Begin("Kod zrodlowy programu lotu:");
 
@@ -94,7 +93,7 @@ void Gui::renderCodeEditor(std::string& text)
     static ImGuiInputTextFlags flags = ImGuiInputTextFlags_AllowTabInput;
     //static char text2[1024 * 16] = 
 
-    ImGui::InputTextMultiline("##source", &text, ImVec2(-FLT_MIN, ImGui::GetTextLineHeight() * 35), flags);
+    ImGui::InputTextMultiline("##source", &text, ImVec2(-FLT_MIN, ImGui::GetTextLineHeight() * 55), flags);
 
     ImGui::End();
 }
@@ -102,7 +101,7 @@ void Gui::renderCodeEditor(std::string& text)
 void Gui::renderTelemetry(TelemetryData& telemetryData)
 {
     ImGui::SetNextWindowSize(ImVec2(450, 150), ImGuiCond_Once);
-    ImGui::SetNextWindowPos(ImVec2(100, 725), ImGuiCond_Once);
+    ImGui::SetNextWindowPos(ImVec2(1250, 50), ImGuiCond_Once);
 
     ImGui::Begin("Telemetria:");
     
@@ -148,31 +147,36 @@ void Gui::renderTelemetry(TelemetryData& telemetryData)
 void Gui::plotTelemetry(
     std::vector<double> velocityHistory, double maxVelo,
     std::vector<double> altitudeHistory, double maxAlt,
+    std::vector<double> atmPressureHistory, double maxAtm,
     std::vector<double> accelerationHistory, double maxAcc, double minAcc)
 {
-    ImGui::SetNextWindowSize(ImVec2(450, 460), ImGuiCond_Once);
-    ImGui::SetNextWindowPos(ImVec2(1050, 150), ImGuiCond_Once);
+    ImGui::SetNextWindowSize(ImVec2(450, 510), ImGuiCond_Once);
+    ImGui::SetNextWindowPos(ImVec2(1250, 210), ImGuiCond_Once);
     ImGui::Begin("Wykresy telemetrii:");
 
     int n = velocityHistory.size();
     float* arrVelo = new float[n];
     float* arrAlt = new float[n];
     float* arrAcc = new float[n];
+    float* arrAtm = new float[n];
 
     for (int i = 0; i < n; i++)
     {
         arrVelo[i] = (float)velocityHistory[i];
         arrAlt[i] = (float)altitudeHistory[i];
         arrAcc[i] = (float)accelerationHistory[i];
+        arrAtm[i] = (float)atmPressureHistory[i];
     }
 
     ImGui::PlotHistogram("Predkosc", arrVelo, n, 0, NULL, 0.0f, (float)maxVelo, ImVec2(370, 110.0f));
     ImGui::PlotHistogram("Przysp.", arrAcc, n, 0, NULL, (float)minAcc, (float)maxAcc, ImVec2(370, 110.0f));
     ImGui::PlotHistogram("Wysokosc", arrAlt, n, 0, NULL, 0.0f, (float)maxAlt, ImVec2(370, 110.0f));
+    ImGui::PlotHistogram("Cysn. atm.", arrAtm, n, 0, NULL, 0.0f, (float)maxAtm, ImVec2(370, 110.0f));
     
     delete[] arrVelo;
     delete[] arrAlt;
     delete[] arrAcc;
+    delete[] arrAtm;
 
     ImGui::End();
 }
@@ -180,7 +184,7 @@ void Gui::plotTelemetry(
 void Gui::renderCommandHistory(std::map<unsigned __int64, RocketCommand>& commandHistory)
 {
     ImGui::SetNextWindowSize(ImVec2(450, 240), ImGuiCond_Once);
-    ImGui::SetNextWindowPos(ImVec2(1050, 635), ImGuiCond_Once);
+    ImGui::SetNextWindowPos(ImVec2(1250, 735), ImGuiCond_Once);
 
     ImGui::Begin("Wykonane komendy:");
 
