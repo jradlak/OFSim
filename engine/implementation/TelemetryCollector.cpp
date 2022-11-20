@@ -67,3 +67,8 @@ std::vector<double> TelemetryCollector::getAtmPressureHistory()
 {
 	return atmPressureHistory;
 }
+
+std::vector<TelemetryData> TelemetryCollector::getTelemetryHistory()
+{
+	return telemetryHistory;
+}

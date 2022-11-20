@@ -171,7 +171,7 @@ void Gui::plotTelemetry(
     ImGui::PlotHistogram("Predkosc", arrVelo, n, 0, NULL, 0.0f, (float)maxVelo, ImVec2(370, 110.0f));
     ImGui::PlotHistogram("Przysp.", arrAcc, n, 0, NULL, (float)minAcc, (float)maxAcc, ImVec2(370, 110.0f));
     ImGui::PlotHistogram("Wysokosc", arrAlt, n, 0, NULL, 0.0f, (float)maxAlt, ImVec2(370, 110.0f));
-    ImGui::PlotHistogram("Cysn. atm.", arrAtm, n, 0, NULL, 0.0f, (float)maxAtm, ImVec2(370, 110.0f));
+    ImGui::PlotHistogram("Cisn. atm.", arrAtm, n, 0, NULL, 0.0f, (float)maxAtm, ImVec2(370, 110.0f));
     
     delete[] arrVelo;
     delete[] arrAlt;

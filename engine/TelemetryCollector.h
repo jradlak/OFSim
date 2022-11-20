@@ -14,13 +14,13 @@ public:
 	std::vector<double> getAltitudeHistory();
 	std::vector<double> getAccelarationHistory();
 	std::vector<double> getAtmPressureHistory();
+	std::vector<TelemetryData> getTelemetryHistory();
 
 	double getMaxVelocity() { return maxVelocity; }
 	double getMaxAltitude() { return maxAltitude; }
 	double getMaxAtmPressure() { return maxAtmPressure; }
 	double getMaxAcceleration() { return maxAcceleration; }
 	double getMinAcceleration() { return minAcceleration; }
-
 
 	~TelemetryCollector() {}
 

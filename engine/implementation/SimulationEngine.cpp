@@ -138,7 +138,8 @@ void SimulationEngine::mainLoop()
 				trajectoryPrediction->initWithPositions(
 					physics->getTrajectoryPredictionX(),
 					physics->getTrajectoryPredictionY(),
-					physics->getTrajectoryPredictionZ());
+					physics->getTrajectoryPredictionZ(),
+					telemetryCollector->getTelemetryHistory());
 
 				if (trajectoryPredictionMode == false)
 				{
@@ -167,8 +168,7 @@ void SimulationEngine::mainLoop()
 			camera->processCameraRotation(3.0, 0);
 		}
 		else 
-		{
-			
+		{			
 			//camera->processCameraRotation(3.0, 0);
 		}
 
@@ -271,9 +271,9 @@ void SimulationEngine::collectTelemetry()
 		data.perygeum = perygeum;
 		data.atmPressure = physics->getAtmosphereDragForceMagnitude();
 		data.mass = rocket->getMass();
-		data.velocity = glm::length(rocket->getVelocity());
-		data.acceleration = 0; // TODO!
-		
+		data.velocity = glm::length(rocket->getVelocity());		
+		data.position = rocket->getPosition();
+
 		telemetryCollector->registerTelemetry(data);
 	}
 }
