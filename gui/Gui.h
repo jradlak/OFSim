@@ -13,6 +13,23 @@
 #include "..\engine\TelemetryData.h"
 #include "..\vmachine\RocketCommand.h"
 
+enum MenuPosition {
+	FILE_NEW,
+	FILE_OPEN,
+	FILE_SAVE,
+	FILE_EXIT,
+
+	VIEW_TELEMETRY,
+	VIEW_TELEMETRY_PLOT,
+	VIEW_COMMANDS,
+	VIEW_PROGRAM,
+
+	HELP_ABOUT,
+	HELP_HELP,
+
+	NONE
+};
+
 class Gui
 {
 public:
@@ -23,6 +40,8 @@ public:
 
 	void newFrame();
 	
+	void renderMenuBar();
+
 	void renderSimulationControlWindow(unsigned __int64 time);
 
 	void renderCodeEditor(std::string& text);
@@ -47,6 +66,9 @@ public:
 
 	void setTimeFactor(int factor) { timeFactor = factor; }
 
+	MenuPosition getLastClickedMenu() { return lastClickedMenu; }
+	void clearLastClickedMenu() { lastClickedMenu = MenuPosition::NONE; }
+
 private:
 	GLuint play_texture = 0;
 	GLuint pause_texture = 0;
@@ -61,4 +83,11 @@ private:
 	int out_height = 0;
 
 	int timeFactor = 0;
+
+	bool viewTelemetryOn = true;
+	bool viewTelemetryPlot = true;
+	bool viewCommands = true;
+	bool viewSourceCode = true;
+
+	MenuPosition lastClickedMenu = MenuPosition::NONE;
 };

@@ -21,10 +21,49 @@ void Gui::newFrame()
     ImGui::NewFrame();
 }
 
+void Gui::renderMenuBar()
+{
+    if (ImGui::BeginMainMenuBar())
+    {
+        if (ImGui::BeginMenu("Program"))
+        {
+            if (ImGui::MenuItem("Nowy")) { lastClickedMenu = MenuPosition::FILE_NEW; }
+            if (ImGui::MenuItem("Otworz...")) { lastClickedMenu = MenuPosition::FILE_OPEN; }
+            if (ImGui::MenuItem("Zapisz...")) { lastClickedMenu = MenuPosition::FILE_SAVE; }
+            ImGui::Separator();
+            if (ImGui::MenuItem("Zamknij")) { lastClickedMenu = MenuPosition::FILE_EXIT; }
+
+            ImGui::EndMenu();
+        }
+        
+        if (ImGui::BeginMenu("Widok"))
+        {            
+            ImGui::Checkbox("Telemetria - dane", &viewTelemetryOn);
+            ImGui::Checkbox("Telemetria - wykresy", &viewTelemetryPlot);
+            ImGui::Checkbox("Historia komend", &viewCommands);
+            ImGui::Separator();
+            ImGui::Checkbox("Kod programu lotu", &viewSourceCode);
+
+            ImGui::EndMenu();
+        }
+
+        if (ImGui::BeginMenu("Pomoc"))
+        {
+            if (ImGui::MenuItem("Instrucja obs³ugi")) { lastClickedMenu = MenuPosition::HELP_HELP; }
+            ImGui::Separator();
+            if (ImGui::MenuItem("O programie")) { lastClickedMenu = MenuPosition::HELP_ABOUT; }
+
+            ImGui::EndMenu();
+        }
+
+        ImGui::EndMainMenuBar();
+    }
+}
+
 void Gui::renderSimulationControlWindow(unsigned __int64 time)
 {
     ImGui::SetNextWindowSize(ImVec2(450, 100), ImGuiCond_Once);
-    ImGui::SetNextWindowPos(ImVec2(100, 110), ImGuiCond_Once);
+    ImGui::SetNextWindowPos(ImVec2(100, 50), ImGuiCond_Once);
 
     ImGui::Begin("Kontrola symulacji: ");
 
@@ -84,8 +123,10 @@ void Gui::renderSimulationControlWindow(unsigned __int64 time)
 
 void Gui::renderCodeEditor(std::string& text)
 {
-    ImGui::SetNextWindowSize(ImVec2(450, 750), ImGuiCond_Once);
-    ImGui::SetNextWindowPos(ImVec2(100, 220), ImGuiCond_Once);
+    if (!viewSourceCode) return;
+
+    ImGui::SetNextWindowSize(ImVec2(450, 820), ImGuiCond_Once);
+    ImGui::SetNextWindowPos(ImVec2(100, 160), ImGuiCond_Once);
 
     ImGui::Begin("Kod zrodlowy programu lotu:");
 
@@ -93,13 +134,15 @@ void Gui::renderCodeEditor(std::string& text)
     static ImGuiInputTextFlags flags = ImGuiInputTextFlags_AllowTabInput;
     //static char text2[1024 * 16] = 
 
-    ImGui::InputTextMultiline("##source", &text, ImVec2(-FLT_MIN, ImGui::GetTextLineHeight() * 55), flags);
+    ImGui::InputTextMultiline("##source", &text, ImVec2(-FLT_MIN, ImGui::GetTextLineHeight() * 60), flags);
 
     ImGui::End();
 }
 
 void Gui::renderTelemetry(TelemetryData& telemetryData)
 {
+    if (!viewTelemetryOn) return;
+
     ImGui::SetNextWindowSize(ImVec2(450, 150), ImGuiCond_Once);
     ImGui::SetNextWindowPos(ImVec2(1250, 50), ImGuiCond_Once);
 
@@ -150,6 +193,8 @@ void Gui::plotTelemetry(
     std::vector<double> atmPressureHistory, double maxAtm,
     std::vector<double> accelerationHistory, double maxAcc, double minAcc)
 {
+    if (!viewTelemetryPlot) return;
+
     ImGui::SetNextWindowSize(ImVec2(450, 510), ImGuiCond_Once);
     ImGui::SetNextWindowPos(ImVec2(1250, 210), ImGuiCond_Once);
     ImGui::Begin("Wykresy telemetrii:");
@@ -183,6 +228,8 @@ void Gui::plotTelemetry(
 
 void Gui::renderCommandHistory(std::map<unsigned __int64, RocketCommand>& commandHistory)
 {
+    if (!viewCommands) return;
+
     ImGui::SetNextWindowSize(ImVec2(450, 240), ImGuiCond_Once);
     ImGui::SetNextWindowPos(ImVec2(1250, 735), ImGuiCond_Once);
 

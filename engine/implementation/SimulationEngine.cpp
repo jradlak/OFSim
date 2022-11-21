@@ -186,6 +186,7 @@ void SimulationEngine::mainLoop()
 		}
 
 		// render HUD:
+		gui->renderMenuBar();
 		gui->renderSimulationControlWindow(runningTime);
 		gui->renderCodeEditor(orbitalProgramSourceCode);
 		std::map<unsigned __int64, RocketCommand>& commandHistory = communicationBus->getCommandHistory();
