@@ -42,6 +42,8 @@ public:
 	
 	void renderMenuBar();
 
+	void renderFileOpenDialog();
+
 	void renderSimulationControlWindow(unsigned __int64 time);
 
 	void renderCodeEditor(std::string& text);
@@ -88,6 +90,7 @@ private:
 	bool viewTelemetryPlot = true;
 	bool viewCommands = true;
 	bool viewSourceCode = true;
+	bool viewFileOpen = false;
 
 	MenuPosition lastClickedMenu = MenuPosition::NONE;
 };

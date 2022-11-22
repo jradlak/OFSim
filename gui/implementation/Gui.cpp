@@ -28,7 +28,12 @@ void Gui::renderMenuBar()
         if (ImGui::BeginMenu("Program"))
         {
             if (ImGui::MenuItem("Nowy")) { lastClickedMenu = MenuPosition::FILE_NEW; }
-            if (ImGui::MenuItem("Otworz...")) { lastClickedMenu = MenuPosition::FILE_OPEN; }
+            if (ImGui::MenuItem("Otworz...")) 
+            {                 
+                viewFileOpen = true;
+                lastClickedMenu = MenuPosition::FILE_OPEN; 
+            }
+
             if (ImGui::MenuItem("Zapisz...")) { lastClickedMenu = MenuPosition::FILE_SAVE; }
             ImGui::Separator();
             if (ImGui::MenuItem("Zamknij")) { lastClickedMenu = MenuPosition::FILE_EXIT; }
@@ -57,7 +62,30 @@ void Gui::renderMenuBar()
         }
 
         ImGui::EndMainMenuBar();
-    }
+    }    
+}
+
+void Gui::renderFileOpenDialog()
+{   
+    if (!viewFileOpen) return;
+
+    ImGui::SetNextWindowSize(ImVec2(450, 100), ImGuiCond_Once);
+    ImGui::SetNextWindowPos(ImVec2(600, 200), ImGuiCond_Once);
+
+    ImGui::Begin("Wczytaj kod zrodlowy programu lotu");
+    
+    ImGui::Text("Katalog: ");
+    ImGui::Separator();
+
+    ImGui::Text("Lista plikow: ");
+    ImGui::Separator();
+
+    if (ImGui::Button("OK", ImVec2(120, 0))) { viewFileOpen = false; }
+    ImGui::SetItemDefaultFocus();
+    ImGui::SameLine();
+    if (ImGui::Button("Anuluj", ImVec2(120, 0))) { viewFileOpen = false; }
+
+    ImGui::End();
 }
 
 void Gui::renderSimulationControlWindow(unsigned __int64 time)

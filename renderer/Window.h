@@ -14,8 +14,7 @@ public:
 
     int initialize();
     void processInput();
-
-    // function callback to precess key pressed
+    
     void registerInputCallback(inputCall funct);
 
     bool shouldClose();
@@ -32,19 +31,12 @@ private:
     float lastX, lastY;
     bool firstMouse;
 
-    
-    float deltaTime; 	// time between current frame and last frame
+    float deltaTime;
     float lastFrame;
 
     inputCall processInputCall;
-
-    // glfw: whenever the window size changed (by OS or user resize) this callback function executes
-    // ---------------------------------------------------------------------------------------------
+    
     static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-
-
-    // glfw: whenever the mouse moves, this callback is called
-    // -------------------------------------------------------
-    static void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-       
+    
+    static void mouse_callback(GLFWwindow* window, double xpos, double ypos);       
 };
