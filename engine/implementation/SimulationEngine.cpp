@@ -86,11 +86,18 @@ void SimulationEngine::restart()
 	communicationBus->clear();
 	physics->reset();
 
+	if (gui->getSelectedFile() != "")
+	{
+		SOURCE_CODE_FILE_NAME = gui->getSelectedFile();
+		gui->clearSelectedFile();
+	}
+
 	saveSourceCode(SOURCE_CODE_FILE_NAME);	
 	loadSourceCode(SOURCE_CODE_FILE_NAME);
 
 	initialRocketRotation();
 	initialOrbitalInformation();
+	vm->provideSourcePath(SOURCE_CODE_FILE_NAME.c_str());
 	vm->start();
 	//oddma->start();
 }

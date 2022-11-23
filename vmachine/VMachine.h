@@ -34,6 +34,8 @@ public:
 	
 	///////////////////
 
+	void provideSourcePath(const char* _sourcePath) { sourcePath = _sourcePath; }
+
 	void takeANap();
 
 	Memory* getMemory() { return memory; }

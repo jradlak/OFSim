@@ -69,18 +69,40 @@ void Gui::renderFileOpenDialog()
 {   
     if (!viewFileOpen) return;
 
-    ImGui::SetNextWindowSize(ImVec2(450, 100), ImGuiCond_Once);
+    ImGui::SetNextWindowSize(ImVec2(450, 210), ImGuiCond_Once);
     ImGui::SetNextWindowPos(ImVec2(600, 200), ImGuiCond_Once);
 
     ImGui::Begin("Wczytaj kod zrodlowy programu lotu");
     
-    ImGui::Text("Katalog: ");
+    ImGui::Text("Katalog: ");    
+    ImGui::InputText(" ", &directory);
+    ImGui::SameLine();
+    if (ImGui::Button("Wczytaj", ImVec2(60, 0))) 
+    { 
+        loadFilesInDirectory(directory); 
+    }
+
     ImGui::Separator();
 
     ImGui::Text("Lista plikow: ");
+    const char* items[10];
+    for (int i = 0; i < filesInDirectory.size(); i++)
+    {
+        items[i] = filesInDirectory[i].c_str();
+    }
+
+    static int item_current = 0;
+    ImGui::ListBox(" ", &item_current, items, filesInDirectory.size(), 4);
+    
     ImGui::Separator();
 
-    if (ImGui::Button("OK", ImVec2(120, 0))) { viewFileOpen = false; }
+    if (ImGui::Button("OK", ImVec2(120, 0))) 
+    {         
+        selectedFile = filesInDirectory[item_current];
+        viewFileOpen = false; 
+        timeFactor = -1;
+    }
+
     ImGui::SetItemDefaultFocus();
     ImGui::SameLine();
     if (ImGui::Button("Anuluj", ImVec2(120, 0))) { viewFileOpen = false; }
@@ -362,4 +384,15 @@ int Gui::getTimeFactor()
     }
 
     return timeFactor;
+}
+
+void Gui::loadFilesInDirectory(std::string &directory)
+{
+    filesInDirectory.clear();
+    for (const auto& entry : fs::directory_iterator(directory))
+    {        
+        std::string fileName = entry.path().u8string();
+        std::cout << fileName << std::endl;
+        filesInDirectory.push_back(fileName);
+    }
 }

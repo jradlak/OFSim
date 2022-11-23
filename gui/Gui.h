@@ -3,6 +3,9 @@
 #include <string>
 #include <map>
 
+#include <filesystem>
+namespace fs = std::filesystem;
+
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
@@ -71,6 +74,9 @@ public:
 	MenuPosition getLastClickedMenu() { return lastClickedMenu; }
 	void clearLastClickedMenu() { lastClickedMenu = MenuPosition::NONE; }
 
+	std::string getSelectedFile() { return selectedFile; }
+	void clearSelectedFile() { selectedFile = ""; }
+
 private:
 	GLuint play_texture = 0;
 	GLuint pause_texture = 0;
@@ -92,5 +98,11 @@ private:
 	bool viewSourceCode = true;
 	bool viewFileOpen = false;
 
+	std::vector<std::string> filesInDirectory;
+
 	MenuPosition lastClickedMenu = MenuPosition::NONE;
+	
+	std::string directory;
+	std::string selectedFile = "";
+	void loadFilesInDirectory(std::string &directory);
 };
