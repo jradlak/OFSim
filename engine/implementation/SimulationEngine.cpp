@@ -92,7 +92,6 @@ void SimulationEngine::restart()
 		gui->clearSelectedFile();
 	}
 
-	saveSourceCode(SOURCE_CODE_FILE_NAME);	
 	loadSourceCode(SOURCE_CODE_FILE_NAME);
 
 	initialRocketRotation();
@@ -258,15 +257,18 @@ void SimulationEngine::loadSourceCode(std::string sourcePath)
 
 void SimulationEngine::saveSourceCode(std::string sourcePath)
 {
-	std::ofstream destFile;
-	destFile.open(sourcePath, std::ios::out | std::ios::trunc);
-	
-	if (destFile.is_open())
+	if (orbitalProgramSourceCode != "")
 	{
-		destFile << orbitalProgramSourceCode;
+		std::ofstream destFile;
+		destFile.open(sourcePath, std::ios::out | std::ios::trunc);
+
+		if (destFile.is_open())
+		{
+			destFile << orbitalProgramSourceCode;
+		}
+
+		destFile.close();
 	}
-	
-	destFile.close();
 }
 
 void SimulationEngine::collectTelemetry()

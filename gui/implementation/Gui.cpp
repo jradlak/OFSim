@@ -175,7 +175,7 @@ void Gui::renderCodeEditor(std::string& text)
 {
     if (!viewSourceCode) return;
 
-    ImGui::SetNextWindowSize(ImVec2(450, 820), ImGuiCond_Once);
+    ImGui::SetNextWindowSize(ImVec2(450, 780), ImGuiCond_Once);
     ImGui::SetNextWindowPos(ImVec2(100, 160), ImGuiCond_Once);
 
     ImGui::Begin("Kod zrodlowy programu lotu:");
@@ -184,7 +184,7 @@ void Gui::renderCodeEditor(std::string& text)
     static ImGuiInputTextFlags flags = ImGuiInputTextFlags_AllowTabInput;
     //static char text2[1024 * 16] = 
 
-    ImGui::InputTextMultiline("##source", &text, ImVec2(-FLT_MIN, ImGui::GetTextLineHeight() * 60), flags);
+    ImGui::InputTextMultiline("##source", &text, ImVec2(-FLT_MIN, ImGui::GetTextLineHeight() * 57), flags);
 
     ImGui::End();
 }
@@ -280,8 +280,8 @@ void Gui::renderCommandHistory(std::map<unsigned __int64, RocketCommand>& comman
 {
     if (!viewCommands) return;
 
-    ImGui::SetNextWindowSize(ImVec2(450, 240), ImGuiCond_Once);
-    ImGui::SetNextWindowPos(ImVec2(1250, 735), ImGuiCond_Once);
+    ImGui::SetNextWindowSize(ImVec2(450, 210), ImGuiCond_Once);
+    ImGui::SetNextWindowPos(ImVec2(1250, 730), ImGuiCond_Once);
 
     ImGui::Begin("Wykonane komendy:");
 

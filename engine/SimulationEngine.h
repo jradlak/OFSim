@@ -36,9 +36,10 @@ private:
 	const int MS_PER_UPDATE = 12;
 	
 	const unsigned int SCR_WIDTH = 1800;
-	const unsigned int SCR_HEIGHT = 1000;
+	const unsigned int SCR_HEIGHT = 950;
 
-	std::string SOURCE_CODE_FILE_NAME = "orbital_programs/ballisticProgram.oasm";
+	//std::string SOURCE_CODE_FILE_NAME = "orbital_programs/ballisticProgram.oasm";
+	std::string SOURCE_CODE_FILE_NAME = "";
 
 	std::vector<Renderable*> renderables;		
 	std::vector<Task*> backgroundTasks;
