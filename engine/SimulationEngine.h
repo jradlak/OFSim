@@ -10,12 +10,14 @@
 #include "../renderer/Camera.h"
 #include "../renderer/Window.h"
 #include "../renderer/TrajectoryPrediction.h"
+#include "../renderer/SkyBoxRenderer.h"
 #include "../gui/Gui.h"
 #include "../world/solar_system/SolarSystem.h"
 #include "../math_and_physics/PhysicsEngine.h"
 #include "../vmachine/CommunicationBus.h"
 #include "../vmachine/VMachine.h"
 #include "../vmachine/ODDMA.h"
+
 
 class SimulationEngine : public Task
 {
@@ -51,7 +53,8 @@ private:
 	Rocket* rocket;
 	PhysicsEngine* physics;
 	TrajectoryPrediction* trajectoryPrediction;
-	
+	SkyBoxRenderer* skyboxRenderer;
+
 	// rocket and camera orientation:
 	float angle = 30.0;
 	float dangle = 60.0;
@@ -63,7 +66,7 @@ private:
 	Camera* camera;
 	Window* mainWindow;
 	Gui* gui;
-
+	
 	// task and communication:
 	CommunicationBus* communicationBus;
 	VMachine* vm;

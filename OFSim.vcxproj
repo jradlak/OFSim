@@ -41,6 +41,7 @@
     <ClInclude Include="renderer\Renderable.h" />
     <ClInclude Include="engine\SimulationEngine.h" />
     <ClInclude Include="engine\Task.h" />
+    <ClInclude Include="renderer\SkyBoxRenderer.h" />
     <ClInclude Include="renderer\TrajectoryPrediction.h" />
     <ClInclude Include="world\SolarSystemConstants.h" />
     <ClInclude Include="world\solar_system\Moon.h" />
@@ -85,6 +86,7 @@
     <ClCompile Include="renderer\implementation\Camera.cpp" />
     <ClCompile Include="engine\implementation\SimulationEngine.cpp" />
     <ClCompile Include="renderer\implementation\TrajectoryPrediction.cpp" />
+    <ClCompile Include="renderer\implementation\SkyBoxRenderer.cpp" />
     <ClCompile Include="world\solar_system\implementation\Moon.cpp" />
     <ClCompile Include="world\solar_system\implementation\Planet.cpp" />
     <ClCompile Include="world\solar_system\implementation\SolarSystem.cpp" />
@@ -129,14 +131,28 @@
     <None Include="shaders\model3d_shader_vs.glsl" />
     <None Include="shaders\planet_textured_shader_fs.glsl" />
     <None Include="shaders\planet_textured_shader_vs.glsl" />
+    <None Include="shaders\skybox_fs.glsl" />
+    <None Include="shaders\skybox_vs.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="textures\8k_earth_daymap.jpg" />
     <Image Include="textures\8k_stars_milky_way.jpg" />
+    <Image Include="textures\back.jpg" />
+    <Image Include="textures\back.png" />
+    <Image Include="textures\bottom.jpg" />
+    <Image Include="textures\bottom.png" />
     <Image Include="textures\earth2048.bmp" />
+    <Image Include="textures\front.jpg" />
+    <Image Include="textures\front.png" />
     <Image Include="textures\fwd.png" />
+    <Image Include="textures\left.jpg" />
+    <Image Include="textures\left.png" />
     <Image Include="textures\pause.png" />
+    <Image Include="textures\right.jpg" />
+    <Image Include="textures\right.png" />
     <Image Include="textures\stop.png" />
+    <Image Include="textures\top.jpg" />
+    <Image Include="textures\top.png" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

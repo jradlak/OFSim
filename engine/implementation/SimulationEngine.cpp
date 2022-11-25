@@ -53,6 +53,9 @@ SimulationEngine::SimulationEngine()
 	initialPhysicsInformation();
 	initialOrbitalInformation();
 
+	skyboxRenderer = new SkyBoxRenderer();
+	skyboxRenderer->init();
+
 	// register renderables:
 	renderables.push_back(solarSystem);
 	renderables.push_back(rocket);
@@ -191,6 +194,11 @@ void SimulationEngine::mainLoop()
 			trajectoryPrediction->render(projection, view, SolarSystemConstants::lightPos);
 		}
 
+		if (physics->getAltitude() > 21.0)
+		{
+			skyboxRenderer->render(projection, view, camera);
+		}
+
 		// render HUD:
 		// TODO: extract to separate method!
 		gui->renderMenuBar();
@@ -212,7 +220,7 @@ void SimulationEngine::mainLoop()
 
 		lastAltitudeDirection = altitudeDirection;
 		lastAltitude = physics->getAltitude();
-
+	
 		// sync and swap:
 		syncFramerate(currentTime(), MS_PER_UPDATE);
 		mainWindow->swapBuffers();
@@ -404,6 +412,8 @@ SimulationEngine::~SimulationEngine()
 	delete communicationBus;
 	delete telemetryCollector;
 	delete trajectoryPrediction;
+
+	delete skyboxRenderer;
 }
 
 void keyPressedCallback(int keyPressed)

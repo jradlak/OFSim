@@ -189,6 +189,9 @@
     <ClInclude Include="renderer\TrajectoryPrediction.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
+    <ClInclude Include="renderer\SkyBoxRenderer.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="renderer\implementation\Window.cpp">
@@ -314,6 +317,9 @@
     <ClCompile Include="renderer\implementation\TrajectoryPrediction.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
+    <ClCompile Include="renderer\implementation\SkyBoxRenderer.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\planet_shader_fs.glsl">
@@ -347,6 +353,8 @@
     <None Include="shaders\ball_shader_vs.glsl" />
     <None Include="shaders\planet_textured_shader_vs.glsl" />
     <None Include="shaders\planet_textured_shader_fs.glsl" />
+    <None Include="shaders\skybox_vs.glsl" />
+    <None Include="shaders\skybox_fs.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="textures\fwd.png">
@@ -365,6 +373,42 @@
       <Filter>Pliki zasobów</Filter>
     </Image>
     <Image Include="textures\earth2048.bmp">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="textures\back.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="textures\bottom.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="textures\front.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="textures\left.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="textures\right.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="textures\top.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="textures\back.jpg">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="textures\bottom.jpg">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="textures\front.jpg">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="textures\left.jpg">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="textures\right.jpg">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="textures\top.jpg">
       <Filter>Pliki zasobów</Filter>
     </Image>
   </ItemGroup>
