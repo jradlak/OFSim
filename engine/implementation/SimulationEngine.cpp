@@ -194,7 +194,7 @@ void SimulationEngine::mainLoop()
 			trajectoryPrediction->render(projection, view, SolarSystemConstants::lightPos);
 		}
 
-		if (physics->getAltitude() > 21.0)
+		if (physics->getAltitude() > 25.0)
 		{
 			skyboxRenderer->render(projection, view, camera);
 		}
@@ -202,6 +202,7 @@ void SimulationEngine::mainLoop()
 		// render HUD:
 		// TODO: extract to separate method!
 		gui->renderMenuBar();
+		gui->renderSplashScreen();
 		gui->renderFileOpenDialog();
 		gui->renderSimulationControlWindow(runningTime);
 		gui->renderCodeEditor(orbitalProgramSourceCode);
@@ -216,6 +217,8 @@ void SimulationEngine::mainLoop()
 			telemetryCollector->getAccelarationHistory(), telemetryCollector->getMaxAcceleration(), telemetryCollector->getMinAcceleration());
 		renderTelemetry(gui, rocket, physics->getAltitude(), apogeum, perygeum, physics->getAtmosphereDragForceMagnitude());
 		
+		gui->endRendering();
+
 		calcApogeumAndPerygeum();
 
 		lastAltitudeDirection = altitudeDirection;
@@ -239,7 +242,7 @@ void SimulationEngine::createGui()
 {
 	gui = new Gui();
 	gui->initialization(mainWindow);
-	gui->loadButtonTextures();
+	gui->loadTextures();
 }
 
 void SimulationEngine::loadSourceCode(std::string sourcePath)

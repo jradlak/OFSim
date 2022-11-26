@@ -45,6 +45,8 @@ public:
 	
 	void renderMenuBar();
 
+	void renderSplashScreen();
+
 	void renderFileOpenDialog();
 
 	void renderSimulationControlWindow(unsigned __int64 time);
@@ -52,6 +54,8 @@ public:
 	void renderCodeEditor(std::string& text);
 
 	void renderTelemetry(TelemetryData& telemetryData);
+	
+	void endRendering();
 
 	void plotTelemetry(
 		std::vector<double> velocityHistory, double maxVelo,
@@ -63,7 +67,7 @@ public:
 
 	void renderDiagnostics(glm::dvec3 position, glm::dvec3 rotation = glm::dvec3(0.0, 0.0, 0.0));
 
-	void loadButtonTextures();
+	void loadTextures();
 
 	void cleanUp();
 
@@ -85,6 +89,8 @@ private:
 	GLuint stop_texture = 0;	
 	GLuint fwd_texture = 0;
 
+	GLuint splashTexture = 0;
+
 	bool plaing = false;
 
 	int out_width = 0;
@@ -92,11 +98,13 @@ private:
 
 	int timeFactor = 0;
 
-	bool viewTelemetryOn = true;
-	bool viewTelemetryPlot = true;
-	bool viewCommands = true;
-	bool viewSourceCode = true;
+	bool viewSimulationControl = false;
+	bool viewTelemetryOn = false;
+	bool viewTelemetryPlot = false;
+	bool viewCommands = false;
+	bool viewSourceCode = false;
 	bool viewFileOpen = false;
+	bool viewSplashScreen = true;
 
 	std::vector<std::string> filesInDirectory;
 
