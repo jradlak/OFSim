@@ -105,7 +105,12 @@ void SimulationEngine::restart()
 }
 
 void SimulationEngine::mainLoop()
-{
+{	
+	double radius = 0.000000001;
+	double step = 0.000000001;
+
+	glm::dvec3 toTheMoon = SolarSystemConstants::moonPos;
+	bool frwd = true;
 	while (!mainWindow->shouldClose())
 	{		
 		int factor = gui->getTimeFactor();
@@ -152,15 +157,19 @@ void SimulationEngine::mainLoop()
 
 				if (trajectoryPredictionMode == false)
 				{
-					camera->updatePosition(solarSystem->pointAboveEarthSurface(30, 30, 800), rocket->getRotation());
+					//camera->updatePosition(solarSystem->pointAboveEarthSurface(30, 30, 800), rocket->getRotation());
+					//camera->updatePosition(rocket->getPosition(), rocket->getRotation());
 					trajectoryPredictionMode = true;
+					toTheMoon = rocket->getPosition() - SolarSystemConstants::moonPos;
+					radius = 0.000000001;
+					step = 0.000000001;
 				}
 				else
 				{
 					trajectoryPredictionMode = false;
-				}
+				}                                          
 			}
-			
+
 			lastKeyPressed = 0;
 		}
 
@@ -178,7 +187,25 @@ void SimulationEngine::mainLoop()
 		}
 		else 
 		{			
+			camera->setAutomaticRotation(true);			
 			//camera->processCameraRotation(3.0, 0);
+			toTheMoon = SolarSystemConstants::moonPos - rocket->getPosition();
+			if (glm::length(radius) > glm::length(SolarSystemConstants::earthPos - SolarSystemConstants::moonPos))
+			{
+				frwd = false;
+			}
+
+			camera->updatePosition(rocket->getPosition() + (toTheMoon * radius), rocket->getRotation());
+			if (frwd) 
+			{
+				radius += step;
+				step *= 1.005;
+			} 
+			else
+			{
+				radius -= step;
+				step /= 1.005;
+			}
 		}
 
 		glm::dmat4 view = camera->getViewMatrix();

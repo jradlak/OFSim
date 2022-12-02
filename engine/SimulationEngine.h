@@ -87,6 +87,7 @@ private:
 	int altitudeDirection = 1;
 
 	bool trajectoryPredictionMode = false;
+	bool cameraFreeRunMode = false;
 	std::string orbitalProgramSourceCode;
 
 	void initialPhysicsInformation();

@@ -85,7 +85,7 @@ void PhysicsEngine::updatePhysics(double deltaTime)
     glm::dvec3 velocity = rocket.getVelocity();
     glm::dvec3 position = rocket.getPosition();
 
-    glm::dvec3 gravityForceVector = glm::normalize(rocket.getPosition() - celestialBodyCenter(celestialBodySize)) * -0.00981;
+    glm::dvec3 gravityForceVector = glm::normalize(rocket.getPosition() - celestialBodyCenter(celestialBodySize)) * GConst;
 
     glm::dvec3 sumOfForces = glm::dvec3(0.0);
     for (unsigned int i = 0; i < forces.size(); i++)
@@ -118,7 +118,7 @@ void PhysicsEngine::predictTrajectory(unsigned __int64 elapsedTime)
 
     for (int index = 0; index < n; index++)
     {
-        glm::dvec3 gravityForceVector = glm::normalize(position - celestialBodyCenter(celestialBodySize)) * -0.00981;
+        glm::dvec3 gravityForceVector = glm::normalize(position - celestialBodyCenter(celestialBodySize)) * GConst;
 
         currentVelocity += gravityForceVector * deltaTime;
         position += currentVelocity * deltaTime;

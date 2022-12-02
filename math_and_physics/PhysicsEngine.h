@@ -65,6 +65,8 @@ private:
 	double celestialBodySize;
 	double atmosphereDragForceMagnitude = 0.0;
 
+	double GConst = -0.00981;
+
 	int MS_PER_UPDATE;
 
 	glm::dvec3 thrustVector;

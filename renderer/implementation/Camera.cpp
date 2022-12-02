@@ -108,9 +108,9 @@ void Camera::processMouseRotation(double xoffset, double yoffset, bool constrain
     updateCameraVectors();
 }
 
-void Camera::updatePosition(glm::dvec3 newPosition, glm::dvec3 rocketRotation)
+void Camera::updatePosition(glm::dvec3 newPosition, glm::dvec3 rocketRotation, float radius)
 {    
-    const float radius = 0.020;
+    //const float radius = 0.020;
     //rotationPosition = newPosition + glm::dvec3(0.0, 0.024, 0.0);
     double camX = cos(glm::radians(rotationAngle)) * radius;
     double camZ = sin(glm::radians(rotationAngle)) * radius;

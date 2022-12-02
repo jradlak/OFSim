@@ -22,7 +22,7 @@ enum Camera_Movement {
 // Default camera values
 const double YAW         = 30.0;
 const double PITCH       = -70.0;
-const double SPEED       = 800;
+const double SPEED       = 400;
 const double SENSITIVITY = 0.1;
 const double ZOOM        = 80.0;
 
@@ -57,7 +57,7 @@ public:
     glm::dmat4 getViewMatrix();     
     void processCameraRotation(double xoffset, double yoffset, bool constrainPitch = true);
     
-    void updatePosition(glm::dvec3 newPosition, glm::dvec3 rocketRotation);
+    void updatePosition(glm::dvec3 newPosition, glm::dvec3 rocketRotation, float radius = 0.020);
 
     void processKeyboard(Camera_Movement direction, double deltaTime);
     void processMouseRotation(double xoffset, double yoffset, bool constrainPitch = true);
