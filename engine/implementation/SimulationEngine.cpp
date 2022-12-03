@@ -180,6 +180,7 @@ void SimulationEngine::mainLoop()
 					else
 					{
 						presentationMode = false;
+						gui->restoreWindows();
 					}					
 				}
 			}
@@ -236,9 +237,10 @@ void SimulationEngine::mainLoop()
 		if (trajectoryPredictionMode || presentationMode)
 		{
 			trajectoryPrediction->render(projection, view, SolarSystemConstants::lightPos);
+			gui->renderPresentationModeInfo(0.0);
 		}
 
-		if (physics->getAltitude() > 25.0)
+		if (physics->getAltitude() > 27.0)
 		{
 			skyboxRenderer->render(projection, view, camera);
 		}

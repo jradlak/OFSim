@@ -55,6 +55,10 @@ public:
 
 	void renderTelemetry(TelemetryData& telemetryData);
 	
+	void renderPresentationModeInfo(double distance);
+
+	void restoreWindows();
+
 	void endRendering();
 
 	void plotTelemetry(
@@ -105,7 +109,7 @@ private:
 	bool viewSourceCode = false;
 	bool viewFileOpen = false;
 	bool viewSplashScreen = true;
-
+	
 	std::vector<std::string> filesInDirectory;
 
 	MenuPosition lastClickedMenu = MenuPosition::NONE;
