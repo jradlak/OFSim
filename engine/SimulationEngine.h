@@ -86,8 +86,9 @@ private:
 	int lastAltitudeDirection = 1;
 	int altitudeDirection = 1;
 
-	bool trajectoryPredictionMode = false;
-	bool cameraFreeRunMode = false;
+	bool trajectoryPredictionMode = false;	
+	bool presentationMode = false;
+
 	std::string orbitalProgramSourceCode;
 
 	void initialPhysicsInformation();

@@ -145,7 +145,7 @@ void SimulationEngine::mainLoop()
 			physics->updateKeyPressed(lastKeyPressed);
 			lag = physics->calculateForces(lag);
 					
-			if (lastKeyPressed == 77)
+			if (lastKeyPressed == 77 || lastKeyPressed == 75) // m, k
 			{
 				camera->setAutomaticRotation(false);
 				physics->predictTrajectory(runningTime);
@@ -155,19 +155,33 @@ void SimulationEngine::mainLoop()
 					physics->getTrajectoryPredictionZ(),
 					telemetryCollector->getTelemetryHistory());
 
-				if (trajectoryPredictionMode == false)
+				if (lastKeyPressed == 77) // m
 				{
-					//camera->updatePosition(solarSystem->pointAboveEarthSurface(30, 30, 800), rocket->getRotation());
-					//camera->updatePosition(rocket->getPosition(), rocket->getRotation());
-					trajectoryPredictionMode = true;
-					toTheMoon = rocket->getPosition() - SolarSystemConstants::moonPos;
-					radius = 0.000000001;
-					step = 0.000000001;
+					if (trajectoryPredictionMode == false)
+					{
+						camera->updatePosition(solarSystem->pointAboveEarthSurface(30, 30, 800), rocket->getRotation());						
+						trajectoryPredictionMode = true;						
+					}
+					else
+					{
+						trajectoryPredictionMode = false;
+					}
 				}
-				else
+
+				if (lastKeyPressed == 75) // k
 				{
-					trajectoryPredictionMode = false;
-				}                                          
+					if (presentationMode == false)
+					{
+						toTheMoon = rocket->getPosition() - SolarSystemConstants::moonPos;
+						radius = 0.000000001;
+						step = 0.000000001;
+						presentationMode = true;
+					}
+					else
+					{
+						presentationMode = false;
+					}					
+				}
 			}
 
 			lastKeyPressed = 0;
@@ -179,7 +193,7 @@ void SimulationEngine::mainLoop()
 		gui->newFrame();
 
 		// camera/view transformation:
-		if (!trajectoryPredictionMode)
+		if (!trajectoryPredictionMode && !presentationMode)
 		{
 			camera->setAutomaticRotation(true);
 			camera->updatePosition(rocket->getPosition(), rocket->getRotation());
@@ -187,24 +201,27 @@ void SimulationEngine::mainLoop()
 		}
 		else 
 		{			
-			camera->setAutomaticRotation(true);			
-			//camera->processCameraRotation(3.0, 0);
-			toTheMoon = SolarSystemConstants::moonPos - rocket->getPosition();
-			if (glm::length(radius) > glm::length(SolarSystemConstants::earthPos - SolarSystemConstants::moonPos))
+			if (presentationMode)
 			{
-				frwd = false;
-			}
+				camera->setAutomaticRotation(true);
+				//camera->processCameraRotation(3.0, 0);
+				toTheMoon = SolarSystemConstants::moonPos - rocket->getPosition();
+				if (radius > 1.1)
+				{
+					frwd = false;
+				}
 
-			camera->updatePosition(rocket->getPosition() + (toTheMoon * radius), rocket->getRotation());
-			if (frwd) 
-			{
-				radius += step;
-				step *= 1.005;
-			} 
-			else
-			{
-				radius -= step;
-				step /= 1.005;
+				camera->updatePosition(rocket->getPosition() + (toTheMoon * radius), rocket->getRotation());
+				if (frwd)
+				{
+					radius += step;
+					step *= 1.005;
+				}
+				else
+				{
+					radius -= step;
+					step /= 1.008;
+				}
 			}
 		}
 
@@ -216,7 +233,7 @@ void SimulationEngine::mainLoop()
 			renderables[i]->render(projection, view, SolarSystemConstants::lightPos);
 		}
 
-		if (trajectoryPredictionMode)
+		if (trajectoryPredictionMode || presentationMode)
 		{
 			trajectoryPrediction->render(projection, view, SolarSystemConstants::lightPos);
 		}

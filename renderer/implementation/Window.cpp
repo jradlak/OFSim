@@ -84,6 +84,11 @@ Window::Window(Camera& _camera, unsigned int _width, unsigned int _height)
             processInputCall((int)GLFW_KEY_M);
         }
 
+        if (glfwGetKey(mainWindow, GLFW_KEY_K) == GLFW_PRESS)
+        {
+            processInputCall((int)GLFW_KEY_K);
+        }
+
         if (glfwGetKey(mainWindow, GLFW_KEY_W) == GLFW_PRESS)
             camera.processKeyboard(FORWARD, deltaTime);
         if (glfwGetKey(mainWindow, GLFW_KEY_S) == GLFW_PRESS)
