@@ -207,22 +207,19 @@ void SimulationEngine::mainLoop()
 				camera->setAutomaticRotation(true);
 				//camera->processCameraRotation(3.0, 0);
 				toTheMoon = SolarSystemConstants::moonPos - rocket->getPosition();
-				if (radius > 1.1)
-				{
-					frwd = false;
-				}
-
+				
 				camera->updatePosition(rocket->getPosition() + (toTheMoon * radius), rocket->getRotation());
-				if (frwd)
-				{
-					radius += step;
+				
+				if (radius < 0.52)
+				{ 
 					step *= 1.005;
 				}
 				else
 				{
-					radius -= step;
-					step /= 1.008;
+					step /= 1.005;
 				}
+
+				radius += step;							
 			}
 		}
 
@@ -237,7 +234,9 @@ void SimulationEngine::mainLoop()
 		if (trajectoryPredictionMode || presentationMode)
 		{
 			trajectoryPrediction->render(projection, view, SolarSystemConstants::lightPos);
-			gui->renderPresentationModeInfo(0.0);
+			
+			double distance = glm::length(camera->position - rocket->getPosition());
+			gui->renderPresentationModeInfo(distance);
 		}
 
 		if (physics->getAltitude() > 27.0)
