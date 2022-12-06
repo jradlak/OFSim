@@ -144,7 +144,13 @@ void SimulationEngine::mainLoop()
 		{	
 			physics->updateKeyPressed(lastKeyPressed);
 			lag = physics->calculateForces(lag);
-					
+			
+			if (gui->getLastClickedMenu() == MenuPosition::FILE_SAVE)
+			{
+				saveSourceCode(SOURCE_CODE_FILE_NAME);
+				gui->clearLastClickedMenu();
+			}
+
 			if (lastKeyPressed == 77 || lastKeyPressed == 75) // m, k
 			{
 				camera->setAutomaticRotation(false);
@@ -235,8 +241,11 @@ void SimulationEngine::mainLoop()
 		{
 			trajectoryPrediction->render(projection, view, SolarSystemConstants::lightPos);
 			
-			double distance = glm::length(camera->position - rocket->getPosition());
-			gui->renderPresentationModeInfo(distance);
+			if (presentationMode)
+			{
+				double distance = glm::length(camera->position - rocket->getPosition());
+				gui->renderPresentationModeInfo(distance);
+			}
 		}
 
 		if (physics->getAltitude() > 27.0)
