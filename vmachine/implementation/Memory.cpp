@@ -46,7 +46,8 @@ double Memory::fetchDWord(unsigned int addr)
 void Memory::storeDWord(unsigned int addr, double dword)
 {
 	assertConditions(addr + 8);
-	unsigned char* result = static_cast<unsigned char*>(static_cast<void*>(&dword));
+	unsigned char* result 
+		= static_cast<unsigned char*>(static_cast<void*>(&dword));
 	memcopy(result, mem, 0, addr, 8);
 	leaseSemaphore();
 }

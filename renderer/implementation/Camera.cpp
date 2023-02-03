@@ -104,7 +104,6 @@ void Camera::processMouseRotation(double xoffset, double yoffset, bool constrain
         }
     }
     
-
     updateCameraVectors();
 }
 

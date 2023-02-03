@@ -26,7 +26,7 @@ public:
 	void fst(unsigned char* args);
 	void bst(unsigned char* args);
 
-	// arythmetical operations:
+	// arithmetical operations:
 	void add(unsigned char* args);
 	void fadd(unsigned char* args);
 	void sub(unsigned char* args);
@@ -45,7 +45,7 @@ public:
 	void vshl(unsigned char* args);
 	void vshr(unsigned char* args);
 
-	// comparisions and conditional jumps:
+	// comparisons and conditional jumps:
 	void cmp(unsigned char* args);
 	void fcmp(unsigned char* args);
 
