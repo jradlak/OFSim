@@ -3,8 +3,7 @@
 Planet::Planet(double _size, const glm::dvec3& _position)
 {
 	celestialBody = new CelestialBody(CelestialBodyType::planet, "planet_textured_shader", _size, _position, true);
-	celestialBody->init(glm::dvec3(0.25f, 0.75f, 0.55f), 9.81, "textures/8k_earth_daymap.jpg");
-	//celestialBody->init(glm::dvec3(0.25f, 0.75f, 0.55f), 9.81, "textures/earth2048.bmp");
+	celestialBody->init(glm::dvec3(0.25f, 0.75f, 0.55f), 9.81, "assets/textures/8k_earth_daymap.jpg");	
 }
 
 void Planet::render(glm::dmat4 projection, glm::dmat4 view, const glm::dvec3 lightPos)
@@ -28,7 +27,7 @@ void Planet::init(int number, double _angle, double _dangle, glm::dvec3 _rotatio
 	cloudsAndTrees->provideInitialRotation(_rotation);
 
 	glm::dvec3 launchpadPos = pointAboveTheSurface(_angle, _dangle, -0.187);
-	this->launchpad = new Launchpad("model3d_shader", "models/launchpad2.obj", launchpadPos, 0.05);
+	this->launchpad = new Launchpad("model3d_shader", "assets/models/launchpad2.obj", launchpadPos, 0.05);
 	launchpad->updateRotation(_rotation);
 }
 

@@ -2,7 +2,7 @@
 
 ModelRenderer::ModelRenderer(std::string shaderName, std::string modelPath)
 {
-	shader = new Shader(("shaders/" + shaderName + "_vs.glsl").c_str(), ("shaders/" + shaderName + "_fs.glsl").c_str());
+	shader = new Shader(("src/shaders/" + shaderName + "_vs.glsl").c_str(), ("src/shaders/" + shaderName + "_fs.glsl").c_str());
 	objectModel = new Model(modelPath);
 	logDepthBufFC = 2.0 / log(150000000000000000.0 + 1.0) / 0.69315;
 }

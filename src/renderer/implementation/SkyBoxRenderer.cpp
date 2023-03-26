@@ -2,7 +2,7 @@
 
 SkyBoxRenderer::SkyBoxRenderer()
 {
-    skyboxShader = new Shader("shaders/skybox_vs.glsl", "shaders/skybox_fs.glsl");    
+    skyboxShader = new Shader("src/shaders/skybox_vs.glsl", "src/shaders/skybox_fs.glsl");    
 }
 
 void SkyBoxRenderer::init()
@@ -60,12 +60,12 @@ void SkyBoxRenderer::init()
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 
-    faces.push_back("textures/right.jpg");
-    faces.push_back("textures/left.jpg");
-    faces.push_back("textures/top.jpg");
-    faces.push_back("textures/bottom.jpg");
-    faces.push_back("textures/front.jpg");
-    faces.push_back("textures/back.jpg");
+    faces.push_back("assets/textures/right.jpg");
+    faces.push_back("assets/textures/left.jpg");
+    faces.push_back("assets/textures/top.jpg");
+    faces.push_back("assets/textures/bottom.jpg");
+    faces.push_back("assets/textures/front.jpg");
+    faces.push_back("assets/textures/back.jpg");
 
     cubemapTexture = loadCubemap();
     skyboxShader->use();

@@ -1,6 +1,6 @@
 #include "..\SimulationEngine.h"
 
-#include "../world/SolarSystemConstants.h"
+#include "../src/world/SolarSystemConstants.h"
 
 int lastKeyPressed = 0;
 void keyPressedCallback(int keyPressed);

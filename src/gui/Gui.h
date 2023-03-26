@@ -6,10 +6,10 @@
 #include <filesystem>
 namespace fs = std::filesystem;
 
-#include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
-#include "imgui_stdlib.h"
+#include "..\external_libraries\imgui\imgui.h"
+#include "..\external_libraries\imgui\imgui_impl_glfw.h"
+#include "..\external_libraries\imgui\imgui_impl_opengl3.h"
+#include "..\external_libraries\imgui\imgui_stdlib.h"
 
 #include "..\renderer\Window.h"
 
