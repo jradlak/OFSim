@@ -452,7 +452,7 @@ void SimulationEngine::syncFramerate(unsigned __int64 startTime, int ms_per_upda
 
 SimulationEngine::~SimulationEngine()
 {
-	oddma->stop();
+	oddma->stop();		
 	vm->stop();
 
 	delete mainWindow;

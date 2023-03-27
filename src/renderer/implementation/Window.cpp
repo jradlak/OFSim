@@ -77,7 +77,9 @@ Window::Window(Camera& _camera, unsigned int _width, unsigned int _height)
         lastFrame = currentFrame;
 
         if (glfwGetKey(mainWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        {
             glfwSetWindowShouldClose(mainWindow, true);
+        }
 
         if (glfwGetKey(mainWindow, GLFW_KEY_M) == GLFW_PRESS)
         {

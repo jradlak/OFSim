@@ -39,7 +39,7 @@ public:
 	void takeANap();
 
 	Memory* getMemory() { return memory; }
-	
+		
 	~VMachine();
 
 private:
@@ -58,8 +58,8 @@ private:
 	unsigned int pc = 0;
 	unsigned int oldpc = 0;
 
-	bool shouldStop = false;
-	bool pause = true;	
+	bool shouldStop = true;
+	bool pause = false;	
 
 	bool threadFinished = 0;
 };
