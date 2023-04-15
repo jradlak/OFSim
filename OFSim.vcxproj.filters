@@ -78,9 +78,6 @@
     <ClInclude Include="src\vmachine\Memory.h">
       <Filter>Pliki nagłówkowe\vm</Filter>
     </ClInclude>
-    <ClInclude Include="UnitTests.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\vmachine\VMachine.h">
       <Filter>Pliki nagłówkowe\vm</Filter>
     </ClInclude>
@@ -217,9 +214,6 @@
     </ClCompile>
     <ClCompile Include="src\world\implementation\Smoke.cpp">
       <Filter>Pliki źródłowe\world</Filter>
-    </ClCompile>
-    <ClCompile Include="UnitTests.cpp">
-      <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\vmachine\implementation\Memory.cpp">
       <Filter>Pliki źródłowe\vm</Filter>

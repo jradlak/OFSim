@@ -67,7 +67,6 @@
     <ClInclude Include="src\world\solar_system\CelestialBody.h" />
     <ClInclude Include="src\vmachine\Translator.h" />
     <ClInclude Include="src\renderer\TriangleGeometry.h" />
-    <ClInclude Include="UnitTests.h" />
     <ClInclude Include="src\vmachine\VMachine.h" />
     <ClInclude Include="src\renderer\Window.h" />
   </ItemGroup>
@@ -109,7 +108,6 @@
     <ClCompile Include="src\world\implementation\Sphere.cpp" />
     <ClCompile Include="src\vmachine\implementation\Translator.cpp" />
     <ClCompile Include="src\renderer\implementation\TriangleGeometry.cpp" />
-    <ClCompile Include="UnitTests.cpp" />
     <ClCompile Include="src\vmachine\implementation\VMachine.cpp" />
     <ClCompile Include="src\renderer\implementation\Window.cpp" />
     <ClCompile Include="src\world\implementation\Launchpad.cpp" />
