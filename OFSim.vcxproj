@@ -22,6 +22,7 @@
     <ClInclude Include="..\imgui\misc\cpp\imgui_stdlib.h" />
     <ClInclude Include="src\engine\TelemetryCollector.h" />
     <ClInclude Include="src\gui\Gui.h" />
+    <ClInclude Include="src\gui\i18n.h" />
     <ClInclude Include="src\gui\ImageUtils.h" />
     <ClInclude Include="src\engine\TelemetryData.h" />
     <ClInclude Include="external_libraries\imgui\imconfig.h" />
@@ -82,6 +83,7 @@
     <ClCompile Include="external_libraries\imgui\imgui_stdlib.cpp" />
     <ClCompile Include="external_libraries\imgui\imgui_tables.cpp" />
     <ClCompile Include="external_libraries\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="src\gui\implementation\i18n.cpp" />
     <ClCompile Include="src\renderer\implementation\Camera.cpp" />
     <ClCompile Include="src\engine\implementation\SimulationEngine.cpp" />
     <ClCompile Include="src\renderer\implementation\TrajectoryPrediction.cpp" />
