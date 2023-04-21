@@ -29,30 +29,38 @@ void i18n::initLabels()
 	enLabels[menu_manual] = "Operation manual";
 	plLabels[menu_about] = "O programie...";
 	enLabels[menu_about] = "About...";
+	plLabels[splash_info] = "Symulator Lotów Orbitalnych";
+	enLabels[splash_info] = "Orbital Flight Simulator";
+	plLabels[splash_version] = "Wersja: 0.21.1 alpha";
+	enLabels[splash_version] = "Version: 0.21.1 alpha";
+	plLabels[dialog_title] = "Wczytaj kod zrodlowy programu lotu";
+	enLabels[dialog_title] = "Load the source code of the flight program";
+	plLabels[dialog_directory] = "Katalog: ";
+	enLabels[dialog_directory] = "Directory: ";
+	plLabels[dialog_load] = "Wczytaj";
+	enLabels[dialog_load] = "Load";
+	plLabels[dialog_file_list] = "Lista plików: ";
+	enLabels[dialog_file_list] = "List of files: ";
+	plLabels[dialog_cancel] = "Anuluj";
+	enLabels[dialog_cancel] = "Cancel";
+	plLabels[sim_panel_title] = "Kontrola symulacji";
+	enLabels[sim_panel_title] = "Simulation control panel";
+	plLabels[sim_panel_clock] = "Zegar: ";
+	enLabels[sim_panel_clock] = "Clock: ";
+	plLabels[sim_panel_time_compression] = "Kompresja czasu: ";
+	enLabels[sim_panel_time_compression] = "Time compression: ";
+	plLabels[code_editor_title] = "Edytor kodu zrodlowego programu lotu";
+	enLabels[code_editor_title] = "Flight program source code editor";
+	plLabels[telemetry_title] = "Telemetria";
+	enLabels[telemetry_title] = "Telemetry";
+	plLabels[telemetry_altitude] = "Wysokoœæ punktu widzenia: ";
+	enLabels[telemetry_altitude] = "Altitude: ";	
+	plLabels[telemetry_mass] = "Masa rakiety: ";
+	enLabels[telemetry_mass] = "Mass of the rocket: ";
+	plLabels[telemetry_atm_press] = "Cisnienie dynamiczne atmosfery: ";
+	enLabels[telemetry_atm_press] = "Dynamic atmospheric pressure: ";
 
 	/*
-	menu_new,
-	menu_open,
-	menu_save,
-	menu_close,
-	menu_view,
-	menu_telemetry_data,
-	menu_telemetry_plots,
-	menu_command_history,
-	menu_program_source_code,
-	menu_manual,
-	menu_about,
-
-	splash_info,
-	splash_version,
-	splash_author,
-
-	dialog_title,
-	dialog_directory,
-	dialog_load,
-	dialog_file_list,
-	dialog_cancel,
-
 	sim_panel_title,
 	sim_panel_clock,
 	sim_panel_time_compression,
