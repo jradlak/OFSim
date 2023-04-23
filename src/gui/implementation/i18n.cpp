@@ -59,41 +59,56 @@ void i18n::initLabels()
 	enLabels[telemetry_mass] = "Mass of the rocket: ";
 	plLabels[telemetry_atm_press] = "Cisnienie dynamiczne atmosfery: ";
 	enLabels[telemetry_atm_press] = "Dynamic atmospheric pressure: ";
+	plLabels[telemetry_velocity] = "Predkosc rakiety: ";
+	enLabels[telemetry_velocity] = "Velocity: ";
+	plLabels[telemetry_position] = "Pozycja rakiety: ";
+	enLabels[telemetry_position] = "Position: ";
+	plLabels[telemetry_perigee] = "Perygeum: ";
+	enLabels[telemetry_perigee] = "Perigee: ";
+	plLabels[telemetry_apogee] = "Apogeum: ";
+	enLabels[telemetry_apogee] = "Apogee: ";
+	plLabels[telemetry_plots_title] = "Wykresy telemetrii";
+	enLabels[telemetry_plots_title] = "Telemetry plots";
+	plLabels[telemetry_plots_velocity] = "Predkosc";
+	enLabels[telemetry_plots_velocity] = "Velocity";
+	plLabels[telemetry_plots_delta_v] = "Delta-v";
+	enLabels[telemetry_plots_delta_v] = "Delta-v";
+	plLabels[telemetry_plots_altitude] = "Wysokosc";
+	enLabels[telemetry_plots_altitude] = "Altitude";
+	plLabels[telemetry_plots_atm_press] = "Cisn. atm.";
+	enLabels[telemetry_plots_atm_press] = "Atm. pressure";
+	plLabels[presentation_title] = "Tryb prezentacji - podroz na Ksiezyc";
+	enLabels[presentation_title] = "Presentation mode - a journey to the Moon";
+	plLabels[presentation_distance] = "Odleglosc od rakiety: ";
+	enLabels[presentation_distance] = "Distance form the rocket: ";	
+	plLabels[commands_title] = "Wykonane komendy";
+	enLabels[commands_title] = "Executed commands";
+	plLabels[commands_thrust_change] = "zmiana wartosci ciagu: ";
+	enLabels[commands_thrust_change] = "thrust magnitude change: ";
+	plLabels[commands_thrust_direction_x] = "zmiana kierunku ciagu w osi X: ";
+	enLabels[commands_thrust_direction_x] = "thrust direction X change: ";
+	plLabels[commands_thrust_direction_y] = "zmiana kierunku ciagu w osi Y: ";
+	enLabels[commands_thrust_direction_y] = "thrust direction Y change: ";
+	plLabels[commands_thrust_direction_z] = "zmiana kierunku ciagu w osi Z: ";
+	enLabels[commands_thrust_direction_z] = "thrust direction Z change: ";
+	plLabels[commands_thrust_rotation_x] = "zmiana rotacji zyroskopowej w osi X: ";
+	enLabels[commands_thrust_rotation_x] = "change gyroscopic rotation in X axis: ";
+	plLabels[commands_thrust_rotation_y] = "zmiana rotacji zyroskopowej w osi Y: ";
+	enLabels[commands_thrust_rotation_y] = "change gyroscopic rotation in Y axis: ";
+	plLabels[commands_thrust_rotation_z] = "zmiana rotacji zyroskopowej w osi Z: ";
+	enLabels[commands_thrust_rotation_z] = "change gyroscopic rotation in Z axis: ";
 
-	/*
-	sim_panel_title,
-	sim_panel_clock,
-	sim_panel_time_compression,
+	plLabels[splash_info] =
+		"Idea programu jest symulowanie lotow balistycznych (w tym orbitalnych) rakiety w polu grawitacyjnym planety o parametrach zblizonych do ziemskich."
+		" Rakieta jest kierowana przez specjalnie zaprojektowany komputer wirtualny (maszyne wirtualna)."
+		" Sterowanie rakieta polega na pisaniu programow w jezyku asemblera maszyny wirtualnej."
+		" Program asemblera ma dostep do pamieci komputera, w ktorej przechowywane sa dane telemetryczne lotu rakiety"
+		" Na podstawie tych danych program moze wydawac rakiecie komendy takie jak: zmiana kierunku i dlugosci wektora ciagu,"
+		" sterowanie zestawem zyroskopow obrotowych na orbicie, itp.";
 
-	code_editor_title,
-
-	telemetry_title,
-	telemetry_altitude,
-	telemetry_mass,
-	telemetry_atm_press,
-	telemetry_velocity,
-	telemetry_position,
-	telemetry_perigee,
-	telemetry_apogee,
-
-	telemetry_plots_title,
-	telemetry_plots_velocity,
-	telemetry_plots_delta_v,
-	telemetry_plots_altitude,
-	telemetry_plots_atm_press,
-
-	presentation_title,
-	presentation_distance,
-
-	commands_title,
-	commands_thrust_change,
-	commands_thrust_direction_x,
-	commands_thrust_direction_y,
-	commands_thrust_direction_z,
-	commands_thrust_rotation_x,
-	commands_thrust_rotation_y,
-	commands_thrust_rotation_z
-	*/
-
-	//plLabels[]
+	enLabels[splash_info] = "The idea of the program is to simulate ballistic flights (including orbital) of a rocket in the gravitational field of a planet with parameters similar to Earth."
+		"The rocket is controlled by a specially designed virtual computer(virtual machine)."
+		"Rocket control involves writing programs in the assembly language of the virtual machine."
+		"The assembly program has access to the computer's memory, where telemetry data of the rocket's flight is stored.Based on this data,"
+		" the program can issue commands to the rocket, such as changing the direction and length of the thrust vector, controlling a set of rotating gyroscopes in orbit, etc.";	
 }
