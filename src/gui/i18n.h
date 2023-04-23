@@ -19,6 +19,7 @@ enum Label {
 	menu_manual,
 	menu_about,
 
+	splash_title,
 	splash_info,
 	splash_version,
 	splash_author,
@@ -63,18 +64,22 @@ enum Label {
 	commands_thrust_rotation_z
 };
 
-class i18n
+class I18n
 {
 public:
-	i18n() { initLabels(); }
+	I18n() { initLabels(); }
 
-	std::string translate(Label label, Language lang);
-		 
-	~i18n() {}
+	const char* t(Label label);
+	const char* translate(Label label, Language lang);
+	void switchLanguage(Language newLanguage) { currentLanguage = newLanguage; }
+
+	~I18n() {}
 
 private:
 	std::map<Label, std::string> plLabels;
 	std::map<Label, std::string> enLabels;
+
+	Language currentLanguage = PL;
 
 	void initLabels();
 };

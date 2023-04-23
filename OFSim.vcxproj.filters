@@ -189,7 +189,7 @@
     <ClInclude Include="src\renderer\SkyBoxRenderer.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\gui\i18n.h">
+    <ClInclude Include="src\gui\I18n.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
   </ItemGroup>
@@ -317,7 +317,7 @@
     <ClCompile Include="src\renderer\implementation\SkyBoxRenderer.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\gui\implementation\i18n.cpp">
+    <ClCompile Include="src\gui\implementation\I18n.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>
@@ -346,7 +346,6 @@
     <None Include="src\orbital_programs\ballisticProgram.oasm">
       <Filter>Pliki zasobów</Filter>
     </None>
-    <None Include="assimp-vc142-mtd.dll" />
     <None Include="src\shaders\model3d_shader_fs.glsl" />
     <None Include="src\shaders\model3d_shader_vs.glsl" />
     <None Include="src\shaders\ball_shader_fs.glsl" />
@@ -355,6 +354,8 @@
     <None Include="src\shaders\planet_textured_shader_fs.glsl" />
     <None Include="src\shaders\skybox_vs.glsl" />
     <None Include="src\shaders\skybox_fs.glsl" />
+    <None Include="assimp-vc142-mtd.dll" />
+    <None Include="glew32.dll" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\textures\fwd.png">

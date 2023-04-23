@@ -15,6 +15,7 @@ namespace fs = std::filesystem;
 
 #include "..\engine\TelemetryData.h"
 #include "..\vmachine\RocketCommand.h"
+#include "i18n.h"
 
 enum MenuPosition {
 	FILE_NEW,
@@ -114,7 +115,10 @@ private:
 
 	MenuPosition lastClickedMenu = MenuPosition::NONE;
 	
+	I18n i18n;
+
 	std::string directory;
 	std::string selectedFile = "";
+		
 	void loadFilesInDirectory(std::string &directory);
 };
