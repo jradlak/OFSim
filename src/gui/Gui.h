@@ -119,6 +119,8 @@ private:
 
 	std::string directory;
 	std::string selectedFile = "";
-		
+	
+	int selcted_language_item = 0;
+
 	void loadFilesInDirectory(std::string &directory);
 };

@@ -16,6 +16,7 @@ enum Label {
 	menu_telemetry_plots,
 	menu_command_history,
 	menu_program_source_code,
+	menu_help,
 	menu_manual,
 	menu_about,
 
@@ -67,7 +68,11 @@ enum Label {
 class I18n
 {
 public:
-	I18n() { initLabels(); }
+	I18n() 
+	{ 
+		initLabels(); 
+		currentLanguage = PL;
+	}
 
 	const char* t(Label label);
 	const char* translate(Label label, Language lang);
@@ -79,7 +84,7 @@ private:
 	std::map<Label, std::string> plLabels;
 	std::map<Label, std::string> enLabels;
 
-	Language currentLanguage = PL;
+	Language currentLanguage;
 
 	void initLabels();
 };

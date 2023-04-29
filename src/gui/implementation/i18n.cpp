@@ -1,7 +1,8 @@
 #include "../I18n.h"
+#include <iostream>
 
 const char* I18n::t(Label label)
-{
+{	
 	return translate(label, currentLanguage);
 }
 
@@ -36,10 +37,13 @@ void I18n::initLabels()
 	enLabels[menu_command_history] = "Command history";
 	plLabels[menu_program_source_code] = "Kod zrodlowy programu lotu";
 	enLabels[menu_program_source_code] = "Flight program source code";
+	plLabels[menu_help] = "Pomoc";
+	enLabels[menu_help] = "Help";
 	plLabels[menu_manual] = "Instrukcja obs³ugi";
 	enLabels[menu_manual] = "Operation manual";
 	plLabels[menu_about] = "O programie...";
 	enLabels[menu_about] = "About...";
+
 	plLabels[splash_info] = "Symulator Lotów Orbitalnych";
 	enLabels[splash_info] = "Orbital Flight Simulator";
 	plLabels[splash_version] = "Wersja: 0.21.1 alpha";
@@ -110,6 +114,7 @@ void I18n::initLabels()
 	enLabels[commands_thrust_rotation_z] = "change gyroscopic rotation in Z axis: ";
 
 	plLabels[splash_title] = "Symulator Lotow Orbitalnych";
+	enLabels[splash_title] = "Orbital Flight Simulator";
 	plLabels[splash_info] =
 		"Idea programu jest symulowanie lotow balistycznych (w tym orbitalnych) rakiety w polu grawitacyjnym planety o parametrach zblizonych do ziemskich."
 		" Rakieta jest kierowana przez specjalnie zaprojektowany komputer wirtualny (maszyne wirtualna)."
