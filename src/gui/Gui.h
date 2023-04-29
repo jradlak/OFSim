@@ -21,6 +21,7 @@ enum MenuPosition {
 	FILE_NEW,
 	FILE_OPEN,
 	FILE_SAVE,
+	FILE_SAVE_AS,
 	FILE_EXIT,
 
 	VIEW_TELEMETRY,
@@ -47,6 +48,8 @@ public:
 	void renderMenuBar();
 
 	void renderSplashScreen();
+
+	void renderFileSaveAsDialog();
 
 	void renderFileOpenDialog();
 
@@ -109,6 +112,7 @@ private:
 	bool viewCommands = false;
 	bool viewSourceCode = false;
 	bool viewFileOpen = false;
+	bool viewFileSaveAs = false;
 	bool viewSplashScreen = true;
 	
 	std::vector<std::string> filesInDirectory;

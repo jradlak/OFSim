@@ -23,8 +23,10 @@ void I18n::initLabels()
 	enLabels[menu_new] = "New";
 	plLabels[menu_open] = "Otworz...";
 	enLabels[menu_open] = "Open...";
-	plLabels[menu_save] = "Zapisz...";
-	enLabels[menu_save] = "Save..";
+	plLabels[menu_save] = "Zapisz";
+	enLabels[menu_save] = "Save";
+	plLabels[menu_save_as] = "Zapisz jako...";
+	enLabels[menu_save_as] = "Save as...";
 	plLabels[menu_close] = "Zamknij";
 	enLabels[menu_close] = "Close";
 	plLabels[menu_view] = "Widok";
@@ -48,6 +50,7 @@ void I18n::initLabels()
 	enLabels[splash_info] = "Orbital Flight Simulator";
 	plLabels[splash_version] = "Wersja: 0.21.1 alpha";
 	enLabels[splash_version] = "Version: 0.21.1 alpha";
+
 	plLabels[dialog_title] = "Wczytaj kod zrodlowy programu lotu";
 	enLabels[dialog_title] = "Load the source code of the flight program";
 	plLabels[dialog_directory] = "Katalog: ";
@@ -58,14 +61,20 @@ void I18n::initLabels()
 	enLabels[dialog_file_list] = "List of files: ";
 	plLabels[dialog_cancel] = "Anuluj";
 	enLabels[dialog_cancel] = "Cancel";
+
+	plLabels[dialog_save_title] = "Zapisz plik jako";
+	enLabels[dialog_save_title] = "Save file as";
+
 	plLabels[sim_panel_title] = "Kontrola symulacji";
 	enLabels[sim_panel_title] = "Simulation control panel";
 	plLabels[sim_panel_clock] = "Zegar: ";
 	enLabels[sim_panel_clock] = "Clock: ";
 	plLabels[sim_panel_time_compression] = "Kompresja czasu: ";
 	enLabels[sim_panel_time_compression] = "Time compression: ";
+
 	plLabels[code_editor_title] = "Edytor kodu zrodlowego programu lotu";
 	enLabels[code_editor_title] = "Flight program source code editor";
+
 	plLabels[telemetry_title] = "Telemetria";
 	enLabels[telemetry_title] = "Telemetry";
 	plLabels[telemetry_altitude] = "Wysokoœæ punktu widzenia: ";
@@ -82,6 +91,7 @@ void I18n::initLabels()
 	enLabels[telemetry_perigee] = "Perigee: ";
 	plLabels[telemetry_apogee] = "Apogeum: ";
 	enLabels[telemetry_apogee] = "Apogee: ";
+
 	plLabels[telemetry_plots_title] = "Wykresy telemetrii";
 	enLabels[telemetry_plots_title] = "Telemetry plots";
 	plLabels[telemetry_plots_velocity] = "Predkosc";
@@ -92,12 +102,15 @@ void I18n::initLabels()
 	enLabels[telemetry_plots_altitude] = "Altitude";
 	plLabels[telemetry_plots_atm_press] = "Cisn. atm.";
 	enLabels[telemetry_plots_atm_press] = "Atm. pressure";
+
 	plLabels[presentation_title] = "Tryb prezentacji - podroz na Ksiezyc";
 	enLabels[presentation_title] = "Presentation mode - a journey to the Moon";
 	plLabels[presentation_distance] = "Odleglosc od rakiety: ";
 	enLabels[presentation_distance] = "Distance form the rocket: ";	
+
 	plLabels[commands_title] = "Wykonane komendy";
 	enLabels[commands_title] = "Executed commands";
+
 	plLabels[commands_thrust_change] = "zmiana wartosci ciagu: ";
 	enLabels[commands_thrust_change] = "thrust magnitude change: ";
 	plLabels[commands_thrust_direction_x] = "zmiana kierunku ciagu w osi X: ";

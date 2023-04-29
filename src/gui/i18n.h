@@ -10,6 +10,7 @@ enum Label {
 	menu_new,
 	menu_open,
 	menu_save,
+	menu_save_as,
 	menu_close,
 	menu_view,
 	menu_telemetry_data,
@@ -30,6 +31,9 @@ enum Label {
 	dialog_load,
 	dialog_file_list,
 	dialog_cancel,
+
+	dialog_save_title,
+	dialog_save_file_name,
 
 	sim_panel_title,
 	sim_panel_clock,
