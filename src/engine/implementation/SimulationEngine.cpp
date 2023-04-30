@@ -257,6 +257,7 @@ void SimulationEngine::mainLoop()
 		// TODO: extract to separate method!
 		gui->renderMenuBar();
 		gui->renderSplashScreen();
+		gui->renderFileSaveAsDialog();
 		gui->renderFileOpenDialog();
 		gui->renderSimulationControlWindow(runningTime);
 		gui->renderCodeEditor(orbitalProgramSourceCode);

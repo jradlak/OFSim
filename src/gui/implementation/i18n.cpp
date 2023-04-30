@@ -64,6 +64,8 @@ void I18n::initLabels()
 
 	plLabels[dialog_save_title] = "Zapisz plik jako";
 	enLabels[dialog_save_title] = "Save file as";
+	plLabels[dialog_save_file_name] = "Pelna nazwa pliku: ";
+	enLabels[dialog_save_file_name] = "Full file name: ";
 
 	plLabels[sim_panel_title] = "Kontrola symulacji";
 	enLabels[sim_panel_title] = "Simulation control panel";
