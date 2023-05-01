@@ -86,8 +86,11 @@ public:
 	MenuPosition getLastClickedMenu() { return lastClickedMenu; }
 	void clearLastClickedMenu() { lastClickedMenu = MenuPosition::NONE; }
 
+	std::string getSavedFile() { return savedFile; }
+	void clearSavedFile() { savedFile = ""; }
 	std::string getSelectedFile() { return selectedFile; }
 	void clearSelectedFile() { selectedFile = ""; }
+
 
 private:
 	GLuint play_texture = 0;
@@ -123,8 +126,9 @@ private:
 
 	std::string directory;
 	std::string selectedFile = "";
-	
+	std::string savedFile = "";
+
 	int selcted_language_item = 0;
 
-	void loadFilesInDirectory(std::string &directory);
+	void loadFilesInDirectory(std::string &directory);	
 };

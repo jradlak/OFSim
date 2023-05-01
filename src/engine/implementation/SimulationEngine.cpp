@@ -151,6 +151,11 @@ void SimulationEngine::mainLoop()
 				gui->clearLastClickedMenu();
 			}
 
+			if (gui->getLastClickedMenu() == MenuPosition::FILE_SAVE_AS)
+			{
+
+			}
+
 			if (lastKeyPressed == 77 || lastKeyPressed == 75) // m, k
 			{
 				camera->setAutomaticRotation(false);
