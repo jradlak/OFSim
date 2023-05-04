@@ -7,8 +7,10 @@
 #include "../renderer/Renderable.h"
 #include "Task.h"
 #include "TelemetryCollector.h"
+#include "FileService.h"
 #include "../renderer/Camera.h"
 #include "../renderer/Window.h"
+#include "../renderer/TrajectoryPrediction.h"
 #include "../renderer/TrajectoryPrediction.h"
 #include "../renderer/SkyBoxRenderer.h"
 #include "../gui/Gui.h"
@@ -17,7 +19,6 @@
 #include "../vmachine/CommunicationBus.h"
 #include "../vmachine/VMachine.h"
 #include "../vmachine/ODDMA.h"
-
 
 class SimulationEngine : public Task
 {
@@ -107,8 +108,7 @@ private:
 	void createGui();
 	
 	void loadSourceCode(std::string sourcePath);
-	void saveSourceCode(std::string sourcePath);
-
+	
 	void collectTelemetry();
 
 	unsigned __int64 currentTime();

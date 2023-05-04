@@ -17,11 +17,13 @@ namespace fs = std::filesystem;
 #include "..\vmachine\RocketCommand.h"
 #include "i18n.h"
 
+#include "../engine/FileService.h"
+
 enum MenuPosition {
 	FILE_NEW,
 	FILE_OPEN,
-	FILE_SAVE,
-	FILE_SAVE_AS,
+	FILE_SAVE,	
+	FILE_SAVED_AS,
 	FILE_EXIT,
 
 	VIEW_TELEMETRY,

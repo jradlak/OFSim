@@ -1,4 +1,4 @@
-#include "..\SimulationEngine.h"
+#include "../SimulationEngine.h"
 
 #include "../src/world/SolarSystemConstants.h"
 
@@ -147,13 +147,15 @@ void SimulationEngine::mainLoop()
 			
 			if (gui->getLastClickedMenu() == MenuPosition::FILE_SAVE)
 			{
-				saveSourceCode(SOURCE_CODE_FILE_NAME);
+				FileService::saveSourceCode(SOURCE_CODE_FILE_NAME, orbitalProgramSourceCode);
 				gui->clearLastClickedMenu();
 			}
 
-			if (gui->getLastClickedMenu() == MenuPosition::FILE_SAVE_AS)
+			if (gui->getLastClickedMenu() == MenuPosition::FILE_SAVED_AS)
 			{
-
+				std::string fileSaved = gui->getSavedFile();
+				FileService::saveSourceCode(fileSaved, orbitalProgramSourceCode);
+				gui->clearLastClickedMenu();
 			}
 
 			if (lastKeyPressed == 77 || lastKeyPressed == 75) // m, k
@@ -324,22 +326,6 @@ void SimulationEngine::loadSourceCode(std::string sourcePath)
 
 		sourceFile.close();
 	}	
-}
-
-void SimulationEngine::saveSourceCode(std::string sourcePath)
-{
-	if (orbitalProgramSourceCode != "")
-	{
-		std::ofstream destFile;
-		destFile.open(sourcePath, std::ios::out | std::ios::trunc);
-
-		if (destFile.is_open())
-		{
-			destFile << orbitalProgramSourceCode;
-		}
-
-		destFile.close();
-	}
 }
 
 void SimulationEngine::collectTelemetry()

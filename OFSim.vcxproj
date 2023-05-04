@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\imgui\misc\cpp\imgui_stdlib.h" />
+    <ClInclude Include="src\engine\FileService.h" />
     <ClInclude Include="src\engine\TelemetryCollector.h" />
     <ClInclude Include="src\gui\Gui.h" />
     <ClInclude Include="src\gui\I18n.h" />
@@ -73,6 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
+    <ClCompile Include="src\engine\implementation\FileService.cpp" />
     <ClCompile Include="src\engine\implementation\TelemetryCollector.cpp" />
     <ClCompile Include="src\gui\implementation\Gui.cpp" />
     <ClCompile Include="external_libraries\imgui\imgui.cpp" />
