@@ -106,9 +106,7 @@ private:
 	void syncFramerate(unsigned __int64 startTime, int ms_per_update);
 
 	void createGui();
-	
-	void loadSourceCode(std::string sourcePath);
-	
+		
 	void collectTelemetry();
 
 	unsigned __int64 currentTime();

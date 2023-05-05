@@ -15,3 +15,26 @@ void FileService::saveSourceCode(std::string sourcePath, std::string orbitalProg
 		destFile.close();
 	}
 }
+
+std::string FileService::loadSourceFile(std::string sourcePath)
+{
+	std::ifstream sourceFile;
+
+	sourceFile.open(sourcePath.c_str(), std::ios::in);
+
+	std::string orbitalProgramSourceCode = "";
+	if (sourceFile.is_open()) {
+		std::string line;
+
+		while (sourceFile)
+		{
+			std::getline(sourceFile, line, '\r');
+			sourceFile >> line;
+			orbitalProgramSourceCode += line + "\n";
+		}
+
+		sourceFile.close();
+	}
+
+	return orbitalProgramSourceCode;
+}

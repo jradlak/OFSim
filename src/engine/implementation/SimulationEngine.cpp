@@ -43,7 +43,7 @@ SimulationEngine::SimulationEngine()
 
 	// initialize GUI:
 	createGui();
-	loadSourceCode(SOURCE_CODE_FILE_NAME);
+	orbitalProgramSourceCode =  FileService::loadSourceFile(SOURCE_CODE_FILE_NAME);
 
 	// init time variables:
 	startTime = currentTime();
@@ -95,7 +95,7 @@ void SimulationEngine::restart()
 		gui->clearSelectedFile();
 	}
 
-	loadSourceCode(SOURCE_CODE_FILE_NAME);
+	orbitalProgramSourceCode = FileService::loadSourceFile(SOURCE_CODE_FILE_NAME);
 
 	initialRocketRotation();
 	initialOrbitalInformation();
@@ -305,27 +305,6 @@ void SimulationEngine::createGui()
 	gui = new Gui();
 	gui->initialization(mainWindow);
 	gui->loadTextures();
-}
-
-void SimulationEngine::loadSourceCode(std::string sourcePath)
-{
-	std::ifstream sourceFile;
-
-	sourceFile.open(sourcePath.c_str(), std::ios::in);
-
-	orbitalProgramSourceCode = "";
-	if (sourceFile.is_open()) {
-		std::string line;
-
-		while (sourceFile)
-		{
-			std::getline(sourceFile, line, '\r');
-			sourceFile >> line;
-			orbitalProgramSourceCode += line + "\n";
-		}
-
-		sourceFile.close();
-	}	
 }
 
 void SimulationEngine::collectTelemetry()
