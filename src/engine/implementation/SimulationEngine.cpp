@@ -138,10 +138,10 @@ void SimulationEngine::mainLoop()
 
 		// input
 		mainWindow->processInput();
-
-		// update physics:
+		
 		if (simulationStopped != 1) 
 		{	
+			// update physics:
 			physics->updateKeyPressed(lastKeyPressed);
 			lag = physics->calculateForces(lag);
 			
