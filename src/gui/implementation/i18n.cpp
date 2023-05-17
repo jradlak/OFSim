@@ -48,8 +48,8 @@ void I18n::initLabels()
 
 	plLabels[splash_info] = "Symulator Lotów Orbitalnych";
 	enLabels[splash_info] = "Orbital Flight Simulator";
-	plLabels[splash_version] = "Wersja: 0.21.1 alpha";
-	enLabels[splash_version] = "Version: 0.21.1 alpha";
+	plLabels[splash_version] = "Wersja: 0.21.2 alpha";
+	enLabels[splash_version] = "Version: 0.21.2 alpha";
 
 	plLabels[dialog_title] = "Wczytaj kod zrodlowy programu lotu";
 	enLabels[dialog_title] = "Load the source code of the flight program";

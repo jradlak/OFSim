@@ -61,5 +61,5 @@ private:
 	bool shouldStop = true;
 	bool pause = false;	
 
-	bool threadFinished = 0;
+	bool threadFinished = 1;
 };

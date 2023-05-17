@@ -76,6 +76,6 @@ void Registers::assertKnown(unsigned char index)
 	if (index > size)
 	{
 		std::cout << "Unknown register!!! Program must be terminated!" << std::endl;
-		//exit(0);
+		exit(0);
 	}
 }

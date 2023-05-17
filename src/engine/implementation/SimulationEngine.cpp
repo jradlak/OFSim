@@ -32,8 +32,8 @@ SimulationEngine::SimulationEngine()
 
 	// initialize and start Virtual Machine:
 	vm = new VMachine(communicationBus);
-	vm->translateSourceCode(SOURCE_CODE_FILE_NAME.c_str());
-	vm->start();
+	//vm->translateSourceCode(SOURCE_CODE_FILE_NAME.c_str());
+	//vm->start();
 
 	// initialize and start ODDMA:
 	oddma = new ODDMA(rocket, physics, vm, communicationBus);
@@ -43,7 +43,7 @@ SimulationEngine::SimulationEngine()
 
 	// initialize GUI:
 	createGui();
-	orbitalProgramSourceCode =  FileService::loadSourceFile(SOURCE_CODE_FILE_NAME);
+	//orbitalProgramSourceCode =  FileService::loadSourceFile(SOURCE_CODE_FILE_NAME);
 
 	// init time variables:
 	startTime = currentTime();
