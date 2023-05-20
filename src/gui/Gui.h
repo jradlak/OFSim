@@ -40,7 +40,7 @@ enum MenuPosition {
 class Gui
 {
 public:
-	Gui() {}
+	Gui() { i18n = I18n::getInstance(); }
 	~Gui() {}
 
 	void initialization(Window* mainWindow);
@@ -124,7 +124,7 @@ private:
 
 	MenuPosition lastClickedMenu = MenuPosition::NONE;
 	
-	I18n i18n;
+	I18n* i18n;
 
 	std::string directory;
 	std::string selectedFile = "";

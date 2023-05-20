@@ -1,3 +1,5 @@
+#pragma once
+
 #include <string>
 #include <map>
 
@@ -66,17 +68,16 @@ enum Label {
 	commands_thrust_direction_z,
 	commands_thrust_rotation_x,
 	commands_thrust_rotation_y,
-	commands_thrust_rotation_z
+	commands_thrust_rotation_z,
+
+	translate_error
 };
 
 class I18n
 {
 public:
-	I18n() 
-	{ 
-		initLabels(); 
-		currentLanguage = PL;
-	}
+	
+	static I18n* getInstance();
 
 	const char* t(Label label);
 	const char* translate(Label label, Language lang);
@@ -85,6 +86,15 @@ public:
 	~I18n() {}
 
 private:
+	I18n()
+	{
+		initLabels();
+		currentLanguage = PL;
+	}
+
+	I18n(const I18n&) = delete;
+	I18n& operator=(const I18n&) = delete;
+
 	std::map<Label, std::string> plLabels;
 	std::map<Label, std::string> enLabels;
 

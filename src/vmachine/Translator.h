@@ -11,13 +11,15 @@
 #include <cctype>
 #include <locale>
 #include <tuple>
+#include <regex>
 
 #include "Opcodes.h"
+#include "../gui/i18n.h"
 
 class Translator
 {
 public:
-	Translator() { opcodes = new Opcodes(); }
+	Translator();
 
 	void translate(const char* sourcePath);
    
@@ -33,7 +35,11 @@ private:
 	Opcodes* opcodes;
 
 	std::tuple<unsigned int, unsigned int> recognizeInstr(std::string sourceLine);
-	void translate(std::string sourceLine);
+
+	I18n* i18n = nullptr;
+	std::string translationErrors = "";
+
+	void translate(std::string sourceLine, int lineNumber);
 	void findLabel(std::string sourceLine);
 
     void trnsl_constant_to_register(std::tuple<unsigned int, unsigned int> instr, std::string line);

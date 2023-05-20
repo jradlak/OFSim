@@ -1,6 +1,18 @@
 #include "../I18n.h"
 #include <iostream>
 
+I18n* I18n::getInstance()
+{
+	static I18n* i18n;
+
+	if (i18n == nullptr)
+	{
+		i18n = new I18n();
+	}
+	
+	return i18n;
+}
+
 const char* I18n::t(Label label)
 {	
 	return translate(label, currentLanguage);
@@ -143,4 +155,8 @@ void I18n::initLabels()
 		"Rocket control involves writing programs in the assembly language of the virtual machine."
 		"The assembly program has access to the computer's memory, where telemetry data of the rocket's flight is stored.Based on this data,"
 		" the program can issue commands to the rocket, such as changing the direction and length of the thrust vector, controlling a set of rotating gyroscopes in orbit, etc.";	
+
+	plLabels[translate_error] = "Blad translacji w linii @lineNumber, nierozpoznana instrukcja: @lineTxt";
+	enLabels[translate_error] = "Translation error in line: @lineNumber, unrecognized instruction: @lineTxt";
+
 }

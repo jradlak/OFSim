@@ -4,6 +4,12 @@ static inline std::string& ltrim(std::string& s);
 static inline std::string& rtrim(std::string& s);
 static inline std::string& trim(std::string& s);
 
+Translator::Translator()
+{
+    opcodes = new Opcodes();
+    i18n = I18n::getInstance();
+}
+
 void Translator::translate(const char* sourcePath)
 {
     std::ifstream sourceFile;
@@ -25,16 +31,17 @@ void Translator::translate(const char* sourcePath)
         sourceFile.clear();
         sourceFile.seekg(0);
 
+        int lineNumber = 1;
         while (std::getline(sourceFile, line))
         {
-            translate(line);
+            translate(line, lineNumber++);
         }
 
         sourceFile.close();
     }
 }
 
-void Translator::translate(std::string sourceLine)
+void Translator::translate(std::string sourceLine, int lineNumber)
 {
     std::tuple<unsigned int, unsigned int> instr = recognizeInstr(sourceLine);
     unsigned int opcode = std::get<0>(instr);
@@ -99,6 +106,15 @@ void Translator::translate(std::string sourceLine)
             }
 
             instr_addr += dbData.length();
+        }
+        else
+        {
+            std::string errMsg = i18n->t(translate_error);
+
+            errMsg = std::regex_replace(errMsg, std::regex("@lineNumber"), std::to_string(lineNumber));
+            errMsg = std::regex_replace(errMsg, std::regex("@lineTxt"), line);
+           
+            std::cout << errMsg << "\n";
         }
     }
 }
