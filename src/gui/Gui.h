@@ -63,6 +63,8 @@ public:
 	
 	void renderPresentationModeInfo(double distance);
 
+	void renderTranslationErrors(std::string errors);
+
 	void restoreWindows();
 
 	void endRendering();
@@ -93,6 +95,8 @@ public:
 	std::string getSelectedFile() { return selectedFile; }
 	void clearSelectedFile() { selectedFile = ""; }
 
+	bool getClearTranslationErrors() { return clearTranslationErrors; }
+	void setClearTranslationErrors() { clearTranslationErrors = false; }
 
 private:
 	GLuint play_texture = 0;
@@ -119,11 +123,14 @@ private:
 	bool viewFileOpen = false;
 	bool viewFileSaveAs = false;
 	bool viewSplashScreen = true;
-	
+
+	bool clearTranslationErrors = false;
+
 	std::vector<std::string> filesInDirectory;
 
 	MenuPosition lastClickedMenu = MenuPosition::NONE;
 	
+
 	I18n* i18n;
 
 	std::string directory;

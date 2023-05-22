@@ -159,4 +159,6 @@ void I18n::initLabels()
 	plLabels[translate_error] = "Blad translacji w linii @lineNumber, nierozpoznana instrukcja: @lineTxt";
 	enLabels[translate_error] = "Translation error in line: @lineNumber, unrecognized instruction: @lineTxt";
 
+	plLabels[translation_errors_title] = "Bledy translacji programu lotu";
+	enLabels[translation_errors_title] = "Translation errors";
 }

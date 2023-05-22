@@ -70,6 +70,7 @@ enum Label {
 	commands_thrust_rotation_y,
 	commands_thrust_rotation_z,
 
+	translation_errors_title,
 	translate_error
 };
 

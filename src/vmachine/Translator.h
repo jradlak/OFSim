@@ -25,6 +25,9 @@ public:
    
     unsigned int getCodeSize() { return instr_addr; }
 
+	std::string getTranslationErrors() { return translationErrors; }
+	void clearTranslationErrors() { translationErrors = ""; }
+
     unsigned char code[64 * 512] = { }; // code buffer
 
 	~Translator() { delete opcodes; }
