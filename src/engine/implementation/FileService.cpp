@@ -1,5 +1,6 @@
 #include "../FileService.h"
 
+
 void FileService::saveSourceCode(std::string sourcePath, std::string orbitalProgramSrc)
 {
 	if (orbitalProgramSrc != "")
@@ -22,19 +23,20 @@ std::string FileService::loadSourceFile(std::string sourcePath)
 
 	sourceFile.open(sourcePath.c_str(), std::ios::in);
 
-	std::string orbitalProgramSourceCode = "";
-	if (sourceFile.is_open()) {
+	std::string orbital2 = "";
+	if (sourceFile.is_open()) 
+	{
 		std::string line;
 
 		while (sourceFile)
 		{
 			std::getline(sourceFile, line, '\r');
 			sourceFile >> line;
-			orbitalProgramSourceCode += line + "\n";
+			orbital2 += line + "\n";
 		}
 
 		sourceFile.close();
 	}
 
-	return orbitalProgramSourceCode;
+	return orbital2;
 }

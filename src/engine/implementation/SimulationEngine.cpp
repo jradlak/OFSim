@@ -157,7 +157,7 @@ void SimulationEngine::mainLoop()
 				FileService::saveSourceCode(fileSaved, orbitalProgramSourceCode);
 				gui->clearLastClickedMenu();
 			}
-
+		
 			if (gui->getLastClickedMenu() == MenuPosition::FILE_EXIT)
 			{
 				glfwSetWindowShouldClose(mainWindow->getWindow(), true);
