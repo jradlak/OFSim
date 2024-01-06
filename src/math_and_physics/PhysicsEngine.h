@@ -1,8 +1,16 @@
 #pragma once
 
+#define GLM_ENABLE_EXPERIMENTAL
+
+#include "glm/ext.hpp"
+#include "glm/gtx/string_cast.hpp"
+
+#include <glm/gtx/rotate_vector.hpp>
+#include <glm/gtx/euler_angles.hpp> 
+
 #include "Geometry.h"
-#include "..\world\solar_system\CelestialBody.h"
-#include "..\world\Rocket.h"
+#include "../world/solar_system/CelestialBody.h"
+#include "../world/Rocket.h"
 
 class PhysicsEngine
 {
@@ -14,14 +22,14 @@ public:
 		double _celestialBodySize,
 		glm::dvec3 _towards);
 
-	unsigned __int64 calculateForces(unsigned __int64 timeInterval);
+	unsigned long long calculateForces(unsigned long long timeInterval);
 
 	void updateKeyPressed(int _lastKeyPressed);
 	void updateThrustMagnitude(double newMagintude);
 	void rotateVectors(glm::dvec3 newRotation, glm::dvec3 deltaRotation);
 	void rotateRocket(glm::dvec3 deltaRotation);
 
-	void predictTrajectory(unsigned __int64 elapsedTime);
+	void predictTrajectory(unsigned long long elapsedTime);
 
 	void resetForces();
 	void reset();
@@ -29,7 +37,7 @@ public:
 	double getAltitude();
 	double getThrustMagnitude();
 
-	float* atmosphereRgb();
+	std::vector<float> atmosphereRgb();
 
 	double getAtmosphereDragForceMagnitude();
 
@@ -84,7 +92,7 @@ private:
 
 	glm::dvec3 deltaP;
 
-	double theta = 30.0; // todo: znaleŸæ wartoœci pocz¹tkowe
+	double theta = 30.0; // todo: znaleï¿½ï¿½ wartoï¿½ci poczï¿½tkowe
 	double phi = 30.0;
 
 	std::vector<double> trajectoryPredictionX;

@@ -6,15 +6,15 @@
 #include <filesystem>
 namespace fs = std::filesystem;
 
-#include "..\external_libraries\imgui\imgui.h"
-#include "..\external_libraries\imgui\imgui_impl_glfw.h"
-#include "..\external_libraries\imgui\imgui_impl_opengl3.h"
-#include "..\external_libraries\imgui\imgui_stdlib.h"
+#include "../../external_libraries/imgui/imgui.h"
+#include "../../external_libraries/imgui/imgui_impl_glfw.h"
+#include "../../external_libraries/imgui/imgui_impl_opengl3.h"
+#include "../../external_libraries/imgui/imgui_stdlib.h"
 
-#include "..\renderer\Window.h"
+#include "../renderer/Window.h"
 
-#include "..\engine\TelemetryData.h"
-#include "..\vmachine\RocketCommand.h"
+#include "../engine/TelemetryData.h"
+#include "../vmachine/RocketCommand.h"
 #include "i18n.h"
 
 #include "../engine/FileService.h"
@@ -55,7 +55,7 @@ public:
 
 	void renderFileOpenDialog();
 
-	void renderSimulationControlWindow(unsigned __int64 time);
+	void renderSimulationControlWindow(unsigned long long time);
 
 	void renderCodeEditor(std::string& text);
 
@@ -75,7 +75,7 @@ public:
 		std::vector<double> atmPressureHistory, double maxAtm,
 		std::vector<double> accelerationHistory, double maxAcc, double minAcc);
 
-	void renderCommandHistory(std::map<unsigned __int64, RocketCommand> &commandHistory);
+	void renderCommandHistory(std::map<unsigned long long, RocketCommand> &commandHistory);
 
 	void renderDiagnostics(glm::dvec3 position, glm::dvec3 rotation = glm::dvec3(0.0, 0.0, 0.0));
 
@@ -130,7 +130,6 @@ private:
 
 	MenuPosition lastClickedMenu = MenuPosition::NONE;
 	
-
 	I18n* i18n;
 
 	std::string directory;

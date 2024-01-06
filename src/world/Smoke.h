@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 #include <vector>
 
-#include "..\renderer\ObjectRenderer.h"
+#include "../renderer/ObjectRenderer.h"
 #include "Sphere.h"
 
 // TODO: use instancing

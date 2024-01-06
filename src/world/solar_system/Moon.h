@@ -1,6 +1,6 @@
 #pragma once
 
-#include "..\src\renderer\Renderable.h"
+#include "../../renderer/Renderable.h"
 #include "CelestialBody.h"
 
 class Moon : public Renderable

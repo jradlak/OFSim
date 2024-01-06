@@ -41,5 +41,5 @@ private:
 
 	double maxAtmPressure = 0;
 
-	unsigned __int64 lastTick = 0;
+	unsigned long long lastTick = 0;
 };

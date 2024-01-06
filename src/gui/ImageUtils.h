@@ -1,10 +1,7 @@
-#ifndef IMAGE_UTILS_H
-#define IMAGE_UTILS_H
+#pragma once
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
-
-#include <gl/glew.h>
+#include "../../external_libraries/glad/glad.h"
+#include "../../external_libraries/stb_image.h"
 
 class ImageUtils
 {
@@ -43,5 +40,3 @@ public:
         return true;
 	}
 };
-
-#endif

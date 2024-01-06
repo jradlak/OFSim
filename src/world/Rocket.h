@@ -6,10 +6,10 @@
 
 #include <vector>
 
-#include "..\renderer\Renderable.h"
-#include "..\renderer\ObjectRenderer.h"
-#include "..\renderer\TriangleGeometry.h"
-#include "..\renderer\ModelRenderer.h"
+#include "../renderer/Renderable.h"
+#include "../renderer/ObjectRenderer.h"
+#include "../renderer/ModelRenderer.h"
+
 #include "Smoke.h"
 
 

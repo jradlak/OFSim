@@ -1,12 +1,12 @@
 #pragma once
 
-#include <gl/glew.h>
+#include "../../external_libraries/glad/glad.h"
+#include "../../external_libraries/stb_image.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include <stb_image.h>
 #include <vector>
 #include <string>
 

@@ -1,0 +1,4 @@
+# Hashes of file build rules.
+afbdaf622ef408205a0cf7f1aa164261 CMakeFiles/copy_assets
+5d45b9b6cfbd8872fc125764351be2e1 CMakeFiles/copy_shaders
+5020dc6116e48401af2ca202b1a487dd external_libraries/glfw/src/CMakeFiles/update_mappings

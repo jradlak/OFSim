@@ -3,8 +3,8 @@
 #include <glm/glm.hpp>
 #include <string>
 
-#include "..\renderer\Renderable.h"
-#include "..\renderer\ModelRenderer.h"
+#include "../renderer/Renderable.h"
+#include "../renderer/ModelRenderer.h"
 
 class Launchpad : public Renderable
 {

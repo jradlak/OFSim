@@ -1,6 +1,7 @@
 #pragma once
 
-#include <gl/glew.h>
+#include "../../external_libraries/glad/glad.h"
+#include "../../external_libraries/stb_image.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -8,11 +9,8 @@
 
 #include <string>
 #include <vector>
-#include <stb_image.h>
-
 
 #include "Shader.h"
-
 
 class ObjectRenderer
 {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <gl/glew.h>
+#include "../../external_libraries/glad/glad.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -9,8 +9,8 @@
 #include <vector>
 #include <string>
 
-#include "..\Sphere.h"
-#include "..\src\renderer\ObjectRenderer.h"
+#include "../Sphere.h"
+#include "../../renderer/ObjectRenderer.h"
 
 enum CelestialBodyType { star, planet, moon };
 

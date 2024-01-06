@@ -1,0 +1,68 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"install"
+		],
+		"files" : 
+		[
+			"libs/assimp-src/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 455,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 461,
+				"parent" : 0
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 1,
+			"component" : "libassimp5.3.0-dev",
+			"destination" : "lib/cmake/assimp-5.3",
+			"paths" : 
+			[
+				"libs/assimp-build/generated/assimpConfig.cmake",
+				"libs/assimp-build/generated/assimpConfigVersion.cmake"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 2,
+			"component" : "libassimp5.3.0-dev",
+			"destination" : "lib/cmake/assimp-5.3",
+			"exportName" : "assimpTargets",
+			"exportTargets" : 
+			[
+				{
+					"id" : "assimp::@b1e5e54f14a398fa5c32",
+					"index" : 1
+				}
+			],
+			"paths" : 
+			[
+				"/home/jakub/c_progs/OFSim/libs/assimp-build/CMakeFiles/Export/lib/cmake/assimp-5.3/assimpTargets.cmake"
+			],
+			"type" : "export"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "/home/jakub/c_progs/OFSim/libs/assimp-build",
+		"source" : "libs/assimp-src"
+	}
+}

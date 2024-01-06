@@ -1,0 +1,164 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"INSTALL"
+		],
+		"files" : 
+		[
+			"libs/assimp-src/code/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 1400,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 1408,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 1409,
+				"parent" : 0
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 1,
+			"component" : "libassimp5.3.0-dev",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"/home/jakub/c_progs/OFSim/libs/assimp-build/lib/libassimp.a"
+			],
+			"targetId" : "assimp::@b1e5e54f14a398fa5c32",
+			"targetIndex" : 1,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 2,
+			"component" : "assimp-dev",
+			"destination" : "include/assimp",
+			"paths" : 
+			[
+				"libs/assimp-src/code/../include/assimp/anim.h",
+				"libs/assimp-src/code/../include/assimp/aabb.h",
+				"libs/assimp-src/code/../include/assimp/ai_assert.h",
+				"libs/assimp-src/code/../include/assimp/camera.h",
+				"libs/assimp-src/code/../include/assimp/color4.h",
+				"libs/assimp-src/code/../include/assimp/color4.inl",
+				"libs/assimp-build/code/../include/assimp/config.h",
+				"libs/assimp-src/code/../include/assimp/ColladaMetaData.h",
+				"libs/assimp-src/code/../include/assimp/commonMetaData.h",
+				"libs/assimp-src/code/../include/assimp/defs.h",
+				"libs/assimp-src/code/../include/assimp/cfileio.h",
+				"libs/assimp-src/code/../include/assimp/light.h",
+				"libs/assimp-src/code/../include/assimp/material.h",
+				"libs/assimp-src/code/../include/assimp/material.inl",
+				"libs/assimp-src/code/../include/assimp/matrix3x3.h",
+				"libs/assimp-src/code/../include/assimp/matrix3x3.inl",
+				"libs/assimp-src/code/../include/assimp/matrix4x4.h",
+				"libs/assimp-src/code/../include/assimp/matrix4x4.inl",
+				"libs/assimp-src/code/../include/assimp/mesh.h",
+				"libs/assimp-src/code/../include/assimp/ObjMaterial.h",
+				"libs/assimp-src/code/../include/assimp/pbrmaterial.h",
+				"libs/assimp-src/code/../include/assimp/GltfMaterial.h",
+				"libs/assimp-src/code/../include/assimp/postprocess.h",
+				"libs/assimp-src/code/../include/assimp/quaternion.h",
+				"libs/assimp-src/code/../include/assimp/quaternion.inl",
+				"libs/assimp-src/code/../include/assimp/scene.h",
+				"libs/assimp-src/code/../include/assimp/metadata.h",
+				"libs/assimp-src/code/../include/assimp/texture.h",
+				"libs/assimp-src/code/../include/assimp/types.h",
+				"libs/assimp-src/code/../include/assimp/vector2.h",
+				"libs/assimp-src/code/../include/assimp/vector2.inl",
+				"libs/assimp-src/code/../include/assimp/vector3.h",
+				"libs/assimp-src/code/../include/assimp/vector3.inl",
+				"libs/assimp-src/code/../include/assimp/version.h",
+				"libs/assimp-src/code/../include/assimp/cimport.h",
+				"libs/assimp-src/code/../include/assimp/AssertHandler.h",
+				"libs/assimp-src/code/../include/assimp/importerdesc.h",
+				"libs/assimp-src/code/../include/assimp/Importer.hpp",
+				"libs/assimp-src/code/../include/assimp/DefaultLogger.hpp",
+				"libs/assimp-src/code/../include/assimp/ProgressHandler.hpp",
+				"libs/assimp-src/code/../include/assimp/IOStream.hpp",
+				"libs/assimp-src/code/../include/assimp/IOSystem.hpp",
+				"libs/assimp-src/code/../include/assimp/Logger.hpp",
+				"libs/assimp-src/code/../include/assimp/LogStream.hpp",
+				"libs/assimp-src/code/../include/assimp/NullLogger.hpp",
+				"libs/assimp-src/code/../include/assimp/cexport.h",
+				"libs/assimp-src/code/../include/assimp/Exporter.hpp",
+				"libs/assimp-src/code/../include/assimp/DefaultIOStream.h",
+				"libs/assimp-src/code/../include/assimp/DefaultIOSystem.h",
+				"libs/assimp-src/code/../include/assimp/ZipArchiveIOSystem.h",
+				"libs/assimp-src/code/../include/assimp/SceneCombiner.h",
+				"libs/assimp-src/code/../include/assimp/fast_atof.h",
+				"libs/assimp-src/code/../include/assimp/qnan.h",
+				"libs/assimp-src/code/../include/assimp/BaseImporter.h",
+				"libs/assimp-src/code/../include/assimp/Hash.h",
+				"libs/assimp-src/code/../include/assimp/MemoryIOWrapper.h",
+				"libs/assimp-src/code/../include/assimp/ParsingUtils.h",
+				"libs/assimp-src/code/../include/assimp/StreamReader.h",
+				"libs/assimp-src/code/../include/assimp/StreamWriter.h",
+				"libs/assimp-src/code/../include/assimp/StringComparison.h",
+				"libs/assimp-src/code/../include/assimp/StringUtils.h",
+				"libs/assimp-src/code/../include/assimp/SGSpatialSort.h",
+				"libs/assimp-src/code/../include/assimp/GenericProperty.h",
+				"libs/assimp-src/code/../include/assimp/SpatialSort.h",
+				"libs/assimp-src/code/../include/assimp/SkeletonMeshBuilder.h",
+				"libs/assimp-src/code/../include/assimp/SmallVector.h",
+				"libs/assimp-src/code/../include/assimp/SmoothingGroups.h",
+				"libs/assimp-src/code/../include/assimp/SmoothingGroups.inl",
+				"libs/assimp-src/code/../include/assimp/StandardShapes.h",
+				"libs/assimp-src/code/../include/assimp/RemoveComments.h",
+				"libs/assimp-src/code/../include/assimp/Subdivision.h",
+				"libs/assimp-src/code/../include/assimp/Vertex.h",
+				"libs/assimp-src/code/../include/assimp/LineSplitter.h",
+				"libs/assimp-src/code/../include/assimp/TinyFormatter.h",
+				"libs/assimp-src/code/../include/assimp/Profiler.h",
+				"libs/assimp-src/code/../include/assimp/LogAux.h",
+				"libs/assimp-src/code/../include/assimp/Bitmap.h",
+				"libs/assimp-src/code/../include/assimp/XMLTools.h",
+				"libs/assimp-src/code/../include/assimp/IOStreamBuffer.h",
+				"libs/assimp-src/code/../include/assimp/CreateAnimMesh.h",
+				"libs/assimp-src/code/../include/assimp/XmlParser.h",
+				"libs/assimp-src/code/../include/assimp/BlobIOSystem.h",
+				"libs/assimp-src/code/../include/assimp/MathFunctions.h",
+				"libs/assimp-src/code/../include/assimp/Exceptional.h",
+				"libs/assimp-src/code/../include/assimp/ByteSwapper.h",
+				"libs/assimp-src/code/../include/assimp/Base64.hpp"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 3,
+			"component" : "assimp-dev",
+			"destination" : "include/assimp/Compiler",
+			"paths" : 
+			[
+				"libs/assimp-src/code/../include/assimp/Compiler/pushpack1.h",
+				"libs/assimp-src/code/../include/assimp/Compiler/poppack1.h",
+				"libs/assimp-src/code/../include/assimp/Compiler/pstdint.h"
+			],
+			"type" : "file"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "/home/jakub/c_progs/OFSim/libs/assimp-build/code",
+		"source" : "libs/assimp-src/code"
+	}
+}

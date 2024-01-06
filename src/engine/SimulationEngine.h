@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 
+#include "../world/SolarSystemConstants.h"
 #include "../renderer/Renderable.h"
 #include "Task.h"
 #include "TelemetryCollector.h"
@@ -61,8 +62,8 @@ private:
 	float dangle = 60.0;
 	
 	// frame times:
-	unsigned __int64 lag;
-	unsigned __int64 previous;
+	unsigned long long lag;
+	unsigned long long previous;
 
 	Camera* camera;
 	Window* mainWindow;
@@ -75,9 +76,9 @@ private:
 	TelemetryCollector* telemetryCollector;
 
 	// simulation time variables:
-	unsigned __int64 startTime;
-	unsigned __int64 runningTime;
-	unsigned __int64 timePaused;
+	unsigned long long startTime;
+	unsigned long long runningTime;
+	unsigned long long timePaused;
 	
 	// orbital orientation variables:
 	int simulationStopped = 0;
@@ -103,11 +104,11 @@ private:
 	void renderTelemetry(Gui* gui, Rocket* rocket, double altitude, double apogeum, double perygeum, double atmosphereDragForceMagnitude);
 	void calcApogeumAndPerygeum();
 
-	void syncFramerate(unsigned __int64 startTime, int ms_per_update);
+	void syncFramerate(unsigned long long startTime, int ms_per_update);
 
 	void createGui();
 		
 	void collectTelemetry();
 
-	unsigned __int64 currentTime();
+	unsigned long long currentTime();
 };

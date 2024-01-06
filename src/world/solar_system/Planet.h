@@ -1,9 +1,9 @@
 #pragma once
 
-#include "..\src\renderer\Renderable.h"
+#include "../../renderer/Renderable.h"
 #include "CloudsAndTrees.h"
 #include "CelestialBody.h"
-#include "..\Launchpad.h"
+#include "../Launchpad.h"
 
 class Planet : public Renderable 
 {

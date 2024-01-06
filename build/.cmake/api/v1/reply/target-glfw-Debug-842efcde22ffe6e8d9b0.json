@@ -1,0 +1,503 @@
+{
+	"archive" : {},
+	"artifacts" : 
+	[
+		{
+			"path" : "external_libraries/glfw/src/libglfw3.a"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_library",
+			"target_compile_options",
+			"target_compile_definitions",
+			"target_include_directories",
+			"set_target_properties",
+			"target_sources"
+		],
+		"files" : 
+		[
+			"external_libraries/glfw/src/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 2,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 273,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 320,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 47,
+				"parent" : 0
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 140,
+				"parent" : 0
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 143,
+				"parent" : 0
+			},
+			{
+				"command" : 4,
+				"file" : 0,
+				"line" : 130,
+				"parent" : 0
+			},
+			{
+				"command" : 5,
+				"file" : 0,
+				"line" : 19,
+				"parent" : 0
+			},
+			{
+				"command" : 5,
+				"file" : 0,
+				"line" : 48,
+				"parent" : 0
+			},
+			{
+				"command" : 5,
+				"file" : 0,
+				"line" : 61,
+				"parent" : 0
+			},
+			{
+				"command" : 5,
+				"file" : 0,
+				"line" : 63,
+				"parent" : 0
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g -fPIC"
+				},
+				{
+					"backtrace" : 2,
+					"fragment" : "-Wall"
+				},
+				{
+					"fragment" : "-std=c99"
+				},
+				{
+					"fragment" : "-Wdeclaration-after-statement"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 3,
+					"define" : "_DEFAULT_SOURCE"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "_GLFW_X11"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 5,
+					"path" : "/home/jakub/c_progs/OFSim/external_libraries/glfw/include"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/jakub/c_progs/OFSim/external_libraries/glfw/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/jakub/c_progs/OFSim/build/external_libraries/glfw/src"
+				}
+			],
+			"language" : "C",
+			"languageStandard" : 
+			{
+				"backtraces" : 
+				[
+					7
+				],
+				"standard" : "99"
+			},
+			"sourceIndexes" : 
+			[
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13,
+				16,
+				17,
+				18,
+				19
+			]
+		},
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g -fPIC"
+				},
+				{
+					"backtrace" : 2,
+					"fragment" : "-Wall"
+				},
+				{
+					"fragment" : "-std=c99"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 3,
+					"define" : "_DEFAULT_SOURCE"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "_GLFW_X11"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 5,
+					"path" : "/home/jakub/c_progs/OFSim/external_libraries/glfw/include"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/jakub/c_progs/OFSim/external_libraries/glfw/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/jakub/c_progs/OFSim/build/external_libraries/glfw/src"
+				}
+			],
+			"language" : "C",
+			"languageStandard" : 
+			{
+				"backtraces" : 
+				[
+					7
+				],
+				"standard" : "99"
+			},
+			"sourceIndexes" : 
+			[
+				22,
+				23,
+				24,
+				27,
+				28,
+				29,
+				30,
+				31,
+				33,
+				35
+			]
+		}
+	],
+	"folder" : 
+	{
+		"name" : "GLFW3"
+	},
+	"id" : "glfw::@acb7e0c2ba62ee4c1135",
+	"name" : "glfw",
+	"nameOnDisk" : "libglfw3.a",
+	"paths" : 
+	{
+		"build" : "external_libraries/glfw/src",
+		"source" : "external_libraries/glfw/src"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Header Files",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2,
+				3,
+				4,
+				14,
+				15,
+				20,
+				21,
+				25,
+				26,
+				32,
+				34
+			]
+		},
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13,
+				16,
+				17,
+				18,
+				19,
+				22,
+				23,
+				24,
+				27,
+				28,
+				29,
+				30,
+				31,
+				33,
+				35
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 1,
+			"path" : "external_libraries/glfw/include/GLFW/glfw3.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "external_libraries/glfw/include/GLFW/glfw3native.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "external_libraries/glfw/src/internal.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "external_libraries/glfw/src/platform.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "external_libraries/glfw/src/mappings.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "external_libraries/glfw/src/context.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "external_libraries/glfw/src/init.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "external_libraries/glfw/src/input.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "external_libraries/glfw/src/monitor.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "external_libraries/glfw/src/platform.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "external_libraries/glfw/src/vulkan.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "external_libraries/glfw/src/window.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "external_libraries/glfw/src/egl_context.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "external_libraries/glfw/src/osmesa_context.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "external_libraries/glfw/src/null_platform.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "external_libraries/glfw/src/null_joystick.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "external_libraries/glfw/src/null_init.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "external_libraries/glfw/src/null_monitor.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "external_libraries/glfw/src/null_window.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "external_libraries/glfw/src/null_joystick.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 8,
+			"path" : "external_libraries/glfw/src/posix_time.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 8,
+			"path" : "external_libraries/glfw/src/posix_thread.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 8,
+			"compileGroupIndex" : 1,
+			"path" : "external_libraries/glfw/src/posix_module.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 8,
+			"compileGroupIndex" : 1,
+			"path" : "external_libraries/glfw/src/posix_time.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 8,
+			"compileGroupIndex" : 1,
+			"path" : "external_libraries/glfw/src/posix_thread.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 9,
+			"path" : "external_libraries/glfw/src/x11_platform.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 9,
+			"path" : "external_libraries/glfw/src/xkb_unicode.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 9,
+			"compileGroupIndex" : 1,
+			"path" : "external_libraries/glfw/src/x11_init.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 9,
+			"compileGroupIndex" : 1,
+			"path" : "external_libraries/glfw/src/x11_monitor.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 9,
+			"compileGroupIndex" : 1,
+			"path" : "external_libraries/glfw/src/x11_window.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 9,
+			"compileGroupIndex" : 1,
+			"path" : "external_libraries/glfw/src/xkb_unicode.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 9,
+			"compileGroupIndex" : 1,
+			"path" : "external_libraries/glfw/src/glx_context.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 10,
+			"path" : "external_libraries/glfw/src/linux_joystick.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 10,
+			"compileGroupIndex" : 1,
+			"path" : "external_libraries/glfw/src/linux_joystick.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 11,
+			"path" : "external_libraries/glfw/src/posix_poll.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 11,
+			"compileGroupIndex" : 1,
+			"path" : "external_libraries/glfw/src/posix_poll.c",
+			"sourceGroupIndex" : 1
+		}
+	],
+	"type" : "STATIC_LIBRARY"
+}

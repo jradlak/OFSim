@@ -1,8 +1,6 @@
 #pragma once
-#ifndef SHADER_H
-#define SHADER_H
 
-#include <gl/glew.h>
+#include "../../external_libraries/glad/glad.h"
 
 #include <string>
 #include <fstream>
@@ -31,4 +29,3 @@ public:
 private:    
     void checkCompileErrors(unsigned int shader, std::string type);
 };
-#endif

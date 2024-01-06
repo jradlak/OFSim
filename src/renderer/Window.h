@@ -1,6 +1,6 @@
 #pragma once
 
-#include <GL/glew.h>
+#include "../../external_libraries/glad/glad.h"
 #include <GLFW/glfw3.h>
 
 #include "Camera.h"

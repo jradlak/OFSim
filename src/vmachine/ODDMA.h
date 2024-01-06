@@ -11,8 +11,8 @@
 
 #include "Memory.h"
 #include "VMachine.h"
-#include "..\world\Rocket.h"
-#include "..\math_and_physics\PhysicsEngine.h"
+#include "../world/Rocket.h"
+#include "../math_and_physics/PhysicsEngine.h"
 
 struct RocketStatus
 {
@@ -75,7 +75,7 @@ public:
 
 	void executeInstruction(int instrCode, double value);
 
-	void provideRunningTime(unsigned __int64 _runningTime) { runningTime = _runningTime; }
+	void provideRunningTime(unsigned long long _runningTime) { runningTime = _runningTime; }
 	
 	~ODDMA() {}
 private:
@@ -86,7 +86,7 @@ private:
 	
 	long lastCommandTimestamp;
 	
-	unsigned __int64 runningTime;
+	unsigned long long runningTime;
 
 	Rocket* rocket;
 	PhysicsEngine* physics;

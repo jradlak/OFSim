@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "/home/jakub/c_progs/OFSim/libs/googletest-build",
+		"source" : "libs/googletest-src"
+	}
+}

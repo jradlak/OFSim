@@ -5,7 +5,7 @@
 class TelemetryData
 {
 public:
-	unsigned __int64 time;
+	unsigned long long time;
 
 	double altitude;
 	double mass;

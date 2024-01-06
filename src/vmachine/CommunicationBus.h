@@ -15,9 +15,9 @@ public:
 	CommunicationBus();
 
 	void publishCommand(RocketCommand cmd);
-	RocketCommand getCommad(unsigned __int64 runningTime);
+	RocketCommand getCommad(unsigned long long runningTime);
 
-	std::map<unsigned __int64, RocketCommand>& getCommandHistory();
+	std::map<unsigned long long, RocketCommand>& getCommandHistory();
 
 	bool anyCommands() { return commands.size() > 0; }
 
@@ -31,5 +31,5 @@ private:
 	mutable std::mutex mc;
 	std::condition_variable cc;
 
-	std::map<unsigned __int64, RocketCommand> commandHistory;	
+	std::map<unsigned long long, RocketCommand> commandHistory;	
 };
