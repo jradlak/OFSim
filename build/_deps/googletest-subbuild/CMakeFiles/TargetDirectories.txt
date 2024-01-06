@@ -1,3 +1,0 @@
-/home/jakub/c_progs/OFSim/build/_deps/googletest-subbuild/CMakeFiles/googletest-populate.dir
-/home/jakub/c_progs/OFSim/build/_deps/googletest-subbuild/CMakeFiles/edit_cache.dir
-/home/jakub/c_progs/OFSim/build/_deps/googletest-subbuild/CMakeFiles/rebuild_cache.dir
