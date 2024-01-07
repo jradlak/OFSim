@@ -4,7 +4,7 @@ CloudsAndTrees::CloudsAndTrees(const int _numberOfClouds, CelestialBody& _earth,
     : numberOfClouds(_numberOfClouds), earth(_earth), angle(_angle), dangle(_dangle)
 {
     cloudRenderer = new ModelRenderer("model3d_shader", "assets/models/Cloud.obj");
-    treeRenderer = new ModelRenderer("model3d_shader", "assets/models/tree.obj");
+    treeRenderer = new ModelRenderer("model3d_shader", "assets/models/Tree.obj");
 
     calculatePositionsAndSizes();
 }
