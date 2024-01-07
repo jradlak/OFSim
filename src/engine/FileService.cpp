@@ -18,24 +18,22 @@ void FileService::saveSourceCode(std::string sourcePath, std::string orbitalProg
 
 std::string FileService::loadSourceFile(std::string sourcePath)
 {
+	std::string orbitalResult = "";
+	
 	std::ifstream sourceFile;
+	sourceFile.open(sourcePath, std::ios::in);	
 
-	sourceFile.open(sourcePath.c_str(), std::ios::in);
-
-	std::string orbital2 = "";
-	if (sourceFile.is_open()) 
+	if (sourceFile.is_open())
 	{
 		std::string line;
 
-		while (sourceFile)
+		while (std::getline(sourceFile, line))
 		{
-			std::getline(sourceFile, line, '\r');
-			sourceFile >> line;
-			orbital2 += line + "\n";
+			orbitalResult += line + "\n";
 		}
 
 		sourceFile.close();
 	}
 
-	return orbital2;
+	return orbitalResult;
 }
