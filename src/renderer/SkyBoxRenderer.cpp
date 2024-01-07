@@ -2,7 +2,7 @@
 
 SkyBoxRenderer::SkyBoxRenderer()
 {
-    skyboxShader = new Shader("src/shaders/skybox_vs.glsl", "src/shaders/skybox_fs.glsl");    
+    skyboxShader = new Shader("shaders/skybox_vs.glsl", "shaders/skybox_fs.glsl");    
 }
 
 void SkyBoxRenderer::init()

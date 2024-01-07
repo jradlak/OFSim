@@ -109,12 +109,12 @@ void Translator::translate(std::string sourceLine, int lineNumber)
         }
         else
         {
-            std::string errMsg = i18n->t(translate_error);
+            // std::string errMsg = i18n->t(translate_error);
 
-            errMsg = std::regex_replace(errMsg, std::regex("@lineNumber"), std::to_string(lineNumber));
-            errMsg = std::regex_replace(errMsg, std::regex("@lineTxt"), line);
+            // errMsg = std::regex_replace(errMsg, std::regex("@lineNumber"), std::to_string(lineNumber));
+            // errMsg = std::regex_replace(errMsg, std::regex("@lineTxt"), line);
            
-            std::cout << errMsg << "\n";
+            // std::cout << errMsg << "\n";
         }
     }
 }
