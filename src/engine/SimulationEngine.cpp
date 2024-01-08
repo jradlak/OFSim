@@ -112,8 +112,8 @@ void SimulationEngine::mainLoop()
 	while (!mainWindow->shouldClose())
 	{		
 		int factor = gui->getTimeFactor();
+		
 		// calculate lag:       
-
 		if (factor == 0)
 		{
 			timePaused = currentTime() - previous;
