@@ -3,6 +3,8 @@
 
 #include <iostream>
 
+using namespace ofsim_gui;
+
 void Gui::initialization(Window* mainWindow)
 {
     // ImGui initialization:

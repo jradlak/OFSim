@@ -19,124 +19,130 @@ namespace fs = std::filesystem;
 
 #include "../utils/FileService.h"
 
-enum MenuPosition {
-	FILE_NEW,
-	FILE_OPEN,
-	FILE_SAVE,	
-	FILE_SAVED_AS,
-	FILE_EXIT,
-
-	VIEW_TELEMETRY,
-	VIEW_TELEMETRY_PLOT,
-	VIEW_COMMANDS,
-	VIEW_PROGRAM,
-
-	HELP_ABOUT,
-	HELP_HELP,
-
-	NONE
-};
-
-class Gui
+namespace ofsim_gui 
 {
-public:
-	Gui() { i18n = I18n::getInstance(); }
-	~Gui() {}
+	enum class MenuPosition 
+	{
+		FILE_NEW,
+		FILE_OPEN,
+		FILE_SAVE,	
+		FILE_SAVED_AS,
+		FILE_EXIT,
 
-	void initialization(Window* mainWindow);
+		VIEW_TELEMETRY,
+		VIEW_TELEMETRY_PLOT,
+		VIEW_COMMANDS,
+		VIEW_PROGRAM,
 
-	void newFrame();
-	
-	void renderMenuBar();
+		HELP_ABOUT,
+		HELP_HELP,
 
-	void renderSplashScreen();
+		NONE
+	};
 
-	void renderFileSaveAsDialog();
 
-	void renderFileOpenDialog();
+	// Class description in the header file
+	class Gui
+	{
+	public:
+		Gui() : i18n(I18n::getInstance()) {}
+		~Gui() {}
 
-	void renderSimulationControlWindow(unsigned long long time);
+		void initialization(Window* mainWindow);
 
-	void renderCodeEditor(std::string& text);
+		void newFrame();
+		
+		void renderMenuBar();
 
-	void renderTelemetry(TelemetryData& telemetryData);
-	
-	void renderPresentationModeInfo(double distance);
+		void renderSplashScreen();
 
-	void renderTranslationErrors(std::string errors);
+		void renderFileSaveAsDialog();
 
-	void restoreWindows();
+		void renderFileOpenDialog();
 
-	void endRendering();
+		void renderSimulationControlWindow(unsigned long long time);
 
-	void plotTelemetry(
-		std::vector<double> velocityHistory, double maxVelo,
-		std::vector<double> altitudeHistory, double maxAlt,
-		std::vector<double> atmPressureHistory, double maxAtm,
-		std::vector<double> accelerationHistory, double maxAcc, double minAcc);
+		void renderCodeEditor(std::string& text);
 
-	void renderCommandHistory(std::map<unsigned long long, RocketCommand> &commandHistory);
+		void renderTelemetry(TelemetryData& telemetryData);
+		
+		void renderPresentationModeInfo(double distance);
 
-	void renderDiagnostics(glm::dvec3 position, glm::dvec3 rotation = glm::dvec3(0.0, 0.0, 0.0));
+		void renderTranslationErrors(std::string errors);
 
-	void loadTextures();
+		void restoreWindows();
 
-	void cleanUp();
+		void endRendering();
 
-	int getTimeFactor();
+		void plotTelemetry(
+			std::vector<double> velocityHistory, double maxVelo,
+			std::vector<double> altitudeHistory, double maxAlt,
+			std::vector<double> atmPressureHistory, double maxAtm,
+			std::vector<double> accelerationHistory, double maxAcc, double minAcc);
 
-	void setTimeFactor(int factor) { timeFactor = factor; }
+		void renderCommandHistory(std::map<unsigned long long, RocketCommand> &commandHistory);
 
-	MenuPosition getLastClickedMenu() { return lastClickedMenu; }
-	void clearLastClickedMenu() { lastClickedMenu = MenuPosition::NONE; }
+		void renderDiagnostics(glm::dvec3 position, glm::dvec3 rotation = glm::dvec3(0.0, 0.0, 0.0));
 
-	std::string getSavedFile() { return savedFile; }
-	void clearSavedFile() { savedFile = ""; }
-	std::string getSelectedFile() { return selectedFile; }
-	void clearSelectedFile() { selectedFile = ""; }
+		void loadTextures();
 
-	bool getClearTranslationErrors() { return clearTranslationErrors; }
-	void setClearTranslationErrors() { clearTranslationErrors = false; }
+		void cleanUp();
 
-private:
-	GLuint play_texture = 0;
-	GLuint pause_texture = 0;
-	GLuint pp_texture = 0;
+		int getTimeFactor();
 
-	GLuint stop_texture = 0;	
-	GLuint fwd_texture = 0;
+		void setTimeFactor(int factor) { timeFactor = factor; }
 
-	GLuint splashTexture = 0;
+		MenuPosition getLastClickedMenu() { return lastClickedMenu; }
+		void clearLastClickedMenu() { lastClickedMenu = MenuPosition::NONE; }
 
-	bool plaing = false;
+		std::string getSavedFile() { return savedFile; }
+		void clearSavedFile() { savedFile = ""; }
+		std::string getSelectedFile() { return selectedFile; }
+		void clearSelectedFile() { selectedFile = ""; }
 
-	int out_width = 0;
-	int out_height = 0;
+		bool getClearTranslationErrors() { return clearTranslationErrors; }
+		void setClearTranslationErrors() { clearTranslationErrors = false; }
 
-	int timeFactor = 0;
+	private:
+		GLuint play_texture { 0 };
+		GLuint pause_texture { 0 };
+		GLuint pp_texture { 0 };
 
-	bool viewSimulationControl = false;
-	bool viewTelemetryOn = false;
-	bool viewTelemetryPlot = false;
-	bool viewCommands = false;
-	bool viewSourceCode = false;
-	bool viewFileOpen = false;
-	bool viewFileSaveAs = false;
-	bool viewSplashScreen = true;
+		GLuint stop_texture { 0 };	
+		GLuint fwd_texture { 0 };
 
-	bool clearTranslationErrors = false;
+		GLuint splashTexture { 0 };
 
-	std::vector<std::string> filesInDirectory;
+		bool plaing { false };
 
-	MenuPosition lastClickedMenu = MenuPosition::NONE;
-	
-	I18n* i18n;
+		int out_width { 0 };
+		int out_height { 0 };
 
-	std::string directory;
-	std::string selectedFile = "";
-	std::string savedFile = "";
+		int timeFactor { 0 };
 
-	int selcted_language_item = 0;
+		bool viewSimulationControl { false };
+		bool viewTelemetryOn { false };
+		bool viewTelemetryPlot { false };
+		bool viewCommands { false };
+		bool viewSourceCode { false };
+		bool viewFileOpen { false };
+		bool viewFileSaveAs { false };
+		bool viewSplashScreen { true };
 
-	void loadFilesInDirectory(std::string &directory);	
-};
+		bool clearTranslationErrors { false };
+
+		std::vector<std::string> filesInDirectory;
+
+		MenuPosition lastClickedMenu = MenuPosition::NONE;
+		
+		I18n* i18n;
+
+		std::string directory;
+		std::string selectedFile { "" };
+		std::string savedFile { "" };
+
+		int selcted_language_item { 0 };
+
+		void loadFilesInDirectory(std::string &directory);	
+	};
+}

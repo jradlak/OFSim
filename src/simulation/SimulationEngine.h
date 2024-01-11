@@ -67,7 +67,7 @@ private:
 
 	Camera* camera;
 	Window* mainWindow;
-	Gui* gui;
+	ofsim_gui::Gui* gui;
 	
 	// task and communication:
 	CommunicationBus* communicationBus;
@@ -101,7 +101,7 @@ private:
 	void mainLoop();
 
 	void switchGLStateForWorldRendering(float r, float g, float b);
-	void renderTelemetry(Gui* gui, Rocket* rocket, double altitude, double apogeum, double perygeum, double atmosphereDragForceMagnitude);
+	void renderTelemetry(ofsim_gui::Gui* gui, Rocket* rocket, double altitude, double apogeum, double perygeum, double atmosphereDragForceMagnitude);
 	void calcApogeumAndPerygeum();
 
 	void syncFramerate(unsigned long long startTime, int ms_per_update);

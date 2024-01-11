@@ -143,20 +143,20 @@ void SimulationEngine::mainLoop()
 			physics->updateKeyPressed(lastKeyPressed);
 			lag = physics->calculateForces(lag);
 			
-			if (gui->getLastClickedMenu() == MenuPosition::FILE_SAVE)
+			if (gui->getLastClickedMenu() == ofsim_gui::MenuPosition::FILE_SAVE)
 			{
 				FileService::saveSourceCode(SOURCE_CODE_FILE_NAME, orbitalProgramSourceCode);
 				gui->clearLastClickedMenu();
 			}
 
-			if (gui->getLastClickedMenu() == MenuPosition::FILE_SAVED_AS)
+			if (gui->getLastClickedMenu() == ofsim_gui::MenuPosition::FILE_SAVED_AS)
 			{
 				std::string fileSaved = gui->getSavedFile();
 				FileService::saveSourceCode(fileSaved, orbitalProgramSourceCode);
 				gui->clearLastClickedMenu();
 			}
 		
-			if (gui->getLastClickedMenu() == MenuPosition::FILE_EXIT)
+			if (gui->getLastClickedMenu() == ofsim_gui::MenuPosition::FILE_EXIT)
 			{
 				glfwSetWindowShouldClose(mainWindow->getWindow(), true);
 				gui->clearLastClickedMenu();
@@ -306,7 +306,7 @@ unsigned long long SimulationEngine::currentTime()
 
 void SimulationEngine::createGui()
 {
-	gui = new Gui();
+	gui = new ofsim_gui::Gui();
 	gui->initialization(mainWindow);
 	gui->loadTextures();
 }
@@ -398,7 +398,7 @@ void SimulationEngine::calcApogeumAndPerygeum()
 	}
 }
 
-void SimulationEngine::renderTelemetry(Gui* gui, Rocket* rocket, double altitude, double apogeum, double perygeum, double atmosphereDragForceMagnitude)
+void SimulationEngine::renderTelemetry(ofsim_gui::Gui* gui, Rocket* rocket, double altitude, double apogeum, double perygeum, double atmosphereDragForceMagnitude)
 {
 	TelemetryData data;
 	
