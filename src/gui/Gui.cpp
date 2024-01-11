@@ -1,5 +1,5 @@
 #include "Gui.h"
-#include "ImageUtils.h"
+#include "../utils/ImageUtils.h"
 
 #include <iostream>
 

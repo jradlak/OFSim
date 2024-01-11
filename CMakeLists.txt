@@ -45,14 +45,16 @@ endif()
 add_executable("${CMAKE_PROJECT_NAME}"     
     src/Application.cpp
     
-    src/simulation/FileService.h
     src/simulation/SimulationEngine.h
     src/simulation/Task.h
     src/simulation/TelemetryCollector.h
-    src/simulation/TelemetryData.h
-    src/simulation/FileService.cpp
+    src/simulation/TelemetryData.h    
     src/simulation/SimulationEngine.cpp    
     src/simulation/TelemetryCollector.cpp    
+
+    src/utils/FileService.h
+    src/utils/FileService.cpp
+    src/utils/ImageUtils.h
 
     src/math_and_physics/Geometry.h
     src/math_and_physics/PhysicsEngine.h
@@ -65,8 +67,7 @@ add_executable("${CMAKE_PROJECT_NAME}"
     src/gui/Gui.cpp
     src/gui/i18n.cpp
     src/gui/Gui.cpp
-    src/gui/ImageUtils.h
-
+    
     src/renderer/Camera.h
     src/renderer/Mesh.h
     src/renderer/Model.h
