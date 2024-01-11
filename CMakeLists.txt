@@ -56,10 +56,11 @@ add_executable("${CMAKE_PROJECT_NAME}"
     src/utils/FileService.cpp
     src/utils/ImageUtils.h
 
+    src/math_and_physics/MathTypes.h
     src/math_and_physics/Geometry.h
-    src/math_and_physics/PhysicsEngine.h
+    src/math_and_physics/PhysicsSolver.h
     src/math_and_physics/Geometry.cpp
-    src/math_and_physics/PhysicsEngine.cpp
+    src/math_and_physics/PhysicsSolver.cpp
 
     src/gui/Gui.h    
     src/gui/i18n.h

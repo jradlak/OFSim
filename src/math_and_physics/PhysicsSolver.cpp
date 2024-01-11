@@ -1,6 +1,8 @@
-#include "PhysicsEngine.h"
+#include "PhysicsSolver.h"
 
 #include <iostream>
+
+using namespace ofsim_math_and_physics;
 
 PhysicsEngine::PhysicsEngine(Rocket& _rocket, int _MS_PER_UPDATE)
 	: rocket(_rocket)
@@ -23,7 +25,7 @@ void PhysicsEngine::changeAltitudeOrientation(
     thrustCutOff = false;
 
     glm::dvec3 direction = glm::normalize(rocket.getPosition() - towards);
-    glm::quat qlook = Geometry::gLookAt(direction, glm::dvec3(0.0, 1.0, 0.0));
+    quat qlook = Geometry::gLookAt(direction, glm::dvec3(0.0, 1.0, 0.0));
     glm::dvec3 rotation = glm::eulerAngles(qlook) * 180.0f / 3.14159265358979323846f;
 
     thrustVector = direction * thrustMagnitude; 

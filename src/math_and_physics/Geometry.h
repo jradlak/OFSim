@@ -1,15 +1,14 @@
 #pragma once
 
-#define GLM_ENABLE_EXPERIMENTAL 
+#include "MathTypes.h"
 
-#include <glm/gtc/quaternion.hpp>
-#include <glm/gtx/quaternion.hpp>
-
-class Geometry
+namespace ofsim_math_and_physics
 {
-public:
-	static glm::quat gRotationBetweenVectors(glm::vec3 start, glm::vec3 dest);	
-	static glm::quat gLookAt(glm::vec3 direction, glm::vec3 desiredUp);
+	struct Geometry 
+	{
+		static quat gRotationBetweenVectors(dvec3 start, dvec3 dest);	
+		static quat gLookAt(dvec3 direction, dvec3 desiredUp);
 
-	static glm::dvec3 rotateVector(glm::dvec3 v, glm::dvec3 k, double angle);
+		static dvec3 rotateVector(dvec3 v, dvec3 k, f64 angle);
+	};
 };

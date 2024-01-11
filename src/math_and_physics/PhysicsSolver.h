@@ -66,7 +66,7 @@ private:
 	Rocket& rocket;
 	
 	//earth's atmosphere gradient color:
-	float r = 0.25, g = 0.55, b = 0.75;
+	float r { 0.25 }, g { 0.55 }, b { 0.75 };
 	float orr = 0.25, og = 0.55, ob = 0.75;
 
 	double altitude;

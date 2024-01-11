@@ -12,7 +12,7 @@
 #include "Memory.h"
 #include "VMachine.h"
 #include "../world/Rocket.h"
-#include "../math_and_physics/PhysicsEngine.h"
+#include "../math_and_physics/PhysicsSolver.h"
 
 struct RocketStatus
 {
