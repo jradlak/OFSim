@@ -7,7 +7,7 @@ static inline std::string& trim(std::string& s);
 Translator::Translator()
 {
     opcodes = new Opcodes();
-    i18n = I18n::getInstance();
+    i18n = ofsim_gui::I18n::getInstance();
 }
 
 void Translator::translate(const char* sourcePath)

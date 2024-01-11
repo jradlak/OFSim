@@ -39,7 +39,7 @@ private:
 
 	std::tuple<unsigned int, unsigned int> recognizeInstr(std::string sourceLine);
 
-	I18n* i18n = nullptr;
+	ofsim_gui::I18n* i18n = nullptr;
 	std::string translationErrors = "";
 
 	void translate(std::string sourceLine, int lineNumber);

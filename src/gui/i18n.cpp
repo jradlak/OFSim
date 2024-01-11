@@ -1,6 +1,8 @@
 #include "i18n.h"
 #include <iostream>
 
+using namespace ofsim_gui;
+
 I18n* I18n::getInstance()
 {
 	static I18n* i18n;
