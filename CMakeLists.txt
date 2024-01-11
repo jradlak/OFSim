@@ -45,14 +45,14 @@ endif()
 add_executable("${CMAKE_PROJECT_NAME}"     
     src/Application.cpp
     
-    src/engine/FileService.h
-    src/engine/SimulationEngine.h
-    src/engine/Task.h
-    src/engine/TelemetryCollector.h
-    src/engine/TelemetryData.h
-    src/engine/FileService.cpp
-    src/engine/SimulationEngine.cpp    
-    src/engine/TelemetryCollector.cpp    
+    src/simulation/FileService.h
+    src/simulation/SimulationEngine.h
+    src/simulation/Task.h
+    src/simulation/TelemetryCollector.h
+    src/simulation/TelemetryData.h
+    src/simulation/FileService.cpp
+    src/simulation/SimulationEngine.cpp    
+    src/simulation/TelemetryCollector.cpp    
 
     src/math_and_physics/Geometry.h
     src/math_and_physics/PhysicsEngine.h

@@ -9,7 +9,7 @@
 #include "Translator.h"
 #include "Opcodes.h"
 
-#include "../engine/Task.h"
+#include "../simulation/Task.h"
 
 class VMachine : public Task
 {

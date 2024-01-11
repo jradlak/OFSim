@@ -13,11 +13,11 @@ namespace fs = std::filesystem;
 
 #include "../renderer/Window.h"
 
-#include "../engine/TelemetryData.h"
+#include "../simulation/TelemetryData.h"
 #include "../vmachine/RocketCommand.h"
 #include "i18n.h"
 
-#include "../engine/FileService.h"
+#include "../simulation/FileService.h"
 
 enum MenuPosition {
 	FILE_NEW,
