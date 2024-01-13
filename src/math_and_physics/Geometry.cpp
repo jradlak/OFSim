@@ -9,15 +9,15 @@ quat Geometry::gRotationBetweenVectors(dvec3 start, dvec3 dest)
 	start = glm::normalize(start);
 	dest = glm::normalize(dest);
 
-	float cosTheta = glm::dot(start, dest);
+	f64 cosTheta { glm::dot(start, dest) };
 	dvec3 rotationAxis;
 
-	if (cosTheta < -1 + 0.001f)
+	if (cosTheta < -1 + 0.001)
 	{
-		rotationAxis = glm::cross(dvec3(0.0f, 0.0f, 1.0f), start);
+		rotationAxis = glm::cross(dvec3(0.0, 0.0, 1.0), start);
 		if (glm::length2(rotationAxis) < 0.01)
 		{
-			rotationAxis = glm::cross(dvec3(1.0f, 0.0f, 0.0f), start);
+			rotationAxis = glm::cross(dvec3(1.0, 0.0, 0.0), start);
 		}
 
 		rotationAxis = glm::normalize(rotationAxis);
@@ -44,11 +44,11 @@ quat Geometry::gLookAt(dvec3 direction, dvec3 desiredUp)
 		return glm::quat();
 	}
 	
-	dvec3 right = glm::cross(direction, desiredUp);
+	dvec3 right { glm::cross(direction, desiredUp) };
 	desiredUp = glm::cross(right, direction);
-	quat rot1 = gRotationBetweenVectors(dvec3(0.0, 0.0, 1.0), direction);	
-	dvec3 newUp = rot1 * vec3(0.0f, 1.0f, 0.0f);
-	quat rot2 = gRotationBetweenVectors(newUp, desiredUp);
+	quat rot1 { gRotationBetweenVectors(dvec3(0.0, 0.0, 1.0), direction) };	
+	dvec3 newUp { rot1 * vec3(0.0f, 1.0f, 0.0f) };
+	quat rot2 { gRotationBetweenVectors(newUp, desiredUp) };
 	
 	return rot2 * rot1;
 }

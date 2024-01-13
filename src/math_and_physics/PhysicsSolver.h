@@ -15,88 +15,93 @@
 class PhysicsEngine
 {
 public:
-	PhysicsEngine(Rocket& _rocket, int _MS_PER_UPDATE);
+	PhysicsEngine(Rocket& _rocket, i32 _MS_PER_UPDATE);
 
+	// change state methods:
 	void changeAltitudeOrientation(
 		CelestialBodyType _celestialBodyType, 
-		double _celestialBodySize,
-		glm::dvec3 _towards);
+		f64 _celestialBodySize,
+		dvec3 _towards);
 
-	unsigned long long calculateForces(unsigned long long timeInterval);
+	u64 calculateForces(u64 timeInterval);
 
-	void updateKeyPressed(int _lastKeyPressed);
-	void updateThrustMagnitude(double newMagintude);
-	void rotateVectors(glm::dvec3 newRotation, glm::dvec3 deltaRotation);
-	void rotateRocket(glm::dvec3 deltaRotation);
+	void updateKeyPressed(i32 _lastKeyPressed);
+	void updateThrustMagnitude(f64 newMagintude);
+	void rotateVectors(dvec3 newRotation, dvec3 deltaRotation);
+	void rotateRocket(dvec3 deltaRotation);
 
 	void predictTrajectory(unsigned long long elapsedTime);
 
 	void resetForces();
 	void reset();
 
-	double getAltitude();
-	double getThrustMagnitude();
+	//  simple properties getters:
+	f64 getAltitude() { return altitude; }
+	f64 getThrustMagnitude() { return thrustMagnitude; }	
+	std::vector<f32> atmosphereRgb() { return { r, g, b }; }
+	f64 getAtmosphereDragForceMagnitude() { return altitude > 98.0 ? 0.0 : atmosphereDragForceMagnitude; }
+	dvec3 getDeltaPosition() { return deltaP; }
+	std::vector<f64> getTrajectoryPredictionX() { return trajectoryPredictionX; }
+	std::vector<f64> getTrajectoryPredictionY() { return trajectoryPredictionY; }
+	std::vector<f64> getTrajectoryPredictionZ() { return trajectoryPredictionZ; }
 
-	std::vector<float> atmosphereRgb();
-
-	double getAtmosphereDragForceMagnitude();
-
-	glm::dvec3 getDeltaPosition() { return deltaP; }
-
-	std::vector<double> getTrajectoryPredictionX() { return trajectoryPredictionX; }
-	std::vector<double> getTrajectoryPredictionY() { return trajectoryPredictionY; }
-	std::vector<double> getTrajectoryPredictionZ() { return trajectoryPredictionZ; }
-
-	~PhysicsEngine();
+	~PhysicsEngine() {}
 
 private:
-	void updatePhysics(double deltaTime);
-	void addForce(glm::vec3 force);
 
-	void calculateAtmosphereGradient();
-	void calculateAtmosphericDragForce();
+	const f32 orr { 0.25 }, og { 0.55 }, ob { 0.75 };
+
+	//earth's atmosphere gradient color:
+	f32 r { 0.25 }, g { 0.55 }, b { 0.75 };
 	
-	double calculateAltitude();
-	
-	glm::dvec3 celestialBodyCenter(double bodySize);
-	
-	std::vector<glm::dvec3> forces;
+	// PRIVATE VARIABLES:
+
+	std::vector<dvec3> forces;
 
 	CelestialBodyType altitudeOrientation;
 	Rocket& rocket;
 	
-	//earth's atmosphere gradient color:
-	float r { 0.25 }, g { 0.55 }, b { 0.75 };
-	float orr = 0.25, og = 0.55, ob = 0.75;
+	f64 altitude;
+	f64 celestialBodySize;
+	f64 atmosphereDragForceMagnitude { 0.0 };
 
-	double altitude;
-	double celestialBodySize;
-	double atmosphereDragForceMagnitude = 0.0;
-
-	double GConst = -0.00981;
+	f64 GConst = -0.00981;
 
 	int MS_PER_UPDATE;
 
-	glm::dvec3 thrustVector;
-	double thrustMagnitude;
+	dvec3 thrustVector;
+	f64 thrustMagnitude;
 
 	bool thrustCutOff;
 
-	int lastKeyPressed;
+	i32 lastKeyPressed;
 	bool mustRecalculateVectors = false;
 
-	glm::dvec3 towards;
-	glm::dvec3 lastPos;
+	dvec3 towards;
+	dvec3 lastPos;
 
-	glm::dvec3 initialTowards;
+	dvec3 initialTowards;
 
-	glm::dvec3 deltaP;
+	dvec3 deltaP;
 
-	double theta = 30.0; // todo: znale�� warto�ci pocz�tkowe
-	double phi = 30.0;
+	f64 theta = 30.0; // TODO: find better initial vaules
+	f64 phi = 30.0;
 
-	std::vector<double> trajectoryPredictionX;
-	std::vector<double> trajectoryPredictionY;
-	std::vector<double> trajectoryPredictionZ;
-	std::vector<double> velocityMagnitude;
-};
+	std::vector<f64> trajectoryPredictionX;
+	std::vector<f64> trajectoryPredictionY;
+	std::vector<f64> trajectoryPredictionZ;
+	std::vector<f64> velocityMagnitude;
+
+	// PRIVATE METHODS:
+
+	void updatePhysics(f64 deltaTime);
+	void addForce(vec3 force);
+
+	void calculateAtmosphereGradient();
+	void calculateAtmosphericDragForce();
+	
+	f64 calculateAltitude();
+	
+	dvec3 celestialBodyCenter(f64 bodySize) { return dvec3(0.0, -bodySize, 0.0); }
+	
+};	

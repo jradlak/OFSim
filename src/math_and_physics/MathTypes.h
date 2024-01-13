@@ -16,6 +16,7 @@ using quat = glm::quat;
 
 using u32 = unsigned int;
 using i32 = int;
-using i64 = long;
-using f64 = double;
+using u64 = unsigned long long; 
+using i64 = long long;
 using f32 = float;
+using f64 = double;

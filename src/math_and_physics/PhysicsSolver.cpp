@@ -4,7 +4,7 @@
 
 using namespace ofsim_math_and_physics;
 
-PhysicsEngine::PhysicsEngine(Rocket& _rocket, int _MS_PER_UPDATE)
+PhysicsEngine::PhysicsEngine(Rocket& _rocket, i32 _MS_PER_UPDATE)
 	: rocket(_rocket)
 {
 	MS_PER_UPDATE = _MS_PER_UPDATE;
@@ -14,7 +14,7 @@ PhysicsEngine::PhysicsEngine(Rocket& _rocket, int _MS_PER_UPDATE)
 void PhysicsEngine::changeAltitudeOrientation(
     CelestialBodyType _celestialBodyType, 
     double _celestialBodySize,
-    glm::dvec3 _towards)
+    dvec3 _towards)
 {
 	altitudeOrientation = _celestialBodyType;
 	celestialBodySize = _celestialBodySize;
@@ -24,9 +24,9 @@ void PhysicsEngine::changeAltitudeOrientation(
 
     thrustCutOff = false;
 
-    glm::dvec3 direction = glm::normalize(rocket.getPosition() - towards);
-    quat qlook = Geometry::gLookAt(direction, glm::dvec3(0.0, 1.0, 0.0));
-    glm::dvec3 rotation = glm::eulerAngles(qlook) * 180.0f / 3.14159265358979323846f;
+    dvec3 direction = normalize(rocket.getPosition() - towards);
+    quat qlook = Geometry::gLookAt(direction, dvec3(0.0, 1.0, 0.0));
+    dvec3 rotation = eulerAngles(qlook) * 180.0f / 3.14159265358979323846f;
 
     thrustVector = direction * thrustMagnitude; 
     
@@ -36,7 +36,7 @@ void PhysicsEngine::changeAltitudeOrientation(
     rocket.updateTowards(towards);
 }
 
-unsigned long long PhysicsEngine::calculateForces(unsigned long long timeInterval)
+u64 PhysicsEngine::calculateForces(u64 timeInterval)
 {
     altitude = calculateAltitude();
     if (altitude > 0.2)
@@ -75,14 +75,14 @@ unsigned long long PhysicsEngine::calculateForces(unsigned long long timeInterva
     return timeInterval;
 }
 
-void PhysicsEngine::updatePhysics(double deltaTime)
+void PhysicsEngine::updatePhysics(f64 deltaTime)
 {
-    glm::dvec3 velocity = rocket.getVelocity();
-    glm::dvec3 position = rocket.getPosition();
+    dvec3 velocity = rocket.getVelocity();
+    dvec3 position = rocket.getPosition();
 
-    glm::dvec3 gravityForceVector = glm::normalize(rocket.getPosition() - celestialBodyCenter(celestialBodySize)) * GConst;
+    dvec3 gravityForceVector = normalize(rocket.getPosition() - celestialBodyCenter(celestialBodySize)) * GConst;
 
-    glm::dvec3 sumOfForces = glm::dvec3(0.0);
+    dvec3 sumOfForces = dvec3(0.0);
     for (unsigned int i = 0; i < forces.size(); i++)
     {
         sumOfForces += forces[i];
@@ -97,29 +97,29 @@ void PhysicsEngine::updatePhysics(double deltaTime)
     resetForces();
 }
 
-void PhysicsEngine::predictTrajectory(unsigned long long elapsedTime)
+void PhysicsEngine::predictTrajectory(u64 elapsedTime)
 {   
     trajectoryPredictionX.clear();
     trajectoryPredictionY.clear();
     trajectoryPredictionZ.clear();
 
-    glm::dvec3 currentVelocity = rocket.getVelocity();
-    glm::dvec3 position = rocket.getPosition();
+    dvec3 currentVelocity = rocket.getVelocity();
+    dvec3 position = rocket.getPosition();
 
     elapsedTime /= 1000;
-    int n = 512;
-    double currentTime = 4000.0 - elapsedTime;
-    double deltaTime = (double)currentTime / n;
+    i32 n = 512;
+    f64 currentTime = 4000.0 - elapsedTime;
+    f64 deltaTime = (f64)currentTime / n;
 
-    for (int index = 0; index < n; index++)
+    for (u32 index = 0; index < n; index++)
     {
-        glm::dvec3 gravityForceVector = glm::normalize(position - celestialBodyCenter(celestialBodySize)) * GConst;
+        dvec3 gravityForceVector = normalize(position - celestialBodyCenter(celestialBodySize)) * GConst;
 
         currentVelocity += gravityForceVector * deltaTime;
         position += currentVelocity * deltaTime;
         currentTime += deltaTime;
 
-        double altitude = glm::length(position - celestialBodyCenter(celestialBodySize)) - celestialBodySize + 0.5;
+        f64 altitude = length(position - celestialBodyCenter(celestialBodySize)) - celestialBodySize + 0.5;
         if (altitude < 0.3)
         {
             break;
@@ -129,11 +129,11 @@ void PhysicsEngine::predictTrajectory(unsigned long long elapsedTime)
         trajectoryPredictionY.push_back(position.y);
         trajectoryPredictionZ.push_back(position.z);
 
-        velocityMagnitude.push_back(glm::length(currentVelocity));
+        velocityMagnitude.push_back(length(currentVelocity));
     }
 }
 
-void PhysicsEngine::addForce(glm::vec3 force)
+void PhysicsEngine::addForce(vec3 force)
 {
     forces.push_back(force);
 }
@@ -160,11 +160,11 @@ void PhysicsEngine::reset()
 void PhysicsEngine::updateKeyPressed(int _lastKeyPressed)
 {
     lastKeyPressed = _lastKeyPressed;
-    glm::dvec3 orgRotation = rocket.getRotation();
+    dvec3 orgRotation = rocket.getRotation();
     if (lastKeyPressed != 0)
     {  
-        double f = 0.2;
-        double x = 0, y = 0, z = 0;
+        f64 f { 0.2 };
+        f64 x { 0 }, y { 0 }, z { 0 };
         if (lastKeyPressed == 265) //GLFW_KEY_UP
         {
             x += f;
@@ -185,7 +185,7 @@ void PhysicsEngine::updateKeyPressed(int _lastKeyPressed)
             y += f;
         }
        
-        glm::dvec3 deltaRotation = glm::dvec3(x, y, z);
+        dvec3 deltaRotation = dvec3(x, y, z);
         orgRotation += deltaRotation;        
         rotateVectors(orgRotation, deltaRotation);
     }
@@ -194,7 +194,7 @@ void PhysicsEngine::updateKeyPressed(int _lastKeyPressed)
 void PhysicsEngine::updateThrustMagnitude(double newMagintude)
 {
     thrustMagnitude = newMagintude;
-    thrustVector = glm::normalize(thrustVector);
+    thrustVector = normalize(thrustVector);
     thrustVector *= thrustMagnitude;
     thrustCutOff = false;
     
@@ -206,108 +206,69 @@ void PhysicsEngine::updateThrustMagnitude(double newMagintude)
     }        
 }
 
-void PhysicsEngine::rotateVectors(glm::dvec3 newRotation, glm::dvec3 deltaRotation)
+void PhysicsEngine::rotateVectors(dvec3 newRotation, dvec3 deltaRotation)
 {    
     // rotate thrust vector:
     if (deltaRotation.x != 0)
     {
-        thrustVector = Geometry::rotateVector(thrustVector, glm::dvec3(1.0, 0.0, 0.0), deltaRotation.x);
+        thrustVector = Geometry::rotateVector(thrustVector, dvec3(1.0, 0.0, 0.0), deltaRotation.x);
     }
 
     if (deltaRotation.y != 0)
     {
-        thrustVector = Geometry::rotateVector(thrustVector, glm::dvec3(0.0, 1.0, 0.0), deltaRotation.y);
+        thrustVector = Geometry::rotateVector(thrustVector, dvec3(0.0, 1.0, 0.0), deltaRotation.y);
     }
 
     if (deltaRotation.z != 0)
     {
-        thrustVector = Geometry::rotateVector(thrustVector, glm::dvec3(0.0, 0.0, 1.0), deltaRotation.z);
+        thrustVector = Geometry::rotateVector(thrustVector, dvec3(0.0, 0.0, 1.0), deltaRotation.z);
     }
 
     rocket.updateRotation(newRotation);
 }
 
-void PhysicsEngine::rotateRocket(glm::dvec3 deltaRotation)
+void PhysicsEngine::rotateRocket(dvec3 deltaRotation)
 {
-    glm::dvec3 orgRotation = rocket.getRotation();
+    dvec3 orgRotation = rocket.getRotation();
     orgRotation += deltaRotation;
     rotateVectors(orgRotation, deltaRotation);
-}
-
-double PhysicsEngine::getAltitude()
-{
-    return altitude;
-}
-
-double PhysicsEngine::getThrustMagnitude()
-{
-    return thrustMagnitude;
-}
-
-std::vector<float> PhysicsEngine::atmosphereRgb()
-{
-    std::vector<float> rgb = { r, g, b };
-    return rgb;
-}
-
-double PhysicsEngine::getAtmosphereDragForceMagnitude()
-{
-    if (altitude > 98.0)
-    {
-        return 0.0;
-    }
-    else
-    {
-        return atmosphereDragForceMagnitude;
-    }
 }
 
 void PhysicsEngine::calculateAtmosphereGradient()
 {
     //atmosphere gradient simulation:
-    float factor = 0; 
-    if (altitude > 4.0) {
-        factor = 0.001 * altitude * altitude;
-    }
+    f32 factor = altitude > 4.0 ? 0.0001 * altitude * altitude : 0.0;
+        
     b = ob - factor;
-    if (b < 0)
-    {
-        b = 0;
-    }
-
+    b = b < 0 ? 0 : b;
+    
     r = orr - factor;
-    if (r < 0)
-    {
-        r = 0;
-    }
-
+    r = r < 0 ? 0 : r;
+    
     g = og - factor;
-    if (g < 0)
-    {
-        g = 0;
-    }
+    g = g < 0 ? 0 : g;    
 }
 
 void PhysicsEngine::calculateAtmosphericDragForce()
 {
-    if (glm::length(rocket.getVelocity()) > 0.0) 
+    if (length(rocket.getVelocity()) > 0.0) 
     {
-        glm::dvec3 forceDirection = glm::normalize(rocket.getVelocity()) * -1.0;
-        double velocityMagnitude = 1.1 * glm::length(rocket.getVelocity());
-        double altitudeMagnitude = 1.0 / (altitude * 1.2);
+        dvec3 forceDirection = normalize(rocket.getVelocity()) * -1.0;
+        f64 velocityMagnitude = 1.1 * length(rocket.getVelocity());
+        f64 altitudeMagnitude = 1.0 / (altitude * 1.2);
         if (altitude > 20.0)
         {
             altitudeMagnitude *= 1.0 / altitude;
         }
 
-        glm::dvec3 dragForce = forceDirection * velocityMagnitude * altitudeMagnitude;
+        dvec3 dragForce = forceDirection * velocityMagnitude * altitudeMagnitude;
 
-        if (glm::length(dragForce) > 0.0001 && altitude < 98.0)
+        if (length(dragForce) > 0.0001 && altitude < 98.0)
         {            
             addForce(dragForce);
         }
 
-        atmosphereDragForceMagnitude = glm::length(dragForce);
+        atmosphereDragForceMagnitude = length(dragForce);
     }
 }
 
@@ -315,17 +276,8 @@ double PhysicsEngine::calculateAltitude()
 {
     if (altitudeOrientation == planet)
     {
-        return glm::length(rocket.getPosition() - celestialBodyCenter(celestialBodySize)) - celestialBodySize + 0.5;
+        return length(rocket.getPosition() - celestialBodyCenter(celestialBodySize)) - celestialBodySize + 0.5;
     }
 
     return 0.0;
-}
-
-glm::dvec3 PhysicsEngine::celestialBodyCenter(double bodySize)
-{
-    return glm::dvec3(0.0, -bodySize, 0.0);
-}
-
-PhysicsEngine::~PhysicsEngine()
-{
 }
