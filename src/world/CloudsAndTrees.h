@@ -2,8 +2,8 @@
 #include <vector>
 
 #include "CelestialBody.h"
-#include "../../renderer/ModelRenderer.h"
-#include "../../renderer/Renderable.h"
+#include "../renderer/ModelRenderer.h"
+#include "../renderer/Renderable.h"
 
 class CloudsAndTrees : public Renderable
 {

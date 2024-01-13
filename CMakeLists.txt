@@ -116,18 +116,18 @@ add_executable("${CMAKE_PROJECT_NAME}"
     src/world/Rocket.cpp
     src/world/Smoke.cpp        
 
-    src/world/solar_system/CelestialBody.h
-    src/world/solar_system/CloudsAndTrees.h
-    src/world/solar_system/Moon.h
-    src/world/solar_system/Planet.h
-    src/world/solar_system/SolarSystem.h
-    src/world/solar_system/Sun.h
-    src/world/solar_system/CelestialBody.cpp
-    src/world/solar_system/CloudsAndTrees.cpp
-    src/world/solar_system/Moon.cpp
-    src/world/solar_system/Planet.cpp
-    src/world/solar_system/SolarSystem.cpp
-    src/world/solar_system/Sun.cpp
+    src/world/CelestialBody.h
+    src/world/CloudsAndTrees.h
+    src/world/Moon.h
+    src/world/Planet.h
+    src/world/SolarSystem.h
+    src/world/Sun.h
+    src/world/CelestialBody.cpp
+    src/world/CloudsAndTrees.cpp
+    src/world/Moon.cpp
+    src/world/Planet.cpp
+    src/world/SolarSystem.cpp
+    src/world/Sun.cpp
 
     external_libraries/glad/glad.h 
     external_libraries/glad/glad.c

@@ -3,8 +3,8 @@
 #include <vector>
 
 #include "Planet.h"
-#include "../../renderer/Renderable.h"
-#include "../Rocket.h"
+#include "../renderer/Renderable.h"
+#include "Rocket.h"
 
 class SolarSystem : public Renderable
 {

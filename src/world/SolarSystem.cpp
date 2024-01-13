@@ -2,7 +2,7 @@
 #include "Planet.h"
 #include "Moon.h"
 #include "Sun.h"
-#include "../SolarSystemConstants.h"
+#include "SolarSystemConstants.h"
 
 SolarSystem::SolarSystem()
 {	

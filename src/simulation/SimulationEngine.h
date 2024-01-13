@@ -15,7 +15,7 @@
 #include "../renderer/TrajectoryPrediction.h"
 #include "../renderer/SkyBoxRenderer.h"
 #include "../gui/Gui.h"
-#include "../world/solar_system/SolarSystem.h"
+#include "../world/SolarSystem.h"
 #include "../math_and_physics/PhysicsSolver.h"
 #include "../vmachine/CommunicationBus.h"
 #include "../vmachine/VMachine.h"

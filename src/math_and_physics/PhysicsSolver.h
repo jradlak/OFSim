@@ -9,7 +9,7 @@
 #include <glm/gtx/euler_angles.hpp> 
 
 #include "Geometry.h"
-#include "../world/solar_system/CelestialBody.h"
+#include "../world/CelestialBody.h"
 #include "../world/Rocket.h"
 
 /*
