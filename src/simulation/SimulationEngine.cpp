@@ -22,7 +22,7 @@ SimulationEngine::SimulationEngine()
 	// physics:
 	glm::dvec3 towards = solarSystem->pointAboveEarthSurface(angle, dangle, -50.0);
 	physics = new PhysicsSolver(*rocket, MS_PER_UPDATE);
-	physics->changeAltitudeOrientation(CelestialBodyType::planet, 3185.0, towards);
+	physics->changeInitialAltitudeOrientation(CelestialBodyType::planet, 3185.0, towards);
 
 	// initialize communication Bus and telemetry collector:
 	communicationBus = new CommunicationBus();
@@ -140,7 +140,7 @@ void SimulationEngine::mainLoop()
 		if (simulationStopped != 1) 
 		{	
 			// update physics:
-			physics->updateKeyPressed(lastKeyPressed);
+			physics->updateRocketOrientation(lastKeyPressed);
 			lag = physics->calculateForces(lag);
 			
 			if (gui->getLastClickedMenu() == ofsim_gui::MenuPosition::FILE_SAVE)

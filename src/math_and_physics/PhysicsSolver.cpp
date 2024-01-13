@@ -4,6 +4,8 @@
 
 using namespace ofsim_math_and_physics;
 
+// the class and the method descriptions are in the header file
+
 PhysicsSolver::PhysicsSolver(Rocket& _rocket, i32 _MS_PER_UPDATE)
 	: rocket(_rocket)
 {
@@ -11,9 +13,9 @@ PhysicsSolver::PhysicsSolver(Rocket& _rocket, i32 _MS_PER_UPDATE)
     thrustMagnitude = 0.01; //0.24;
 }
 
-void PhysicsSolver::changeAltitudeOrientation(
+void PhysicsSolver::changeInitialAltitudeOrientation(
     CelestialBodyType _celestialBodyType, 
-    double _celestialBodySize,
+    f64 _celestialBodySize,
     dvec3 _towards)
 {
 	altitudeOrientation = _celestialBodyType;
@@ -150,14 +152,14 @@ void PhysicsSolver::reset()
     thrustCutOff = true;
 
     rocket.reset();
-    changeAltitudeOrientation(CelestialBodyType::planet, 3185.0, initialTowards);
+    changeInitialAltitudeOrientation(CelestialBodyType::planet, 3185.0, initialTowards);
         
     altitude = calculateAltitude();
     calculateAtmosphereGradient();
     calculateAtmosphericDragForce();
 }
 
-void PhysicsSolver::updateKeyPressed(int _lastKeyPressed)
+void PhysicsSolver::updateRocketOrientation(i32 _lastKeyPressed)
 {
     lastKeyPressed = _lastKeyPressed;
     dvec3 orgRotation = rocket.getRotation();
@@ -191,7 +193,7 @@ void PhysicsSolver::updateKeyPressed(int _lastKeyPressed)
     }
 }
 
-void PhysicsSolver::updateThrustMagnitude(double newMagintude)
+void PhysicsSolver::updateThrustMagnitude(f64 newMagintude)
 {
     thrustMagnitude = newMagintude;
     thrustVector = normalize(thrustVector);
