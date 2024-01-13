@@ -4,14 +4,14 @@
 
 using namespace ofsim_math_and_physics;
 
-PhysicsEngine::PhysicsEngine(Rocket& _rocket, i32 _MS_PER_UPDATE)
+PhysicsSolver::PhysicsSolver(Rocket& _rocket, i32 _MS_PER_UPDATE)
 	: rocket(_rocket)
 {
 	MS_PER_UPDATE = _MS_PER_UPDATE;
     thrustMagnitude = 0.01; //0.24;
 }
 
-void PhysicsEngine::changeAltitudeOrientation(
+void PhysicsSolver::changeAltitudeOrientation(
     CelestialBodyType _celestialBodyType, 
     double _celestialBodySize,
     dvec3 _towards)
@@ -36,7 +36,7 @@ void PhysicsEngine::changeAltitudeOrientation(
     rocket.updateTowards(towards);
 }
 
-u64 PhysicsEngine::calculateForces(u64 timeInterval)
+u64 PhysicsSolver::calculateForces(u64 timeInterval)
 {
     altitude = calculateAltitude();
     if (altitude > 0.2)
@@ -75,7 +75,7 @@ u64 PhysicsEngine::calculateForces(u64 timeInterval)
     return timeInterval;
 }
 
-void PhysicsEngine::updatePhysics(f64 deltaTime)
+void PhysicsSolver::updatePhysics(f64 deltaTime)
 {
     dvec3 velocity = rocket.getVelocity();
     dvec3 position = rocket.getPosition();
@@ -97,7 +97,7 @@ void PhysicsEngine::updatePhysics(f64 deltaTime)
     resetForces();
 }
 
-void PhysicsEngine::predictTrajectory(u64 elapsedTime)
+void PhysicsSolver::predictTrajectory(u64 elapsedTime)
 {   
     trajectoryPredictionX.clear();
     trajectoryPredictionY.clear();
@@ -133,17 +133,17 @@ void PhysicsEngine::predictTrajectory(u64 elapsedTime)
     }
 }
 
-void PhysicsEngine::addForce(vec3 force)
+void PhysicsSolver::addForce(vec3 force)
 {
     forces.push_back(force);
 }
 
-void PhysicsEngine::resetForces()
+void PhysicsSolver::resetForces()
 {
     forces.clear();
 }
 
-void PhysicsEngine::reset()
+void PhysicsSolver::reset()
 {
     resetForces();
     thrustMagnitude = 0.01;
@@ -157,7 +157,7 @@ void PhysicsEngine::reset()
     calculateAtmosphericDragForce();
 }
 
-void PhysicsEngine::updateKeyPressed(int _lastKeyPressed)
+void PhysicsSolver::updateKeyPressed(int _lastKeyPressed)
 {
     lastKeyPressed = _lastKeyPressed;
     dvec3 orgRotation = rocket.getRotation();
@@ -191,7 +191,7 @@ void PhysicsEngine::updateKeyPressed(int _lastKeyPressed)
     }
 }
 
-void PhysicsEngine::updateThrustMagnitude(double newMagintude)
+void PhysicsSolver::updateThrustMagnitude(double newMagintude)
 {
     thrustMagnitude = newMagintude;
     thrustVector = normalize(thrustVector);
@@ -206,7 +206,7 @@ void PhysicsEngine::updateThrustMagnitude(double newMagintude)
     }        
 }
 
-void PhysicsEngine::rotateVectors(dvec3 newRotation, dvec3 deltaRotation)
+void PhysicsSolver::rotateVectors(dvec3 newRotation, dvec3 deltaRotation)
 {    
     // rotate thrust vector:
     if (deltaRotation.x != 0)
@@ -227,17 +227,17 @@ void PhysicsEngine::rotateVectors(dvec3 newRotation, dvec3 deltaRotation)
     rocket.updateRotation(newRotation);
 }
 
-void PhysicsEngine::rotateRocket(dvec3 deltaRotation)
+void PhysicsSolver::rotateRocket(dvec3 deltaRotation)
 {
     dvec3 orgRotation = rocket.getRotation();
     orgRotation += deltaRotation;
     rotateVectors(orgRotation, deltaRotation);
 }
 
-void PhysicsEngine::calculateAtmosphereGradient()
+void PhysicsSolver::calculateAtmosphereGradient()
 {
     //atmosphere gradient simulation:
-    f32 factor = altitude > 4.0 ? 0.0001 * altitude * altitude : 0.0;
+    f32 factor = altitude > 4.0 ? 0.001 * altitude * altitude : 0.0;
         
     b = ob - factor;
     b = b < 0 ? 0 : b;
@@ -249,7 +249,7 @@ void PhysicsEngine::calculateAtmosphereGradient()
     g = g < 0 ? 0 : g;    
 }
 
-void PhysicsEngine::calculateAtmosphericDragForce()
+void PhysicsSolver::calculateAtmosphericDragForce()
 {
     if (length(rocket.getVelocity()) > 0.0) 
     {
@@ -272,7 +272,7 @@ void PhysicsEngine::calculateAtmosphericDragForce()
     }
 }
 
-double PhysicsEngine::calculateAltitude()
+double PhysicsSolver::calculateAltitude()
 {
     if (altitudeOrientation == planet)
     {

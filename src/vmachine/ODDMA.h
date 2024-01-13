@@ -63,13 +63,13 @@ public:
 class ODDMA : public Task
 {
 public:
-	ODDMA(Rocket* _rocket, PhysicsEngine* _physics, VMachine* _vm, CommunicationBus* _commandBus);
+	ODDMA(Rocket* _rocket, PhysicsSolver* _physics, VMachine* _vm, CommunicationBus* _commandBus);
 	
 	void start();
 	
 	void stop();
 
-	void init();
+	void init() {}
 
 	void restart();
 
@@ -89,7 +89,7 @@ private:
 	unsigned long long runningTime;
 
 	Rocket* rocket;
-	PhysicsEngine* physics;
+	PhysicsSolver* physics;
 	VMachine* vm;
 	CommunicationBus* commandBus;
 

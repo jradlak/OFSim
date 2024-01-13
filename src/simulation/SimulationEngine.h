@@ -53,7 +53,7 @@ private:
 
 	SolarSystem* solarSystem;
 	Rocket* rocket;
-	PhysicsEngine* physics;
+	PhysicsSolver* physics;
 	TrajectoryPrediction* trajectoryPrediction;
 	SkyBoxRenderer* skyboxRenderer;
 

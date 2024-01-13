@@ -21,7 +21,7 @@ SimulationEngine::SimulationEngine()
 	
 	// physics:
 	glm::dvec3 towards = solarSystem->pointAboveEarthSurface(angle, dangle, -50.0);
-	physics = new PhysicsEngine(*rocket, MS_PER_UPDATE);
+	physics = new PhysicsSolver(*rocket, MS_PER_UPDATE);
 	physics->changeAltitudeOrientation(CelestialBodyType::planet, 3185.0, towards);
 
 	// initialize communication Bus and telemetry collector:

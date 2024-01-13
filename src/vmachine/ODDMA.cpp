@@ -4,7 +4,7 @@ using std::chrono::duration_cast;
 using std::chrono::milliseconds;
 using std::chrono::system_clock;
 
-ODDMA::ODDMA(Rocket* _rocket, PhysicsEngine* _physics, VMachine* _vm, CommunicationBus* _commandBus)
+ODDMA::ODDMA(Rocket* _rocket, PhysicsSolver* _physics, VMachine* _vm, CommunicationBus* _commandBus)
 {
 	rocket = _rocket;
 	physics = _physics;
@@ -34,9 +34,6 @@ void ODDMA::stop()
 	std::swap(qStatuses, empty);
 }
 
-void ODDMA::init()
-{
-}
 
 void ODDMA::restart()
 {

@@ -12,10 +12,10 @@
 #include "../world/solar_system/CelestialBody.h"
 #include "../world/Rocket.h"
 
-class PhysicsEngine
+class PhysicsSolver
 {
 public:
-	PhysicsEngine(Rocket& _rocket, i32 _MS_PER_UPDATE);
+	PhysicsSolver(Rocket& _rocket, i32 _MS_PER_UPDATE);
 
 	// change state methods:
 	void changeAltitudeOrientation(
@@ -45,7 +45,7 @@ public:
 	std::vector<f64> getTrajectoryPredictionY() { return trajectoryPredictionY; }
 	std::vector<f64> getTrajectoryPredictionZ() { return trajectoryPredictionZ; }
 
-	~PhysicsEngine() {}
+	~PhysicsSolver() {}
 
 private:
 
