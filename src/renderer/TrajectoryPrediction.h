@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include "../world/Sphere.h"
+#include "../math_and_physics/Sphere.h"
 #include "../simulation/TelemetryData.h"
 #include "ObjectRenderer.h"
 

@@ -59,8 +59,10 @@ add_executable("${CMAKE_PROJECT_NAME}"
     src/math_and_physics/MathTypes.h
     src/math_and_physics/Geometry.h
     src/math_and_physics/PhysicsSolver.h
+    src/math_and_physics/Sphere.h
     src/math_and_physics/Geometry.cpp
     src/math_and_physics/PhysicsSolver.cpp
+    src/math_and_physics/Sphere.cpp
 
     src/gui/Gui.h    
     src/gui/i18n.h
@@ -109,12 +111,10 @@ add_executable("${CMAKE_PROJECT_NAME}"
     src/world/Launchpad.h
     src/world/Rocket.h
     src/world/Smoke.h
-    src/world/SolarSystemConstants.h
-    src/world/Sphere.h
+    src/world/SolarSystemConstants.h    
     src/world/Launchpad.cpp
     src/world/Rocket.cpp
-    src/world/Smoke.cpp    
-    src/world/Sphere.cpp
+    src/world/Smoke.cpp        
 
     src/world/solar_system/CelestialBody.h
     src/world/solar_system/CloudsAndTrees.h

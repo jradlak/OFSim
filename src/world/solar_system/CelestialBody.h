@@ -9,7 +9,7 @@
 #include <vector>
 #include <string>
 
-#include "../Sphere.h"
+#include "../../math_and_physics/Sphere.h"
 #include "../../renderer/ObjectRenderer.h"
 
 enum CelestialBodyType { star, planet, moon };

@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "../renderer/ObjectRenderer.h"
-#include "Sphere.h"
+#include "../math_and_physics/Sphere.h"
 
 // TODO: use instancing
 class Smoke
