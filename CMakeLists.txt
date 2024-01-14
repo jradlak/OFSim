@@ -38,6 +38,16 @@ set(ASSIMP_INJECT_DEBUG_POSTFIX OFF CACHE BOOL "" FORCE)
 set(ASSIMP_INSTALL OFF CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(assimp)
 
+#Google Test Library:
+include(FetchContent)
+FetchContent_Declare(
+  googletest
+  URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
+)
+# For Windows: Prevent overriding the parent project's compiler/linker settings
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(googletest)
+
 if( MSVC )
     SET( CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /ENTRY:mainCRTStartup" )
 endif()
@@ -182,3 +192,75 @@ if(MSVC)
         set_property( DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT GLFW-CMake-starter )
     endif()
 endif()
+
+
+enable_testing()
+add_executable(
+  ofsim_tests  
+    src/renderer/Camera.h
+    src/renderer/Mesh.h
+    src/renderer/Model.h
+    src/renderer/ModelRenderer.h
+    src/renderer/ObjectRenderer.h
+    src/renderer/Renderable.h
+    src/renderer/Shader.h
+    src/renderer/SkyBoxRenderer.h
+    src/renderer/TrajectoryPrediction.h
+    src/renderer/Window.h
+    src/renderer/Camera.cpp
+    src/renderer/Mesh.cpp
+    src/renderer/Model.cpp
+    src/renderer/ModelRenderer.cpp
+    src/renderer/ObjectRenderer.cpp    
+    src/renderer/Shader.cpp
+    src/renderer/SkyBoxRenderer.cpp
+    src/renderer/TrajectoryPrediction.cpp
+    src/renderer/Window.cpp
+
+    src/world/Launchpad.h
+    src/world/Rocket.h
+    src/world/Smoke.h
+    src/world/SolarSystemConstants.h    
+    src/world/Launchpad.cpp
+    src/world/Rocket.cpp
+    src/world/Smoke.cpp        
+
+    src/world/CelestialBody.h
+    src/world/CloudsAndTrees.h
+    src/world/Moon.h
+    src/world/Planet.h
+    src/world/SolarSystem.h
+    src/world/Sun.h
+    src/world/CelestialBody.cpp
+    src/world/CloudsAndTrees.cpp
+    src/world/Moon.cpp
+    src/world/Planet.cpp
+    src/world/SolarSystem.cpp
+    src/world/Sun.cpp
+
+    src/math_and_physics/MathTypes.h
+    src/math_and_physics/Geometry.h
+    src/math_and_physics/PhysicsSolver.h
+    src/math_and_physics/Sphere.h
+    src/math_and_physics/Geometry.cpp
+    src/math_and_physics/PhysicsSolver.cpp
+    src/math_and_physics/Sphere.cpp
+
+    external_libraries/glad/glad.h 
+    external_libraries/glad/glad.c
+    external_libraries/stb_image.h
+    external_libraries/stb_image.cpp  
+
+    "tests/SphereTests.cpp"    
+)
+target_link_libraries(
+    ofsim_tests
+    ${OPENGL_LIBRARIES}
+    glfw
+    glm
+    assimp
+    GTest::gtest_main
+)
+
+include(GoogleTest)
+gtest_discover_tests(ofsim_tests)

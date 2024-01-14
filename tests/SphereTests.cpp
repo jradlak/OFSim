@@ -1,0 +1,14 @@
+#include <gtest/gtest.h>
+
+#include "../src/math_and_physics/Sphere.h"
+
+TEST(SphereTests, testSphere)
+{
+    Sphere sphere = Sphere(1.0f, 32, 16);
+
+    std::vector<float> vertices = sphere.getVertices();
+    std::vector<int> indices = sphere.getIndices();
+
+    EXPECT_EQ(vertices.size(), 3366);
+    EXPECT_EQ(indices.size(), 2880);
+}
