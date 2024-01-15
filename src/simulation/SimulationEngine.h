@@ -8,7 +8,7 @@
 #include "../renderer/Renderable.h"
 #include "Task.h"
 #include "TelemetryCollector.h"
-#include "../utils/FileService.h"
+#include "../infrastructure/FileService.h"
 #include "../renderer/Camera.h"
 #include "../renderer/Window.h"
 #include "../renderer/TrajectoryPrediction.h"
@@ -17,7 +17,7 @@
 #include "../gui/Gui.h"
 #include "../world/SolarSystem.h"
 #include "../math_and_physics/PhysicsSolver.h"
-#include "../vmachine/CommunicationBus.h"
+#include "../infrastructure/CommunicationBus.h"
 #include "../vmachine/VMachine.h"
 #include "../vmachine/ODDMA.h"
 

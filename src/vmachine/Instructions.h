@@ -2,7 +2,7 @@
 
 #include "Registers.h"
 #include "Memory.h"
-#include "CommunicationBus.h"
+#include "../infrastructure/CommunicationBus.h"
 
 class Instructions
 {

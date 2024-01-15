@@ -62,9 +62,11 @@ add_executable("${CMAKE_PROJECT_NAME}"
     src/simulation/SimulationEngine.cpp    
     src/simulation/TelemetryCollector.cpp    
 
-    src/utils/FileService.h
-    src/utils/FileService.cpp
-    src/utils/ImageUtils.h
+    src/infrastructure/FileService.h
+    src/infrastructure/FileService.cpp
+    src/infrastructure/ImageUtils.h
+    src/infrastructure/CommunicationBus.h
+    src/infrastructure/CommunicationBus.cpp
 
     src/math_and_physics/MathTypes.h
     src/math_and_physics/Geometry.h
@@ -100,8 +102,7 @@ add_executable("${CMAKE_PROJECT_NAME}"
     src/renderer/SkyBoxRenderer.cpp
     src/renderer/TrajectoryPrediction.cpp
     src/renderer/Window.cpp
-
-    src/vmachine/CommunicationBus.h
+    
     src/vmachine/Instructions.h
     src/vmachine/Memory.h
     src/vmachine/ODDMA.h
@@ -109,8 +110,7 @@ add_executable("${CMAKE_PROJECT_NAME}"
     src/vmachine/Registers.h
     src/vmachine/RocketCommand.h
     src/vmachine/Translator.h
-    src/vmachine/VMachine.h    
-    src/vmachine/CommunicationBus.cpp
+    src/vmachine/VMachine.h        
     src/vmachine/Instructions.cpp
     src/vmachine/Memory.cpp
     src/vmachine/ODDMA.cpp    
