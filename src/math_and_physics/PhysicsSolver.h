@@ -38,7 +38,7 @@ which are essential in 3D physics calculations.
 class PhysicsSolver
 {
 public:
-	PhysicsSolver(Rocket& _rocket, i32 _MS_PER_UPDATE);
+	PhysicsSolver(RocketPhysicalProperties& _rocketProperties, i32 _MS_PER_UPDATE);
 
 	// change state methods:
 
@@ -64,7 +64,7 @@ public:
 	// Computes the trajectory prediction of the rocket based on its current state and the forces acting on it.
 	void predictTrajectory(u64 elapsedTime);
 
-	void resetForces();
+	void resetForces() { forces.clear(); }
 	void reset();
 
 	//  simple properties getters:
@@ -91,7 +91,8 @@ private:
 	std::vector<dvec3> forces;
 
 	CelestialBodyType altitudeOrientation;
-	Rocket& rocket;
+	//Rocket& rocket;
+	RocketPhysicalProperties& rocketProperties;
 	
 	f64 altitude;
 	f64 celestialBodySize;
@@ -127,7 +128,7 @@ private:
 	// PRIVATE METHODS:
 
 	void updatePhysics(f64 deltaTime);
-	void addForce(vec3 force);
+	void addForce(vec3 force) { forces.push_back(force); }
 
 	void rotateVectors(dvec3 newRotation, dvec3 deltaRotation);
 

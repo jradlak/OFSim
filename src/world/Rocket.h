@@ -10,15 +10,27 @@
 #include "../renderer/ObjectRenderer.h"
 #include "../renderer/ModelRenderer.h"
 
+#include "../math_and_physics/MathTypes.h"
+
 #include "Smoke.h"
 
+struct RocketPhysicalProperties
+{	
+	dvec3 &position;
+	dvec3 &initialPosition;
+	dvec3 &towards;
+	dvec3 &rotation;	
+	dvec3 &velocity;
+
+	f64 &size, &mass, &thrustMagnitude;	
+};
 
 class Rocket : public Renderable
 {
 public:
 	Rocket(std::string shaderName, glm::dvec3 _position, double _size);
 
-	void init();
+	void init() {}
 	
 	void render(glm::dmat4 projection, glm::dmat4 view, glm::dvec3 _lightPos);
 
@@ -32,9 +44,11 @@ public:
 	void updateTowards(glm::dvec3 newTowards);
 	void updateThrustMagnitude(double newMagnitude) { thrustMagnitude = newMagnitude; }
 
+	RocketPhysicalProperties projectProperties();
+
 	void reset();
 
-	double getMass();
+	f64 getMass();
 	glm::dvec3 getVelocity();
 	glm::dvec3 getRotation();
 
@@ -43,10 +57,10 @@ public:
 private:	
 	ModelRenderer* modelRenderer;
 	
-	glm::dvec3 position;
-	glm::dvec3 initialPosition;
-	glm::dvec3 towards;
-	glm::dvec3 rotation;
+	glm::dvec3 position = dvec3(0.0, 0.0, 0.0);
+	glm::dvec3 initialPosition = dvec3(0.0, 0.0, 0.0);
+	glm::dvec3 towards = dvec3(0.0, 0.0, 0.0);
+	glm::dvec3 rotation = dvec3(0.0, 0.0, 0.0);
 	
 	double size;
 

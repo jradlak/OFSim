@@ -6,12 +6,8 @@ using namespace ofsim_math_and_physics;
 
 // the class and the method descriptions are in the header file
 
-PhysicsSolver::PhysicsSolver(Rocket& _rocket, i32 _MS_PER_UPDATE)
-	: rocket(_rocket)
-{
-	MS_PER_UPDATE = _MS_PER_UPDATE;
-    thrustMagnitude = 0.01; //0.24;
-}
+PhysicsSolver::PhysicsSolver(RocketPhysicalProperties& _rocketProperties, i32 _MS_PER_UPDATE)
+	: rocketProperties(_rocketProperties), MS_PER_UPDATE(_MS_PER_UPDATE), thrustMagnitude(0.01) {}
 
 void PhysicsSolver::changeInitialAltitudeOrientation(
     CelestialBodyType _celestialBodyType, 
@@ -22,11 +18,11 @@ void PhysicsSolver::changeInitialAltitudeOrientation(
 	celestialBodySize = _celestialBodySize;
 
     towards = _towards; 
-    lastPos = rocket.getPosition();
+    lastPos = rocketProperties.position;
 
     thrustCutOff = false;
 
-    dvec3 direction = normalize(rocket.getPosition() - towards);
+    dvec3 direction = normalize(rocketProperties.position - towards);
     quat qlook = Geometry::gLookAt(direction, dvec3(0.0, 1.0, 0.0));
     dvec3 rotation = eulerAngles(qlook) * 180.0f / 3.14159265358979323846f;
 
@@ -34,8 +30,8 @@ void PhysicsSolver::changeInitialAltitudeOrientation(
     
     initialTowards = towards;
 
-    rocket.updateRotation(rotation);
-    rocket.updateTowards(towards);
+    rocketProperties.rotation = rotation;
+    rocketProperties.towards = towards;    
 }
 
 u64 PhysicsSolver::calculateForces(u64 timeInterval)
@@ -45,7 +41,7 @@ u64 PhysicsSolver::calculateForces(u64 timeInterval)
     {
         while (timeInterval > MS_PER_UPDATE)
         {
-            double mass = rocket.getMass();
+            double mass = rocketProperties.mass;
 
             if (!thrustCutOff)
             {
@@ -59,14 +55,14 @@ u64 PhysicsSolver::calculateForces(u64 timeInterval)
             
             if (!thrustCutOff)
             {
-                rocket.updateMass(mass -= 0.0004);
+                rocketProperties.mass = (mass -= 0.0004);
             }
 
             updatePhysics(MS_PER_UPDATE / 1000.0f);
             timeInterval -= MS_PER_UPDATE;
 
-            deltaP = rocket.getPosition() - lastPos;
-            lastPos = rocket.getPosition();
+            deltaP = rocketProperties.position - lastPos;
+            lastPos = rocketProperties.position;
             towards += deltaP;
 
             calculateAtmosphereGradient();
@@ -79,10 +75,10 @@ u64 PhysicsSolver::calculateForces(u64 timeInterval)
 
 void PhysicsSolver::updatePhysics(f64 deltaTime)
 {
-    dvec3 velocity = rocket.getVelocity();
-    dvec3 position = rocket.getPosition();
+    dvec3 &velocity = rocketProperties.velocity;
+    dvec3 &position = rocketProperties.position;
 
-    dvec3 gravityForceVector = normalize(rocket.getPosition() - celestialBodyCenter(celestialBodySize)) * GConst;
+    dvec3 gravityForceVector = normalize(rocketProperties.position - celestialBodyCenter(celestialBodySize)) * GConst;
 
     dvec3 sumOfForces = dvec3(0.0);
     for (unsigned int i = 0; i < forces.size(); i++)
@@ -90,11 +86,11 @@ void PhysicsSolver::updatePhysics(f64 deltaTime)
         sumOfForces += forces[i];
     }
 
-    velocity += (gravityForceVector + (sumOfForces / rocket.getMass())) * deltaTime;
+    velocity += (gravityForceVector + (sumOfForces / rocketProperties.mass)) * deltaTime;
     position += velocity * deltaTime;
 
-    rocket.updatePosition(position);
-    rocket.updateVelocity(velocity);
+    //rocket.updatePosition(position);
+    //rocket.updateVelocity(velocity);
 
     resetForces();
 }
@@ -105,8 +101,8 @@ void PhysicsSolver::predictTrajectory(u64 elapsedTime)
     trajectoryPredictionY.clear();
     trajectoryPredictionZ.clear();
 
-    dvec3 currentVelocity = rocket.getVelocity();
-    dvec3 position = rocket.getPosition();
+    dvec3 currentVelocity = rocketProperties.velocity;
+    dvec3 position = rocketProperties.position;
 
     elapsedTime /= 1000;
     i32 n = 512;
@@ -135,23 +131,14 @@ void PhysicsSolver::predictTrajectory(u64 elapsedTime)
     }
 }
 
-void PhysicsSolver::addForce(vec3 force)
-{
-    forces.push_back(force);
-}
-
-void PhysicsSolver::resetForces()
-{
-    forces.clear();
-}
-
+// TODO: fix this method!!!
 void PhysicsSolver::reset()
 {
     resetForces();
     thrustMagnitude = 0.01;
     thrustCutOff = true;
 
-    rocket.reset();
+    //rocket.reset(); // FIX THIS!!!
     changeInitialAltitudeOrientation(CelestialBodyType::planet, 3185.0, initialTowards);
         
     altitude = calculateAltitude();
@@ -162,7 +149,7 @@ void PhysicsSolver::reset()
 void PhysicsSolver::updateRocketOrientation(i32 _lastKeyPressed)
 {
     lastKeyPressed = _lastKeyPressed;
-    dvec3 orgRotation = rocket.getRotation();
+    dvec3 orgRotation = rocketProperties.rotation;
     if (lastKeyPressed != 0)
     {  
         f64 f { 0.2 };
@@ -200,7 +187,7 @@ void PhysicsSolver::updateThrustMagnitude(f64 newMagintude)
     thrustVector *= thrustMagnitude;
     thrustCutOff = false;
     
-    rocket.updateThrustMagnitude(newMagintude);
+    rocketProperties.thrustMagnitude = newMagintude;
     
     if (newMagintude <= 0.01)
     {
@@ -226,12 +213,12 @@ void PhysicsSolver::rotateVectors(dvec3 newRotation, dvec3 deltaRotation)
         thrustVector = Geometry::rotateVector(thrustVector, dvec3(0.0, 0.0, 1.0), deltaRotation.z);
     }
 
-    rocket.updateRotation(newRotation);
+    rocketProperties.rotation = newRotation;    
 }
 
 void PhysicsSolver::rotateRocket(dvec3 deltaRotation)
 {
-    dvec3 orgRotation = rocket.getRotation();
+    dvec3 orgRotation = rocketProperties.rotation;
     orgRotation += deltaRotation;
     rotateVectors(orgRotation, deltaRotation);
 }
@@ -253,10 +240,10 @@ void PhysicsSolver::calculateAtmosphereGradient()
 
 void PhysicsSolver::calculateAtmosphericDragForce()
 {
-    if (length(rocket.getVelocity()) > 0.0) 
+    if (length(rocketProperties.velocity) > 0.0) 
     {
-        dvec3 forceDirection = normalize(rocket.getVelocity()) * -1.0;
-        f64 velocityMagnitude = 1.1 * length(rocket.getVelocity());
+        dvec3 forceDirection = normalize(rocketProperties.velocity) * -1.0;
+        f64 velocityMagnitude = 1.1 * length(rocketProperties.velocity);
         f64 altitudeMagnitude = 1.0 / (altitude * 1.2);
         if (altitude > 20.0)
         {
@@ -278,7 +265,7 @@ double PhysicsSolver::calculateAltitude()
 {
     if (altitudeOrientation == planet)
     {
-        return length(rocket.getPosition() - celestialBodyCenter(celestialBodySize)) - celestialBodySize + 0.5;
+        return length(rocketProperties.position - celestialBodyCenter(celestialBodySize)) - celestialBodySize + 0.5;
     }
 
     return 0.0;

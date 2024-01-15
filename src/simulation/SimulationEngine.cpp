@@ -17,46 +17,7 @@ SimulationEngine::SimulationEngine()
 	glm::dvec3 rocketPos = solarSystem->pointAboveEarthSurface(angle, dangle, -0.2);
 	rocket = new Rocket("model3d_shader", rocketPos, 0.000013);
 	
-	camera->position = rocket->getPosition() + glm::dvec3(0.0, 0.024, 0.0);
-	
-	// physics:
-	glm::dvec3 towards = solarSystem->pointAboveEarthSurface(angle, dangle, -50.0);
-	physics = new PhysicsSolver(*rocket, MS_PER_UPDATE);
-	physics->changeInitialAltitudeOrientation(CelestialBodyType::planet, 3185.0, towards);
-
-	// initialize communication Bus and telemetry collector:
-	communicationBus = new CommunicationBus();
-	telemetryCollector = new TelemetryCollector();
-
-	// initialize and start Virtual Machine:
-	vm = new VMachine(communicationBus);
-	//vm->translateSourceCode(SOURCE_CODE_FILE_NAME.c_str());
-	//vm->start();
-
-	// initialize and start ODDMA:
-	oddma = new ODDMA(rocket, physics, vm, communicationBus);
-	oddma->start();
-
-	trajectoryPrediction = new TrajectoryPrediction();
-
-	// initialize GUI:
-	createGui();
-	//orbitalProgramSourceCode =  FileService::loadSourceFile(SOURCE_CODE_FILE_NAME);
-
-	// init time variables:
-	startTime = currentTime();
-	runningTime = 0;
-	timePaused = 0;
-
-	initialPhysicsInformation();
-	initialOrbitalInformation();
-
-	skyboxRenderer = new SkyBoxRenderer();
-	skyboxRenderer->init();
-
-	// register renderables:
-	renderables.push_back(solarSystem);
-	renderables.push_back(rocket);
+	camera->position = rocket->getPosition() + glm::dvec3(0.0, 0.024, 0.0);	
 }
 
 void SimulationEngine::init()
@@ -104,8 +65,52 @@ void SimulationEngine::restart()
 
 void SimulationEngine::mainLoop()
 {	
+	// <---- initialization sectiom; ----->
+
+	// physics:
+	glm::dvec3 towards = solarSystem->pointAboveEarthSurface(angle, dangle, -50.0);
+	RocketPhysicalProperties rocketProperties = rocket->projectProperties();
+	physics = new PhysicsSolver(rocketProperties, MS_PER_UPDATE);
+	physics->changeInitialAltitudeOrientation(CelestialBodyType::planet, 3185.0, towards);
+
+	// initialize communication Bus and telemetry collector:
+	communicationBus = new CommunicationBus();
+	telemetryCollector = new TelemetryCollector();
+
+	// initialize and start Virtual Machine:
+	vm = new VMachine(communicationBus);
+	//vm->translateSourceCode(SOURCE_CODE_FILE_NAME.c_str());
+	//vm->start();
+
+	// initialize and start ODDMA:
+	oddma = new ODDMA(rocket, physics, vm, communicationBus);
+	oddma->start();
+
+	trajectoryPrediction = new TrajectoryPrediction();
+
+	// initialize GUI:
+	createGui();
+	//orbitalProgramSourceCode =  FileService::loadSourceFile(SOURCE_CODE_FILE_NAME);
+
+	// init time variables:
+	startTime = currentTime();
+	runningTime = 0;
+	timePaused = 0;
+
+	initialPhysicsInformation();
+	initialOrbitalInformation();
+
+	skyboxRenderer = new SkyBoxRenderer();
+	skyboxRenderer->init();
+
+	// register renderables:
+	renderables.push_back(solarSystem);
+	renderables.push_back(rocket);
+
 	double radius = 0.000000001;
 	double step = 0.000000001;
+
+	// <----- end of initialization section ----->
 
 	glm::dvec3 toTheMoon = SolarSystemConstants::moonPos;
 	bool frwd = true;

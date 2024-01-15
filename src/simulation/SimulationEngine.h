@@ -52,7 +52,7 @@ private:
 	glm::dmat4 projection;	
 
 	SolarSystem* solarSystem;
-	Rocket* rocket;
+	Rocket* rocket;	
 	PhysicsSolver* physics;
 	TrajectoryPrediction* trajectoryPrediction;
 	SkyBoxRenderer* skyboxRenderer;

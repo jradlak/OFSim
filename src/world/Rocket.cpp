@@ -12,9 +12,9 @@ Rocket::Rocket(std::string shaderName, glm::dvec3 _position, double _size)
 	rotation = glm::dvec3(0.0);
 }
 
-void Rocket::init()
+RocketPhysicalProperties Rocket::projectProperties()
 {
-	
+	return { position, initialPosition, towards, rotation, velocity, size, mass, thrustMagnitude };
 }
 
 void Rocket::reset()
