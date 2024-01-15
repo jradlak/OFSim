@@ -252,6 +252,7 @@ add_executable(
     external_libraries/stb_image.cpp  
 
     "tests/SphereTests.cpp"    
+    "tests/PhysicsSolverTests.cpp"
 )
 target_link_libraries(
     ofsim_tests
