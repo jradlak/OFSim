@@ -2,41 +2,30 @@
 
 #include "Sphere.h"
 
-#define M_PI       3.14159265358979323846   // pi
-
-
-Sphere::Sphere()
+Sphere::Sphere() 
+    : radius(0.5f), sectorCount(32), stackCount(16), size(0.0f)
 {
-    radius = 0.5f;
-    sectorCount = 32;
-    stackCount = 16;    
-    size = 0.0f;
-
     build();
 }
 
-Sphere::Sphere(float _radius, unsigned int _sectorCount, unsigned int _stackCount)
+Sphere::Sphere(f32 _radius, u32 _sectorCount, u32 _stackCount)
+    : radius(_radius), sectorCount(_sectorCount), stackCount(_stackCount), size(_radius)
 {
-    radius = _radius;
-    sectorCount = _sectorCount;
-    stackCount = _stackCount;
-    size = _radius;
-
     build();
 }
 
 void Sphere::build()
 {
-    std::vector<float>().swap(verticesAndNormals);
+    std::vector<f32>().swap(verticesAndNormals);
     std::vector<int>().swap(indices);
 
-    float x, y, z, xy;
-    float nx, ny, nz, lengthInv = 1.0f / radius;
-    float s, t;
+    f32 x, y, z, xy;
+    f32 nx, ny, nz, lengthInv = 1.0f / radius;
+    f32 s, t;
 
-    float sectorStep = 2 * M_PI / sectorCount;
-    float stackStep = M_PI / stackCount;
-    float sectorAngle, stackAngle;
+    f32 sectorStep = 2 * M_PI / sectorCount;
+    f32 stackStep = M_PI / stackCount;
+    f32 sectorAngle, stackAngle;
 
     for(int i = 0; i <= stackCount; ++i)
     {
@@ -63,24 +52,24 @@ void Sphere::build()
             verticesAndNormals.push_back(nz);
 
             // vertex tex coord (s, t) range between [0, 1]
-            s = (float)j / sectorCount;
-            t = (float)i / stackCount;
+            s = (f32)j / sectorCount;
+            t = (f32)i / stackCount;
             texCoords.push_back(s);
             texCoords.push_back(t);
         }
     }
 
-    int k1, k2;
-    for(int i = 0; i < stackCount; ++i)
+    u32 k1, k2;
+    for (u32 i = 0; i < stackCount; ++i)
     {
         k1 = i * (sectorCount + 1);     // beginning of current stack
         k2 = k1 + sectorCount + 1;      // beginning of next stack
 
-        for(int j = 0; j < sectorCount; ++j, ++k1, ++k2)
+        for (u32 j = 0; j < sectorCount; ++j, ++k1, ++k2)
         {
             // 2 triangles per sector excluding first and last stacks
             // k1 => k2 => k1+1
-            if(i != 0)
+            if (i != 0)
             {
                 indices.push_back(k1);
                 indices.push_back(k2);
@@ -88,7 +77,7 @@ void Sphere::build()
             }
 
             // k1+1 => k2 => k2+1
-            if(i != (stackCount-1))
+            if (i != (stackCount - 1))
             {
                 indices.push_back(k1 + 1);
                 indices.push_back(k2);
@@ -96,39 +85,4 @@ void Sphere::build()
             }
         }
     }
-}
-
-std::vector<float> Sphere::getVertices()
-{
-    return verticesAndNormals;
-}
-
-std::vector<int> Sphere::getIndices()
-{
-    return indices;
-}
-
-float Sphere::getSize()
-{
-    return size;
-}
-
-void Sphere::updateSize(float newSize)
-{
-    size = newSize;
-}
-
-glm::dvec3 Sphere::getPosition()
-{
-    return position;
-}
-
-void Sphere::updatePosition(glm::dvec3 newPosition)
-{
-    position = newPosition;
-}
-
-Sphere::~Sphere()
-{
-
 }
