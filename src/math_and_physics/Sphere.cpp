@@ -27,13 +27,13 @@ void Sphere::build()
     f32 stackStep = M_PI / stackCount;
     f32 sectorAngle, stackAngle;
 
-    for(int i = 0; i <= stackCount; ++i)
+    for(u32 i = 0; i <= stackCount; ++i)
     {
         stackAngle = M_PI / 2 - i * stackStep;
         xy = radius * cosf(stackAngle);
         z = radius * sinf(stackAngle);
 
-        for(int j = 0; j <= sectorCount; ++j)
+        for(u32 j = 0; j <= sectorCount; ++j)
         {
             sectorAngle = j * sectorStep;
 

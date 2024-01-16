@@ -21,10 +21,10 @@
 #include "../vmachine/VMachine.h"
 #include "../vmachine/ODDMA.h"
 
-class SimulationEngine : public Task
+class Simulation : public Task
 {
 public:
-	SimulationEngine();
+	Simulation();
 
 	void init();
 
@@ -34,7 +34,7 @@ public:
 
 	void restart();
 
-	~SimulationEngine();
+	~Simulation();
 
 private:
 	const int MS_PER_UPDATE = 12;

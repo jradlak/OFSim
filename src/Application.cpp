@@ -1,11 +1,9 @@
-#include "simulation/SimulationEngine.h"
+#include "simulation/Simulation.h"
 
 int main(int argc, char** argv)
 {
-	SimulationEngine* simulation = new SimulationEngine();
-	simulation->init();
-	simulation->start();
-	simulation->stop();
-
-	delete simulation;
+	Simulation simulation;
+	simulation.init();
+	simulation.start();
+	simulation.stop();
 }

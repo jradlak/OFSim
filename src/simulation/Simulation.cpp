@@ -1,9 +1,9 @@
-#include "SimulationEngine.h"
+#include "Simulation.h"
 
 int lastKeyPressed = 0;
 void keyPressedCallback(int keyPressed);
 
-SimulationEngine::SimulationEngine()
+Simulation::Simulation()
 {
 	camera = new Camera(glm::vec3(-100.0, -160.0, 1000.0));
 	mainWindow = new Window(*camera, SCR_WIDTH, SCR_HEIGHT);
@@ -20,7 +20,7 @@ SimulationEngine::SimulationEngine()
 	camera->position = rocket->getPosition() + glm::dvec3(0.0, 0.024, 0.0);	
 }
 
-void SimulationEngine::init()
+void Simulation::init()
 {
 	lag = 0;
 	previous = currentTime();
@@ -28,18 +28,18 @@ void SimulationEngine::init()
 		(double)SCR_WIDTH / (double)SCR_HEIGHT, 0.001, 150000000.0);
 }
 
-void SimulationEngine::start()
+void Simulation::start()
 {
 	simulationStopped = false;
 	mainLoop();
 }
 
-void SimulationEngine::stop()
+void Simulation::stop()
 {
 	simulationStopped = true;
 }
 
-void SimulationEngine::restart()
+void Simulation::restart()
 {	
 	vm->unPause();
 	runningTime = 0;
@@ -63,7 +63,7 @@ void SimulationEngine::restart()
 	//oddma->start();
 }
 
-void SimulationEngine::mainLoop()
+void Simulation::mainLoop()
 {	
 	// <---- initialization sectiom; ----->
 
@@ -302,21 +302,21 @@ void SimulationEngine::mainLoop()
 	}
 }
 
-unsigned long long SimulationEngine::currentTime()
+unsigned long long Simulation::currentTime()
 {
 	return std::chrono::duration_cast<std::chrono::milliseconds>(
 		std::chrono::system_clock::now().time_since_epoch()
 		).count();
 }
 
-void SimulationEngine::createGui()
+void Simulation::createGui()
 {
 	gui = new ofsim_gui::Gui();
 	gui->initialization(mainWindow);
 	gui->loadTextures();
 }
 
-void SimulationEngine::collectTelemetry()
+void Simulation::collectTelemetry()
 {
 	unsigned long long tickTock = runningTime / 1000;
 	if (runningTime > 0)
@@ -335,13 +335,13 @@ void SimulationEngine::collectTelemetry()
 	}
 }
 
-void SimulationEngine::initialPhysicsInformation()
+void Simulation::initialPhysicsInformation()
 {
 	initialRocketRotation();
 	solarSystem->provideRocketInformationAndInit(angle, dangle, rocket);	
 }
 
-void SimulationEngine::initialRocketRotation()
+void Simulation::initialRocketRotation()
 {
 	glm::dvec3 newRotation = glm::dvec3(-50.000021, 48.8000050, 0.0);
 	glm::dvec3 deltaRotation = newRotation - rocket->getRotation();
@@ -349,7 +349,7 @@ void SimulationEngine::initialRocketRotation()
 	physics->rotateRocket(deltaRotation);
 }
 
-void SimulationEngine::initialOrbitalInformation()
+void Simulation::initialOrbitalInformation()
 {
 	simulationStopped = 0;
 	lastAltitude = 0;
@@ -359,7 +359,7 @@ void SimulationEngine::initialOrbitalInformation()
 	altitudeDirection = 1;
 }
 
-void SimulationEngine::initWindowContext()
+void Simulation::initWindowContext()
 {
 	int result = mainWindow->initialize();
 	if (result != 0)
@@ -368,7 +368,7 @@ void SimulationEngine::initWindowContext()
 	}		                                               
 }
 
-void SimulationEngine::switchGLStateForWorldRendering(float r, float g, float b)
+void Simulation::switchGLStateForWorldRendering(float r, float g, float b)
 {
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
@@ -380,7 +380,7 @@ void SimulationEngine::switchGLStateForWorldRendering(float r, float g, float b)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void SimulationEngine::calcApogeumAndPerygeum()
+void Simulation::calcApogeumAndPerygeum()
 {
 	if (lastAltitude < physics->getAltitude() && lastAltitude > 4)
 	{
@@ -403,7 +403,7 @@ void SimulationEngine::calcApogeumAndPerygeum()
 	}
 }
 
-void SimulationEngine::renderTelemetry(ofsim_gui::Gui* gui, Rocket* rocket, double altitude, double apogeum, double perygeum, double atmosphereDragForceMagnitude)
+void Simulation::renderTelemetry(ofsim_gui::Gui* gui, Rocket* rocket, double altitude, double apogeum, double perygeum, double atmosphereDragForceMagnitude)
 {
 	TelemetryData data;
 	
@@ -421,7 +421,7 @@ void SimulationEngine::renderTelemetry(ofsim_gui::Gui* gui, Rocket* rocket, doub
 	gui->renderTelemetry(data);
 }
 
-void SimulationEngine::syncFramerate(unsigned long long startTime, int ms_per_update)
+void Simulation::syncFramerate(unsigned long long startTime, int ms_per_update)
 {
 	unsigned long long endTime = startTime + ms_per_update;
 	while (currentTime() < endTime)
@@ -430,7 +430,7 @@ void SimulationEngine::syncFramerate(unsigned long long startTime, int ms_per_up
 	}
 }
 
-SimulationEngine::~SimulationEngine()
+Simulation::~Simulation()
 {
 	oddma->stop();		
 	vm->stop();
