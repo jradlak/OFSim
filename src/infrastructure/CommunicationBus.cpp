@@ -1,8 +1,6 @@
 #include "CommunicationBus.h"
 
-CommunicationBus::CommunicationBus()
-{	
-}
+using namespace ofs_infrastructure;
 
 void CommunicationBus::publishCommand(RocketCommand cmd)
 {
@@ -25,14 +23,4 @@ RocketCommand CommunicationBus::getCommad(unsigned long long runningTime)
 	commandHistory.insert(std::pair<unsigned long long, RocketCommand>(runningTime, cmd));
 
 	return cmd;
-}
-
-std::map<unsigned long long, RocketCommand>& CommunicationBus::getCommandHistory()
-{
-	return commandHistory;
-}
-
-void CommunicationBus::clear()
-{	
-	commandHistory.clear();	
 }

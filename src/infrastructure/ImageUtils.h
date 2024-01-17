@@ -3,9 +3,8 @@
 #include "../../external_libraries/glad/glad.h"
 #include "../../external_libraries/stb_image.h"
 
-class ImageUtils
+struct ImageUtils
 {
-public:
 	static bool loadTextureFromFile(const char* filename, GLuint* out_texture, int* out_width, int* out_height)
 	{
                 // Load from file

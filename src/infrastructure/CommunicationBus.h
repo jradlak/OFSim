@@ -9,27 +9,31 @@
 
 #include "../vmachine/RocketCommand.h"
 
-class CommunicationBus
+namespace ofs_infrastructure
 {
-public:
-	CommunicationBus();
+	class CommunicationBus
+	{
+	public:
+		CommunicationBus() {}
 
-	void publishCommand(RocketCommand cmd);
-	RocketCommand getCommad(unsigned long long runningTime);
+		void publishCommand(RocketCommand cmd);
+		RocketCommand getCommad(unsigned long long runningTime);
 
-	std::map<unsigned long long, RocketCommand>& getCommandHistory();
+		std::map<unsigned long long, RocketCommand>& getCommandHistory() { return commandHistory; }
 
-	bool anyCommands() { return commands.size() > 0; }
+		bool anyCommands() { return commands.size() > 0; }
 
-	void clear();
+		void clear() { commandHistory.clear();}
 
-	~CommunicationBus() {}
+		~CommunicationBus() {}
 
-private:
-	std::queue<RocketCommand> commands;	
+	private:
+		std::queue<RocketCommand> commands;	
 
-	mutable std::mutex mc;
-	std::condition_variable cc;
+		mutable std::mutex mc;
+		std::condition_variable cc;
 
-	std::map<unsigned long long, RocketCommand> commandHistory;	
-};
+		std::map<unsigned long long, RocketCommand> commandHistory;	
+	};
+
+}

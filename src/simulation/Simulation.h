@@ -70,7 +70,7 @@ private:
 	ofsim_gui::Gui* gui;
 	
 	// task and communication:
-	CommunicationBus* communicationBus;
+	ofs_infrastructure::CommunicationBus* communicationBus;
 	VMachine* vm;
 	ODDMA* oddma;
 	TelemetryCollector* telemetryCollector;

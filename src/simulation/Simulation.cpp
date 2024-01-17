@@ -74,7 +74,7 @@ void Simulation::mainLoop()
 	physics->changeInitialAltitudeOrientation(CelestialBodyType::planet, 3185.0, towards);
 
 	// initialize communication Bus and telemetry collector:
-	communicationBus = new CommunicationBus();
+	communicationBus = new ofs_infrastructure::CommunicationBus();
 	telemetryCollector = new TelemetryCollector();
 
 	// initialize and start Virtual Machine:
