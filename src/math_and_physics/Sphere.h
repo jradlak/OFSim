@@ -3,10 +3,14 @@
 #include <glm/glm.hpp>
 #include <vector>
 
+#include <cmath>
+
 #include "MathTypes.h"
 
 namespace ofsim_math_and_physics
 {
+    constexpr f32 M_PI { 3.141592653589793238462643383279502884197169399375105820974944592307816406286f };
+
     //TODO: extract PuffCloud class
     class Sphere
     {
