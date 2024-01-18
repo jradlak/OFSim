@@ -53,7 +53,7 @@ Smoke::~Smoke()
 {
 	for (int i = 0; i < SMOKE_SIZE; i++)
 	{
-		delete puffClouds[i];		
+		delete puffClouds[i];
 	}
 
 	delete renderer;	

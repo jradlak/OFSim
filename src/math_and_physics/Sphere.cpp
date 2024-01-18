@@ -2,17 +2,7 @@
 
 #include "Sphere.h"
 
-Sphere::Sphere() 
-    : radius(0.5f), sectorCount(32), stackCount(16), size(0.0f)
-{
-    build();
-}
-
-Sphere::Sphere(f32 _radius, u32 _sectorCount, u32 _stackCount)
-    : radius(_radius), sectorCount(_sectorCount), stackCount(_stackCount), size(_radius)
-{
-    build();
-}
+using namespace ofsim_math_and_physics;
 
 void Sphere::build()
 {
@@ -20,11 +10,11 @@ void Sphere::build()
     std::vector<int>().swap(indices);
 
     f32 x, y, z, xy;
-    f32 nx, ny, nz, lengthInv = 1.0f / radius;
+    f32 nx, ny, nz, lengthInv { 1.0f  / radius };
     f32 s, t;
 
-    f32 sectorStep = 2 * M_PI / sectorCount;
-    f32 stackStep = M_PI / stackCount;
+    f32 sectorStep { 2 * (f32)M_PI / sectorCount };
+    f32 stackStep { (f32)M_PI / stackCount };
     f32 sectorAngle, stackAngle;
 
     for(u32 i = 0; i <= stackCount; ++i)

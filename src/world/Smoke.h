@@ -6,6 +6,8 @@
 #include "../renderer/ObjectRenderer.h"
 #include "../math_and_physics/Sphere.h"
 
+using namespace ofsim_math_and_physics;	
+
 // TODO: use instancing
 class Smoke
 {

@@ -65,7 +65,7 @@ private:
 	unsigned long long lag;
 	unsigned long long previous;
 
-	Camera* camera;
+	ofsim_renderer::Camera* camera;
 	Window* mainWindow;
 	ofsim_gui::Gui* gui;
 	

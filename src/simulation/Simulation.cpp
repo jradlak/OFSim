@@ -5,7 +5,7 @@ void keyPressedCallback(int keyPressed);
 
 Simulation::Simulation()
 {
-	camera = new Camera(glm::vec3(-100.0, -160.0, 1000.0));
+	camera = new ofsim_renderer::Camera(glm::vec3(-100.0, -160.0, 1000.0));
 	mainWindow = new Window(*camera, SCR_WIDTH, SCR_HEIGHT);
 	initWindowContext();
 

@@ -18,21 +18,21 @@ void TrajectoryPrediction::initWithPositions(
 
 	for (int i = 0; i < px.size(); i++)
 	{
-		Sphere* sphere = new Sphere(3, 32, 16);
+		ofsim_math_and_physics::Sphere* sphere = new ofsim_math_and_physics::Sphere(3, 32, 16);
 		sphere->updatePosition(glm::dvec3(px[i], py[i], pz[i]));
 		spheresPrediction.push_back(sphere);
 	}
 
 	for (int i = 0; i < telemetryHistory.size(); i += 8)
 	{
-		Sphere* sphere = new Sphere(3, 32, 16);
+		ofsim_math_and_physics::Sphere* sphere = new ofsim_math_and_physics::Sphere(3, 32, 16);
 		sphere->updatePosition(telemetryHistory[i].position);
 		spheresHistory.push_back(sphere);
 	}
 
 	if (spheresPrediction.size() > 0)
 	{
-		Sphere* sphere = spheresPrediction[0];
+		ofsim_math_and_physics::Sphere* sphere = spheresPrediction[0];
 		renderer->init(sphere->getVertices(), sphere->getIndices());
 	}
 }

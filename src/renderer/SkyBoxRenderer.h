@@ -22,7 +22,7 @@ public:
 
 	void render(glm::dmat4& projection,
 		glm::dmat4& view,
-		Camera* camera);
+		ofsim_renderer::Camera* camera);
 
 	~SkyBoxRenderer();
 

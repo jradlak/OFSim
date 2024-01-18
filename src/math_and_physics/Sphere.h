@@ -5,35 +5,41 @@
 
 #include "MathTypes.h"
 
-//TODO: extract PuffCloud class
-class Sphere
+namespace ofsim_math_and_physics
 {
-public:
-    Sphere(); //puff cloud
-    Sphere(f32 _radius, u32 _sectorCount, u32 _stackCount);
-    
-    std::vector<f32> getVertices() { return verticesAndNormals; }
-    std::vector<int> getIndices() { return indices; }
+    //TODO: extract PuffCloud class
+    class Sphere
+    {
+    public:
+        Sphere() 
+            : radius(0.5f), sectorCount(32), stackCount(16), size(0.0f) { build(); }
 
-    // below: PuffCloud:
-    f32 getSize() { return size; }
-    void updateSize(f32 newSize) { size = newSize; }
-    dvec3 getPosition() { return position; }
-    void updatePosition(glm::dvec3 newPosition) { position = newPosition; }
+        Sphere(f32 _radius, u32 _sectorCount, u32 _stackCount)
+            : radius(_radius), sectorCount(_sectorCount), stackCount(_stackCount), size(_radius) { build(); }
+        
+        std::vector<f32> getVertices() { return verticesAndNormals; }
+        std::vector<int> getIndices() { return indices; }
 
-    ~Sphere() {}
+        // below: PuffCloud:
+        f32 getSize() { return size; }
+        void updateSize(f32 newSize) { size = newSize; }
+        dvec3 getPosition() { return position; }
+        void updatePosition(glm::dvec3 newPosition) { position = newPosition; }
 
-private:
-    std::vector<f32> verticesAndNormals;
-    std::vector<f32> texCoords;
+        ~Sphere() {}
 
-    std::vector<int> indices;
+    private:
+        std::vector<f32> verticesAndNormals;
+        std::vector<f32> texCoords;
 
-    u32 sectorCount, stackCount;
-    
-    f32 size = 0.0f; // used in puff clouds
-    f32 radius;      // used in other cases
-    dvec3 position;
-    
-    void build();
-};
+        std::vector<int> indices;
+
+        u32 sectorCount, stackCount;
+        
+        f32 size { 0.0f }; // used in puff clouds
+        f32 radius;        // used in other cases
+        dvec3 position;
+        
+        void build();
+    };
+}

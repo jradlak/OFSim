@@ -2,6 +2,8 @@
 
 #include "../src/math_and_physics/Sphere.h"
 
+using namespace ofsim_math_and_physics;
+
 TEST(SphereTests, testSphere)
 {
     Sphere sphere = Sphere(1.0f, 32, 16);

@@ -31,7 +31,7 @@ public:
 
 private:
 	CelestialBodyType bodyType;
-	Sphere* sphere;
+	ofsim_math_and_physics::Sphere* sphere;
 	
 	ObjectRenderer* objectRenderer;
 

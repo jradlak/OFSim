@@ -24,8 +24,8 @@ public:
 	~TrajectoryPrediction();
 
 private:
-	std::vector<Sphere*> spheresHistory;
-	std::vector<Sphere*> spheresPrediction;
+	std::vector<ofsim_math_and_physics::Sphere*> spheresHistory;
+	std::vector<ofsim_math_and_physics::Sphere*> spheresPrediction;
 	ObjectRenderer* renderer;
 
 	void clearSpheres();

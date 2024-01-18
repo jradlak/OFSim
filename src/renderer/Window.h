@@ -7,6 +7,8 @@
 
 typedef void (*inputCall)(int);
 
+using namespace ofsim_renderer;
+
 class Window
 {
 public:

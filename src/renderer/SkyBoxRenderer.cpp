@@ -74,7 +74,7 @@ void SkyBoxRenderer::init()
 
 void SkyBoxRenderer::render(glm::dmat4& projection,
     glm::dmat4& view,
-    Camera* camera)
+    ofsim_renderer::Camera* camera)
 {
     // draw skybox as last
     glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
