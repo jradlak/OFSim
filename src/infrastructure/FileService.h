@@ -4,10 +4,12 @@
 #include <iostream>
 #include <string>
 
-struct FileService
-{		
-	static void saveSourceCode(std::string sourcePath, std::string orbitalProgramSrc);
+namespace ofs_infrastructure
+{
+	struct FileService
+	{		
+		static void saveSourceCode(std::string sourcePath, std::string orbitalProgramSrc);
 
-	static std::string loadSourceFile(std::string sourcePath);	
-};
-
+		static std::string loadSourceFile(std::string sourcePath);	
+	};
+}

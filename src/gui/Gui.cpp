@@ -1,5 +1,5 @@
 #include "Gui.h"
-#include "../infrastructure/ImageUtils.h"
+#include "../infrastructure/ImageLoader.h"
 
 #include <iostream>
 
@@ -522,15 +522,15 @@ void Gui::renderDiagnostics(glm::dvec3 position, glm::dvec3 rotation)
 
 void Gui::loadTextures()
 {    
-    bool ret = ImageUtils::loadTextureFromFile("assets/textures/play.png", &play_texture, &out_width, &out_height);
+    bool ret = ofs_infrastructure::ImageLoader::loadTextureFromFile("assets/textures/play.png", &play_texture, &out_width, &out_height);
     IM_ASSERT(ret);
-    ret = ImageUtils::loadTextureFromFile("assets/textures/stop.png", &stop_texture, &out_width, &out_height);
+    ret = ofs_infrastructure::ImageLoader::loadTextureFromFile("assets/textures/stop.png", &stop_texture, &out_width, &out_height);
     IM_ASSERT(ret);
-    ret = ImageUtils::loadTextureFromFile("assets/textures/pause.png", &pause_texture, &out_width, &out_height);
+    ret = ofs_infrastructure::ImageLoader::loadTextureFromFile("assets/textures/pause.png", &pause_texture, &out_width, &out_height);
     IM_ASSERT(ret);
-    ret = ImageUtils::loadTextureFromFile("assets/textures/fwd.png", &fwd_texture, &out_width, &out_height);
+    ret = ofs_infrastructure::ImageLoader::loadTextureFromFile("assets/textures/fwd.png", &fwd_texture, &out_width, &out_height);
     IM_ASSERT(ret);
-    ret = ImageUtils::loadTextureFromFile("assets/textures/splash.jpg", &splashTexture, &out_width, &out_height);
+    ret = ofs_infrastructure::ImageLoader::loadTextureFromFile("assets/textures/splash.jpg", &splashTexture, &out_width, &out_height);
     IM_ASSERT(ret);
 
     pp_texture = play_texture;

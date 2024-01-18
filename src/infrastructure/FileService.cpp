@@ -1,5 +1,7 @@
 #include "FileService.h"
 
+using namespace ofs_infrastructure;
+
 void FileService::saveSourceCode(std::string sourcePath, std::string orbitalProgramSrc)
 {
 	if (orbitalProgramSrc != "")

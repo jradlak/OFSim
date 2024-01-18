@@ -54,7 +54,7 @@ void Simulation::restart()
 		gui->clearSelectedFile();
 	}
 
-	orbitalProgramSourceCode = FileService::loadSourceFile(SOURCE_CODE_FILE_NAME);
+	orbitalProgramSourceCode = ofs_infrastructure::FileService::loadSourceFile(SOURCE_CODE_FILE_NAME);
 
 	initialRocketRotation();
 	initialOrbitalInformation();
@@ -150,14 +150,14 @@ void Simulation::mainLoop()
 			
 			if (gui->getLastClickedMenu() == ofsim_gui::MenuPosition::FILE_SAVE)
 			{
-				FileService::saveSourceCode(SOURCE_CODE_FILE_NAME, orbitalProgramSourceCode);
+				ofs_infrastructure::FileService::saveSourceCode(SOURCE_CODE_FILE_NAME, orbitalProgramSourceCode);
 				gui->clearLastClickedMenu();
 			}
 
 			if (gui->getLastClickedMenu() == ofsim_gui::MenuPosition::FILE_SAVED_AS)
 			{
 				std::string fileSaved = gui->getSavedFile();
-				FileService::saveSourceCode(fileSaved, orbitalProgramSourceCode);
+				ofs_infrastructure::FileService::saveSourceCode(fileSaved, orbitalProgramSourceCode);
 				gui->clearLastClickedMenu();
 			}
 		
