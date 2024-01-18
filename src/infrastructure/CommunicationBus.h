@@ -9,7 +9,7 @@
 
 #include "../vmachine/RocketCommand.h"
 
-namespace ofs_infrastructure
+namespace ofsim_infrastructure
 {
 	class CommunicationBus
 	{

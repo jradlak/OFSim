@@ -14,7 +14,7 @@
 class VMachine : public Task
 {
 public:
-	VMachine(ofs_infrastructure::CommunicationBus* commandBus);
+	VMachine(ofsim_infrastructure::CommunicationBus* commandBus);
 	
 	void translateSourceCode(const char* _sourcePath);
 	

@@ -1,6 +1,6 @@
 #include "VMachine.h"
 
-VMachine::VMachine(ofs_infrastructure::CommunicationBus* commandBus)
+VMachine::VMachine(ofsim_infrastructure::CommunicationBus* commandBus)
 {
 	memory = new Memory();
 	registers = new Registers();

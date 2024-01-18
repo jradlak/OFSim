@@ -3,7 +3,7 @@
 #include "../../external_libraries/glad/glad.h"
 #include "../../external_libraries/stb_image.h"
 
-namespace ofs_infrastructure 
+namespace ofsim_infrastructure 
 {
         struct ImageLoader
         {

@@ -2,6 +2,8 @@
 
 #include "../src/math_and_physics/PhysicsSolver.h"
 
+using namespace ofsim_math_and_physics;
+
 TEST(PhysicsSolverTests, primitiveTest1)
 {   
     dvec3 position = dvec3(0.0, 0.0, 0.0);

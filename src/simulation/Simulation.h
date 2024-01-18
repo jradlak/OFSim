@@ -53,7 +53,7 @@ private:
 
 	SolarSystem* solarSystem;
 	Rocket* rocket;	
-	PhysicsSolver* physics;
+	ofsim_math_and_physics::PhysicsSolver* physics;
 	TrajectoryPrediction* trajectoryPrediction;
 	SkyBoxRenderer* skyboxRenderer;
 
@@ -70,7 +70,7 @@ private:
 	ofsim_gui::Gui* gui;
 	
 	// task and communication:
-	ofs_infrastructure::CommunicationBus* communicationBus;
+	ofsim_infrastructure::CommunicationBus* communicationBus;
 	VMachine* vm;
 	ODDMA* oddma;
 	TelemetryCollector* telemetryCollector;

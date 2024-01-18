@@ -1,6 +1,6 @@
 #include "FileService.h"
 
-using namespace ofs_infrastructure;
+using namespace ofsim_infrastructure;
 
 void FileService::saveSourceCode(std::string sourcePath, std::string orbitalProgramSrc)
 {

@@ -522,15 +522,15 @@ void Gui::renderDiagnostics(glm::dvec3 position, glm::dvec3 rotation)
 
 void Gui::loadTextures()
 {    
-    bool ret = ofs_infrastructure::ImageLoader::loadTextureFromFile("assets/textures/play.png", &play_texture, &out_width, &out_height);
+    bool ret = ofsim_infrastructure::ImageLoader::loadTextureFromFile("assets/textures/play.png", &play_texture, &out_width, &out_height);
     IM_ASSERT(ret);
-    ret = ofs_infrastructure::ImageLoader::loadTextureFromFile("assets/textures/stop.png", &stop_texture, &out_width, &out_height);
+    ret = ofsim_infrastructure::ImageLoader::loadTextureFromFile("assets/textures/stop.png", &stop_texture, &out_width, &out_height);
     IM_ASSERT(ret);
-    ret = ofs_infrastructure::ImageLoader::loadTextureFromFile("assets/textures/pause.png", &pause_texture, &out_width, &out_height);
+    ret = ofsim_infrastructure::ImageLoader::loadTextureFromFile("assets/textures/pause.png", &pause_texture, &out_width, &out_height);
     IM_ASSERT(ret);
-    ret = ofs_infrastructure::ImageLoader::loadTextureFromFile("assets/textures/fwd.png", &fwd_texture, &out_width, &out_height);
+    ret = ofsim_infrastructure::ImageLoader::loadTextureFromFile("assets/textures/fwd.png", &fwd_texture, &out_width, &out_height);
     IM_ASSERT(ret);
-    ret = ofs_infrastructure::ImageLoader::loadTextureFromFile("assets/textures/splash.jpg", &splashTexture, &out_width, &out_height);
+    ret = ofsim_infrastructure::ImageLoader::loadTextureFromFile("assets/textures/splash.jpg", &splashTexture, &out_width, &out_height);
     IM_ASSERT(ret);
 
     pp_texture = play_texture;

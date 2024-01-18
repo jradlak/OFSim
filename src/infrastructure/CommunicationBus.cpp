@@ -1,6 +1,6 @@
 #include "CommunicationBus.h"
 
-using namespace ofs_infrastructure;
+using namespace ofsim_infrastructure;
 
 void CommunicationBus::publishCommand(RocketCommand cmd)
 {

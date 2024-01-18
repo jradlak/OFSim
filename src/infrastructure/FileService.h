@@ -4,7 +4,7 @@
 #include <iostream>
 #include <string>
 
-namespace ofs_infrastructure
+namespace ofsim_infrastructure
 {
 	struct FileService
 	{		

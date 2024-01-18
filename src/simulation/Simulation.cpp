@@ -54,7 +54,7 @@ void Simulation::restart()
 		gui->clearSelectedFile();
 	}
 
-	orbitalProgramSourceCode = ofs_infrastructure::FileService::loadSourceFile(SOURCE_CODE_FILE_NAME);
+	orbitalProgramSourceCode = ofsim_infrastructure::FileService::loadSourceFile(SOURCE_CODE_FILE_NAME);
 
 	initialRocketRotation();
 	initialOrbitalInformation();
@@ -70,11 +70,11 @@ void Simulation::mainLoop()
 	// physics:
 	glm::dvec3 towards = solarSystem->pointAboveEarthSurface(angle, dangle, -50.0);
 	RocketPhysicalProperties rocketProperties = rocket->projectProperties();
-	physics = new PhysicsSolver(rocketProperties, MS_PER_UPDATE);
+	physics = new ofsim_math_and_physics::PhysicsSolver(rocketProperties, MS_PER_UPDATE);
 	physics->changeInitialAltitudeOrientation(CelestialBodyType::planet, 3185.0, towards);
 
 	// initialize communication Bus and telemetry collector:
-	communicationBus = new ofs_infrastructure::CommunicationBus();
+	communicationBus = new ofsim_infrastructure::CommunicationBus();
 	telemetryCollector = new TelemetryCollector();
 
 	// initialize and start Virtual Machine:
@@ -150,14 +150,14 @@ void Simulation::mainLoop()
 			
 			if (gui->getLastClickedMenu() == ofsim_gui::MenuPosition::FILE_SAVE)
 			{
-				ofs_infrastructure::FileService::saveSourceCode(SOURCE_CODE_FILE_NAME, orbitalProgramSourceCode);
+				ofsim_infrastructure::FileService::saveSourceCode(SOURCE_CODE_FILE_NAME, orbitalProgramSourceCode);
 				gui->clearLastClickedMenu();
 			}
 
 			if (gui->getLastClickedMenu() == ofsim_gui::MenuPosition::FILE_SAVED_AS)
 			{
 				std::string fileSaved = gui->getSavedFile();
-				ofs_infrastructure::FileService::saveSourceCode(fileSaved, orbitalProgramSourceCode);
+				ofsim_infrastructure::FileService::saveSourceCode(fileSaved, orbitalProgramSourceCode);
 				gui->clearLastClickedMenu();
 			}
 		

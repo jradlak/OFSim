@@ -64,7 +64,7 @@ add_executable("${CMAKE_PROJECT_NAME}"
 
     src/infrastructure/FileService.h
     src/infrastructure/FileService.cpp
-    src/infrastructure/ImageUtils.h
+    src/infrastructure/ImageLoader.h
     src/infrastructure/CommunicationBus.h
     src/infrastructure/CommunicationBus.cpp
 
