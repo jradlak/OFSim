@@ -27,7 +27,7 @@ public:
 	~Launchpad();
 
 private:
-	ModelRenderer* modelRenderer;
+	ofsim_renderer::ModelRenderer* modelRenderer;
 
 	glm::dvec3 position;	
 	glm::dvec3 rotation;

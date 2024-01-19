@@ -16,22 +16,21 @@
 #include "Shader.h"
 #include "Mesh.h"
 
-class Model
+namespace ofsim_renderer
 {
-public:
-    Model(std::string path)
+    class Model
     {
-        loadModel(path);
-    }
+    public:
+        Model(std::string path) { loadModel(path); }
+        void draw(Shader& shader);
 
-    void draw(Shader& shader);
+    private:
+        // model data
+        std::vector<Mesh> meshes;
+        std::string directory;
 
-private:
-    // model data
-    std::vector<Mesh> meshes;
-    std::string directory;
-
-    void loadModel(std::string path);
-    void processNode(aiNode* node, const aiScene* scene);
-    Mesh processMesh(aiMesh* mesh, const aiScene* scene);   
-};
+        void loadModel(std::string path);
+        void processNode(aiNode* node, const aiScene* scene);
+        Mesh processMesh(aiMesh* mesh, const aiScene* scene);
+    };
+}

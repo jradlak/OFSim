@@ -1,11 +1,13 @@
 #include "Model.h"
 
-// based on: https://learnopengl.com/Model-Loading/Model
+using namespace ofsim_renderer;
 
 void Model::draw(Shader& shader)
 {
-	for (unsigned int i = 0; i < meshes.size(); i++)
-		meshes[i].draw(shader);
+    for (u32 i = 0; i < meshes.size(); i++)
+    {
+        meshes[i].draw(shader);
+    }
 }
 
 void Model::loadModel(std::string path)
@@ -26,13 +28,13 @@ void Model::loadModel(std::string path)
 
 void Model::processNode(aiNode* node, const aiScene* scene)
 {
-    for (unsigned int i = 0; i < node->mNumMeshes; i++)
+    for (u32 i = 0; i < node->mNumMeshes; i++)
     {
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
         meshes.push_back(processMesh(mesh, scene));
     }
 
-    for (unsigned int i = 0; i < node->mNumChildren; i++)
+    for (u32 i = 0; i < node->mNumChildren; i++)
     {
         processNode(node->mChildren[i], scene);
     }
@@ -43,14 +45,16 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
 
-    for (unsigned int i = 0; i < mesh->mNumVertices; i++)
+    for (u32 i = 0; i < mesh->mNumVertices; i++)
     {
-        Vertex vertex;
-        glm::vec3 vector;
-        
-        vector.x = mesh->mVertices[i].x;
-        vector.y = mesh->mVertices[i].y;
-        vector.z = mesh->mVertices[i].z;
+        Vertex vertex{};
+        vec3 vector
+        {
+            mesh->mVertices[i].x,
+            mesh->mVertices[i].y,
+            mesh->mVertices[i].z
+        };
+
         vertex.position = vector;
         
         if (mesh->HasNormals())
@@ -64,12 +68,14 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
         vertices.push_back(vertex);
     }
 
-    for (unsigned int i = 0; i < mesh->mNumFaces; i++)
+    for (u32 i = 0; i < mesh->mNumFaces; i++)
     {
         aiFace face = mesh->mFaces[i];
    
-        for (unsigned int j = 0; j < face.mNumIndices; j++)
+        for (u32 j = 0; j < face.mNumIndices; j++)
+        {
             indices.push_back(face.mIndices[j]);
+        }
     }
     
     return Mesh(vertices, indices);

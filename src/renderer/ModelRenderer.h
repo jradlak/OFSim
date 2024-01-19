@@ -11,26 +11,29 @@
 #include <vector>
 #include "Shader.h"
 #include "Model.h"
+#include "../math_and_physics/MathTypes.h"
 
-
-class ModelRenderer
+namespace ofsim_renderer
 {
-public:
-	ModelRenderer(std::string shaderName, std::string modelPath);
+	class ModelRenderer
+	{
+	public:
+		ModelRenderer(std::string shaderName, std::string modelPath);
 
-	void renderWithRotation(glm::dmat4& projection,
-		glm::dmat4& view,
-		double size,
-		glm::dvec3 position,
-		glm::dvec3 rotation = glm::dvec3(0.0, 0.0, 0.0));
+		void renderWithRotation(dmat4& projection,
+						dmat4& view,
+						f64 size,
+						dvec3 position,
+						dvec3 rotation = dvec3(0.0, 0.0, 0.0));
 
-	Shader* getShader();
+		Shader* getShader() { return shader; }
 
-	~ModelRenderer();
+		~ModelRenderer();
 
-private:
-	Shader* shader;
-	Model* objectModel;
+	private:
+		Shader* shader;
+		Model* objectModel;
 
-	double logDepthBufFC;	
-};
+		f64 logDepthBufFC;	
+	};
+}

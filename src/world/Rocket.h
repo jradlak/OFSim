@@ -55,7 +55,7 @@ public:
 	~Rocket();
 	
 private:	
-	ModelRenderer* modelRenderer;
+	ofsim_renderer::ModelRenderer* modelRenderer;
 	
 	glm::dvec3 position = dvec3(0.0, 0.0, 0.0);
 	glm::dvec3 initialPosition = dvec3(0.0, 0.0, 0.0);

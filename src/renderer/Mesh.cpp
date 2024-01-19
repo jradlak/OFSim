@@ -1,5 +1,7 @@
 #include "Mesh.h"
 
+using namespace ofsim_renderer;
+
 Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices)
 {
     this->vertices = vertices;

@@ -7,7 +7,7 @@ Launchpad::Launchpad(
 	double _size)
 	: position(_position), size(_size)
 {
-	modelRenderer = new ModelRenderer(shaderName, modelName);
+	modelRenderer = new ofsim_renderer::ModelRenderer(shaderName, modelName);
 	r = 0.25f; g = 0.25f, b = 0.75f;
 }
 

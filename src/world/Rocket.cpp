@@ -3,7 +3,7 @@
 Rocket::Rocket(std::string shaderName, glm::dvec3 _position, double _size)
 	: position(_position), initialPosition(_position), size(_size)
 {	
-	modelRenderer = new ModelRenderer(shaderName, "assets/models/12216_rocket_v1_l2.obj");
+	modelRenderer = new ofsim_renderer::ModelRenderer(shaderName, "assets/models/12216_rocket_v1_l2.obj");
 	
 	smoke = new Smoke();
 

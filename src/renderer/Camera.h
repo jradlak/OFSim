@@ -49,7 +49,9 @@ namespace ofsim_renderer
         dmat4 getViewMatrix() { return automaticRotation ? 
             glm::lookAt(rotationPosition + glm::dvec3(0.016, 0.0, 0.012), position, up) 
             : glm::lookAt(position, position + front, up); }
-            
+
+        void setAutomaticRotation(bool autorotation) { automaticRotation = autorotation; }
+
         void processCameraRotation(f64 xoffset, f64 yoffset, bool constrainPitch = true);
         
         void updatePosition(dvec3 newPosition, dvec3 rocketRotation, f64 radius = 0.020);
@@ -57,10 +59,7 @@ namespace ofsim_renderer
         void processKeyboard(Camera_Movement direction, f64 deltaTime);
         void processMouseRotation(f64 xoffset, f64 yoffset, bool constrainPitch = true);
 
-        void setAutomaticRotation(bool autorotation) { automaticRotation = autorotation; }
-
     private:
         void updateCameraVectors();
     };
-
 }

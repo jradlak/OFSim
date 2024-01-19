@@ -28,8 +28,8 @@ private:
 	double dangle;
 	glm::dvec3 initialRotation;
 
-	ModelRenderer* cloudRenderer;
-	ModelRenderer* treeRenderer;
+	ofsim_renderer::ModelRenderer* cloudRenderer;
+	ofsim_renderer::ModelRenderer* treeRenderer;
 	
 	CelestialBody& earth;
 
