@@ -6,17 +6,17 @@ using namespace ofsim_math_and_physics;
 
 TEST(PhysicsSolverTests, primitiveTest1)
 {   
-    dvec3 position = dvec3(0.0, 0.0, 0.0);
-    dvec3 initialPosition = dvec3(0.0, 0.0, 0.0);
-    dvec3 towards = dvec3(0.0, 0.0, 0.0);
-    dvec3 rotation = dvec3(0.0, 0.0, 0.0);
-    dvec3 velocity = dvec3(0.0, 0.0, 0.0);
+    dvec3 position{ dvec3(0.0, 0.0, 0.0) };
+    dvec3 initialPosition{ dvec3(0.0, 0.0, 0.0) };
+    dvec3 towards{ dvec3(0.0, 0.0, 0.0) };
+    dvec3 rotation{ dvec3(0.0, 0.0, 0.0) };
+    dvec3 velocity{ dvec3(0.0, 0.0, 0.0) };
 
-    f64 size = 1.0;
-    f64 mass = 1.0;
-    f64 thrustMagnitude = 1.0;
+    f64 size{ 1.0 };
+    f64 mass{ 1.0 };
+    f64 thrustMagnitude{ 1.0 };
 
-    RocketPhysicalProperties rocketProperties = 
+    RocketPhysicalProperties rocketProperties 
     {
         position,
         initialPosition,
@@ -28,16 +28,16 @@ TEST(PhysicsSolverTests, primitiveTest1)
         thrustMagnitude
     };
 
-    PhysicsSolver physicsSolver = PhysicsSolver(rocketProperties, 12);
+    auto physicsSolver{ PhysicsSolver(rocketProperties, 12) };
 
     physicsSolver.changeInitialAltitudeOrientation(
         CelestialBodyType::planet, 
         1.0,
         dvec3(0.0, 0.0, 0.0));
 
-    u64 timeInterval = 12;
+    u64 timeInterval{ 12 };
 
-    u64 forces = physicsSolver.calculateForces(timeInterval);
+    u64 forces{ physicsSolver.calculateForces(timeInterval) };
 
     EXPECT_EQ(forces, 12);
 }
