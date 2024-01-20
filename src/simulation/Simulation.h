@@ -81,7 +81,7 @@ private:
 	unsigned long long timePaused;
 	
 	// orbital orientation variables:
-	int simulationStopped = 0;
+	int simulationStopped = 1;
 	double lastAltitude = 0;
 	double apogeum = 0;
 	double perygeum = 0;

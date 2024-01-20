@@ -34,7 +34,6 @@ void ODDMA::stop()
 	std::swap(qStatuses, empty);
 }
 
-
 void ODDMA::restart()
 {
 	stop();

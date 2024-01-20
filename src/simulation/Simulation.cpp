@@ -30,7 +30,7 @@ void Simulation::init()
 
 void Simulation::start()
 {
-	simulationStopped = false;
+	simulationStopped = 0;
 	mainLoop();
 }
 
@@ -41,11 +41,11 @@ void Simulation::stop()
 
 void Simulation::restart()
 {	
-	vm->unPause();
+	//vm->unPause();
 	runningTime = 0;
 	//oddma->stop();
-	vm->stop();
-	communicationBus->clear();
+	//vm->stop();
+	//communicationBus->clear();
 	physics->reset();
 
 	if (gui->getSelectedFile() != "")
@@ -58,8 +58,8 @@ void Simulation::restart()
 
 	initialRocketRotation();
 	initialOrbitalInformation();
-	vm->provideSourcePath(SOURCE_CODE_FILE_NAME.c_str());
-	vm->start();
+	//vm->provideSourcePath(SOURCE_CODE_FILE_NAME.c_str());
+	//vm->start();
 	//oddma->start();
 }
 
@@ -74,23 +74,23 @@ void Simulation::mainLoop()
 	physics->changeInitialAltitudeOrientation(CelestialBodyType::planet, 3185.0, towards);
 
 	// initialize communication Bus and telemetry collector:
-	communicationBus = new ofsim_infrastructure::CommunicationBus();
+	
 	telemetryCollector = new TelemetryCollector();
 
-	// initialize and start Virtual Machine:
-	vm = new VMachine(communicationBus);
+	// <------ initialize and start Virtual Machine: ------>
+	//communicationBus = new ofsim_infrastructure::CommunicationBus();
+	//vm = new VMachine(communicationBus);
 	//vm->translateSourceCode(SOURCE_CODE_FILE_NAME.c_str());
 	//vm->start();
 
 	// initialize and start ODDMA:
-	oddma = new ODDMA(rocket, physics, vm, communicationBus);
-	oddma->start();
+	//oddma = new ODDMA(rocket, physics, vm, communicationBus);
+	//oddma->start();
 
 	trajectoryPrediction = new TrajectoryPrediction();
 
 	// initialize GUI:
-	createGui();
-	//orbitalProgramSourceCode =  FileService::loadSourceFile(SOURCE_CODE_FILE_NAME);
+	createGui();	
 
 	// init time variables:
 	startTime = currentTime();
@@ -122,7 +122,7 @@ void Simulation::mainLoop()
 		if (factor == 0)
 		{
 			timePaused = currentTime() - previous;
-			vm->setPause();
+			//vm->setPause();
 		}
 		else if (factor > 0)
 		{
@@ -131,8 +131,9 @@ void Simulation::mainLoop()
 			previous = current;
 			lag += elapsed;
 			runningTime += elapsed;
-			vm->unPause();
-			oddma->provideRunningTime(runningTime);
+			simulationStopped = false;
+			//vm->unPause();
+			//oddma->provideRunningTime(runningTime);
 		}
 		else if (factor == -1)
 		{			
@@ -142,12 +143,20 @@ void Simulation::mainLoop()
 		// input
 		mainWindow->processInput();
 		
+		bool thrustStarterd = false;
 		if (simulationStopped != 1) 
 		{	
-			// update physics:
-			physics->updateRocketOrientation(lastKeyPressed);
-			lag = physics->calculateForces(lag);
-			
+			// update physics:			
+			// temporary launch rocket:
+			if (!thrustStarterd)
+			{
+				physics->updateThrustMagnitude(0.24);			
+				thrustStarterd = true;
+			}
+
+			physics->updateThrustMagnitude(0.24);
+			lag = physics->calculateForces(lag);					
+
 			if (gui->getLastClickedMenu() == ofsim_gui::MenuPosition::FILE_SAVE)
 			{
 				ofsim_infrastructure::FileService::saveSourceCode(SOURCE_CODE_FILE_NAME, orbitalProgramSourceCode);
@@ -209,12 +218,12 @@ void Simulation::mainLoop()
 
 			lastKeyPressed = 0;
 		}
-
+	
 		std::vector<float> rgb = physics->atmosphereRgb();
 		switchGLStateForWorldRendering(rgb[0], rgb[1], rgb[2]);
 
 		gui->newFrame();
-
+		
 		// camera/view transformation:
 		if (!trajectoryPredictionMode && !presentationMode)
 		{
@@ -277,8 +286,8 @@ void Simulation::mainLoop()
 		gui->renderFileOpenDialog();
 		gui->renderSimulationControlWindow(runningTime);
 		gui->renderCodeEditor(orbitalProgramSourceCode);
-		std::map<unsigned long long, RocketCommand>& commandHistory = communicationBus->getCommandHistory();
-		gui->renderCommandHistory(commandHistory);		
+		std::map<unsigned long long, RocketCommand>& commandHistory = communicationBus->getCommandHistory();		
+		//gui->renderCommandHistory(commandHistory);		
 		
 		collectTelemetry();
 		gui->plotTelemetry(
@@ -351,7 +360,7 @@ void Simulation::initialRocketRotation()
 
 void Simulation::initialOrbitalInformation()
 {
-	simulationStopped = 0;
+	simulationStopped = 1;
 	lastAltitude = 0;
 	apogeum = 0;
 	perygeum = 0;
@@ -432,8 +441,8 @@ void Simulation::syncFramerate(unsigned long long startTime, int ms_per_update)
 
 Simulation::~Simulation()
 {
-	oddma->stop();		
-	vm->stop();
+	//oddma->stop();		
+	//vm->stop();
 
 	delete mainWindow;
 	delete camera;
@@ -443,10 +452,10 @@ Simulation::~Simulation()
 		delete renderables[i];
 	}
 		
-	delete oddma;
+	//delete oddma;
 	delete gui;
-	delete vm;
-	delete communicationBus;
+	//delete vm;
+	//delete communicationBus;
 	delete telemetryCollector;
 	delete trajectoryPrediction;
 

@@ -68,8 +68,8 @@ private:
 	Smoke* smoke;
 	
 	//physics:
-	glm::dvec3 velocity;
-	double mass;
+	glm::dvec3 velocity = dvec3(0.0, 0.0, 0.0);
+	double mass = 10.0;
 
 	double thrustMagnitude;
 	

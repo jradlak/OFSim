@@ -50,7 +50,7 @@ u64 PhysicsSolver::calculateForces(u64 timeInterval)
 
             if (mass < 3.0)
             {
-                thrustCutOff = true;
+                updateThrustMagnitude(0.0001);                
             }
             
             if (!thrustCutOff)
@@ -144,40 +144,6 @@ void PhysicsSolver::reset()
     altitude = calculateAltitude();
     calculateAtmosphereGradient();
     calculateAtmosphericDragForce();
-}
-
-void PhysicsSolver::updateRocketOrientation(i32 _lastKeyPressed)
-{
-    lastKeyPressed = _lastKeyPressed;
-    dvec3 orgRotation = rocketProperties.rotation;
-    if (lastKeyPressed != 0)
-    {  
-        f64 f { 0.2 };
-        f64 x { 0 }, y { 0 }, z { 0 };
-        if (lastKeyPressed == 265) //GLFW_KEY_UP
-        {
-            x += f;
-        }
-
-        if (lastKeyPressed == 264) //GLFW_KEY_DOWN
-        {
-            x -= f;
-        }
-
-        if (lastKeyPressed == 262) //GLFW_KEY_RIGHT
-        {
-            y -= f;
-        }
-
-        if (lastKeyPressed == 263) //GLFW_KEY_LEFT
-        {
-            y += f;
-        }
-       
-        dvec3 deltaRotation = dvec3(x, y, z);
-        orgRotation += deltaRotation;        
-        rotateVectors(orgRotation, deltaRotation);
-    }
 }
 
 void PhysicsSolver::updateThrustMagnitude(f64 newMagintude)
