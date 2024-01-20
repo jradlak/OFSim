@@ -76,12 +76,10 @@ add_executable("${CMAKE_PROJECT_NAME}"
     src/math_and_physics/PhysicsSolver.cpp
     src/math_and_physics/Sphere.cpp
 
-    src/gui/Gui.h    
-    src/gui/i18n.h
     src/gui/Gui.h
     src/gui/Gui.cpp
+    src/gui/i18n.h
     src/gui/i18n.cpp
-    src/gui/Gui.cpp
     
     src/renderer/Camera.h
     src/renderer/Mesh.h
@@ -143,7 +141,7 @@ add_executable("${CMAKE_PROJECT_NAME}"
     external_libraries/glad/glad.c
     external_libraries/stb_image.h
     external_libraries/stb_image.cpp   
-)
+ )
 
 #copy shaders to binary directory:
 if(MSVC)
@@ -245,6 +243,30 @@ add_executable(
     src/math_and_physics/Geometry.cpp
     src/math_and_physics/PhysicsSolver.cpp
     src/math_and_physics/Sphere.cpp
+    
+    src/gui/i18n.h    
+    src/gui/i18n.cpp    
+
+    src/infrastructure/FileService.h
+    src/infrastructure/FileService.cpp
+    src/infrastructure/ImageLoader.h
+    src/infrastructure/CommunicationBus.h
+    src/infrastructure/CommunicationBus.cpp
+
+    src/vmachine/Instructions.h
+    src/vmachine/Memory.h
+    src/vmachine/ODDMA.h
+    src/vmachine/Opcodes.h
+    src/vmachine/Registers.h
+    src/vmachine/RocketCommand.h
+    src/vmachine/Translator.h
+    src/vmachine/VMachine.h        
+    src/vmachine/Instructions.cpp
+    src/vmachine/Memory.cpp
+    src/vmachine/ODDMA.cpp    
+    src/vmachine/Registers.cpp    
+    src/vmachine/Translator.cpp
+    src/vmachine/VMachine.cpp
 
     external_libraries/glad/glad.h 
     external_libraries/glad/glad.c
@@ -253,7 +275,7 @@ add_executable(
 
     "tests/SphereTests.cpp"    
     "tests/PhysicsSolverTests.cpp"
-)
+    "tests/MemoryTests.cpp")
 target_link_libraries(
     ofsim_tests
     ${OPENGL_LIBRARIES}
