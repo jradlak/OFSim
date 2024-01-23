@@ -9,7 +9,7 @@ void CommunicationBus::publishCommand(RocketCommand cmd)
 	cc.notify_one();
 }
 
-RocketCommand CommunicationBus::getCommad(unsigned long long runningTime)
+RocketCommand CommunicationBus::getCommad(u64 runningTime)
 {
 	std::unique_lock<std::mutex> lock(mc);
 	while (commands.empty())
@@ -20,7 +20,7 @@ RocketCommand CommunicationBus::getCommad(unsigned long long runningTime)
 	RocketCommand cmd = commands.front();
 	commands.pop();
 	
-	commandHistory.insert(std::pair<unsigned long long, RocketCommand>(runningTime, cmd));
+	commandHistory.insert(std::pair<u64, RocketCommand>(runningTime, cmd));
 
 	return cmd;
 }
