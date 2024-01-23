@@ -7,7 +7,10 @@
 #include <map>
 #include <chrono> 
 
+#include "../math_and_physics/MathTypes.h"
+
 #include "../vmachine/RocketCommand.h"
+
 
 namespace ofsim_infrastructure
 {
@@ -19,7 +22,7 @@ namespace ofsim_infrastructure
 		void publishCommand(RocketCommand cmd);
 		RocketCommand getCommad(unsigned long long runningTime);
 
-		std::map<unsigned long long, RocketCommand>& getCommandHistory() { return commandHistory; }
+		std::map<u64, RocketCommand>& getCommandHistory() { return commandHistory; }
 
 		bool anyCommands() { return commands.size() > 0; }
 
@@ -33,7 +36,7 @@ namespace ofsim_infrastructure
 		mutable std::mutex mc;
 		std::condition_variable cc;
 
-		std::map<unsigned long long, RocketCommand> commandHistory;	
+		std::map<u64, RocketCommand> commandHistory;	
 	};
 
 }
