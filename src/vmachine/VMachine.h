@@ -28,9 +28,9 @@ public:
 
 	void stop();
 
-	void setPause();
+	void setPause() { pause = true; }
 
-	void unPause();
+	void unPause() { pause = false; }
 
 	void restart();
 	

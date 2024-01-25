@@ -56,16 +56,6 @@ void VMachine::stop()
 	memory->clear();
 }
 
-void VMachine::setPause()
-{
-	pause = true;
-}
-
-void VMachine::unPause()
-{
-	pause = false;
-}
-
 void VMachine::restart()
 {
 	stop();
