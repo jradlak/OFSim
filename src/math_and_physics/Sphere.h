@@ -22,7 +22,7 @@ namespace ofsim_math_and_physics
             : radius(_radius), sectorCount(_sectorCount), stackCount(_stackCount), size(_radius) { build(); }
         
         std::vector<f32> getVertices() { return verticesAndNormals; }
-        std::vector<int> getIndices() { return indices; }
+        std::vector<i32> getIndices() { return indices; }
 
         // below: PuffCloud:
         f32 getSize() { return size; }
@@ -36,7 +36,7 @@ namespace ofsim_math_and_physics
         std::vector<f32> verticesAndNormals;
         std::vector<f32> texCoords;
 
-        std::vector<int> indices;
+        std::vector<i32> indices;
 
         u32 sectorCount, stackCount;
         

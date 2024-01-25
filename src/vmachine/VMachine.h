@@ -11,6 +11,8 @@
 
 #include "../simulation/Task.h"
 
+#include "../math_and_physics/MathTypes.h"
+
 class VMachine : public Task
 {
 public:
@@ -20,7 +22,7 @@ public:
 	
 	// Task methods:
 	
-	void init();
+	void init() {}
 
 	void start();
 
@@ -43,9 +45,7 @@ public:
 	~VMachine();
 
 private:
-
 	void executionLoop();
-	void waitUntilExecutionFinished();
 
 	Memory* memory;
 	Registers* registers;
@@ -55,11 +55,9 @@ private:
 
 	const char* sourcePath;
 
-	unsigned int pc = 0;
-	unsigned int oldpc = 0;
+	u32 pc = 0;
+	u32 oldpc = 0;
 
 	bool shouldStop = true;
-	bool pause = false;	
-
-	bool threadFinished = 1;
+	bool pause = false;		
 };

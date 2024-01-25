@@ -11,7 +11,6 @@
 
 #include "../vmachine/RocketCommand.h"
 
-
 namespace ofsim_infrastructure
 {
 	class CommunicationBus
@@ -20,7 +19,7 @@ namespace ofsim_infrastructure
 		CommunicationBus() {}
 
 		void publishCommand(RocketCommand cmd);
-		RocketCommand getCommad(unsigned long long runningTime);
+		RocketCommand getCommad(u64 runningTime);
 
 		std::map<u64, RocketCommand>& getCommandHistory() { return commandHistory; }
 

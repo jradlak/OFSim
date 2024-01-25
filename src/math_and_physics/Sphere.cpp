@@ -7,7 +7,7 @@ using namespace ofsim_math_and_physics;
 void Sphere::build()
 {
     std::vector<f32>().swap(verticesAndNormals);
-    std::vector<int>().swap(indices);
+    std::vector<i32>().swap(indices);
 
     f32 x, y, z, xy;
     f32 nx, ny, nz, lengthInv { 1.0f  / radius };

@@ -78,9 +78,11 @@ void Simulation::mainLoop()
 	telemetryCollector = new TelemetryCollector();
 
 	// <------ initialize and start Virtual Machine: ------>
-	//communicationBus = new ofsim_infrastructure::CommunicationBus();
-	//vm = new VMachine(communicationBus);
+	this->communicationBus = new ofsim_infrastructure::CommunicationBus();
+	this->vm = new VMachine(communicationBus);
+
 	//vm->translateSourceCode(SOURCE_CODE_FILE_NAME.c_str());
+	
 	//vm->start();
 
 	// initialize and start ODDMA:
@@ -454,8 +456,8 @@ Simulation::~Simulation()
 		
 	//delete oddma;
 	delete gui;
-	//delete vm;
-	//delete communicationBus;
+	delete vm;
+	delete communicationBus;
 	delete telemetryCollector;
 	delete trajectoryPrediction;
 

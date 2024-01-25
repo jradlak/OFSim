@@ -21,8 +21,7 @@ void VMachine::translateSourceCode(const char* _sourcePath)
 
 void VMachine::executionLoop()
 {
-	// code execution:	
-	threadFinished = 0;
+	// code execution:		
 	unsigned int opcode = memory->fetchByte(0);
 	while (opcode != opcodes->getOpcode("halt") && !shouldStop)
 	{
@@ -46,20 +45,12 @@ void VMachine::executionLoop()
 
 		// fetch another opcode
 		opcode = memory->fetchByte(pc);
-	}
-
-	threadFinished = 1;
-}
-
-void VMachine::waitUntilExecutionFinished()
-{
-	while (threadFinished == 0);
+	}	
 }
 
 void VMachine::stop()
 {
 	shouldStop = true;
-	waitUntilExecutionFinished();
 	takeANap();	
 	registers->clear();
 	memory->clear();
@@ -80,10 +71,6 @@ void VMachine::restart()
 	stop();
 	takeANap();	
 	start();
-}
-
-void VMachine::init()
-{
 }
 
 void VMachine::start()
