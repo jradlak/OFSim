@@ -1,7 +1,7 @@
 #include "CommunicationBus.h"
 
 namespace com_bus {
-	void publish_command(Tbus_data& bus, RocketCommand cmd)
+	void publish_command(Tbus_data& bus, const RocketCommand cmd)
 	{
 		std::lock_guard<std::mutex> lock(bus.mc);
 		bus.commands.push(cmd);
