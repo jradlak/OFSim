@@ -7,7 +7,7 @@
 class Instructions
 {
 public:
-	Instructions(Memory& _memory, Registers& _registers, ofsim_infrastructure::CommunicationBus& _commandBus)
+	Instructions(Memory& _memory, Registers& _registers, com_bus::Tbus_data& _commandBus)
 		:memory(_memory), registers(_registers), commandBus(_commandBus) {}
 	
 	// copy data operations:
@@ -74,5 +74,5 @@ public:
 private:
 	Memory& memory;
 	Registers& registers;	
-	ofsim_infrastructure::CommunicationBus& commandBus;
+	com_bus::Tbus_data& commandBus;
 };

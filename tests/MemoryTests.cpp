@@ -1,6 +1,5 @@
 #include <gtest/gtest.h>
 
-
 #include <thread>
 #include "../src/vmachine/Memory.h"
 

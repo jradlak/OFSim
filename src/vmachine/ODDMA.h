@@ -63,7 +63,7 @@ public:
 class ODDMA : public Task
 {
 public:
-	ODDMA(Rocket* _rocket, ofsim_math_and_physics::PhysicsSolver* _physics, VMachine* _vm, ofsim_infrastructure::CommunicationBus* _commandBus);
+	ODDMA(Rocket* _rocket, ofsim_math_and_physics::PhysicsSolver* _physics, VMachine* _vm, com_bus::Tbus_data* _commandBus);
 	
 	void start();
 	
@@ -91,7 +91,7 @@ private:
 	Rocket* rocket;
 	ofsim_math_and_physics::PhysicsSolver* physics;
 	VMachine* vm;
-	ofsim_infrastructure::CommunicationBus* commandBus;
+	com_bus::Tbus_data* commandBus;
 
 	bool threadsStarted;
 	bool statusSemaphore;

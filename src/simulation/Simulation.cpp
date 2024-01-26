@@ -78,7 +78,7 @@ void Simulation::mainLoop()
 	telemetryCollector = new TelemetryCollector();
 
 	// <------ initialize and start Virtual Machine: ------>
-	this->communicationBus = new ofsim_infrastructure::CommunicationBus();
+	this->communicationBus = new com_bus::Tbus_data;
 	this->vm = new VMachine(communicationBus);
 
 	//vm->translateSourceCode(SOURCE_CODE_FILE_NAME.c_str());
@@ -288,7 +288,7 @@ void Simulation::mainLoop()
 		gui->renderFileOpenDialog();
 		gui->renderSimulationControlWindow(runningTime);
 		gui->renderCodeEditor(orbitalProgramSourceCode);
-		std::map<unsigned long long, RocketCommand>& commandHistory = communicationBus->getCommandHistory();		
+		std::map<unsigned long long, RocketCommand>& commandHistory = communicationBus->command_history;		
 		//gui->renderCommandHistory(commandHistory);		
 		
 		collectTelemetry();

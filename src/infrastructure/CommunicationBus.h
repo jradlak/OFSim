@@ -8,34 +8,24 @@
 #include <chrono> 
 
 #include "../math_and_physics/MathTypes.h"
-
 #include "../vmachine/RocketCommand.h"
 
-namespace ofsim_infrastructure
+// Communication bus
+// This is a thread safe queue of commands
+namespace com_bus
 {
-	class CommunicationBus
+	struct Tbus_data
 	{
-	public:
-		CommunicationBus() {}
-
-		void publishCommand(RocketCommand cmd);
-		RocketCommand getCommad(u64 runningTime);
-
-		std::map<u64, RocketCommand>& getCommandHistory() { return commandHistory; }
-
-		bool anyCommands() { return commands.size() > 0; }
-
-		void clear() { commandHistory.clear();}
-
-		~CommunicationBus() {}
-
-	private:
-		std::queue<RocketCommand> commands;	
+		std::queue<RocketCommand> commands;
+		std::map<u64, RocketCommand> command_history;
 
 		mutable std::mutex mc;
-		std::condition_variable cc;
-
-		std::map<u64, RocketCommand> commandHistory;	
+		std::condition_variable cc;		
 	};
+			
+	void publish_command(Tbus_data& bus, const RocketCommand cmd);
+	RocketCommand get_command(Tbus_data& bus, const u64 runningTime);
 
+	bool any_commands(Tbus_data& bus);
+	void clear_command_history(Tbus_data& bus);
 }

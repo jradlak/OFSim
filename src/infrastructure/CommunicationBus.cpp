@@ -1,26 +1,29 @@
 #include "CommunicationBus.h"
 
-using namespace ofsim_infrastructure;
-
-void CommunicationBus::publishCommand(RocketCommand cmd)
-{
-	std::lock_guard<std::mutex> lock(mc);
-	commands.push(cmd);
-	cc.notify_one();
-}
-
-RocketCommand CommunicationBus::getCommad(u64 runningTime)
-{
-	std::unique_lock<std::mutex> lock(mc);
-	while (commands.empty())
+namespace com_bus {
+	void publish_command(Tbus_data& bus, RocketCommand cmd)
 	{
-		cc.wait(lock);
+		std::lock_guard<std::mutex> lock(bus.mc);
+		bus.commands.push(cmd);
+		bus.cc.notify_one();
 	}
 
-	RocketCommand cmd = commands.front();
-	commands.pop();
-	
-	commandHistory.insert(std::pair<u64, RocketCommand>(runningTime, cmd));
+	RocketCommand get_command(Tbus_data& bus, const u64 runningTime)
+	{
+		std::unique_lock<std::mutex> lock(bus.mc);
+		while (bus.commands.empty())
+		{
+			bus.cc.wait(lock);
+		}
 
-	return cmd;
+		RocketCommand cmd = bus.commands.front();
+		bus.commands.pop();
+
+		bus.command_history.insert(std::pair<u64, RocketCommand>(runningTime, cmd));
+
+		return cmd;
+	}
+
+	bool any_commands(Tbus_data& bus) { return bus.commands.size() > 0; }
+	void clear_command_history(Tbus_data& bus) { bus.command_history.clear(); }
 }

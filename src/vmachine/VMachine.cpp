@@ -1,6 +1,6 @@
 #include "VMachine.h"
 
-VMachine::VMachine(ofsim_infrastructure::CommunicationBus* commandBus)
+VMachine::VMachine(com_bus::Tbus_data* commandBus)
 {
 	memory = new Memory();
 	registers = new Registers();
@@ -69,6 +69,7 @@ void VMachine::start()
 	shouldStop = false;
 	translateSourceCode(sourcePath);
 	std::thread executionLoopThred = std::thread(&VMachine::executionLoop, this);
+	
 	executionLoopThred.detach();		
 }
 

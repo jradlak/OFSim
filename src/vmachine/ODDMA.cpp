@@ -4,7 +4,7 @@ using std::chrono::duration_cast;
 using std::chrono::milliseconds;
 using std::chrono::system_clock;
 
-ODDMA::ODDMA(Rocket* _rocket, ofsim_math_and_physics::PhysicsSolver* _physics, VMachine* _vm, ofsim_infrastructure::CommunicationBus* _commandBus)
+ODDMA::ODDMA(Rocket* _rocket, ofsim_math_and_physics::PhysicsSolver* _physics, VMachine* _vm, com_bus::Tbus_data* _commandBus)
 {
 	rocket = _rocket;
 	physics = _physics;
@@ -233,9 +233,9 @@ void ODDMA::commandListener()
 {
 	while (threadsStarted)
 	{
-		if (commandBus->anyCommands())
+		if (com_bus::any_commands(*commandBus))
 		{
-			RocketCommand rocketCommand = commandBus->getCommad(runningTime);
+			RocketCommand rocketCommand = com_bus::get_command(*commandBus, runningTime);
 			executeInstruction(rocketCommand.code(), rocketCommand.value());
 		}
 

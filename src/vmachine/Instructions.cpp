@@ -367,7 +367,7 @@ void Instructions::cmd(unsigned char* args)
 	double value = registers.fl(r_src_addr);
 	
 	RocketCommand cmd(cmd_code, value);
-	commandBus.publishCommand(cmd);	
+	com_bus::publish_command(commandBus, cmd);	
 }
 
 void Instructions::call(unsigned int opcode, unsigned char* args)
