@@ -91,9 +91,9 @@ namespace com_bus_tests {
 		auto producer { std::thread{ [&bus_data, &producer_finished, &produced_comands]() {
 			while (!producer_finished)
 			{
-				int id = (int)random();
-				publish_command(*bus_data, RocketCommand{ id, double(random() / 100.0) });				
-				if (id < 100)
+				int id = (int)rand();
+				publish_command(*bus_data, RocketCommand{ id, double(rand() / 100.0) });
+				if (id < 10)
 				{
 					producer_finished = true;
 				}
@@ -106,7 +106,7 @@ namespace com_bus_tests {
 			while (!consumer_finished)
 			{
 				RocketCommand command{ get_command(*bus_data, 123) };
-				if (command.code() == 0)
+				if (command.code() < 10)
 				{
 					consumer_finished = true;					
 				}
