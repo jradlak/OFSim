@@ -29,7 +29,7 @@ public:
 		opcodes.push_back(std::make_tuple(0x10, "fmul", 0x2));
 		opcodes.push_back(std::make_tuple(0x11, "div", 0x2));
 		opcodes.push_back(std::make_tuple(0x12, "fdiv", 0x2));
-		opcodes.push_back(std::make_tuple(0x13, "mod", 0x2));
+		opcodes.push_back(std::make_tuple(0x13, "mod", 0x2));						
 		opcodes.push_back(std::make_tuple(0x14, "vor", 0x2));
 		opcodes.push_back(std::make_tuple(0x15, "vand", 0x2));
 		opcodes.push_back(std::make_tuple(0x16, "vxor", 0x2));
