@@ -103,15 +103,15 @@ add_executable("${CMAKE_PROJECT_NAME}"
     
     src/vmachine/Instructions.h
     src/vmachine/Memory.h
-    src/vmachine/ODDMA.h
-    src/vmachine/Opcodes.h
+    "src/infrastructure/ODDMA.h"
+    "src/vmachine/Opcodes.h"
     src/vmachine/Registers.h
-    src/vmachine/RocketCommand.h
+    "src/infrastructure/RocketCommand.h"
     src/vmachine/Translator.h
     src/vmachine/VMachine.h        
     src/vmachine/Instructions.cpp
     src/vmachine/Memory.cpp
-    src/vmachine/ODDMA.cpp    
+    "src/infrastructure/ODDMA.cpp"    
     src/vmachine/Registers.cpp    
     src/vmachine/Translator.cpp
     src/vmachine/VMachine.cpp
@@ -255,15 +255,15 @@ add_executable(
 
     src/vmachine/Instructions.h
     src/vmachine/Memory.h
-    src/vmachine/ODDMA.h
-    src/vmachine/Opcodes.h
+    "src/infrastructure/ODDMA.h"
+    "src/vmachine/Opcodes.h"
     src/vmachine/Registers.h
-    src/vmachine/RocketCommand.h
+    "src/infrastructure/RocketCommand.h"
     src/vmachine/Translator.h
     src/vmachine/VMachine.h        
     src/vmachine/Instructions.cpp
     src/vmachine/Memory.cpp
-    src/vmachine/ODDMA.cpp    
+    "src/infrastructure/ODDMA.cpp"    
     src/vmachine/Registers.cpp    
     src/vmachine/Translator.cpp
     src/vmachine/VMachine.cpp

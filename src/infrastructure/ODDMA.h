@@ -10,7 +10,7 @@
 #include <iostream>
 
 #include "Memory.h"
-#include "VMachine.h"
+#include "../vmachine/VMachine.h"
 #include "../world/Rocket.h"
 #include "../math_and_physics/PhysicsSolver.h"
 

@@ -18,8 +18,8 @@
 #include "../world/SolarSystem.h"
 #include "../math_and_physics/PhysicsSolver.h"
 #include "../infrastructure/CommunicationBus.h"
+#include "../infrastructure/ODDMA.h"
 #include "../vmachine/VMachine.h"
-#include "../vmachine/ODDMA.h"
 
 class Simulation : public Task
 {

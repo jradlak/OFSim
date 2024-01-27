@@ -8,7 +8,7 @@
 #include <chrono> 
 
 #include "../math_and_physics/MathTypes.h"
-#include "../vmachine/RocketCommand.h"
+#include "RocketCommand.h"
 
 // Communication bus
 // This is a thread safe queue of commands

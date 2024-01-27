@@ -11,12 +11,12 @@ namespace fs = std::filesystem;
 #include "../../external_libraries/imgui/imgui_impl_opengl3.h"
 #include "../../external_libraries/imgui/imgui_stdlib.h"
 
-#include "../renderer/Window.h"
-
-#include "../simulation/TelemetryData.h"
-#include "../vmachine/RocketCommand.h"
 #include "i18n.h"
 
+#include "../renderer/Window.h"
+#include "../simulation/TelemetryData.h"
+
+#include "../infrastructure/RocketCommand.h"
 #include "../infrastructure/FileService.h"
 
 namespace ofsim_gui 
