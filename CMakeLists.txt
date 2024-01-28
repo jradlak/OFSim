@@ -136,13 +136,12 @@ add_executable("${CMAKE_PROJECT_NAME}"
     src/world/Planet.cpp
     src/world/SolarSystem.cpp
     src/world/Sun.cpp
-    "src/vm/vmachine.h" "src/vm/vm_memory.cpp"
-
+    
     external_libraries/glad/glad.h 
     external_libraries/glad/glad.c
     external_libraries/stb_image.h
     external_libraries/stb_image.cpp   
-  "src/vm/vm_registers.cpp")
+  )
 
 #copy shaders to binary directory:
 if(MSVC)
@@ -277,7 +276,8 @@ add_executable(
     "tests/SphereTests.cpp"    
     "tests/PhysicsSolverTests.cpp"
     "tests/MemoryTests.cpp" 
-    "tests/com_bus_tests.cpp" "src/vm/vmachine.h" "src/vm/vm_memory.cpp" "src/vm/vm_registers.cpp")
+    "tests/com_bus_tests.cpp"
+   )
 target_link_libraries(
     ofsim_tests
     ${OPENGL_LIBRARIES}
