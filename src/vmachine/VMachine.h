@@ -9,11 +9,9 @@
 #include "Translator.h"
 #include "Opcodes.h"
 
-#include "../simulation/Task.h"
-
 #include "../math_and_physics/MathTypes.h"
 
-class VMachine : public Task
+class VMachine
 {
 public:
 	VMachine(com_bus::Tbus_data* commandBus);
@@ -21,9 +19,7 @@ public:
 	void translateSourceCode(const char* _sourcePath);
 	
 	// Task methods:
-	
-	void init() {}
-
+	// 		
 	void start();
 
 	void stop();

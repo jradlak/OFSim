@@ -60,7 +60,7 @@ public:
 };
 
 // Orbital Data Direct Memory Access controller - ODDMA controller
-class ODDMA : public Task
+class ODDMA
 {
 public:
 	ODDMA(Rocket* _rocket, ofsim_math_and_physics::PhysicsSolver* _physics, VMachine* _vm, com_bus::Tbus_data* _commandBus);

@@ -6,7 +6,6 @@
 
 #include "../world/SolarSystemConstants.h"
 #include "../renderer/Renderable.h"
-#include "Task.h"
 #include "TelemetryCollector.h"
 #include "../infrastructure/FileService.h"
 #include "../renderer/Camera.h"
@@ -21,7 +20,7 @@
 #include "../infrastructure/ODDMA.h"
 #include "../vmachine/VMachine.h"
 
-class Simulation : public Task
+class Simulation
 {
 public:
 	Simulation();
@@ -46,8 +45,7 @@ private:
 	std::string SOURCE_CODE_FILE_NAME = "";
 
 	std::vector<Renderable*> renderables;		
-	std::vector<Task*> backgroundTasks;
-
+	
 	// render matrices:
 	glm::dmat4 projection;	
 
