@@ -4,6 +4,8 @@ static inline std::string& ltrim(std::string& s);
 static inline std::string& rtrim(std::string& s);
 static inline std::string& trim(std::string& s);
 
+using namespace ofsim_vm;
+
 Translator::Translator()
 {
     opcodes = std::make_unique<Opcodes>();

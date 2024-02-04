@@ -4,7 +4,7 @@ using std::chrono::duration_cast;
 using std::chrono::milliseconds;
 using std::chrono::system_clock;
 
-ODDMA::ODDMA(Rocket* _rocket, ofsim_math_and_physics::PhysicsSolver* _physics, VMachine* _vm, com_bus::Tbus_data* _commandBus)
+ODDMA::ODDMA(Rocket* _rocket, ofsim_math_and_physics::PhysicsSolver* _physics, ofsim_vm::VMachine* _vm, com_bus::Tbus_data* _commandBus)
 {
 	rocket = _rocket;
 	physics = _physics;
@@ -84,8 +84,8 @@ void ODDMA::stateConsumer()
 			qStatuses.pop();
 			statusSemaphore = false;
 
-			Memory* memory = vm->getMemory();
-			int address = memory->size - 8;
+			ofsim_vm::Memory* memory = vm->getMemory();
+			int address = ofsim_vm::mem_size - 8;
 
 			memory->storeDWord(address, status.rotation.z);
 			address -= 8;

@@ -1,5 +1,7 @@
 #include "Registers.h"
 
+using namespace ofsim_vm;
+
 unsigned int& Registers::operator[](unsigned char index)
 {
 	assertKnown(index);
@@ -16,46 +18,6 @@ void Registers::fl(unsigned char index, double value)
 {
 	assertKnown(index);
 	flr[index] = value;
-}
-
-short Registers::cr()
-{
-	return creg;
-}
-
-void Registers::cr(short value)
-{
-	creg = value;
-}
-
-short Registers::zf()
-{
-	return zfreg;
-}
-
-void Registers::zf(short value)
-{
-	zfreg = value;
-}
-
-short Registers::cf()
-{
-	return cfreg;
-}
-
-void Registers::cf(short value)
-{
-	cfreg = value;
-}
-
-unsigned int Registers::pc()
-{
-	return pcreg;
-}
-
-void Registers::pc(unsigned int value)
-{
-	pcreg = value;
 }
 
 void Registers::clear()

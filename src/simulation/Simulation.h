@@ -69,7 +69,7 @@ private:
 	
 	// task and communication:
 	com_bus::Tbus_data* communicationBus;
-	VMachine* vm;
+	ofsim_vm::VMachine* vm;
 	ODDMA* oddma;
 	TelemetryCollector* telemetryCollector;
 

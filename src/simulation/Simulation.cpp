@@ -79,7 +79,7 @@ void Simulation::mainLoop()
 
 	// <------ initialize and start Virtual Machine: ------>
 	this->communicationBus = new com_bus::Tbus_data;
-	this->vm = new VMachine(communicationBus);
+	this->vm = new ofsim_vm::VMachine(communicationBus);
 
 	//vm->translateSourceCode(SOURCE_CODE_FILE_NAME.c_str());
 	

@@ -1,5 +1,7 @@
 #include "Memory.h"
 
+using namespace ofsim_vm;
+
 unsigned char Memory::fetchByte(unsigned int addr)
 {
 	std::lock_guard<std::mutex> lock(memMutex);
@@ -63,14 +65,14 @@ void Memory::memcopy(unsigned char* src, unsigned char* dst, unsigned int addr_s
 void Memory::clear()
 {
 	std::lock_guard<std::mutex> lock(memMutex);
-	for (int i = 0; i < size; i++) {
+	for (int i = 0; i < mem_size; i++) {
 		mem[i] = 0;
 	}
 }
 
 void Memory::assertConditions(unsigned int addr) const
 {
-	if (addr > size)
+	if (addr > mem_size)
 	{
 		throw 0x01; // memory address out of range
 	}

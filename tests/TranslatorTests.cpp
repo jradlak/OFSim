@@ -4,6 +4,8 @@
 
 namespace vm_tests
 {
+	using namespace ofsim_vm;
+
 	TEST(TranslatorTest, translateSimpleLine) 
 	{
 		Translator translator;

@@ -5,6 +5,7 @@
 
 namespace vm_tests
 {
+	using namespace ofsim_vm;
 	TEST(MemoryTests, simpleStoreAndFetchBytes)
 	{
 		Memory memory;

@@ -11,45 +11,48 @@
 
 #include "../math_and_physics/MathTypes.h"
 
-class VMachine
+namespace ofsim_vm
 {
-public:
-	VMachine(com_bus::Tbus_data* commandBus);
-	
-	void translateSourceCode(const char* _sourcePath);
-		
-	void start();
+	class VMachine
+	{
+	public:
+		VMachine(com_bus::Tbus_data* commandBus);
 
-	void stop();
+		void translateSourceCode(const char* _sourcePath);
 
-	void setPause() { pause = true; }
+		void start();
 
-	void unPause() { pause = false; }
+		void stop();
 
-	void restart();
-		
-	void provideSourcePath(const char* _sourcePath) { sourcePath = _sourcePath; }
+		void setPause() { pause = true; }
 
-	void takeANap();
+		void unPause() { pause = false; }
 
-	Memory* getMemory() { return memory.get(); }
-		
-	~VMachine() {}
+		void restart();
 
-private:
-	void executionLoop();
+		void provideSourcePath(const char* _sourcePath) { sourcePath = _sourcePath; }
 
-	std::unique_ptr<Memory> memory;
-	std::unique_ptr<Registers> registers;
-	std::unique_ptr<Opcodes> opcodes;
-	std::unique_ptr<Instructions> instructions;
-	std::unique_ptr<Translator> translator;
+		void takeANap();
 
-	const char* sourcePath = nullptr;
+		Memory* getMemory() { return memory.get(); }
 
-	u32 pc = 0;
-	u32 oldpc = 0;
+		~VMachine() {}
 
-	bool shouldStop = true;
-	bool pause = false;		
-};
+	private:
+		void executionLoop();
+
+		std::unique_ptr<Memory> memory;
+		std::unique_ptr<Registers> registers;
+		std::unique_ptr<Opcodes> opcodes;
+		std::unique_ptr<Instructions> instructions;
+		std::unique_ptr<Translator> translator;
+
+		const char* sourcePath{ nullptr };
+
+		u32 pc{ 0 };
+		u32 oldpc{ 0 };
+
+		bool shouldStop{ true };
+		bool pause{ false };
+	};
+} // namespace ofsim_vm

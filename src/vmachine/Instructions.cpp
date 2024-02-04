@@ -1,5 +1,7 @@
 #include "Instructions.h"
 
+using namespace ofsim_vm;
+
 void Instructions::mov(unsigned char* args)
 {
 	unsigned char r_src_addr = args[1];

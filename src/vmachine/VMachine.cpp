@@ -1,5 +1,7 @@
 #include "VMachine.h"
 
+using namespace ofsim_vm;
+
 VMachine::VMachine(com_bus::Tbus_data* commandBus)
 {
 	memory = std::make_unique<Memory>();
