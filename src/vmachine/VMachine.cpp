@@ -2,17 +2,17 @@
 
 VMachine::VMachine(com_bus::Tbus_data* commandBus)
 {
-	memory = new Memory();
-	registers = new Registers();
-	opcodes = new Opcodes();
-	instructions = new Instructions(*memory, *registers, *commandBus);
-	translator = new Translator();
+	memory = std::make_unique<Memory>();
+	registers = std::make_unique<Registers>();
+	opcodes = std::make_unique<Opcodes>();
+	instructions = std::make_unique<Instructions>(*memory, *registers, *commandBus);
+	translator = std::make_unique<Translator>();
 }
 
 void VMachine::translateSourceCode(const char* _sourcePath)
 {
 	sourcePath = _sourcePath;	
-	translator->translate(_sourcePath);
+	translator->translateSourceFile(_sourcePath);
 
 	// load translated code into memory:
 	unsigned int codeSize = translator->getCodeSize();
@@ -73,13 +73,4 @@ void VMachine::start()
 void VMachine::takeANap()
 {	
 	std::this_thread::sleep_for(std::chrono::milliseconds(100));
-}
-
-VMachine::~VMachine()
-{
-	delete translator;
-	delete instructions;
-	delete opcodes;
-	delete memory;
-	delete registers;	
 }

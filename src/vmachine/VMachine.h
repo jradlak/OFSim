@@ -1,7 +1,7 @@
 #pragma once
 
 #include <chrono>
-#include <thread>
+#include <memory>
 
 #include "Memory.h"
 #include "Registers.h"
@@ -17,9 +17,7 @@ public:
 	VMachine(com_bus::Tbus_data* commandBus);
 	
 	void translateSourceCode(const char* _sourcePath);
-	
-	// Task methods:
-	// 		
+		
 	void start();
 
 	void stop();
@@ -29,27 +27,25 @@ public:
 	void unPause() { pause = false; }
 
 	void restart();
-	
-	///////////////////
-
+		
 	void provideSourcePath(const char* _sourcePath) { sourcePath = _sourcePath; }
 
 	void takeANap();
 
-	Memory* getMemory() { return memory; }
+	Memory* getMemory() { return memory.get(); }
 		
-	~VMachine();
+	~VMachine() {}
 
 private:
 	void executionLoop();
 
-	Memory* memory;
-	Registers* registers;
-	Opcodes* opcodes;
-	Instructions* instructions;
-	Translator* translator;
+	std::unique_ptr<Memory> memory;
+	std::unique_ptr<Registers> registers;
+	std::unique_ptr<Opcodes> opcodes;
+	std::unique_ptr<Instructions> instructions;
+	std::unique_ptr<Translator> translator;
 
-	const char* sourcePath;
+	const char* sourcePath = nullptr;
 
 	u32 pc = 0;
 	u32 oldpc = 0;

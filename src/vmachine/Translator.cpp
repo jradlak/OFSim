@@ -6,11 +6,11 @@ static inline std::string& trim(std::string& s);
 
 Translator::Translator()
 {
-    opcodes = new Opcodes();
+    opcodes = std::make_unique<Opcodes>();
     i18n = ofsim_gui::I18n::getInstance();
 }
 
-void Translator::translate(const char* sourcePath)
+void Translator::translateSourceFile(const char* sourcePath)
 {
     std::ifstream sourceFile;
     
@@ -34,14 +34,14 @@ void Translator::translate(const char* sourcePath)
         int lineNumber = 1;
         while (std::getline(sourceFile, line))
         {
-            translate(line, lineNumber++);
+            translateLine(line, lineNumber++);
         }
 
         sourceFile.close();
     }
 }
 
-void Translator::translate(std::string sourceLine, int lineNumber)
+void Translator::translateLine(std::string sourceLine, int lineNumber)
 {
     std::tuple<unsigned int, unsigned int> instr = recognizeInstr(sourceLine);
     unsigned int opcode = std::get<0>(instr);

@@ -12,6 +12,7 @@
 #include <locale>
 #include <tuple>
 #include <regex>
+#include <memory>
 
 #include "Opcodes.h"
 #include "../gui/i18n.h"
@@ -21,8 +22,9 @@ class Translator
 public:
 	Translator();
 
-	void translate(const char* sourcePath);
-   
+	void translateSourceFile(const char* sourcePath);
+	void translateLine(std::string sourceLine, int lineNumber);
+
     unsigned int getCodeSize() { return instr_addr; }
 
 	std::string getTranslationErrors() { return translationErrors; }
@@ -30,19 +32,19 @@ public:
 
     unsigned char code[64 * 512] = { }; // code buffer
 
-	~Translator() { delete opcodes; }
+	~Translator() { }
 
-private:   
+private:   	
+	std::unique_ptr<Opcodes> opcodes;
+
 	unsigned int instr_addr = 0;
 	std::map<std::string, unsigned int> labelDict;
-	Opcodes* opcodes;
-
+	
 	std::tuple<unsigned int, unsigned int> recognizeInstr(std::string sourceLine);
 
 	ofsim_gui::I18n* i18n = nullptr;
 	std::string translationErrors = "";
-
-	void translate(std::string sourceLine, int lineNumber);
+	
 	void findLabel(std::string sourceLine);
 
     void trnsl_constant_to_register(std::tuple<unsigned int, unsigned int> instr, std::string line);
