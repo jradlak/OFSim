@@ -7,8 +7,9 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <string>
-
 #include <vector>
+#include <memory>
+
 #include "Shader.h"
 #include "Model.h"
 #include "../math_and_physics/MathTypes.h"
@@ -26,13 +27,13 @@ namespace ofsim_renderer
 						dvec3 position,
 						dvec3 rotation = dvec3(0.0, 0.0, 0.0));
 
-		Shader* getShader() { return shader; }
+		Shader* getShader() { return shader.get(); }
 
-		~ModelRenderer();
+		~ModelRenderer() {}
 
 	private:
-		Shader* shader;
-		Model* objectModel;
+		std::unique_ptr<Shader> shader;
+		std::unique_ptr<Model> objectModel;
 
 		f64 logDepthBufFC;	
 	};

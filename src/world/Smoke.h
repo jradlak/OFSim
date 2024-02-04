@@ -2,6 +2,7 @@
 
 #include <glm/glm.hpp>
 #include <vector>
+#include <memory>
 
 #include "../renderer/ObjectRenderer.h"
 #include "../math_and_physics/Sphere.h"
@@ -14,10 +15,10 @@ class Smoke
 public:
 	Smoke();
 	void puff(glm::dmat4& projection, glm::dmat4& view, glm::dvec3& _lightPos, glm::dvec3 position);
-	~Smoke();
+	~Smoke() {}
 
 private:
-	int puffIndex = 0;
-	std::vector<Sphere*> puffClouds;
-	ObjectRenderer* renderer;
+	int puffIndex{ 0 };
+	std::vector<std::unique_ptr<Sphere>> puffClouds;
+	std::unique_ptr<ObjectRenderer> renderer;
 };

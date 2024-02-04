@@ -5,17 +5,17 @@ void keyPressedCallback(int keyPressed);
 
 Simulation::Simulation()
 {
-	camera = new ofsim_renderer::Camera(glm::vec3(-100.0, -160.0, 1000.0));
-	mainWindow = new Window(*camera, SCR_WIDTH, SCR_HEIGHT);
+	camera = std::make_unique<ofsim_renderer::Camera>(glm::vec3(-100.0, -160.0, 1000.0));
+	mainWindow = std::make_unique<Window>(*camera, SCR_WIDTH, SCR_HEIGHT);
 	initWindowContext();
 
 	mainWindow->registerInputCallback(keyPressedCallback);
 
-	solarSystem = new SolarSystem();
+	solarSystem = std::make_unique<SolarSystem>();
 	
 	// rocket:
 	glm::dvec3 rocketPos = solarSystem->pointAboveEarthSurface(angle, dangle, -0.2);
-	rocket = new Rocket("model3d_shader", rocketPos, 0.000013);
+	rocket = std::make_unique<Rocket>("model3d_shader", rocketPos, 0.000013);
 	
 	camera->position = rocket->getPosition() + glm::dvec3(0.0, 0.024, 0.0);	
 }
@@ -41,6 +41,8 @@ void Simulation::stop()
 
 void Simulation::restart()
 {	
+	// TODO: implement restart logic, possibly reinventing code below:
+
 	//vm->unPause();
 	runningTime = 0;
 	//oddma->stop();
@@ -67,19 +69,18 @@ void Simulation::mainLoop()
 {	
 	// <---- initialization sectiom; ----->
 
-	// physics:
+	// initialize physics solver:
 	glm::dvec3 towards = solarSystem->pointAboveEarthSurface(angle, dangle, -50.0);
 	RocketPhysicalProperties rocketProperties = rocket->projectProperties();
-	physics = new ofsim_math_and_physics::PhysicsSolver(rocketProperties, MS_PER_UPDATE);
+	physics = std::make_unique<ofsim_math_and_physics::PhysicsSolver>(rocketProperties, MS_PER_UPDATE);
 	physics->changeInitialAltitudeOrientation(CelestialBodyType::planet, 3185.0, towards);
 
-	// initialize communication Bus and telemetry collector:
-	
-	telemetryCollector = new TelemetryCollector();
+	// initialize communication Bus and telemetry collector:	
+	telemetryCollector = std::make_unique<TelemetryCollector>();
 
 	// <------ initialize and start Virtual Machine: ------>
-	this->communicationBus = new com_bus::Tbus_data;
-	this->vm = new ofsim_vm::VMachine(communicationBus);
+	this->communicationBus = std::make_unique<com_bus::Tbus_data>();
+	this->vm = std::make_unique<ofsim_vm::VMachine>(communicationBus.get());
 
 	//vm->translateSourceCode(SOURCE_CODE_FILE_NAME.c_str());
 	
@@ -89,7 +90,7 @@ void Simulation::mainLoop()
 	//oddma = new ODDMA(rocket, physics, vm, communicationBus);
 	//oddma->start();
 
-	trajectoryPrediction = new TrajectoryPrediction();
+	trajectoryPrediction = std::make_unique<TrajectoryPrediction>();
 
 	// initialize GUI:
 	createGui();	
@@ -102,19 +103,19 @@ void Simulation::mainLoop()
 	initialPhysicsInformation();
 	initialOrbitalInformation();
 
-	skyboxRenderer = new SkyBoxRenderer();
+	skyboxRenderer = std::make_unique<SkyBoxRenderer>();
 	skyboxRenderer->init();
 
 	// register renderables:
-	renderables.push_back(solarSystem);
-	renderables.push_back(rocket);
+	renderables.push_back(solarSystem.get());
+	renderables.push_back(rocket.get());
 
-	double radius = 0.000000001;
-	double step = 0.000000001;
+	f64 radius{ 0.000000001 };
+	f64 step{ 0.000000001 };
 
 	// <----- end of initialization section ----->
 
-	glm::dvec3 toTheMoon = SolarSystemConstants::moonPos;
+	dvec3 toTheMoon = SolarSystemConstants::moonPos;
 	bool frwd = true;
 	while (!mainWindow->shouldClose())
 	{		
@@ -159,6 +160,7 @@ void Simulation::mainLoop()
 			physics->updateThrustMagnitude(0.24);
 			lag = physics->calculateForces(lag);					
 
+			// <------------ USER INTERACTION SECTION ------------->
 			if (gui->getLastClickedMenu() == ofsim_gui::MenuPosition::FILE_SAVE)
 			{
 				ofsim_infrastructure::FileService::saveSourceCode(SOURCE_CODE_FILE_NAME, orbitalProgramSourceCode);
@@ -220,7 +222,9 @@ void Simulation::mainLoop()
 
 			lastKeyPressed = 0;
 		}
-	
+		// <------------ END OF USER INTERACTION SECTION ------------->
+
+
 		std::vector<float> rgb = physics->atmosphereRgb();
 		switchGLStateForWorldRendering(rgb[0], rgb[1], rgb[2]);
 
@@ -277,7 +281,7 @@ void Simulation::mainLoop()
 
 		if (physics->getAltitude() > 27.0)
 		{
-			skyboxRenderer->render(projection, view, camera);
+			skyboxRenderer->render(projection, view, camera.get());
 		}
 
 		// render HUD:
@@ -297,7 +301,7 @@ void Simulation::mainLoop()
 			telemetryCollector->getAltitudeHistory(), telemetryCollector->getMaxAltitude(),
 			telemetryCollector->getAtmPressureHistory(), telemetryCollector->getMaxAtmPressure(),
 			telemetryCollector->getAccelarationHistory(), telemetryCollector->getMaxAcceleration(), telemetryCollector->getMinAcceleration());
-		renderTelemetry(gui, rocket, physics->getAltitude(), apogeum, perygeum, physics->getAtmosphereDragForceMagnitude());
+		renderTelemetry(gui.get(), rocket.get(), physics->getAltitude(), apogeum, perygeum, physics->getAtmosphereDragForceMagnitude());
 		
 		gui->endRendering();
 
@@ -322,8 +326,8 @@ unsigned long long Simulation::currentTime()
 
 void Simulation::createGui()
 {
-	gui = new ofsim_gui::Gui();
-	gui->initialization(mainWindow);
+	gui = std::make_unique<ofsim_gui::Gui>();
+	gui->initialization(mainWindow.get());
 	gui->loadTextures();
 }
 
@@ -349,7 +353,7 @@ void Simulation::collectTelemetry()
 void Simulation::initialPhysicsInformation()
 {
 	initialRocketRotation();
-	solarSystem->provideRocketInformationAndInit(angle, dangle, rocket);	
+	solarSystem->provideRocketInformationAndInit(angle, dangle, rocket.get());	
 }
 
 void Simulation::initialRocketRotation()
@@ -432,9 +436,9 @@ void Simulation::renderTelemetry(ofsim_gui::Gui* gui, Rocket* rocket, double alt
 	gui->renderTelemetry(data);
 }
 
-void Simulation::syncFramerate(unsigned long long startTime, int ms_per_update)
+void Simulation::syncFramerate(u64 startTime, i32 ms_per_update)
 {
-	unsigned long long endTime = startTime + ms_per_update;
+	u64 endTime = startTime + ms_per_update;
 	while (currentTime() < endTime)
 	{
 		std::this_thread::sleep_for(std::chrono::milliseconds(1));
@@ -445,23 +449,12 @@ Simulation::~Simulation()
 {
 	//oddma->stop();		
 	//vm->stop();
-
-	delete mainWindow;
-	delete camera;
-
-	for (int i = 0; i < renderables.size(); i++)
+	
+	// TODO: finish convertion to smart pointers in the solar system : can't delete renderables
+	for (u32 i = 0; i < renderables.size(); i++)
 	{	
 		delete renderables[i];
-	}
-		
-	//delete oddma;
-	delete gui;
-	delete vm;
-	delete communicationBus;
-	delete telemetryCollector;
-	delete trajectoryPrediction;
-
-	delete skyboxRenderer;
+	}		
 }
 
 void keyPressedCallback(int keyPressed)

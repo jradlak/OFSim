@@ -6,13 +6,13 @@ Smoke::Smoke()
 {
 	for (int i = 0; i < SMOKE_SIZE; i++)
 	{
-		Sphere* sphere = new Sphere();
+		std::unique_ptr<Sphere> sphere = std::make_unique<Sphere>();
 		sphere->updatePosition(glm::dvec3(0.0));
-		puffClouds.push_back(sphere);
+		puffClouds.push_back(std::move(sphere));
 	}
 
-	Sphere* sphere = puffClouds[0];
-	renderer = new ObjectRenderer("moon_shader");
+	Sphere* sphere = puffClouds[0].get();
+	renderer = std::make_unique<ObjectRenderer>("moon_shader");
 	renderer->init(sphere->getVertices(), sphere->getIndices());
 }
 
@@ -24,7 +24,7 @@ void Smoke::puff(glm::dmat4& projection, glm::dmat4& view, glm::dvec3& _lightPos
 
 	for (int puffIndex = 0; puffIndex < SMOKE_SIZE; puffIndex++)
 	{
-		Sphere* cloud = puffClouds[puffIndex];
+		Sphere* cloud = puffClouds[puffIndex].get();
 		float cSize = cloud->getSize();
 		if (cSize > 0.0f)
 		{
@@ -47,14 +47,4 @@ void Smoke::puff(glm::dmat4& projection, glm::dmat4& view, glm::dvec3& _lightPos
 		shader->setVec3("lightPos", _lightPos);
 		renderer->render(projection, view, cSize, position);
 	}
-}
-
-Smoke::~Smoke()
-{
-	for (int i = 0; i < SMOKE_SIZE; i++)
-	{
-		delete puffClouds[i];
-	}
-
-	delete renderer;	
 }

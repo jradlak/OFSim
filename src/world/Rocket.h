@@ -5,6 +5,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <vector>
+#include <memory>
 
 #include "../renderer/Renderable.h"
 #include "../renderer/ObjectRenderer.h"
@@ -52,25 +53,22 @@ public:
 	glm::dvec3 getVelocity();
 	glm::dvec3 getRotation();
 
-	~Rocket();
+	~Rocket() {}
 	
 private:	
-	ofsim_renderer::ModelRenderer* modelRenderer;
-	
-	glm::dvec3 position = dvec3(0.0, 0.0, 0.0);
-	glm::dvec3 initialPosition = dvec3(0.0, 0.0, 0.0);
-	glm::dvec3 towards = dvec3(0.0, 0.0, 0.0);
-	glm::dvec3 rotation = dvec3(0.0, 0.0, 0.0);
-	
+	// rendering:
+	std::unique_ptr<ofsim_renderer::ModelRenderer> modelRenderer;	
+	std::unique_ptr<Smoke> smoke;
+
+	// orientation:
+	glm::dvec3 position{ dvec3(0.0, 0.0, 0.0) };
+	glm::dvec3 initialPosition{ dvec3(0.0, 0.0, 0.0) };
+	glm::dvec3 towards{ dvec3(0.0, 0.0, 0.0) };
+	glm::dvec3 rotation{ dvec3(0.0, 0.0, 0.0) };
+			
+	// physics:
 	double size;
-
-	// smoke:
-	Smoke* smoke;
-	
-	//physics:
-	glm::dvec3 velocity = dvec3(0.0, 0.0, 0.0);
-	double mass = 10.0;
-
-	double thrustMagnitude;
-	
+	glm::dvec3 velocity{ dvec3(0.0, 0.0, 0.0) };
+	double mass{ 10.0 };
+	double thrustMagnitude;	
 };

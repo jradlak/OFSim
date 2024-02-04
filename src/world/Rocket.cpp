@@ -3,9 +3,9 @@
 Rocket::Rocket(std::string shaderName, glm::dvec3 _position, double _size)
 	: position(_position), initialPosition(_position), size(_size)
 {	
-	modelRenderer = new ofsim_renderer::ModelRenderer(shaderName, "assets/models/12216_rocket_v1_l2.obj");
+	modelRenderer = std::make_unique<ofsim_renderer::ModelRenderer>(shaderName, "assets/models/12216_rocket_v1_l2.obj");
 	
-	smoke = new Smoke();
+	smoke = std::make_unique<Smoke>();
 
 	mass = 10.0;
 	
@@ -87,10 +87,4 @@ void Rocket::updateRotation(glm::dvec3 _rotation)
 void Rocket::updateTowards(glm::dvec3 newTowards)
 {
 	towards = newTowards;
-}
-
-Rocket::~Rocket()
-{
-	delete modelRenderer;
-	delete smoke;
 }

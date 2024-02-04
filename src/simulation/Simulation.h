@@ -3,6 +3,7 @@
 #include <vector>
 #include <iostream>
 #include <string>
+#include <memory>
 
 #include "../world/SolarSystemConstants.h"
 #include "../renderer/Renderable.h"
@@ -16,6 +17,7 @@
 #include "../gui/Gui.h"
 #include "../world/SolarSystem.h"
 #include "../math_and_physics/PhysicsSolver.h"
+#include "../math_and_physics/MathTypes.h"
 #include "../infrastructure/CommunicationBus.h"
 #include "../infrastructure/ODDMA.h"
 #include "../vmachine/VMachine.h"
@@ -36,58 +38,64 @@ public:
 	~Simulation();
 
 private:
-	const int MS_PER_UPDATE = 12;
+	const i32 MS_PER_UPDATE{ 12 };
 	
-	const unsigned int SCR_WIDTH = 1800;
-	const unsigned int SCR_HEIGHT = 950;
+	const u32 SCR_WIDTH{ 1800 };
+	const u32 SCR_HEIGHT{ 950 };
 
 	//std::string SOURCE_CODE_FILE_NAME = "orbital_programs/ballisticProgram.oasm";
-	std::string SOURCE_CODE_FILE_NAME = "";
+	std::string SOURCE_CODE_FILE_NAME{ "" };
 
 	std::vector<Renderable*> renderables;		
 	
 	// render matrices:
-	glm::dmat4 projection;	
+	dmat4 projection;	
 
-	SolarSystem* solarSystem;
-	Rocket* rocket;	
-	ofsim_math_and_physics::PhysicsSolver* physics;
-	TrajectoryPrediction* trajectoryPrediction;
-	SkyBoxRenderer* skyboxRenderer;
+	// world objects:
+	std::unique_ptr<SolarSystem> solarSystem;
+	std::unique_ptr<Rocket> rocket;	
 
-	// rocket and camera orientation:
-	float angle = 30.0;
-	float dangle = 60.0;
+	// physics and trajectory prediction:
+	std::unique_ptr<ofsim_math_and_physics::PhysicsSolver> physics;
+	std::unique_ptr<TrajectoryPrediction> trajectoryPrediction;
+	
+	// skybox:
+	std::unique_ptr<SkyBoxRenderer> skyboxRenderer;
+	
+	// camera, window and gui (user interaction objects):
+	std::unique_ptr<ofsim_renderer::Camera> camera;
+	std::unique_ptr<Window> mainWindow;
+	std::unique_ptr<ofsim_gui::Gui> gui;
+
+	// task and communication:
+	std::unique_ptr<com_bus::Tbus_data> communicationBus;
+	std::unique_ptr<ofsim_vm::VMachine> vm;
+	std::unique_ptr<ODDMA> oddma;
+	std::unique_ptr<TelemetryCollector> telemetryCollector;
+
+	// initial rocket and camera angles:
+	f32 angle{ 30.0 };
+	f32 dangle{ 60.0 };
 	
 	// frame times:
-	unsigned long long lag;
-	unsigned long long previous;
-
-	ofsim_renderer::Camera* camera;
-	Window* mainWindow;
-	ofsim_gui::Gui* gui;
+	u64 lag;
+	u64 previous;
 	
-	// task and communication:
-	com_bus::Tbus_data* communicationBus;
-	ofsim_vm::VMachine* vm;
-	ODDMA* oddma;
-	TelemetryCollector* telemetryCollector;
-
 	// simulation time variables:
-	unsigned long long startTime;
-	unsigned long long runningTime;
-	unsigned long long timePaused;
+	u64 startTime;
+	u64 runningTime;
+	u64 timePaused;
 	
 	// orbital orientation variables:
-	int simulationStopped = 1;
-	double lastAltitude = 0;
-	double apogeum = 0;
-	double perygeum = 0;
-	int lastAltitudeDirection = 1;
-	int altitudeDirection = 1;
+	i32 simulationStopped{ 1 };
+	f64 lastAltitude{ 0 };
+	f64 apogeum{ 0 };
+	f64 perygeum{ 0 };
+	i32 lastAltitudeDirection{ 1 };
+	i32 altitudeDirection{ 1 };
 
-	bool trajectoryPredictionMode = false;	
-	bool presentationMode = false;
+	bool trajectoryPredictionMode{ false };
+	bool presentationMode{ false };
 
 	std::string orbitalProgramSourceCode;
 
@@ -102,11 +110,11 @@ private:
 	void renderTelemetry(ofsim_gui::Gui* gui, Rocket* rocket, double altitude, double apogeum, double perygeum, double atmosphereDragForceMagnitude);
 	void calcApogeumAndPerygeum();
 
-	void syncFramerate(unsigned long long startTime, int ms_per_update);
+	void syncFramerate(u64 startTime, int ms_per_update);
 
 	void createGui();
 		
 	void collectTelemetry();
 
-	unsigned long long currentTime();
+	u64 currentTime();
 };

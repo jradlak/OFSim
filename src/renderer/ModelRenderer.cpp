@@ -4,8 +4,8 @@ using namespace ofsim_renderer;
 
 ModelRenderer::ModelRenderer(std::string shaderName, std::string modelPath)
 {
-	shader = new Shader(("shaders/" + shaderName + "_vs.glsl").c_str(), ("shaders/" + shaderName + "_fs.glsl").c_str());
-	objectModel = new Model(modelPath);
+	shader = std::make_unique<Shader>(("shaders/" + shaderName + "_vs.glsl").c_str(), ("shaders/" + shaderName + "_fs.glsl").c_str());
+	objectModel = std::make_unique<Model>(modelPath);
 	logDepthBufFC = 2.0 / log(150000000000000000.0 + 1.0) / 0.69315;
 }
 
@@ -47,8 +47,3 @@ void ModelRenderer::renderWithRotation(dmat4& projection, dmat4& view, f64 size,
 	objectModel->draw(*shader);
 }
 
-ModelRenderer::~ModelRenderer()
-{
-	delete objectModel;
-	delete shader;
-}
