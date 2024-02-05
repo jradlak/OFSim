@@ -2,7 +2,7 @@
 
 TrajectoryPrediction::TrajectoryPrediction()
 {
-	renderer = new ObjectRenderer("ball_shader");
+	renderer = std::make_unique<ObjectRenderer>("ball_shader");
 }
 
 void TrajectoryPrediction::initWithPositions(
@@ -11,28 +11,26 @@ void TrajectoryPrediction::initWithPositions(
 	std::vector<double> pz,
 	std::vector<TelemetryData> telemetryHistory)
 {
-	clearSpheres();
-
 	spheresHistory.clear();
 	spheresPrediction.clear();
 
 	for (int i = 0; i < px.size(); i++)
 	{
-		ofsim_math_and_physics::Sphere* sphere = new ofsim_math_and_physics::Sphere(3, 32, 16);
+		auto sphere = std::make_unique<ofsim_math_and_physics::Sphere>(3, 32, 16);
 		sphere->updatePosition(glm::dvec3(px[i], py[i], pz[i]));
-		spheresPrediction.push_back(sphere);
+		spheresPrediction.push_back(std::move(sphere));
 	}
 
 	for (int i = 0; i < telemetryHistory.size(); i += 8)
 	{
-		ofsim_math_and_physics::Sphere* sphere = new ofsim_math_and_physics::Sphere(3, 32, 16);
+		auto sphere = std::make_unique<ofsim_math_and_physics::Sphere>(3, 32, 16);
 		sphere->updatePosition(telemetryHistory[i].position);
-		spheresHistory.push_back(sphere);
+		spheresHistory.push_back(std::move(sphere));
 	}
 
 	if (spheresPrediction.size() > 0)
 	{
-		ofsim_math_and_physics::Sphere* sphere = spheresPrediction[0];
+		ofsim_math_and_physics::Sphere* sphere = spheresPrediction[0].get();
 		renderer->init(sphere->getVertices(), sphere->getIndices());
 	}
 }
@@ -41,24 +39,6 @@ void TrajectoryPrediction::render(glm::dmat4 projection, glm::dmat4 view, const 
 {
 	renderHistory(projection, view, lightPos);
 	renderPrediction(projection, view, lightPos);
-}
-
-TrajectoryPrediction::~TrajectoryPrediction()
-{
-	clearSpheres();
-}
-
-void TrajectoryPrediction::clearSpheres()
-{
-	for (int i = 0; i < spheresHistory.size(); i++)
-	{
-		delete spheresHistory[i];
-	}
-
-	for (int i = 0; i < spheresPrediction.size(); i++)
-	{
-		delete spheresPrediction[i];
-	}
 }
 
 void TrajectoryPrediction::renderHistory(glm::dmat4 projection, glm::dmat4 view, const glm::dvec3 lightPos)

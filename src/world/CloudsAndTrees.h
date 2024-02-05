@@ -1,11 +1,11 @@
 #pragma once
 #include <vector>
+#include <memory>
 
 #include "CelestialBody.h"
 #include "../renderer/ModelRenderer.h"
-#include "../renderer/Renderable.h"
 
-class CloudsAndTrees : public Renderable
+class CloudsAndTrees
 {
 public:
 	CloudsAndTrees(const int _numberOfClouds, CelestialBody& _earth,
@@ -15,10 +15,12 @@ public:
 
 	void render(glm::dmat4 projection, glm::dmat4 view, const glm::dvec3 lightPos);
 
-	~CloudsAndTrees() {}
+private:	
+	std::unique_ptr<ofsim_renderer::ModelRenderer> cloudRenderer;
+	std::unique_ptr<ofsim_renderer::ModelRenderer> treeRenderer;
 
-private:
 	const int numberOfClouds;
+
 	std::vector<glm::dvec3> cloudsPositions;
 	std::vector<glm::dvec3> treesPositions;
 
@@ -28,9 +30,6 @@ private:
 	double dangle;
 	glm::dvec3 initialRotation;
 
-	ofsim_renderer::ModelRenderer* cloudRenderer;
-	ofsim_renderer::ModelRenderer* treeRenderer;
-	
 	CelestialBody& earth;
 
 	void calculatePositionsAndSizes();

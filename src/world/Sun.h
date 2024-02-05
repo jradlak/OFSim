@@ -1,9 +1,8 @@
 #pragma once
 
-#include "../renderer/Renderable.h"
 #include "CelestialBody.h"
 
-class Sun : public Renderable
+class Sun
 {
 public:
 

@@ -7,7 +7,7 @@ Launchpad::Launchpad(
 	double _size)
 	: position(_position), size(_size)
 {
-	modelRenderer = new ofsim_renderer::ModelRenderer(shaderName, modelName);
+	modelRenderer = std::make_unique<ofsim_renderer::ModelRenderer>(shaderName, modelName);
 	r = 0.25f; g = 0.25f, b = 0.75f;
 }
 
@@ -28,20 +28,3 @@ void Launchpad::updateColor(float _r, float _g, float _b)
 	g = _g;
 	b = _b;
 }
-
-void Launchpad::updateRotation(glm::dvec3 newRotation)
-{
-	rotation = newRotation;
-}
-
-void Launchpad::updatePosition(glm::dvec3 newPosition)
-{
-	position = newPosition;
-}
-
-Launchpad::~Launchpad()
-{
-	delete modelRenderer;
-}
-
-

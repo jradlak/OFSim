@@ -1,14 +1,13 @@
 #pragma once
 
 #include <vector>
+#include <memory>
+
 #include "../math_and_physics/Sphere.h"
 #include "../simulation/TelemetryData.h"
 #include "ObjectRenderer.h"
 
-
-#include "Renderable.h"
-
-class TrajectoryPrediction : public Renderable
+class TrajectoryPrediction
 {
 public:
 	TrajectoryPrediction();
@@ -21,14 +20,13 @@ public:
 
 	void render(glm::dmat4 projection, glm::dmat4 view, const glm::dvec3 lightPos);
 	
-	~TrajectoryPrediction();
+	~TrajectoryPrediction() {}
 
 private:
-	std::vector<ofsim_math_and_physics::Sphere*> spheresHistory;
-	std::vector<ofsim_math_and_physics::Sphere*> spheresPrediction;
-	ObjectRenderer* renderer;
-
-	void clearSpheres();
+	std::vector<std::unique_ptr<ofsim_math_and_physics::Sphere>> spheresHistory;
+	std::vector<std::unique_ptr<ofsim_math_and_physics::Sphere>> spheresPrediction;
+	
+	std::unique_ptr<ObjectRenderer> renderer;
 
 	void renderHistory(glm::dmat4 projection, glm::dmat4 view, const glm::dvec3 lightPos);
 	void renderPrediction(glm::dmat4 projection, glm::dmat4 view, const glm::dvec3 lightPos);

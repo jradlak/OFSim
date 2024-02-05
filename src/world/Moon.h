@@ -1,9 +1,8 @@
 #pragma once
 
-#include "../renderer/Renderable.h"
 #include "CelestialBody.h"
 
-class Moon : public Renderable
+class Moon
 {
 public:
 	Moon(double _size, const glm::dvec3 _position);

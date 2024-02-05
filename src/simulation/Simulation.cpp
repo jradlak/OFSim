@@ -106,10 +106,6 @@ void Simulation::mainLoop()
 	skyboxRenderer = std::make_unique<SkyBoxRenderer>();
 	skyboxRenderer->init();
 
-	// register renderables:
-	renderables.push_back(solarSystem.get());
-	renderables.push_back(rocket.get());
-
 	f64 radius{ 0.000000001 };
 	f64 step{ 0.000000001 };
 
@@ -262,11 +258,9 @@ void Simulation::mainLoop()
 
 		glm::dmat4 view = camera->getViewMatrix();
 
-		// render renderables:
-		for (int i = 0; i < renderables.size(); i++)
-		{
-			renderables[i]->render(projection, view, SolarSystemConstants::lightPos);
-		}
+		// render world:
+		solarSystem->render(projection, view, SolarSystemConstants::lightPos);
+		rocket->render(projection, view, SolarSystemConstants::lightPos);
 
 		if (trajectoryPredictionMode || presentationMode)
 		{
@@ -443,18 +437,6 @@ void Simulation::syncFramerate(u64 startTime, i32 ms_per_update)
 	{
 		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 	}
-}
-
-Simulation::~Simulation()
-{
-	//oddma->stop();		
-	//vm->stop();
-	
-	// TODO: finish convertion to smart pointers in the solar system : can't delete renderables
-	for (u32 i = 0; i < renderables.size(); i++)
-	{	
-		delete renderables[i];
-	}		
 }
 
 void keyPressedCallback(int keyPressed)

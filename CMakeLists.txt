@@ -86,7 +86,7 @@ add_executable("${CMAKE_PROJECT_NAME}"
     src/renderer/Model.h
     src/renderer/ModelRenderer.h
     src/renderer/ObjectRenderer.h
-    src/renderer/Renderable.h
+    
     src/renderer/Shader.h
     src/renderer/SkyBoxRenderer.h
     src/renderer/TrajectoryPrediction.h
@@ -200,7 +200,7 @@ add_executable(
     src/renderer/Model.h
     src/renderer/ModelRenderer.h
     src/renderer/ObjectRenderer.h
-    src/renderer/Renderable.h
+    
     src/renderer/Shader.h
     src/renderer/SkyBoxRenderer.h
     src/renderer/TrajectoryPrediction.h

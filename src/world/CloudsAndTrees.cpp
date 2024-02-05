@@ -3,8 +3,8 @@
 CloudsAndTrees::CloudsAndTrees(const int _numberOfClouds, CelestialBody& _earth, double _angle, double _dangle)
     : numberOfClouds(_numberOfClouds), earth(_earth), angle(_angle), dangle(_dangle)
 {
-    cloudRenderer = new ofsim_renderer::ModelRenderer("model3d_shader", "assets/models/Cloud.obj");
-    treeRenderer = new ofsim_renderer::ModelRenderer("model3d_shader", "assets/models/Tree.obj");
+    cloudRenderer = std::make_unique<ofsim_renderer::ModelRenderer>("model3d_shader", "assets/models/Cloud.obj");
+    treeRenderer = std::make_unique<ofsim_renderer::ModelRenderer>("model3d_shader", "assets/models/Tree.obj");
 
     calculatePositionsAndSizes();
 }

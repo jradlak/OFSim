@@ -7,7 +7,6 @@
 #include <vector>
 #include <memory>
 
-#include "../renderer/Renderable.h"
 #include "../renderer/ObjectRenderer.h"
 #include "../renderer/ModelRenderer.h"
 
@@ -26,7 +25,7 @@ struct RocketPhysicalProperties
 	f64 &size, &mass, &thrustMagnitude;	
 };
 
-class Rocket : public Renderable
+class Rocket
 {
 public:
 	Rocket(std::string shaderName, glm::dvec3 _position, double _size);

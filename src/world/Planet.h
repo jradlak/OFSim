@@ -1,11 +1,10 @@
 #pragma once
 
-#include "../renderer/Renderable.h"
 #include "CloudsAndTrees.h"
 #include "CelestialBody.h"
 #include "Launchpad.h"
 
-class Planet : public Renderable 
+class Planet
 {
 public:
 	Planet(double _size, const glm::dvec3& _position);

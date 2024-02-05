@@ -6,7 +6,6 @@
 #include <memory>
 
 #include "../world/SolarSystemConstants.h"
-#include "../renderer/Renderable.h"
 #include "TelemetryCollector.h"
 #include "../infrastructure/FileService.h"
 #include "../renderer/Camera.h"
@@ -35,7 +34,7 @@ public:
 
 	void restart();
 
-	~Simulation();
+	~Simulation() {};
 
 private:
 	const i32 MS_PER_UPDATE{ 12 };
@@ -45,8 +44,6 @@ private:
 
 	//std::string SOURCE_CODE_FILE_NAME = "orbital_programs/ballisticProgram.oasm";
 	std::string SOURCE_CODE_FILE_NAME{ "" };
-
-	std::vector<Renderable*> renderables;		
 	
 	// render matrices:
 	dmat4 projection;	
