@@ -14,32 +14,32 @@ Translator::Translator()
 
 void Translator::translateSourceFile(const char* sourcePath)
 {
-    std::ifstream sourceFile;
-    
-    std::string sourceCode = "";
+    std::ifstream file(sourcePath, std::ios::in);
+    std::stringstream fileBuffer;
+    fileBuffer << file.rdbuf();
+    std::string fileData = fileBuffer.str();
+    translateSourceString(fileData);
+    file.close();
+}
 
-    sourceFile.open(sourcePath, std::ios::in);
-        
-    if (sourceFile.is_open()) {
-        std::string line;
-        
-        while (std::getline(sourceFile, line))
-        {
-            recognizeInstr(line);
-            findLabel(line);
-        }
-        
-        instr_addr = 0;
-        sourceFile.clear();
-        sourceFile.seekg(0);
+void ofsim_vm::Translator::translateSourceString(const std::string sourceString)
+{    
+    std::string line;
+    std::stringstream ss(sourceString);
+    while (std::getline(ss, line))
+    {
+        recognizeInstr(line);
+        findLabel(line);        
+    }
 
-        int lineNumber = 1;
-        while (std::getline(sourceFile, line))
-        {
-            translateLine(line, lineNumber++);
-        }
-
-        sourceFile.close();
+    instr_addr = 0;
+    int lineNumber = 1;
+    std::stringstream ss2(sourceString);
+    ss2.clear();
+    ss2.seekg(0, std::ios::beg);
+    while (std::getline(ss2, line))
+    {
+        translateLine(line, lineNumber++);
     }
 }
 

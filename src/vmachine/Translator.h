@@ -25,6 +25,7 @@ namespace ofsim_vm
 		Translator();
 
 		void translateSourceFile(const char* sourcePath);
+		void translateSourceString(const std::string sourceString);
 		void translateLine(std::string sourceLine, int lineNumber);
 
 		unsigned int getCodeSize() { return instr_addr; }
