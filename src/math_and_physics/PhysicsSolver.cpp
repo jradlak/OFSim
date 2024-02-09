@@ -81,6 +81,7 @@ void PhysicsSolver::updatePhysics(f64 deltaTime)
     dvec3 gravityForceVector = normalize(rocketProperties.position - celestialBodyCenter(celestialBodySize)) * GConst;
 
     dvec3 sumOfForces = dvec3(0.0);
+    
     for (unsigned int i = 0; i < forces.size(); i++)
     {
         sumOfForces += forces[i];

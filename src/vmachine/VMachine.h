@@ -2,6 +2,7 @@
 
 #include <chrono>
 #include <memory>
+#include <thread>
 
 #include "Memory.h"
 #include "Registers.h"
