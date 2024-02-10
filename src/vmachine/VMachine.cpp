@@ -69,7 +69,8 @@ void VMachine::start()
 {	
 	takeANap();
 	shouldStop = false;
-	translateSourceCode(sourcePath);	
+	translateSourceCode(sourcePath);
+	executionLoop();
 }
 
 void VMachine::takeANap()
