@@ -78,18 +78,6 @@ void Simulation::mainLoop()
 	// initialize communication Bus and telemetry collector:	
 	telemetryCollector = std::make_unique<TelemetryCollector>();
 
-	// <------ initialize and start Virtual Machine: ------>
-	this->communicationBus = std::make_unique<com_bus::Tbus_data>();
-	this->vm = std::make_unique<ofsim_vm::VMachine>(communicationBus.get());
-
-	//vm->translateSourceCode(SOURCE_CODE_FILE_NAME.c_str());
-	
-	//vm->start();
-
-	// initialize and start ODDMA:
-	//oddma = new ODDMA(rocket, physics, vm, communicationBus);
-	//oddma->start();
-
 	trajectoryPrediction = std::make_unique<TrajectoryPrediction>();
 
 	// initialize GUI:
@@ -109,6 +97,13 @@ void Simulation::mainLoop()
 	f64 radius{ 0.000000001 };
 	f64 step{ 0.000000001 };
 
+	// <------ initialize and start Virtual Machine: ------>
+	this->communicationBus = std::make_unique<com_bus::Tbus_data>();
+	this->vm = std::make_unique<ofsim_vm::VMachine>(communicationBus.get());
+
+	// Start VM in the seperate thread:
+	
+
 	// <----- end of initialization section ----->
 
 	dvec3 toTheMoon = SolarSystemConstants::moonPos;
@@ -120,8 +115,7 @@ void Simulation::mainLoop()
 		// calculate lag:       
 		if (factor == 0)
 		{
-			timePaused = currentTime() - previous;
-			//vm->setPause();
+			timePaused = currentTime() - previous;			
 		}
 		else if (factor > 0)
 		{
@@ -130,9 +124,7 @@ void Simulation::mainLoop()
 			previous = current;
 			lag += elapsed;
 			runningTime += elapsed;
-			simulationStopped = false;
-			//vm->unPause();
-			//oddma->provideRunningTime(runningTime);
+			simulationStopped = false;			
 		}
 		else if (factor == -1)
 		{			
@@ -156,71 +148,11 @@ void Simulation::mainLoop()
 			physics->updateThrustMagnitude(0.24);
 			lag = physics->calculateForces(lag);					
 
-			// <------------ USER INTERACTION SECTION ------------->
-			if (gui->getLastClickedMenu() == ofsim_gui::MenuPosition::FILE_SAVE)
-			{
-				ofsim_infrastructure::FileService::saveSourceCode(SOURCE_CODE_FILE_NAME, orbitalProgramSourceCode);
-				gui->clearLastClickedMenu();
-			}
-
-			if (gui->getLastClickedMenu() == ofsim_gui::MenuPosition::FILE_SAVED_AS)
-			{
-				std::string fileSaved = gui->getSavedFile();
-				ofsim_infrastructure::FileService::saveSourceCode(fileSaved, orbitalProgramSourceCode);
-				gui->clearLastClickedMenu();
-			}
-		
-			if (gui->getLastClickedMenu() == ofsim_gui::MenuPosition::FILE_EXIT)
-			{
-				glfwSetWindowShouldClose(mainWindow->getWindow(), true);
-				gui->clearLastClickedMenu();
-			}
-
-			if (lastKeyPressed == 77 || lastKeyPressed == 75) // m, k
-			{
-				camera->setAutomaticRotation(false);
-				physics->predictTrajectory(runningTime);
-				trajectoryPrediction->initWithPositions(
-					physics->getTrajectoryPredictionX(),
-					physics->getTrajectoryPredictionY(),
-					physics->getTrajectoryPredictionZ(),
-					telemetryCollector->getTelemetryHistory());
-
-				if (lastKeyPressed == 77) // m
-				{
-					if (trajectoryPredictionMode == false)
-					{
-						camera->updatePosition(solarSystem->pointAboveEarthSurface(30, 30, 800), rocket->getRotation());						
-						trajectoryPredictionMode = true;						
-					}
-					else
-					{
-						trajectoryPredictionMode = false;
-					}
-				}
-
-				if (lastKeyPressed == 75) // k
-				{
-					if (presentationMode == false)
-					{
-						toTheMoon = rocket->getPosition() - SolarSystemConstants::moonPos;
-						radius = 0.000000001;
-						step = 0.000000001;
-						presentationMode = true;
-					}
-					else
-					{
-						presentationMode = false;
-						gui->restoreWindows();
-					}					
-				}
-			}
+			userInteraction(toTheMoon, radius, step);
 
 			lastKeyPressed = 0;
 		}
-		// <------------ END OF USER INTERACTION SECTION ------------->
-
-
+		
 		std::vector<float> rgb = physics->atmosphereRgb();
 		switchGLStateForWorldRendering(rgb[0], rgb[1], rgb[2]);
 
@@ -237,8 +169,7 @@ void Simulation::mainLoop()
 		{			
 			if (presentationMode)
 			{
-				camera->setAutomaticRotation(true);
-				//camera->processCameraRotation(3.0, 0);
+				camera->setAutomaticRotation(true);				
 				toTheMoon = SolarSystemConstants::moonPos - rocket->getPosition();
 				
 				camera->updatePosition(rocket->getPosition() + (toTheMoon * radius), rocket->getRotation());
@@ -278,26 +209,9 @@ void Simulation::mainLoop()
 			skyboxRenderer->render(projection, view, camera.get());
 		}
 
-		// render HUD:
-		// TODO: extract to separate method!
-		gui->renderMenuBar();
-		gui->renderSplashScreen();
-		gui->renderFileSaveAsDialog();
-		gui->renderFileOpenDialog();
-		gui->renderSimulationControlWindow(runningTime);
-		gui->renderCodeEditor(orbitalProgramSourceCode);
-		std::map<unsigned long long, RocketCommand>& commandHistory = communicationBus->command_history;		
-		//gui->renderCommandHistory(commandHistory);		
-		
 		collectTelemetry();
-		gui->plotTelemetry(
-			telemetryCollector->getVelicityHistory(), telemetryCollector->getMaxVelocity(),
-			telemetryCollector->getAltitudeHistory(), telemetryCollector->getMaxAltitude(),
-			telemetryCollector->getAtmPressureHistory(), telemetryCollector->getMaxAtmPressure(),
-			telemetryCollector->getAccelarationHistory(), telemetryCollector->getMaxAcceleration(), telemetryCollector->getMinAcceleration());
-		renderTelemetry(gui.get(), rocket.get(), physics->getAltitude(), apogeum, perygeum, physics->getAtmosphereDragForceMagnitude());
 		
-		gui->endRendering();
+		renderHUD();
 
 		calcApogeumAndPerygeum();
 
@@ -308,6 +222,88 @@ void Simulation::mainLoop()
 		syncFramerate(currentTime(), MS_PER_UPDATE);
 		mainWindow->swapBuffers();
 		glfwPollEvents();
+	}
+}
+
+void Simulation::renderHUD()
+{
+	gui->renderMenuBar();
+	gui->renderSplashScreen();
+	gui->renderFileSaveAsDialog();
+	gui->renderFileOpenDialog();
+	gui->renderSimulationControlWindow(runningTime);
+	gui->renderCodeEditor(orbitalProgramSourceCode);
+	std::map<unsigned long long, RocketCommand>& commandHistory = communicationBus->command_history;
+
+	gui->plotTelemetry(
+		telemetryCollector->getVelicityHistory(), telemetryCollector->getMaxVelocity(),
+		telemetryCollector->getAltitudeHistory(), telemetryCollector->getMaxAltitude(),
+		telemetryCollector->getAtmPressureHistory(), telemetryCollector->getMaxAtmPressure(),
+		telemetryCollector->getAccelarationHistory(), telemetryCollector->getMaxAcceleration(), telemetryCollector->getMinAcceleration());
+	renderTelemetry(gui.get(), rocket.get(), physics->getAltitude(), apogeum, perygeum, physics->getAtmosphereDragForceMagnitude());
+
+	gui->endRendering();
+}
+
+void Simulation::userInteraction(dvec3& toTheMoon, f64& radius, f64& step)
+{	
+	if (gui->getLastClickedMenu() == ofsim_gui::MenuPosition::FILE_SAVE)
+	{
+		ofsim_infrastructure::FileService::saveSourceCode(SOURCE_CODE_FILE_NAME, orbitalProgramSourceCode);
+		gui->clearLastClickedMenu();
+	}
+
+	if (gui->getLastClickedMenu() == ofsim_gui::MenuPosition::FILE_SAVED_AS)
+	{
+		std::string fileSaved = gui->getSavedFile();
+		ofsim_infrastructure::FileService::saveSourceCode(fileSaved, orbitalProgramSourceCode);
+		gui->clearLastClickedMenu();
+	}
+
+	if (gui->getLastClickedMenu() == ofsim_gui::MenuPosition::FILE_EXIT)
+	{
+		glfwSetWindowShouldClose(mainWindow->getWindow(), true);
+		gui->clearLastClickedMenu();
+	}
+
+	if (lastKeyPressed == 77 || lastKeyPressed == 75) // m, k
+	{
+		camera->setAutomaticRotation(false);
+		physics->predictTrajectory(runningTime);
+		trajectoryPrediction->initWithPositions(
+			physics->getTrajectoryPredictionX(),
+			physics->getTrajectoryPredictionY(),
+			physics->getTrajectoryPredictionZ(),
+			telemetryCollector->getTelemetryHistory());
+
+		if (lastKeyPressed == 77) // m
+		{
+			if (trajectoryPredictionMode == false)
+			{
+				camera->updatePosition(solarSystem->pointAboveEarthSurface(30, 30, 800), rocket->getRotation());
+				trajectoryPredictionMode = true;
+			}
+			else
+			{
+				trajectoryPredictionMode = false;
+			}
+		}
+
+		if (lastKeyPressed == 75) // k
+		{
+			if (presentationMode == false)
+			{
+				toTheMoon = rocket->getPosition() - SolarSystemConstants::moonPos;
+				radius = 0.000000001;
+				step = 0.000000001;
+				presentationMode = true;
+			}
+			else
+			{
+				presentationMode = false;
+				gui->restoreWindows();
+			}
+		}
 	}
 }
 

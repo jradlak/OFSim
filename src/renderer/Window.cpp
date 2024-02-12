@@ -5,12 +5,9 @@
 
 using namespace ofsim_renderer; 
 
-Window::Window(Camera& _camera, unsigned int _width, unsigned int _height)
-        :camera(_camera)
-    {
-        width = _width;
-        height = _height;
-
+Window::Window(Camera& _camera, const u32 _width, const u32 _height)
+        :camera(_camera), width(_width), height(_height)
+    {        
         lastX = width / 2.0f;
         lastY = height / 2.0f;
         firstMouse = true;

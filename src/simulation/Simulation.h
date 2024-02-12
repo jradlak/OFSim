@@ -51,14 +51,14 @@ private:
 	// world objects:
 	std::unique_ptr<SolarSystem> solarSystem;
 	std::unique_ptr<Rocket> rocket;	
+	
+	// skybox:
+	std::unique_ptr<SkyBoxRenderer> skyboxRenderer;
 
 	// physics and trajectory prediction:
 	std::unique_ptr<ofsim_math_and_physics::PhysicsSolver> physics;
 	std::unique_ptr<TrajectoryPrediction> trajectoryPrediction;
-	
-	// skybox:
-	std::unique_ptr<SkyBoxRenderer> skyboxRenderer;
-	
+		
 	// camera, window and gui (user interaction objects):
 	std::unique_ptr<ofsim_renderer::Camera> camera;
 	std::unique_ptr<Window> mainWindow;
@@ -103,15 +103,19 @@ private:
 	void initWindowContext();
 	void mainLoop();
 
+	void renderHUD();
+
+	void userInteraction(dvec3& toTheMoon, f64& radius, f64& step);
+
 	void switchGLStateForWorldRendering(float r, float g, float b);
 	void renderTelemetry(ofsim_gui::Gui* gui, Rocket* rocket, double altitude, double apogeum, double perygeum, double atmosphereDragForceMagnitude);
 	void calcApogeumAndPerygeum();
 
-	void syncFramerate(u64 startTime, int ms_per_update);
+	void syncFramerate(u64 startTime, i32 ms_per_update);
 
 	void createGui();
 		
 	void collectTelemetry();
 
-	u64 currentTime();
+	u64 currentTime();	
 };

@@ -1,6 +1,8 @@
 #pragma once
 
 #include "../../external_libraries/glad/glad.h"
+#include "../math_and_physics/MathTypes.h"
+
 #include <GLFW/glfw3.h>
 
 #include "Camera.h"
@@ -12,7 +14,7 @@ using namespace ofsim_renderer;
 class Window
 {
 public:
-    Window(Camera& _camera, unsigned int _width, unsigned int _height);
+    Window(Camera& _camera, const u32 _width, const u32 _height);
 
     int initialize();
     void processInput();
@@ -27,9 +29,10 @@ public:
     ~Window();
 
 private:
-    GLFWwindow* mainWindow;
+    GLFWwindow* mainWindow = nullptr;
     Camera& camera;
-    unsigned int width, height;
+
+    const u32 width, height;
     float lastX, lastY;
     bool firstMouse;
 
