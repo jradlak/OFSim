@@ -3,6 +3,7 @@
 #include <chrono>
 #include <memory>
 #include <thread>
+#include <string>
 
 #include "Memory.h"
 #include "Registers.h"
@@ -19,7 +20,11 @@ namespace ofsim_vm
 	public:
 		VMachine(com_bus::Tbus_data* commandBus);
 
-		void translateSourceCode(const char* _sourcePath);
+		void translateSourceCodeFromFile(const char* _sourcePath);
+
+		void loadCode() { Memory::memcopy(translator->code, memory->mem, 0, 0, translator->getCodeSize()); }
+
+		void translateSourceCode(std::string sourceCode);
 
 		void start();
 
@@ -31,11 +36,11 @@ namespace ofsim_vm
 
 		void restart();
 
-		void provideSourcePath(const char* _sourcePath) { sourcePath = _sourcePath; }
+		void provideSourcePath(const char *_sourcePath) { sourcePath = _sourcePath; }
 
 		void takeANap();
 
-		Memory* getMemory() { return memory.get(); }
+		Memory *getMemory() { return memory.get(); }
 
 		~VMachine() {}
 
@@ -48,12 +53,12 @@ namespace ofsim_vm
 		std::unique_ptr<Instructions> instructions;
 		std::unique_ptr<Translator> translator;
 
-		const char* sourcePath{ nullptr };
+		const char *sourcePath{nullptr};
 
-		u32 pc{ 0 };
-		u32 oldpc{ 0 };
+		u32 pc{0};
+		u32 oldpc{0};
 
-		bool shouldStop{ true };
-		bool pause{ false };
+		bool shouldStop{true};
+		bool pause{false};
 	};
 } // namespace ofsim_vm

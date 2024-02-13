@@ -20,7 +20,7 @@ Simulation::Simulation()
 	camera->position = rocket->getPosition() + glm::dvec3(0.0, 0.024, 0.0);	
 }
 
-void Simulation::init()
+void Simulation::init()	
 {
 	lag = 0;
 	previous = currentTime();
@@ -100,9 +100,6 @@ void Simulation::mainLoop()
 	// <------ initialize and start Virtual Machine: ------>
 	this->communicationBus = std::make_unique<com_bus::Tbus_data>();
 	this->vm = std::make_unique<ofsim_vm::VMachine>(communicationBus.get());
-
-	// Start VM in the seperate thread:
-	
 
 	// <----- end of initialization section ----->
 

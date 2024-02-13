@@ -90,9 +90,6 @@ void PhysicsSolver::updatePhysics(f64 deltaTime)
     velocity += (gravityForceVector + (sumOfForces / rocketProperties.mass)) * deltaTime;
     position += velocity * deltaTime;
 
-    //rocket.updatePosition(position);
-    //rocket.updateVelocity(velocity);
-
     resetForces();
 }
 

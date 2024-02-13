@@ -40,7 +40,6 @@ namespace ofsim_gui
 		NONE
 	};
 
-
 	// Class description in the header file
 	class Gui
 	{
