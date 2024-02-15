@@ -39,32 +39,6 @@ void Simulation::stop()
 	simulationStopped = true;
 }
 
-void Simulation::restart()
-{	
-	// TODO: implement restart logic, possibly reinventing code below:
-
-	//vm->unPause();
-	runningTime = 0;
-	//oddma->stop();
-	//vm->stop();
-	//communicationBus->clear();
-	physics->reset();
-
-	if (gui->getSelectedFile() != "")
-	{
-		SOURCE_CODE_FILE_NAME = gui->getSelectedFile();
-		gui->clearSelectedFile();
-	}
-
-	orbitalProgramSourceCode = ofsim_infrastructure::FileService::loadSourceFile(SOURCE_CODE_FILE_NAME);
-
-	initialRocketRotation();
-	initialOrbitalInformation();
-	//vm->provideSourcePath(SOURCE_CODE_FILE_NAME.c_str());
-	//vm->start();
-	//oddma->start();
-}
-
 void Simulation::mainLoop()
 {	
 	// <---- initialization sectiom; ----->
@@ -109,6 +83,8 @@ void Simulation::mainLoop()
 	{		
 		int factor = gui->getTimeFactor();
 		
+		recieveUserEvent();
+
 		// calculate lag:       
 		if (factor == 0)
 		{
@@ -125,7 +101,7 @@ void Simulation::mainLoop()
 		}
 		else if (factor == -1)
 		{			
-			restart();			
+			
 		}
 
 		// input
@@ -242,22 +218,26 @@ void Simulation::renderHUD()
 	gui->endRendering();
 }
 
+/**
+ * @brief User interaction with the simulation
+ * @details Interprets user events recieved from the GUI
+*/
 void Simulation::userInteraction(dvec3& toTheMoon, f64& radius, f64& step)
-{	
-	if (gui->getLastClickedMenu() == ofsim_gui::MenuPosition::FILE_SAVE)
+{		
+	if (gui->getLastClickedMenu() == ofsim_gui::UserClickAction::FILE_SAVE)
 	{
 		ofsim_infrastructure::FileService::saveSourceCode(SOURCE_CODE_FILE_NAME, orbitalProgramSourceCode);
 		gui->clearLastClickedMenu();
 	}
 
-	if (gui->getLastClickedMenu() == ofsim_gui::MenuPosition::FILE_SAVED_AS)
+	if (gui->getLastClickedMenu() == ofsim_gui::UserClickAction::FILE_SAVED_AS)
 	{
 		std::string fileSaved = gui->getSavedFile();
 		ofsim_infrastructure::FileService::saveSourceCode(fileSaved, orbitalProgramSourceCode);
 		gui->clearLastClickedMenu();
 	}
 
-	if (gui->getLastClickedMenu() == ofsim_gui::MenuPosition::FILE_EXIT)
+	if (gui->getLastClickedMenu() == ofsim_gui::UserClickAction::FILE_EXIT)
 	{
 		glfwSetWindowShouldClose(mainWindow->getWindow(), true);
 		gui->clearLastClickedMenu();
@@ -302,6 +282,17 @@ void Simulation::userInteraction(dvec3& toTheMoon, f64& radius, f64& step)
 			}
 		}
 	}
+}
+
+void Simulation::recieveUserEvent()
+{
+	ofsim_gui::UserEvent event = gui->getUserEvent();
+
+	if (event.action != ofsim_gui::UserClickAction::NONE)
+	{
+		std::cout << "Event received: " << (int)event.action << "\n";
+		std::cout << "Data reciewed " << event.data << "\n";
+	} 
 }
 
 unsigned long long Simulation::currentTime()

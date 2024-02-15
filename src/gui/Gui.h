@@ -2,6 +2,8 @@
 
 #include <string>
 #include <map>
+#include <chrono>
+#include <ctime>
 
 #include <filesystem>
 namespace fs = std::filesystem;
@@ -21,10 +23,11 @@ namespace fs = std::filesystem;
 
 namespace ofsim_gui 
 {
-	enum class MenuPosition 
+	enum class UserClickAction 
 	{
 		FILE_NEW,
 		FILE_OPEN,
+		PROGRAM_FILE_OPENED,
 		FILE_SAVE,	
 		FILE_SAVED_AS,
 		FILE_EXIT,
@@ -38,6 +41,18 @@ namespace ofsim_gui
 		HELP_HELP,
 
 		NONE
+	};
+
+	struct UserEvent
+	{		
+		u32 id;
+		u64 timestamp;
+		UserClickAction action;
+		std::string data;
+
+		UserEvent() : action(UserClickAction::NONE) {}
+		UserEvent(u32 _id, u64 _timestamp, UserClickAction _action, std::string _data)
+			: id(_id), timestamp(_timestamp), action(_action), data(_data) {}
 	};
 
 	// Class description in the header file
@@ -91,16 +106,16 @@ namespace ofsim_gui
 
 		void setTimeFactor(int factor) { timeFactor = factor; }
 
-		MenuPosition getLastClickedMenu() { return lastClickedMenu; }
-		void clearLastClickedMenu() { lastClickedMenu = MenuPosition::NONE; }
+		UserClickAction getLastClickedMenu() { return lastClickedMenu; }
+		void clearLastClickedMenu() { lastClickedMenu = UserClickAction::NONE; }
 
 		std::string getSavedFile() { return savedFile; }
 		void clearSavedFile() { savedFile = ""; }
-		std::string getSelectedFile() { return selectedFile; }
-		void clearSelectedFile() { selectedFile = ""; }
-
+				
 		bool getClearTranslationErrors() { return clearTranslationErrors; }
 		void setClearTranslationErrors() { clearTranslationErrors = false; }
+
+		UserEvent getUserEvent();
 
 	private:
 		GLuint play_texture { 0 };
@@ -132,16 +147,22 @@ namespace ofsim_gui
 
 		std::vector<std::string> filesInDirectory;
 
-		MenuPosition lastClickedMenu = MenuPosition::NONE;
+		UserClickAction lastClickedMenu = UserClickAction::NONE;
 		
 		I18n* i18n;
 
-		std::string directory;
-		std::string selectedFile { "" };
+		std::string directory;		
 		std::string savedFile { "" };
 
 		int selcted_language_item { 0 };
 
+		UserEvent* userEvent = nullptr;
+		u32 eventCounter {0};
+
 		void loadFilesInDirectory(std::string &directory);	
+
+		void createUserEvent(UserClickAction action, std::string data);
+		
+		u64 currentTime();
 	};
 }
