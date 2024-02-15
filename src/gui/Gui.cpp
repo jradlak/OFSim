@@ -172,8 +172,10 @@ void Gui::renderFileOpenDialog()
     ImGui::SameLine();
     if (ImGui::Button(i18n->t(dialog_load), ImVec2(60, 0)))
     { 
-        if (directory != "") 
+        if (directory != "")
+        { 
             loadFilesInDirectory(directory); 
+        }
     }
 
     ImGui::Separator();
