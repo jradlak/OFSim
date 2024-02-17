@@ -39,6 +39,8 @@ namespace ofsim_vm
 
 		Memory *getMemory() { return memory.get(); }
 
+		bool isStarted() { return started; }
+
 		~VMachine() {}
 
 	private:
@@ -56,5 +58,6 @@ namespace ofsim_vm
 		u32 oldpc{0};
 
 		bool shouldStop{true};
+		bool started{false};
 	};
 } // namespace ofsim_vm

@@ -25,8 +25,7 @@ void Simulation::init()
 	lag = 0;
 	previous = currentTime();
 	projection = glm::perspective((double)glm::radians(camera->Zoom),
-		(double)SCR_WIDTH / (double)SCR_HEIGHT, 0.001, 150000000.0);
-		
+		(double)SCR_WIDTH / (double)SCR_HEIGHT, 0.001, 150000000.0);		
 }
 
 void Simulation::start()
@@ -72,9 +71,10 @@ void Simulation::mainLoop()
 	f64 radius{ 0.000000001 };
 	f64 step{ 0.000000001 };
 
-	// <------ initialize and start Virtual Machine: ------>
+	// <------ initialize Virtual Machine and ODDMA: ------>
 	this->communicationBus = std::make_unique<com_bus::Tbus_data>();
 	this->vm = std::make_unique<ofsim_vm::VMachine>(communicationBus.get());
+	this->oddma = std::make_unique<ODDMA>(*rocket, *physics, *vm, *communicationBus);	
 
 	// <----- end of initialization section ----->
 
@@ -85,6 +85,7 @@ void Simulation::mainLoop()
 		int factor = gui->getTimeFactor();
 		
 		recieveUserEvent();
+		oddma->provideRunningTime(runningTime);
 
 		// calculate lag:       
 		if (factor == 0)
@@ -108,18 +109,8 @@ void Simulation::mainLoop()
 		// input
 		mainWindow->processInput();
 		
-		bool thrustStarterd = false;
 		if (simulationStopped != 1) 
 		{	
-			// update physics:			
-			// temporary launch rocket:
-			if (!thrustStarterd)
-			{
-				physics->updateThrustMagnitude(0.24);			
-				thrustStarterd = true;
-			}
-
-			physics->updateThrustMagnitude(0.24);
 			lag = physics->calculateForces(lag);					
 
 			userInteraction(toTheMoon, radius, step);
@@ -198,8 +189,11 @@ void Simulation::mainLoop()
 		glfwPollEvents();
 	}
 
-	vm->stop();
-	vmThread->join();
+	if (vm->isStarted()) 
+	{
+		vm->stop();
+		vmThread->join();
+	}
 }
 
 void Simulation::renderHUD()
@@ -303,7 +297,9 @@ void Simulation::recieveUserEvent()
 
 	if (event.action == ofsim_gui::UserClickAction::PROGRAM_START_EXECUTION)
 	{
+		// TODO: consider hide thread execution (simillar to ODDMA):
 		vmThread = std::make_unique<std::thread>(&ofsim_vm::VMachine::start, this->vm.get());
+		oddma->start();
 	}
 }
 

@@ -56,6 +56,7 @@ void VMachine::executionLoop()
 void VMachine::stop()
 {
 	shouldStop = true;
+	started = false;
 	takeANap();	
 	registers->clear();
 	memory->clear();
@@ -72,6 +73,7 @@ void VMachine::start()
 {	
 	takeANap();
 	shouldStop = false;
+	started = true;
 	std::cout << "VMachine execution loop started!\n";	
 	executionLoop();
 }

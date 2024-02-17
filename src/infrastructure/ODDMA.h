@@ -7,6 +7,7 @@
 #include <queue>
 #include <chrono>
 #include <thread>
+#include <memory>
 #include <iostream>
 
 #include "../vmachine/Memory.h"
@@ -63,7 +64,11 @@ public:
 class ODDMA
 {
 public:
-	ODDMA(Rocket* _rocket, ofsim_math_and_physics::PhysicsSolver* _physics, ofsim_vm::VMachine* _vm, com_bus::Tbus_data* _commandBus);
+	ODDMA(Rocket& _rocket,
+		ofsim_math_and_physics::PhysicsSolver& _physics, 
+		ofsim_vm::VMachine& _vm, 
+		com_bus::Tbus_data& _commandBus) 
+		: rocket(_rocket), physics(_physics), vm(_vm), commandBus(_commandBus) {}
 	
 	void start();
 	
@@ -77,25 +82,25 @@ public:
 
 	void provideRunningTime(unsigned long long _runningTime) { runningTime = _runningTime; }
 	
-	~ODDMA() {}
+	~ODDMA() { stop(); }
 private:
 	// address in memory to store commands
 	const unsigned int commandAddress = 65416;
-
-	std::queue<RocketStatus> qStatuses;
 	
 	long lastCommandTimestamp;
 	
 	unsigned long long runningTime;
 
-	Rocket* rocket;
-	ofsim_math_and_physics::PhysicsSolver* physics;
-	ofsim_vm::VMachine* vm;
-	com_bus::Tbus_data* commandBus;
+	Rocket& rocket;
+	ofsim_math_and_physics::PhysicsSolver& physics;
+	ofsim_vm::VMachine& vm;
+	com_bus::Tbus_data& commandBus;
 
-	bool threadsStarted;
-	bool statusSemaphore;
-	int threadsStopped = 0;
+	bool threadsStarted {false};
+	int threadsStopped {0};
+
+	std::unique_ptr<std::thread> stateProducerThread;
+	std::unique_ptr<std::thread> commandListenerThread;
 
 	void sendCommandChangeThrust(double thrustMagnitude);
 	void sendCommandChangeDirectionX(double angle);
@@ -107,7 +112,6 @@ private:
 	void sendCommandChangeGyroRotationZ(double angle);
 
 	void stateProducer();
-	void stateConsumer();
 	void commandListener();
 
 	void takeANap();

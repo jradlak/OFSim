@@ -4,34 +4,28 @@ using std::chrono::duration_cast;
 using std::chrono::milliseconds;
 using std::chrono::system_clock;
 
-ODDMA::ODDMA(Rocket* _rocket, ofsim_math_and_physics::PhysicsSolver* _physics, ofsim_vm::VMachine* _vm, com_bus::Tbus_data* _commandBus)
-{
-	rocket = _rocket;
-	physics = _physics;
-	vm = _vm;
-	commandBus = _commandBus;
-}
-
 void ODDMA::start()
 {
 	threadsStarted = true;
 
-	std::thread stateProducerThread = std::thread(&ODDMA::stateProducer, this);
-	std::thread stateConsumerThread = std::thread(&ODDMA::stateConsumer, this);
+	stateProducerThread = std::make_unique<std::thread>(&ODDMA::stateProducer, this);
+	commandListenerThread = std::make_unique<std::thread>(&ODDMA::commandListener, this);
 
-	stateProducerThread.detach();
-	stateConsumerThread.detach();
-
-	std::thread commandListenerThread = std::thread(&ODDMA::commandListener, this);
-	commandListenerThread.detach();
+	threadsStopped = 0;
 }
 
 void ODDMA::stop()
 {
+	if (!threadsStarted)
+	{
+		return;
+	}
+
 	threadsStarted = false;		
 	while (threadsStopped != 2); //waiting for all threds to finish
-	std::queue<RocketStatus> empty;
-	std::swap(qStatuses, empty);
+
+	stateProducerThread->join();
+	commandListenerThread->join();
 }
 
 void ODDMA::restart()
@@ -44,15 +38,15 @@ void ODDMA::stateProducer()
 {
 	while (threadsStarted)
 	{
-		glm::dvec3 position = rocket->getPosition();
-		glm::dvec3 rotation = rocket->getRotation();
-		glm::dvec3 velocity = rocket->getVelocity();
-		double altitude = physics->getAltitude();
-		double thrust = physics->getThrustMagnitude();
-		double mass = rocket->getMass();
+		glm::dvec3 position = rocket.getPosition();
+		glm::dvec3 rotation = rocket.getRotation();
+		glm::dvec3 velocity = rocket.getVelocity();
+		double altitude = physics.getAltitude();
+		double thrust = physics.getThrustMagnitude();
+		double mass = rocket.getMass();
 
 		RocketStatus status;
-		status.timestamp = runningTime; //duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+		status.timestamp = runningTime;
 		status.mass = mass;
 		status.thrustMagnitude = thrust;
 		status.altitude = altitude;
@@ -60,62 +54,38 @@ void ODDMA::stateProducer()
 		status.rotation = rotation;
 		status.position = position;
 
-		while (statusSemaphore);
-		statusSemaphore = true;
-		qStatuses.push(status);
-		statusSemaphore = false;
+		// write produced state into memory:
+		ofsim_vm::Memory *memory = vm.getMemory();
+		int address = ofsim_vm::mem_size - 8;
 
-		takeANap();
- 	}
+		memory->storeDWord(address, status.rotation.z);
+		address -= 8;
+		memory->storeDWord(address, status.rotation.y);
+		address -= 8;
+		memory->storeDWord(address, status.rotation.x);
+		address -= 8;
 
-	threadsStopped++;
-}
+		memory->storeDWord(address, status.velocity.z);
+		address -= 8;
+		memory->storeDWord(address, status.velocity.y);
+		address -= 8;
+		memory->storeDWord(address, status.velocity.x);
+		address -= 8;
 
-void ODDMA::stateConsumer()
-{
-	while (threadsStarted)
-	{
-		while (statusSemaphore);
-		if (qStatuses.size() > 0)
-		{
-			statusSemaphore = true;
-			RocketStatus status = qStatuses.front();
+		memory->storeDWord(address, status.position.z);
+		address -= 8;
+		memory->storeDWord(address, status.position.y);
+		address -= 8;
+		memory->storeDWord(address, status.position.x);
+		address -= 8;
 
-			qStatuses.pop();
-			statusSemaphore = false;
-
-			ofsim_vm::Memory* memory = vm->getMemory();
-			int address = ofsim_vm::mem_size - 8;
-
-			memory->storeDWord(address, status.rotation.z);
-			address -= 8;
-			memory->storeDWord(address, status.rotation.y);
-			address -= 8;
-			memory->storeDWord(address, status.rotation.x);
-			address -= 8;
-
-			memory->storeDWord(address, status.velocity.z);
-			address -= 8;
-			memory->storeDWord(address, status.velocity.y);
-			address -= 8;
-			memory->storeDWord(address, status.velocity.x);
-			address -= 8;
-
-			memory->storeDWord(address, status.position.z);
-			address -= 8;
-			memory->storeDWord(address, status.position.y);
-			address -= 8;
-			memory->storeDWord(address, status.position.x);
-			address -= 8;
-
-			memory->storeDWord(address, status.mass);
-			address -= 8;
-			memory->storeDWord(address, status.thrustMagnitude);
-			address -= 8;
-			memory->storeDWord(address, status.altitude);
-			address -= 8;			
-			memory->storeDWord(address, status.timestamp);					
-		}
+		memory->storeDWord(address, status.mass);
+		address -= 8;
+		memory->storeDWord(address, status.thrustMagnitude);
+		address -= 8;
+		memory->storeDWord(address, status.altitude);
+		address -= 8;
+		memory->storeDWord(address, status.timestamp);
 
 		takeANap();
 	}
@@ -125,60 +95,60 @@ void ODDMA::stateConsumer()
 
 void ODDMA::sendCommandChangeThrust(double thrustMagnitude)
 {
-	physics->updateThrustMagnitude(thrustMagnitude);
+	physics.updateThrustMagnitude(thrustMagnitude);
 }
 
 void ODDMA::sendCommandChangeDirectionX(double angle)
 {
-	if (physics->getThrustMagnitude() > 0.01)
+	if (physics.getThrustMagnitude() > 0.01)
 	{
 		glm::dvec3 delta = glm::dvec3(angle, 0, 0);
-		physics->rotateRocket(delta);
+		physics.rotateRocket(delta);
 	}
 }
 
 void ODDMA::sendCommandChangeDirectionY(double angle)
 {
-	if (physics->getThrustMagnitude() > 0.01)
+	if (physics.getThrustMagnitude() > 0.01)
 	{
 		glm::dvec3 delta = glm::dvec3(0, angle, 0);
-		physics->rotateRocket(delta);
+		physics.rotateRocket(delta);
 	}
 }
 
 void ODDMA::sendCommandChangeDirectionZ(double angle)
 {
-	if (physics->getThrustMagnitude() > 0.01)
+	if (physics.getThrustMagnitude() > 0.01)
 	{
 		glm::dvec3 delta = glm::dvec3(0, 0, angle);
-		physics->rotateRocket(delta);
+		physics.rotateRocket(delta);
 	}
 }
 
 void ODDMA::sendCommandChangeGyroRotationX(double angle)
 {
-	if (physics->getThrustMagnitude() <= 0.01)
+	if (physics.getThrustMagnitude() <= 0.01)
 	{
 		glm::dvec3 delta = glm::dvec3(angle, 0, 0);
-		physics->rotateRocket(delta);
+		physics.rotateRocket(delta);
 	}
 }
 
 void ODDMA::sendCommandChangeGyroRotationY(double angle)
 {
-	if (physics->getThrustMagnitude() <= 0.01)
+	if (physics.getThrustMagnitude() <= 0.01)
 	{
 		glm::dvec3 delta = glm::dvec3(0, angle, 0);
-		physics->rotateRocket(delta);
+		physics.rotateRocket(delta);
 	}
 }
 
 void ODDMA::sendCommandChangeGyroRotationZ(double angle)
 {
-	if (physics->getThrustMagnitude() <= 0.01)
+	if (physics.getThrustMagnitude() <= 0.01)
 	{
 		glm::dvec3 delta = glm::dvec3(0, 0, angle);
-		physics->rotateRocket(delta);
+		physics.rotateRocket(delta);
 	}
 }
 
@@ -233,14 +203,16 @@ void ODDMA::commandListener()
 {
 	while (threadsStarted)
 	{
-		if (com_bus::any_commands(*commandBus))
+		if (com_bus::any_commands(commandBus))
 		{
-			RocketCommand rocketCommand = com_bus::get_command(*commandBus, runningTime);
+			RocketCommand rocketCommand = com_bus::get_command(commandBus, runningTime);
 			executeInstruction(rocketCommand.code(), rocketCommand.value());
 		}
 
 		takeANap();
 	}
+
+	threadsStopped++;
 }
 
 void ODDMA::takeANap()
