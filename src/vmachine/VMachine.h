@@ -20,19 +20,16 @@ namespace ofsim_vm
 	public:
 		VMachine(com_bus::Tbus_data* commandBus);
 
-		void translateSourceCodeFromFile(const char* _sourcePath);
-
-		void loadCode() { Memory::memcopy(translator->code, memory->mem, 0, 0, translator->getCodeSize()); }
+		// Translates source code from the file path, and returs loaded source txt file
+		std::string translateSourceCodeFromFile(const char* _sourcePath);
 
 		void translateSourceCode(std::string sourceCode);
+
+		void loadCode() { Memory::memcopy(translator->code, memory->mem, 0, 0, translator->getCodeSize()); }
 
 		void start();
 
 		void stop();
-
-		void setPause() { pause = true; }
-
-		void unPause() { pause = false; }
 
 		void restart();
 
@@ -59,6 +56,5 @@ namespace ofsim_vm
 		u32 oldpc{0};
 
 		bool shouldStop{true};
-		bool pause{false};
 	};
 } // namespace ofsim_vm

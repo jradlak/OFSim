@@ -247,6 +247,8 @@ void Gui::renderSimulationControlWindow(unsigned long long time)
             pp_texture = pause_texture;
             plaing = true;
             timeFactor = 1;
+
+            createUserEvent(UserClickAction::PROGRAM_START_EXECUTION, "");
         }
     }
     

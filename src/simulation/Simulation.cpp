@@ -26,6 +26,7 @@ void Simulation::init()
 	previous = currentTime();
 	projection = glm::perspective((double)glm::radians(camera->Zoom),
 		(double)SCR_WIDTH / (double)SCR_HEIGHT, 0.001, 150000000.0);
+		
 }
 
 void Simulation::start()
@@ -196,6 +197,9 @@ void Simulation::mainLoop()
 		mainWindow->swapBuffers();
 		glfwPollEvents();
 	}
+
+	vm->stop();
+	vmThread->join();
 }
 
 void Simulation::renderHUD()
@@ -288,11 +292,19 @@ void Simulation::recieveUserEvent()
 {
 	ofsim_gui::UserEvent event = gui->getUserEvent();
 
-	if (event.action != ofsim_gui::UserClickAction::NONE)
+	if (event.action == ofsim_gui::UserClickAction::PROGRAM_FILE_OPENED)
 	{
 		std::cout << "Event received: " << (int)event.action << "\n";
 		std::cout << "Data reciewed " << event.data << "\n";
-	} 
+
+		// load VM program source code from file:
+		this->orbitalProgramSourceCode = vm->translateSourceCodeFromFile(event.data.c_str());
+	}
+
+	if (event.action == ofsim_gui::UserClickAction::PROGRAM_START_EXECUTION)
+	{
+		vmThread = std::make_unique<std::thread>(&ofsim_vm::VMachine::start, this->vm.get());
+	}
 }
 
 unsigned long long Simulation::currentTime()

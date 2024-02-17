@@ -12,7 +12,7 @@ Translator::Translator()
     i18n = ofsim_gui::I18n::getInstance();
 }
 
-void Translator::translateSourceFile(const char* sourcePath)
+std::string Translator::translateSourceFile(const char* sourcePath)
 {
     std::ifstream file(sourcePath, std::ios::in);
     std::stringstream fileBuffer;
@@ -20,6 +20,8 @@ void Translator::translateSourceFile(const char* sourcePath)
     std::string fileData = fileBuffer.str();
     translateSourceString(fileData);
     file.close();
+
+    return fileData;
 }
 
 void ofsim_vm::Translator::translateSourceString(const std::string sourceString)

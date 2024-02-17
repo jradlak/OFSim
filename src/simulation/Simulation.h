@@ -65,6 +65,7 @@ private:
 	// task and communication:
 	std::unique_ptr<com_bus::Tbus_data> communicationBus;
 	std::unique_ptr<ofsim_vm::VMachine> vm;
+	std::unique_ptr<std::thread> vmThread;
 	std::unique_ptr<ODDMA> oddma;
 	std::unique_ptr<TelemetryCollector> telemetryCollector;
 

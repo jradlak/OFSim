@@ -27,7 +27,10 @@ namespace ofsim_gui
 	{
 		FILE_NEW,
 		FILE_OPEN,
+
 		PROGRAM_FILE_OPENED,
+		PROGRAM_START_EXECUTION,
+		
 		FILE_SAVE,	
 		FILE_SAVED_AS,
 		FILE_EXIT,

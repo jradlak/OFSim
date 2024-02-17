@@ -11,11 +11,13 @@ VMachine::VMachine(com_bus::Tbus_data* commandBus)
 	translator = std::make_unique<Translator>();
 }
 
-void VMachine::translateSourceCodeFromFile(const char* _sourcePath)
+std::string VMachine::translateSourceCodeFromFile(const char* _sourcePath)
 {
 	sourcePath = _sourcePath;	
-	translator->translateSourceFile(_sourcePath);
+	std::string source_code = translator->translateSourceFile(_sourcePath);
     loadCode();
+
+	return source_code;
 }
 
 void ofsim_vm::VMachine::translateSourceCode(std::string sourceCode)
@@ -30,8 +32,6 @@ void VMachine::executionLoop()
 	unsigned int opcode = memory->fetchByte(0);
 	while (opcode != opcodes->getOpcode("halt") && !shouldStop)
 	{
-		while (pause); // wait
-
 		// decode and execute instruction:
 		unsigned int args_size = opcodes->getInstrSize(opcode);
 		unsigned char* args = new unsigned char[args_size];
@@ -71,7 +71,8 @@ void VMachine::restart()
 void VMachine::start()
 {	
 	takeANap();
-	shouldStop = false;	
+	shouldStop = false;
+	std::cout << "VMachine execution loop started!\n";	
 	executionLoop();
 }
 

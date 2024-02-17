@@ -24,7 +24,7 @@ namespace ofsim_vm
 	public:
 		Translator();
 
-		void translateSourceFile(const char* sourcePath);
+		std::string translateSourceFile(const char* sourcePath);
 		void translateSourceString(const std::string sourceString);
 		void translateLine(std::string sourceLine, int lineNumber);
 
