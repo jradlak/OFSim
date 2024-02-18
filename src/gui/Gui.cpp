@@ -31,18 +31,18 @@ void Gui::renderMenuBar()
         {
             if (ImGui::MenuItem(i18n->t(menu_new))) 
             { 
-                lastClickedMenu = UserClickAction::FILE_NEW; 
+                createUserEvent(UserClickAction::FILE_NEW, ""); 
             }
 
             if (ImGui::MenuItem(i18n->t(menu_open))) 
             {                 
                 viewFileOpen = true;
-                lastClickedMenu = UserClickAction::FILE_OPEN; 
+                createUserEvent(UserClickAction::FILE_OPEN, "");                
             }
 
             if (ImGui::MenuItem(i18n->t(menu_save))) 
             { 
-                lastClickedMenu = UserClickAction::FILE_SAVE; 
+                createUserEvent(UserClickAction::FILE_SAVE, "");
             }
 
             if (ImGui::MenuItem(i18n->t(menu_save_as)))
@@ -52,8 +52,8 @@ void Gui::renderMenuBar()
             
             ImGui::Separator();
             if (ImGui::MenuItem(i18n->t(menu_close))) 
-            { 
-                lastClickedMenu = UserClickAction::FILE_EXIT; 
+            {  
+                createUserEvent(UserClickAction::FILE_EXIT, "");
             }
 
             ImGui::EndMenu();
@@ -74,14 +74,14 @@ void Gui::renderMenuBar()
         {
             if (ImGui::MenuItem(i18n->t(menu_manual))) 
             { 
-                lastClickedMenu = UserClickAction::HELP_HELP; 
+                createUserEvent(UserClickAction::HELP_HELP, "");               
             }
             
             ImGui::Separator();
             
             if (ImGui::MenuItem(i18n->t(menu_about))) 
             { 
-                lastClickedMenu = UserClickAction::HELP_ABOUT; 
+                createUserEvent(UserClickAction::HELP_ABOUT, "");
             }
 
             ImGui::EndMenu();
@@ -154,8 +154,8 @@ void Gui::renderFileSaveAsDialog()
 
     if (ImGui::Button("OK", ImVec2(120, 0)))
     {        
-        viewFileSaveAs = false;      
-        lastClickedMenu = UserClickAction::FILE_SAVED_AS;
+        viewFileSaveAs = false;
+        createUserEvent(UserClickAction::FILE_SAVED_AS, "");
     }
 
     ImGui::SetItemDefaultFocus();

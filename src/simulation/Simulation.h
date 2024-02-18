@@ -21,6 +21,13 @@
 #include "../infrastructure/ODDMA.h"
 #include "../vmachine/VMachine.h"
 
+enum class SimulationMode
+{
+	STANDARD_SIMULATION,
+	TRAJECTORY_PREDICTION,
+	PRESENTATION_MODE
+};
+
 class Simulation
 {
 public:

@@ -235,23 +235,20 @@ void Simulation::userInteraction(dvec3& toTheMoon, f64& radius, f64& step)
 		oddma->start();
 	}
 
-	if (gui->getLastClickedMenu() == ofsim_gui::UserClickAction::FILE_SAVE)
+	if (event.action == ofsim_gui::UserClickAction::FILE_SAVE)
 	{
-		ofsim_infrastructure::FileService::saveSourceCode(SOURCE_CODE_FILE_NAME, orbitalProgramSourceCode);
-		gui->clearLastClickedMenu();
+		ofsim_infrastructure::FileService::saveSourceCode(SOURCE_CODE_FILE_NAME, orbitalProgramSourceCode);		
 	}
 
-	if (gui->getLastClickedMenu() == ofsim_gui::UserClickAction::FILE_SAVED_AS)
+	if (event.action == ofsim_gui::UserClickAction::FILE_SAVED_AS)
 	{
 		std::string fileSaved = gui->getSavedFile();
 		ofsim_infrastructure::FileService::saveSourceCode(fileSaved, orbitalProgramSourceCode);
-		gui->clearLastClickedMenu();
 	}
 
-	if (gui->getLastClickedMenu() == ofsim_gui::UserClickAction::FILE_EXIT)
+	if (event.action == ofsim_gui::UserClickAction::FILE_EXIT)
 	{
 		glfwSetWindowShouldClose(mainWindow->getWindow(), true);
-		gui->clearLastClickedMenu();
 	}
 
 	if (lastKeyPressed == 77 || lastKeyPressed == 75) // m, k

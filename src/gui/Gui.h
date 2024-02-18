@@ -109,9 +109,6 @@ namespace ofsim_gui
 
 		void setTimeFactor(int factor) { timeFactor = factor; }
 
-		UserClickAction getLastClickedMenu() { return lastClickedMenu; }
-		void clearLastClickedMenu() { lastClickedMenu = UserClickAction::NONE; }
-
 		std::string getSavedFile() { return savedFile; }
 		void clearSavedFile() { savedFile = ""; }
 				
@@ -149,8 +146,6 @@ namespace ofsim_gui
 		bool clearTranslationErrors { false };
 
 		std::vector<std::string> filesInDirectory;
-
-		UserClickAction lastClickedMenu = UserClickAction::NONE;
 		
 		I18n* i18n;
 
