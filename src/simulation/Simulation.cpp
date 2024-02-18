@@ -83,8 +83,7 @@ void Simulation::mainLoop()
 	while (!mainWindow->shouldClose())
 	{		
 		int factor = gui->getTimeFactor();
-		
-		recieveUserEvent();
+				
 		oddma->provideRunningTime(runningTime);
 
 		// calculate lag:       
@@ -100,22 +99,16 @@ void Simulation::mainLoop()
 			lag += elapsed;
 			runningTime += elapsed;
 			simulationStopped = false;			
-		}
-		else if (factor == -1)
-		{			
-			
-		}
+		}		
 
 		// input
 		mainWindow->processInput();
-		
+		userInteraction(toTheMoon, radius, step);
+		lastKeyPressed = 0;
+
 		if (simulationStopped != 1) 
 		{	
 			lag = physics->calculateForces(lag);					
-
-			userInteraction(toTheMoon, radius, step);
-
-			lastKeyPressed = 0;
 		}
 		
 		std::vector<float> rgb = physics->atmosphereRgb();
@@ -205,6 +198,7 @@ void Simulation::renderHUD()
 	gui->renderSimulationControlWindow(runningTime);
 	gui->renderCodeEditor(orbitalProgramSourceCode);
 	std::map<unsigned long long, RocketCommand>& commandHistory = communicationBus->command_history;
+	gui->renderCommandHistory(commandHistory);
 
 	gui->plotTelemetry(
 		telemetryCollector->getVelicityHistory(), telemetryCollector->getMaxVelocity(),
@@ -221,7 +215,26 @@ void Simulation::renderHUD()
  * @details Interprets user events recieved from the GUI
 */
 void Simulation::userInteraction(dvec3& toTheMoon, f64& radius, f64& step)
-{		
+{	
+	// recieve and interpret user events:
+	ofsim_gui::UserEvent event = gui->getUserEvent();
+
+	if (event.action == ofsim_gui::UserClickAction::PROGRAM_FILE_OPENED)
+	{
+		std::cout << "Event received: " << (int)event.action << "\n";
+		std::cout << "Data reciewed " << event.data << "\n";
+
+		// load VM program source code from file:
+		this->orbitalProgramSourceCode = vm->translateSourceCodeFromFile(event.data.c_str());
+	}
+
+	if (event.action == ofsim_gui::UserClickAction::PROGRAM_START_EXECUTION)
+	{
+		// TODO: consider hide thread execution (simillar to ODDMA):
+		vmThread = std::make_unique<std::thread>(&ofsim_vm::VMachine::start, this->vm.get());
+		oddma->start();
+	}
+
 	if (gui->getLastClickedMenu() == ofsim_gui::UserClickAction::FILE_SAVE)
 	{
 		ofsim_infrastructure::FileService::saveSourceCode(SOURCE_CODE_FILE_NAME, orbitalProgramSourceCode);
@@ -279,27 +292,6 @@ void Simulation::userInteraction(dvec3& toTheMoon, f64& radius, f64& step)
 				gui->restoreWindows();
 			}
 		}
-	}
-}
-
-void Simulation::recieveUserEvent()
-{
-	ofsim_gui::UserEvent event = gui->getUserEvent();
-
-	if (event.action == ofsim_gui::UserClickAction::PROGRAM_FILE_OPENED)
-	{
-		std::cout << "Event received: " << (int)event.action << "\n";
-		std::cout << "Data reciewed " << event.data << "\n";
-
-		// load VM program source code from file:
-		this->orbitalProgramSourceCode = vm->translateSourceCodeFromFile(event.data.c_str());
-	}
-
-	if (event.action == ofsim_gui::UserClickAction::PROGRAM_START_EXECUTION)
-	{
-		// TODO: consider hide thread execution (simillar to ODDMA):
-		vmThread = std::make_unique<std::thread>(&ofsim_vm::VMachine::start, this->vm.get());
-		oddma->start();
 	}
 }
 

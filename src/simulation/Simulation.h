@@ -104,8 +104,7 @@ private:
 
 	void renderHUD();
 
-	void userInteraction(dvec3& toTheMoon, f64& radius, f64& step);
-	void recieveUserEvent();
+	void userInteraction(dvec3& toTheMoon, f64& radius, f64& step);	
 
 	void switchGLStateForWorldRendering(float r, float g, float b);
 	void renderTelemetry(ofsim_gui::Gui* gui, Rocket* rocket, double altitude, double apogeum, double perygeum, double atmosphereDragForceMagnitude);
