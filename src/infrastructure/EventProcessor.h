@@ -37,8 +37,8 @@ namespace ofsim_events
 
 	struct UserEvent
 	{		
-		u32 id;
-		u64 timestamp;
+		u32 id { 0 };
+		u64 timestamp { 0 };
 		UserAction action;
 		std::string data;
 

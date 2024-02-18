@@ -3,6 +3,8 @@
 #include "../../external_libraries/glad/glad.h"
 #include "../math_and_physics/MathTypes.h"
 
+#include "../infrastructure/EventProcessor.h"
+
 #include <GLFW/glfw3.h>
 
 #include "Camera.h"

@@ -247,47 +247,46 @@ void Simulation::userInteraction(dvec3& toTheMoon, f64& radius, f64& step)
 		glfwSetWindowShouldClose(mainWindow->getWindow(), true);
 	}
 
-	// TODO: make it work!!!!
-	
-	// if (lastKeyPressed == 77 || lastKeyPressed == 75) // m, k
-	// {
-	// 	camera->setAutomaticRotation(false);
-	// 	physics->predictTrajectory(runningTime);
-	// 	trajectoryPrediction->initWithPositions(
-	// 		physics->getTrajectoryPredictionX(),
-	// 		physics->getTrajectoryPredictionY(),
-	// 		physics->getTrajectoryPredictionZ(),
-	// 		telemetryCollector->getTelemetryHistory());
+	if (event.action == UserAction::CHANGE_MODE_TO_FORM_PRESENTATION 
+		 || event.action == UserAction::CHANGE_MODE_TO_FROM_PREDICTION) // m, k
+	{
+	 	camera->setAutomaticRotation(false);
+	 	physics->predictTrajectory(runningTime);
+	 	trajectoryPrediction->initWithPositions(
+	 		physics->getTrajectoryPredictionX(),
+	 		physics->getTrajectoryPredictionY(),
+	 		physics->getTrajectoryPredictionZ(),
+	 		telemetryCollector->getTelemetryHistory());
 
-	// 	if (lastKeyPressed == 77) // m
-	// 	{
-	// 		if (trajectoryPredictionMode == false)
-	// 		{
-	// 			camera->updatePosition(solarSystem->pointAboveEarthSurface(30, 30, 800), rocket->getRotation());
-	// 			trajectoryPredictionMode = true;
-	// 		}
-	// 		else
-	// 		{
-	// 			trajectoryPredictionMode = false;
-	// 		}
-	// 	}
+	 	if (event.action == UserAction::CHANGE_MODE_TO_FORM_PRESENTATION) // m
+	 	{
+	 		if (trajectoryPredictionMode == false)
+	 		{
+	 			camera->updatePosition(solarSystem->pointAboveEarthSurface(30, 30, 800), rocket->getRotation());
+	 			trajectoryPredictionMode = true;
+	 		}
+	 		else
+	 		{
+	 			trajectoryPredictionMode = false;
+	 		}
+	 	}
 
-	// 	if (lastKeyPressed == 75) // k
-	// 	{
-	// 		if (presentationMode == false)
-	// 		{
-	// 			toTheMoon = rocket->getPosition() - SolarSystemConstants::moonPos;
-	// 			radius = 0.000000001;
-	// 			step = 0.000000001;
-	// 			presentationMode = true;
-	// 		}
-	// 		else
-	// 		{
-	// 			presentationMode = false;
-	// 			gui->restoreWindows();
-	// 		}
-	// 	}
-	// }
+	 	if (event.action == UserAction::CHANGE_MODE_TO_FROM_PREDICTION) // k
+	 	{
+	 		if (presentationMode == false)
+	 		{
+	 			toTheMoon = rocket->getPosition() - SolarSystemConstants::moonPos;
+	 			radius = 0.000000001;
+	 			step = 0.000000001;
+	 			presentationMode = true;
+	 		}
+	 		else
+	 		{
+	 			presentationMode = false;
+	 			gui->restoreWindows();
+	 		}
+	 	}
+	 }
 }
 
 unsigned long long Simulation::currentTime()
