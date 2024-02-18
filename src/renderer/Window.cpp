@@ -77,12 +77,12 @@ Window::Window(Camera& _camera, const u32 _width, const u32 _height)
 
         if (glfwGetKey(mainWindow, GLFW_KEY_M) == GLFW_PRESS)
         {
-            processInputCall((int)GLFW_KEY_M);
+            // TODO!
         }
 
         if (glfwGetKey(mainWindow, GLFW_KEY_K) == GLFW_PRESS)
         {
-            processInputCall((int)GLFW_KEY_K);
+            // TODO!
         }
 
         if (glfwGetKey(mainWindow, GLFW_KEY_W) == GLFW_PRESS)
@@ -97,11 +97,6 @@ Window::Window(Camera& _camera, const u32 _width, const u32 _height)
             camera.processKeyboard(ROLL_LEFT, deltaTime);
         if (glfwGetKey(mainWindow, GLFW_KEY_E) == GLFW_PRESS)
             camera.processKeyboard(ROLL_RIGHT, deltaTime);
-    }
-
-    void Window::registerInputCallback(inputCall funct)
-    {
-        processInputCall = funct;
     }
 
     void Window::framebuffer_size_callback(GLFWwindow* window, int width, int height)

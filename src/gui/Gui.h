@@ -2,8 +2,6 @@
 
 #include <string>
 #include <map>
-#include <chrono>
-#include <ctime>
 
 #include <filesystem>
 namespace fs = std::filesystem;
@@ -20,44 +18,10 @@ namespace fs = std::filesystem;
 
 #include "../infrastructure/RocketCommand.h"
 #include "../infrastructure/FileService.h"
+#include "../infrastructure/EventProcessor.h"
 
 namespace ofsim_gui 
 {
-	enum class UserClickAction 
-	{
-		FILE_NEW,
-		FILE_OPEN,
-
-		PROGRAM_FILE_OPENED,
-		PROGRAM_START_EXECUTION,
-		
-		FILE_SAVE,	
-		FILE_SAVED_AS,
-		FILE_EXIT,
-
-		VIEW_TELEMETRY,
-		VIEW_TELEMETRY_PLOT,
-		VIEW_COMMANDS,
-		VIEW_PROGRAM,
-
-		HELP_ABOUT,
-		HELP_HELP,
-
-		NONE
-	};
-
-	struct UserEvent
-	{		
-		u32 id;
-		u64 timestamp;
-		UserClickAction action;
-		std::string data;
-
-		UserEvent() : action(UserClickAction::NONE) {}
-		UserEvent(u32 _id, u64 _timestamp, UserClickAction _action, std::string _data)
-			: id(_id), timestamp(_timestamp), action(_action), data(_data) {}
-	};
-
 	// Class description in the header file
 	class Gui
 	{
@@ -115,8 +79,6 @@ namespace ofsim_gui
 		bool getClearTranslationErrors() { return clearTranslationErrors; }
 		void setClearTranslationErrors() { clearTranslationErrors = false; }
 
-		UserEvent getUserEvent();
-
 	private:
 		GLuint play_texture { 0 };
 		GLuint pause_texture { 0 };
@@ -154,13 +116,8 @@ namespace ofsim_gui
 
 		int selcted_language_item { 0 };
 
-		UserEvent* userEvent = nullptr;
-		u32 eventCounter {0};
-
 		void loadFilesInDirectory(std::string &directory);	
 
-		void createUserEvent(UserClickAction action, std::string data);
-		
 		u64 currentTime();
 	};
 }

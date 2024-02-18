@@ -4,6 +4,7 @@
 #include <iostream>
 
 using namespace ofsim_gui;
+using namespace ofsim_events;
 
 void Gui::initialization(Window* mainWindow)
 {
@@ -25,24 +26,25 @@ void Gui::newFrame()
 
 void Gui::renderMenuBar()
 {
+    EventProcessor* eventProcessor = EventProcessor::getInstance();
     if (ImGui::BeginMainMenuBar())
     {
         if (ImGui::BeginMenu("Program"))
         {
             if (ImGui::MenuItem(i18n->t(menu_new))) 
             { 
-                createUserEvent(UserClickAction::FILE_NEW, ""); 
+                eventProcessor->createUserEvent(UserAction::FILE_NEW, ""); 
             }
 
             if (ImGui::MenuItem(i18n->t(menu_open))) 
             {                 
                 viewFileOpen = true;
-                createUserEvent(UserClickAction::FILE_OPEN, "");                
+                eventProcessor->createUserEvent(UserAction::FILE_OPEN, "");                
             }
 
             if (ImGui::MenuItem(i18n->t(menu_save))) 
             { 
-                createUserEvent(UserClickAction::FILE_SAVE, "");
+                eventProcessor->createUserEvent(UserAction::FILE_SAVE, "");
             }
 
             if (ImGui::MenuItem(i18n->t(menu_save_as)))
@@ -53,7 +55,7 @@ void Gui::renderMenuBar()
             ImGui::Separator();
             if (ImGui::MenuItem(i18n->t(menu_close))) 
             {  
-                createUserEvent(UserClickAction::FILE_EXIT, "");
+                eventProcessor->createUserEvent(UserAction::FILE_EXIT, "");
             }
 
             ImGui::EndMenu();
@@ -74,14 +76,14 @@ void Gui::renderMenuBar()
         {
             if (ImGui::MenuItem(i18n->t(menu_manual))) 
             { 
-                createUserEvent(UserClickAction::HELP_HELP, "");               
+                eventProcessor->createUserEvent(UserAction::HELP_HELP, "");               
             }
             
             ImGui::Separator();
             
             if (ImGui::MenuItem(i18n->t(menu_about))) 
             { 
-                createUserEvent(UserClickAction::HELP_ABOUT, "");
+                eventProcessor->createUserEvent(UserAction::HELP_ABOUT, "");
             }
 
             ImGui::EndMenu();
@@ -144,6 +146,8 @@ void Gui::renderFileSaveAsDialog()
 {
     if (!viewFileSaveAs) return;
 
+    EventProcessor* eventProcessor = EventProcessor::getInstance();
+
     ImGui::SetNextWindowSize(ImVec2(380, 110), ImGuiCond_Once);
     ImGui::SetNextWindowPos(ImVec2(600, 200), ImGuiCond_Once);
 
@@ -155,7 +159,7 @@ void Gui::renderFileSaveAsDialog()
     if (ImGui::Button("OK", ImVec2(120, 0)))
     {        
         viewFileSaveAs = false;
-        createUserEvent(UserClickAction::FILE_SAVED_AS, "");
+        eventProcessor->createUserEvent(UserAction::FILE_SAVED_AS, "");
     }
 
     ImGui::SetItemDefaultFocus();
@@ -169,6 +173,8 @@ void Gui::renderFileSaveAsDialog()
 void Gui::renderFileOpenDialog()
 {   
     if (!viewFileOpen) return;
+
+    EventProcessor* eventProcessor = EventProcessor::getInstance();
 
     ImGui::SetNextWindowSize(ImVec2(450, 210), ImGuiCond_Once);
     ImGui::SetNextWindowPos(ImVec2(600, 200), ImGuiCond_Once);
@@ -204,7 +210,7 @@ void Gui::renderFileOpenDialog()
     {         
         std::string selectedFile = filesInDirectory[item_current];
         viewFileOpen = false; 
-        createUserEvent(UserClickAction::PROGRAM_FILE_OPENED, selectedFile);
+        eventProcessor->createUserEvent(UserAction::PROGRAM_FILE_OPENED, selectedFile);
     }
 
     ImGui::SetItemDefaultFocus();
@@ -217,6 +223,8 @@ void Gui::renderFileOpenDialog()
 void Gui::renderSimulationControlWindow(unsigned long long time)
 {
     if (!viewSimulationControl) return;
+
+    EventProcessor* eventProcessor = EventProcessor::getInstance();
 
     ImGui::SetNextWindowSize(ImVec2(450, 100), ImGuiCond_Once);
     ImGui::SetNextWindowPos(ImVec2(100, 50), ImGuiCond_Once);
@@ -248,7 +256,7 @@ void Gui::renderSimulationControlWindow(unsigned long long time)
             plaing = true;
             timeFactor = 1;
 
-            createUserEvent(UserClickAction::PROGRAM_START_EXECUTION, "");
+            eventProcessor->createUserEvent(UserAction::PROGRAM_START_EXECUTION, "");
         }
     }
     
@@ -565,20 +573,6 @@ int Gui::getTimeFactor()
     return timeFactor;
 }
 
-UserEvent ofsim_gui::Gui::getUserEvent()
-{
-    if (userEvent == nullptr)
-    {
-         return UserEvent();
-    }
-
-    UserEvent event = UserEvent(userEvent->id, userEvent->timestamp, userEvent->action, userEvent->data);
-    delete userEvent;
-    userEvent = nullptr;
-
-    return event;
-}
-
 void Gui::loadFilesInDirectory(std::string &directory)
 {
     filesInDirectory.clear();
@@ -591,19 +585,4 @@ void Gui::loadFilesInDirectory(std::string &directory)
                 filesInDirectory.push_back(fileName);
         }
     }
-}
-
-void ofsim_gui::Gui::createUserEvent(UserClickAction action, std::string data)
-{
-    if (userEvent == nullptr)
-    {
-        userEvent = new UserEvent(eventCounter++, currentTime(), action, data);
-    }
-}
-
-u64 ofsim_gui::Gui::currentTime()
-{
-    return std::chrono::duration_cast<std::chrono::milliseconds>(
-        std::chrono::system_clock::now().time_since_epoch()
-    ).count();  
 }

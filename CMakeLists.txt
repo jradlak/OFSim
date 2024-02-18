@@ -57,7 +57,9 @@ add_executable("${CMAKE_PROJECT_NAME}"
     src/infrastructure/ImageLoader.h
     src/infrastructure/CommunicationBus.h
     src/infrastructure/CommunicationBus.cpp
-
+    src/infrastructure/EventProcessor.h
+    src/infrastructure/EventProcessor.cpp
+    
     src/math_and_physics/MathTypes.h
     src/math_and_physics/Geometry.h
     src/math_and_physics/PhysicsSolver.h

@@ -7,8 +7,6 @@
 
 #include "Camera.h"
 
-typedef void (*inputCall)(int);
-
 using namespace ofsim_renderer;
 
 class Window
@@ -19,8 +17,6 @@ public:
     int initialize();
     void processInput();
     
-    void registerInputCallback(inputCall funct);
-
     bool shouldClose();
     void swapBuffers();
 
@@ -38,8 +34,6 @@ private:
 
     float deltaTime;
     float lastFrame;
-
-    inputCall processInputCall;
     
     static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
     
