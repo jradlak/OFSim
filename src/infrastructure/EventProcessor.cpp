@@ -5,7 +5,7 @@ using namespace ofsim_events;
 EventProcessor* EventProcessor::instance = nullptr;
 std::mutex EventProcessor::mutex;
 
-EventProcessor *ofsim_events::EventProcessor::getInstance()
+EventProcessor *EventProcessor::getInstance()
 {
     std::lock_guard<std::mutex> lock(mutex);
     if (instance == nullptr)

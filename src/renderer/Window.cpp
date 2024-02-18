@@ -67,7 +67,7 @@ GLFWwindow* Window::getWindow()
 
 void Window::processInput()
 {
-	EventProcessor* eventProcessor = EventProcessor::getInstance();
+	
 
 	float currentFrame = glfwGetTime();
 	deltaTime = currentFrame - lastFrame;
@@ -80,12 +80,12 @@ void Window::processInput()
 
 	if (glfwGetKey(mainWindow, GLFW_KEY_M) == GLFW_PRESS)
 	{
-		eventProcessor->createUserEvent(UserAction::CHANGE_MODE_TO_FROM_PREDICTION, "M");
+		EventProcessor::getInstance()->createUserEvent(UserAction::CHANGE_MODE_TO_FROM_PREDICTION, "");
 	}
 
 	if (glfwGetKey(mainWindow, GLFW_KEY_K) == GLFW_PRESS)
 	{
-		eventProcessor->createUserEvent(UserAction::CHANGE_MODE_TO_FORM_PRESENTATION, "K");
+		EventProcessor::getInstance()->createUserEvent(UserAction::CHANGE_MODE_TO_FORM_PRESENTATION, "");
 	}
 
 	if (glfwGetKey(mainWindow, GLFW_KEY_W) == GLFW_PRESS)

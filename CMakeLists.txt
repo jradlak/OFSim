@@ -244,6 +244,8 @@ add_executable(
     src/infrastructure/ImageLoader.h
     src/infrastructure/CommunicationBus.h
     src/infrastructure/CommunicationBus.cpp
+    src/infrastructure/EventProcessor.h
+    src/infrastructure/EventProcessor.cpp
 
     src/vmachine/Instructions.h
     src/vmachine/Memory.h

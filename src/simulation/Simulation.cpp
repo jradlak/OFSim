@@ -258,7 +258,7 @@ void Simulation::userInteraction(dvec3& toTheMoon, f64& radius, f64& step)
 	 		physics->getTrajectoryPredictionZ(),
 	 		telemetryCollector->getTelemetryHistory());
 
-	 	if (event.action == UserAction::CHANGE_MODE_TO_FORM_PRESENTATION) // m
+	 	if (event.action == UserAction::CHANGE_MODE_TO_FROM_PREDICTION) // m
 	 	{
 	 		if (trajectoryPredictionMode == false)
 	 		{
@@ -271,7 +271,7 @@ void Simulation::userInteraction(dvec3& toTheMoon, f64& radius, f64& step)
 	 		}
 	 	}
 
-	 	if (event.action == UserAction::CHANGE_MODE_TO_FROM_PREDICTION) // k
+	 	if (event.action == UserAction::CHANGE_MODE_TO_FORM_PRESENTATION) // k
 	 	{
 	 		if (presentationMode == false)
 	 		{
