@@ -23,6 +23,7 @@
 
 enum class SimulationMode
 {
+	WAITING_FOR_BEGIN,
 	STANDARD_SIMULATION,
 	TRAJECTORY_PREDICTION,
 	PRESENTATION_MODE
@@ -97,8 +98,7 @@ private:
 	i32 lastAltitudeDirection{ 1 };
 	i32 altitudeDirection{ 1 };
 
-	bool trajectoryPredictionMode{ false };
-	bool presentationMode{ false };
+	SimulationMode simulationMode{ SimulationMode::STANDARD_SIMULATION };
 
 	std::string orbitalProgramSourceCode;
 

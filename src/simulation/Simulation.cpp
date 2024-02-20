@@ -113,7 +113,7 @@ void Simulation::mainLoop()
 		gui->newFrame();
 		
 		// camera/view transformation:
-		if (!trajectoryPredictionMode && !presentationMode)
+		if (simulationMode == SimulationMode::STANDARD_SIMULATION)
 		{
 			camera->setAutomaticRotation(true);
 			camera->updatePosition(rocket->getPosition(), rocket->getRotation());
@@ -121,7 +121,7 @@ void Simulation::mainLoop()
 		}
 		else 
 		{			
-			if (presentationMode)
+			if (simulationMode == SimulationMode::PRESENTATION_MODE)
 			{
 				camera->setAutomaticRotation(true);				
 				toTheMoon = SolarSystemConstants::moonPos - rocket->getPosition();
@@ -147,11 +147,11 @@ void Simulation::mainLoop()
 		solarSystem->render(projection, view, SolarSystemConstants::lightPos);
 		rocket->render(projection, view, SolarSystemConstants::lightPos);
 
-		if (trajectoryPredictionMode || presentationMode)
+		if (simulationMode == SimulationMode::TRAJECTORY_PREDICTION || simulationMode == SimulationMode::PRESENTATION_MODE)
 		{
 			trajectoryPrediction->render(projection, view, SolarSystemConstants::lightPos);
 			
-			if (presentationMode)
+			if (simulationMode == SimulationMode::PRESENTATION_MODE)
 			{
 				double distance = glm::length(camera->position - rocket->getPosition());
 				gui->renderPresentationModeInfo(distance);
@@ -260,29 +260,29 @@ void Simulation::userInteraction(dvec3& toTheMoon, f64& radius, f64& step)
 
 	 	if (event.action == UserAction::CHANGE_MODE_TO_FROM_PREDICTION) // m
 	 	{
-	 		if (trajectoryPredictionMode == false)
+	 		if (simulationMode != SimulationMode::TRAJECTORY_PREDICTION)
 	 		{
 	 			camera->updatePosition(solarSystem->pointAboveEarthSurface(30, 30, 800), rocket->getRotation());
-	 			trajectoryPredictionMode = true;
+	 			simulationMode = SimulationMode::TRAJECTORY_PREDICTION;
 	 		}
 	 		else
 	 		{
-	 			trajectoryPredictionMode = false;
+	 			simulationMode = SimulationMode::STANDARD_SIMULATION;
 	 		}
 	 	}
 
 	 	if (event.action == UserAction::CHANGE_MODE_TO_FORM_PRESENTATION) // k
 	 	{
-	 		if (presentationMode == false)
+	 		if (simulationMode != SimulationMode::PRESENTATION_MODE)
 	 		{
 	 			toTheMoon = rocket->getPosition() - SolarSystemConstants::moonPos;
 	 			radius = 0.000000001;
 	 			step = 0.000000001;
-	 			presentationMode = true;
+	 			simulationMode = SimulationMode::PRESENTATION_MODE;
 	 		}
 	 		else
 	 		{
-	 			presentationMode = false;
+	 			simulationMode = SimulationMode::STANDARD_SIMULATION;
 	 			gui->restoreWindows();
 	 		}
 	 	}
