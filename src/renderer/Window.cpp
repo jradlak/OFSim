@@ -42,6 +42,7 @@ int Window::initialize()
 
 	glfwSetFramebufferSizeCallback(mainWindow, framebuffer_size_callback);
 	glfwSetCursorPosCallback(mainWindow, mouse_callback);
+	glfwSetKeyCallback(mainWindow, key_callback);
 
 	glEnable(GL_DEPTH_TEST);
 
@@ -63,43 +64,6 @@ void Window::swapBuffers()
 GLFWwindow* Window::getWindow()
 {
 	return mainWindow;
-}
-
-void Window::processInput()
-{
-	
-
-	float currentFrame = glfwGetTime();
-	deltaTime = currentFrame - lastFrame;
-	lastFrame = currentFrame;
-
-	if (glfwGetKey(mainWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-	{
-		glfwSetWindowShouldClose(mainWindow, true);
-	}
-
-	if (glfwGetKey(mainWindow, GLFW_KEY_M) == GLFW_PRESS)
-	{
-		EventProcessor::getInstance()->createUserEvent(UserAction::CHANGE_MODE_TO_FROM_PREDICTION, "");
-	}
-
-	if (glfwGetKey(mainWindow, GLFW_KEY_K) == GLFW_PRESS)
-	{
-		EventProcessor::getInstance()->createUserEvent(UserAction::CHANGE_MODE_TO_FORM_PRESENTATION, "");
-	}
-
-	if (glfwGetKey(mainWindow, GLFW_KEY_W) == GLFW_PRESS)
-		camera.processKeyboard(FORWARD, deltaTime);
-	if (glfwGetKey(mainWindow, GLFW_KEY_S) == GLFW_PRESS)
-		camera.processKeyboard(BACKWARD, deltaTime);
-	if (glfwGetKey(mainWindow, GLFW_KEY_A) == GLFW_PRESS)
-		camera.processKeyboard(LEFT, deltaTime);
-	if (glfwGetKey(mainWindow, GLFW_KEY_D) == GLFW_PRESS)
-		camera.processKeyboard(RIGHT, deltaTime);
-	if (glfwGetKey(mainWindow, GLFW_KEY_Q) == GLFW_PRESS)
-		camera.processKeyboard(ROLL_LEFT, deltaTime);
-	if (glfwGetKey(mainWindow, GLFW_KEY_E) == GLFW_PRESS)
-		camera.processKeyboard(ROLL_RIGHT, deltaTime);
 }
 
 void Window::framebuffer_size_callback(GLFWwindow* window, int width, int height)
@@ -125,6 +89,24 @@ void Window::mouse_callback(GLFWwindow* window, double xpos, double ypos)
 	theWindow->lastY = ypos;
 
 	theWindow->camera.processMouseRotation(xoffset, yoffset);
+}
+
+void Window::key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
+{
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+	{
+		glfwSetWindowShouldClose(window, true);
+	}
+
+	if (key == GLFW_KEY_M && action == GLFW_PRESS)
+	{
+		EventProcessor::getInstance()->createUserEvent(UserAction::CHANGE_MODE_TO_FROM_PREDICTION, "");
+	}
+
+	if (key == GLFW_KEY_K && action == GLFW_PRESS)
+	{
+		EventProcessor::getInstance()->createUserEvent(UserAction::CHANGE_MODE_TO_FORM_PRESENTATION, "");
+	}
 }
 
 Window::~Window()

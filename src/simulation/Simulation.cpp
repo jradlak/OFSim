@@ -37,7 +37,7 @@ void Simulation::stop()
 
 void Simulation::mainLoop()
 {	
-	// <---- initialization sectiom; ----->
+	// <---- initialization section; ----->
 
 	// initialize physics solver:
 	glm::dvec3 towards = solarSystem->pointAboveEarthSurface(angle, dangle, -50.0);
@@ -96,8 +96,7 @@ void Simulation::mainLoop()
 			runningTime += elapsed;						
 		}		
 
-		// input
-		mainWindow->processInput();
+		// input processing:		
 		userInteraction(toTheMoon, radius, step);
 
 		if (simulationMode == SimulationMode::STANDARD_SIMULATION) 
@@ -250,8 +249,8 @@ void Simulation::userInteraction(dvec3& toTheMoon, f64& radius, f64& step)
 	if (event.action == UserAction::CHANGE_MODE_TO_FORM_PRESENTATION 
 		 || event.action == UserAction::CHANGE_MODE_TO_FROM_PREDICTION) // m, k
 	{		
-		// change to presention or prediction mode is possible only in standard simulation mode:
-		if (simulationMode == SimulationMode::STANDARD_SIMULATION)
+		// change to presention or prediction mode is possible only when simulation is not waiting for begin:
+		if (simulationMode != SimulationMode::WAITING_FOR_BEGIN)
 		{			
 			camera->setAutomaticRotation(false);
 			physics->predictTrajectory(runningTime);

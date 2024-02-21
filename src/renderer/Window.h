@@ -16,8 +16,7 @@ class Window
 public:
     Window(Camera& _camera, const u32 _width, const u32 _height);
 
-    int initialize();
-    void processInput();
+    int initialize();    
     
     bool shouldClose();
     void swapBuffers();
@@ -36,8 +35,12 @@ private:
 
     float deltaTime;
     float lastFrame;
-    
+
+    int eventsCreated = 0;
+
     static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
     
     static void mouse_callback(GLFWwindow* window, double xpos, double ypos);       
+
+    static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 };
