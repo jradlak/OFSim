@@ -26,14 +26,13 @@ void Simulation::init()
 }
 
 void Simulation::start()
-{
-	simulationStopped = 0;
+{		
 	mainLoop();
 }
 
 void Simulation::stop()
 {
-	simulationStopped = true;
+	simulationMode = SimulationMode::WAITING_FOR_BEGIN;
 }
 
 void Simulation::mainLoop()
@@ -94,15 +93,14 @@ void Simulation::mainLoop()
 			unsigned long long elapsed = (current - previous) * factor;
 			previous = current;
 			lag += elapsed;
-			runningTime += elapsed;
-			simulationStopped = false;			
+			runningTime += elapsed;						
 		}		
 
 		// input
 		mainWindow->processInput();
 		userInteraction(toTheMoon, radius, step);
 
-		if (simulationStopped != 1) 
+		if (simulationMode == SimulationMode::STANDARD_SIMULATION) 
 		{	
 			lag = physics->calculateForces(lag);					
 		}
@@ -113,7 +111,8 @@ void Simulation::mainLoop()
 		gui->newFrame();
 		
 		// camera/view transformation:
-		if (simulationMode == SimulationMode::STANDARD_SIMULATION)
+		if (simulationMode == SimulationMode::STANDARD_SIMULATION 
+			|| simulationMode == SimulationMode::WAITING_FOR_BEGIN)
 		{
 			camera->setAutomaticRotation(true);
 			camera->updatePosition(rocket->getPosition(), rocket->getRotation());
@@ -229,6 +228,7 @@ void Simulation::userInteraction(dvec3& toTheMoon, f64& radius, f64& step)
 		// TODO: consider hide thread execution (simillar to ODDMA):
 		vmThread = std::make_unique<std::thread>(&ofsim_vm::VMachine::start, this->vm.get());
 		oddma->start();
+		this->simulationMode = SimulationMode::STANDARD_SIMULATION;		
 	}
 
 	if (event.action == UserAction::FILE_SAVE)
@@ -249,44 +249,48 @@ void Simulation::userInteraction(dvec3& toTheMoon, f64& radius, f64& step)
 
 	if (event.action == UserAction::CHANGE_MODE_TO_FORM_PRESENTATION 
 		 || event.action == UserAction::CHANGE_MODE_TO_FROM_PREDICTION) // m, k
-	{
-	 	camera->setAutomaticRotation(false);
-	 	physics->predictTrajectory(runningTime);
-	 	trajectoryPrediction->initWithPositions(
-	 		physics->getTrajectoryPredictionX(),
-	 		physics->getTrajectoryPredictionY(),
-	 		physics->getTrajectoryPredictionZ(),
-	 		telemetryCollector->getTelemetryHistory());
+	{		
+		// change to presention or prediction mode is possible only in standard simulation mode:
+		if (simulationMode == SimulationMode::STANDARD_SIMULATION)
+		{			
+			camera->setAutomaticRotation(false);
+			physics->predictTrajectory(runningTime);
+			trajectoryPrediction->initWithPositions(
+				physics->getTrajectoryPredictionX(),
+				physics->getTrajectoryPredictionY(),
+				physics->getTrajectoryPredictionZ(),
+				telemetryCollector->getTelemetryHistory());
 
-	 	if (event.action == UserAction::CHANGE_MODE_TO_FROM_PREDICTION) // m
-	 	{
-	 		if (simulationMode != SimulationMode::TRAJECTORY_PREDICTION)
-	 		{
-	 			camera->updatePosition(solarSystem->pointAboveEarthSurface(30, 30, 800), rocket->getRotation());
-	 			simulationMode = SimulationMode::TRAJECTORY_PREDICTION;
-	 		}
-	 		else
-	 		{
-	 			simulationMode = SimulationMode::STANDARD_SIMULATION;
-	 		}
-	 	}
+			if (event.action == UserAction::CHANGE_MODE_TO_FROM_PREDICTION) // m
+			{
+				if (simulationMode != SimulationMode::TRAJECTORY_PREDICTION)
+				{
+					camera->updatePosition(solarSystem->pointAboveEarthSurface(30, 30, 800), rocket->getRotation());
+					simulationMode = SimulationMode::TRAJECTORY_PREDICTION;
+				}
+				else
+				{
+					simulationMode = SimulationMode::STANDARD_SIMULATION;
+				}
+			}
 
-	 	if (event.action == UserAction::CHANGE_MODE_TO_FORM_PRESENTATION) // k
-	 	{
-	 		if (simulationMode != SimulationMode::PRESENTATION_MODE)
-	 		{
-	 			toTheMoon = rocket->getPosition() - SolarSystemConstants::moonPos;
-	 			radius = 0.000000001;
-	 			step = 0.000000001;
-	 			simulationMode = SimulationMode::PRESENTATION_MODE;
-	 		}
-	 		else
-	 		{
-	 			simulationMode = SimulationMode::STANDARD_SIMULATION;
-	 			gui->restoreWindows();
-	 		}
-	 	}
-	 }
+			if (event.action == UserAction::CHANGE_MODE_TO_FORM_PRESENTATION) // k
+			{
+				if (simulationMode != SimulationMode::PRESENTATION_MODE)
+				{
+					toTheMoon = rocket->getPosition() - SolarSystemConstants::moonPos;
+					radius = 0.000000001;
+					step = 0.000000001;
+					simulationMode = SimulationMode::PRESENTATION_MODE;
+				}
+				else
+				{
+					simulationMode = SimulationMode::STANDARD_SIMULATION;
+					gui->restoreWindows();
+				}
+			}
+		}
+	}
 }
 
 unsigned long long Simulation::currentTime()
@@ -337,8 +341,7 @@ void Simulation::initialRocketRotation()
 }
 
 void Simulation::initialOrbitalInformation()
-{
-	simulationStopped = 1;
+{	
 	lastAltitude = 0;
 	apogeum = 0;
 	perygeum = 0;

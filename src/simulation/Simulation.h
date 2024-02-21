@@ -90,15 +90,14 @@ private:
 	u64 runningTime;
 	u64 timePaused;
 	
-	// orbital orientation variables:
-	i32 simulationStopped{ 1 };
+	// orbital orientation variables:	
 	f64 lastAltitude{ 0 };
 	f64 apogeum{ 0 };
 	f64 perygeum{ 0 };
 	i32 lastAltitudeDirection{ 1 };
 	i32 altitudeDirection{ 1 };
 
-	SimulationMode simulationMode{ SimulationMode::STANDARD_SIMULATION };
+	SimulationMode simulationMode{ SimulationMode::WAITING_FOR_BEGIN };
 
 	std::string orbitalProgramSourceCode;
 
