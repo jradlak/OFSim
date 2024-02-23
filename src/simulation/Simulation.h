@@ -101,18 +101,21 @@ private:
 
 	std::string orbitalProgramSourceCode;
 
+	RocketPhysicalProperties physicsRocketInitialOrientation();
 	void initialPhysicsInformation();
 	void initialRocketRotation();
 	void initialOrbitalInformation();
 
+	void initialRocketOrientationProperties();
+
 	void initWindowContext();
-	void mainLoop();
+    void mainLoop();
 
-	void renderHUD();
+    void renderHUD();
 
-	void userInteraction(dvec3& toTheMoon, f64& radius, f64& step);	
+    void userInteraction(dvec3 &toTheMoon, f64 &radius, f64 &step);
 
-	void switchGLStateForWorldRendering(float r, float g, float b);
+    void switchGLStateForWorldRendering(float r, float g, float b);
 	void renderTelemetry(ofsim_gui::Gui* gui, Rocket* rocket, double altitude, double apogeum, double perygeum, double atmosphereDragForceMagnitude);
 	void calcApogeumAndPerygeum();
 

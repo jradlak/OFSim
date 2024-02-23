@@ -33,6 +33,7 @@ void Simulation::start()
 void Simulation::stop()
 {
 	simulationMode = SimulationMode::WAITING_FOR_BEGIN;
+	initialRocketOrientationProperties();
 }
 
 void Simulation::mainLoop()
@@ -40,12 +41,9 @@ void Simulation::mainLoop()
 	// <---- initialization section; ----->
 
 	// initialize physics solver:
-	glm::dvec3 towards = solarSystem->pointAboveEarthSurface(angle, dangle, -50.0);
-	RocketPhysicalProperties rocketProperties = rocket->projectProperties();
-	physics = std::make_unique<ofsim_math_and_physics::PhysicsSolver>(rocketProperties, MS_PER_UPDATE);
-	physics->changeInitialAltitudeOrientation(CelestialBodyType::planet, 3185.0, towards);
+    RocketPhysicalProperties rocketProperties = physicsRocketInitialOrientation();
 
-	// initialize communication Bus and telemetry collector:	
+    // initialize communication Bus and telemetry collector:	
 	telemetryCollector = std::make_unique<TelemetryCollector>();
 
 	trajectoryPrediction = std::make_unique<TrajectoryPrediction>();
@@ -213,6 +211,15 @@ void Simulation::userInteraction(dvec3& toTheMoon, f64& radius, f64& step)
 	// recieve and interpret user events:
 	UserEvent event = EventProcessor::getInstance()->getUserEvent();
 
+	if (event.action == UserAction::PROGRAM_STOP_EXECUTION)
+	{
+		vm->stop();
+		vmThread->join();
+		oddma->stop();
+	
+		stop();		
+	}
+
 	if (event.action == UserAction::PROGRAM_FILE_OPENED)
 	{
 		std::cout << "Event received: " << (int)event.action << "\n";
@@ -331,6 +338,16 @@ void Simulation::initialPhysicsInformation()
 	solarSystem->provideRocketInformationAndInit(angle, dangle, rocket.get());	
 }
 
+RocketPhysicalProperties Simulation::physicsRocketInitialOrientation()
+{
+    glm::dvec3 towards = solarSystem->pointAboveEarthSurface(angle, dangle, -50.0);
+    RocketPhysicalProperties rocketProperties = rocket->projectProperties();
+    physics = std::make_unique<ofsim_math_and_physics::PhysicsSolver>(rocketProperties, MS_PER_UPDATE);
+    physics->changeInitialAltitudeOrientation(CelestialBodyType::planet, 3185.0, towards);
+
+	return rocketProperties;
+}
+
 void Simulation::initialRocketRotation()
 {
 	glm::dvec3 newRotation = glm::dvec3(-50.000021, 48.8000050, 0.0);
@@ -346,6 +363,16 @@ void Simulation::initialOrbitalInformation()
 	perygeum = 0;
 	lastAltitudeDirection = 1;
 	altitudeDirection = 1;
+}
+
+void Simulation::initialRocketOrientationProperties()
+{
+	glm::dvec3 rocketPos = solarSystem->pointAboveEarthSurface(angle, dangle, -0.2);
+	rocket->reset(rocketPos);
+
+	physicsRocketInitialOrientation();	
+	initialOrbitalInformation();
+	initialRocketRotation();
 }
 
 void Simulation::initWindowContext()

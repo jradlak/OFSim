@@ -266,7 +266,7 @@ void Gui::renderSimulationControlWindow(unsigned long long time)
         std::cout << "Kliknieto stop!! \n";
         pp_texture = play_texture;
         plaing = false;
-        timeFactor = -1;
+        eventProcessor->createUserEvent(UserAction::PROGRAM_STOP_EXECUTION, "");
     }
 
     ImGui::SameLine();

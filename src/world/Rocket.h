@@ -22,7 +22,7 @@ struct RocketPhysicalProperties
 	dvec3 &rotation;	
 	dvec3 &velocity;
 
-	f64 &size, &mass, &thrustMagnitude;	
+	f64 &size, &mass, &thrustMagnitude;		
 };
 
 class Rocket
@@ -46,7 +46,7 @@ public:
 
 	RocketPhysicalProperties projectProperties();
 
-	void reset();
+	void reset(glm::dvec3 _position);
 
 	f64 getMass();
 	glm::dvec3 getVelocity();
