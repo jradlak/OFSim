@@ -26,6 +26,8 @@ void ODDMA::stop()
 
 	stateProducerThread->join();
 	commandListenerThread->join();
+	stateProducerThread.reset();
+	commandListenerThread.reset();
 }
 
 void ODDMA::restart()

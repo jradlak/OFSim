@@ -77,8 +77,3 @@ void VMachine::start()
 	std::cout << "VMachine execution loop started!\n";	
 	executionLoop();
 }
-
-void VMachine::takeANap()
-{	
-	std::this_thread::sleep_for(std::chrono::milliseconds(100));
-}

@@ -48,27 +48,18 @@ void TelemetryCollector::registerTelemetry(TelemetryData data)
 	}
 }
 
-std::vector<double> TelemetryCollector::getVelicityHistory()
-{
-	return velocityHistory;
-}
+void TelemetryCollector::clear()
+{	
+	telemetryHistory.clear();
+	velocityHistory.clear();
+	altitideHistory.clear();
+	acceletationHistory.clear();
+	atmPressureHistory.clear();
 
-std::vector<double> TelemetryCollector::getAltitudeHistory()
-{
-	return altitideHistory;
-}
-
-std::vector<double> TelemetryCollector::getAccelarationHistory()
-{
-	return acceletationHistory;
-}
-
-std::vector<double> TelemetryCollector::getAtmPressureHistory()
-{
-	return atmPressureHistory;
-}
-
-std::vector<TelemetryData> TelemetryCollector::getTelemetryHistory()
-{
-	return telemetryHistory;
+	maxVelocity = 0;
+	maxAltitude = 0;
+	maxAtmPressure = 0;
+	maxAcceleration = 0;
+	minAcceleration = 0;
+	lastTick = 0;
 }

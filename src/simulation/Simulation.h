@@ -99,7 +99,7 @@ private:
 
 	SimulationMode simulationMode{ SimulationMode::WAITING_FOR_BEGIN };
 
-	std::string orbitalProgramSourceCode;
+	std::string orbitalProgramSourceCode { "" };
 
 	RocketPhysicalProperties physicsRocketInitialOrientation();
 	void initialPhysicsInformation();

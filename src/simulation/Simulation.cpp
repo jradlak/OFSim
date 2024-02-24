@@ -81,11 +81,11 @@ void Simulation::mainLoop()
 		oddma->provideRunningTime(runningTime);
 
 		// calculate lag:       
-		if (factor == 0)
+		if (factor == 0) // simulation paused
 		{
 			timePaused = currentTime() - previous;			
 		}
-		else if (factor > 0)
+		else if (factor > 0) // simulation running
 		{
 			unsigned long long current = currentTime() - timePaused;
 			unsigned long long elapsed = (current - previous) * factor;
@@ -213,11 +213,21 @@ void Simulation::userInteraction(dvec3& toTheMoon, f64& radius, f64& step)
 
 	if (event.action == UserAction::PROGRAM_STOP_EXECUTION)
 	{
-		vm->stop();
-		vmThread->join();
-		oddma->stop();
-	
-		stop();		
+		if (simulationMode == SimulationMode::STANDARD_SIMULATION)
+		{
+			vm->stop();
+			vmThread->join();
+			vmThread.reset();
+			oddma->stop();		
+			stop();
+			
+			// tepetition of the tanslation of the loaded source code:
+			vm->translateSourceCode(orbitalProgramSourceCode);
+
+			runningTime = 0;
+			telemetryCollector->clear();
+			clear_command_history(*communicationBus);	
+		}
 	}
 
 	if (event.action == UserAction::PROGRAM_FILE_OPENED)
@@ -231,6 +241,12 @@ void Simulation::userInteraction(dvec3& toTheMoon, f64& radius, f64& step)
 
 	if (event.action == UserAction::PROGRAM_START_EXECUTION)
 	{
+		if (this->orbitalProgramSourceCode.empty())
+		{
+			std::cout << "No source code to execute!\n";
+			return;
+		}
+
 		// TODO: consider hide thread execution (simillar to ODDMA):
 		vmThread = std::make_unique<std::thread>(&ofsim_vm::VMachine::start, this->vm.get());
 		oddma->start();

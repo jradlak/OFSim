@@ -9,12 +9,13 @@ public:
 	TelemetryCollector() {}
 
 	void registerTelemetry(TelemetryData data);
+	void clear();
 
-	std::vector<double> getVelicityHistory();
-	std::vector<double> getAltitudeHistory();
-	std::vector<double> getAccelarationHistory();
-	std::vector<double> getAtmPressureHistory();
-	std::vector<TelemetryData> getTelemetryHistory();
+	std::vector<double> getVelicityHistory() { return velocityHistory; }
+	std::vector<double> getAltitudeHistory() { return altitideHistory; }
+	std::vector<double> getAccelarationHistory() { return acceletationHistory; }
+	std::vector<double> getAtmPressureHistory() { return atmPressureHistory; }
+	std::vector<TelemetryData> getTelemetryHistory() { return telemetryHistory; }
 
 	double getMaxVelocity() { return maxVelocity; }
 	double getMaxAltitude() { return maxAltitude; }
