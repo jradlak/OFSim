@@ -129,16 +129,12 @@ void PhysicsSolver::predictTrajectory(u64 elapsedTime)
     }
 }
 
-// TODO: fix this method!!!
 void PhysicsSolver::reset()
 {
     resetForces();
     thrustMagnitude = 0.01;
     thrustCutOff = true;
-
-    //rocket.reset(); // FIX THIS!!!
-    changeInitialAltitudeOrientation(CelestialBodyType::planet, 3185.0, initialTowards);
-        
+                        
     altitude = calculateAltitude();
     calculateAtmosphereGradient();
     calculateAtmosphericDragForce();

@@ -220,6 +220,7 @@ void Simulation::userInteraction(dvec3& toTheMoon, f64& radius, f64& step)
 			vmThread.reset();
 			oddma->stop();		
 			stop();
+			physics->reset();
 			
 			// tepetition of the tanslation of the loaded source code:
 			vm->translateSourceCode(orbitalProgramSourceCode);

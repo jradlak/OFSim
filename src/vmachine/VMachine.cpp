@@ -60,6 +60,8 @@ void VMachine::stop()
 	takeANap();	
 	registers->clear();
 	memory->clear();
+	pc = 0;
+	oldpc = 0;
 }
 
 void VMachine::restart()
