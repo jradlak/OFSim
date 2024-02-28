@@ -4,6 +4,5 @@ int main(int argc, char** argv)
 {
 	Simulation simulation;
 	simulation.init();
-	simulation.start();
-	simulation.stop();
+	simulation.start();	
 }

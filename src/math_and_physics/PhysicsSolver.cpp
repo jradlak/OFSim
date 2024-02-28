@@ -6,7 +6,7 @@ using namespace ofsim_math_and_physics;
 
 // the class and the method descriptions are in the header file
 
-PhysicsSolver::PhysicsSolver(RocketPhysicalProperties _rocketProperties, i32 _MS_PER_UPDATE)
+PhysicsSolver::PhysicsSolver(RocketPhysicalProperties& _rocketProperties, i32 _MS_PER_UPDATE)
 	: rocketProperties(_rocketProperties), MS_PER_UPDATE(_MS_PER_UPDATE), thrustMagnitude(0.01) {}
 
 void PhysicsSolver::changeInitialAltitudeOrientation(
@@ -135,7 +135,7 @@ void PhysicsSolver::reset()
     thrustMagnitude = 0.01;
     thrustCutOff = true;
                         
-    altitude = calculateAltitude();
+    altitude = 0.0;
     calculateAtmosphereGradient();
     calculateAtmosphericDragForce();
 }

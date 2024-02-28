@@ -40,7 +40,7 @@ namespace ofsim_math_and_physics
 	class PhysicsSolver
 	{
 	public:
-		PhysicsSolver(RocketPhysicalProperties _rocketProperties, i32 _MS_PER_UPDATE);
+		PhysicsSolver(RocketPhysicalProperties& _rocketProperties, i32 _MS_PER_UPDATE);
 
 		// change state methods:
 
@@ -91,7 +91,7 @@ namespace ofsim_math_and_physics
 
 		CelestialBodyType altitudeOrientation;
 		//Rocket& rocket;
-		RocketPhysicalProperties rocketProperties;
+		RocketPhysicalProperties& rocketProperties;
 		
 		f64 altitude;
 		f64 celestialBodySize;

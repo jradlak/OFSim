@@ -30,12 +30,6 @@ void Simulation::start()
 	mainLoop();
 }
 
-void Simulation::stop()
-{
-	simulationMode = SimulationMode::WAITING_FOR_BEGIN;
-	initialRocketOrientationProperties();
-}
-
 void Simulation::mainLoop()
 {	
 	// <---- initialization section; ----->
@@ -349,6 +343,19 @@ void Simulation::collectTelemetry()
 	}
 }
 
+void Simulation::stop()
+{
+	simulationMode = SimulationMode::WAITING_FOR_BEGIN;
+	
+	glm::dvec3 rocketPos = solarSystem->pointAboveEarthSurface(angle, dangle, -0.2);
+	rocket->reset(rocketPos);
+	glm::dvec3 towards = solarSystem->pointAboveEarthSurface(angle, dangle, -50.0);
+	physics->changeInitialAltitudeOrientation(CelestialBodyType::planet, 3185.0, towards);
+	
+	initialOrbitalInformation();
+	initialRocketRotation();
+}
+
 void Simulation::initialPhysicsInformation()
 {
 	initialRocketRotation();
@@ -380,16 +387,6 @@ void Simulation::initialOrbitalInformation()
 	perygeum = 0;
 	lastAltitudeDirection = 1;
 	altitudeDirection = 1;
-}
-
-void Simulation::initialRocketOrientationProperties()
-{
-	glm::dvec3 rocketPos = solarSystem->pointAboveEarthSurface(angle, dangle, -0.2);
-	rocket->reset(rocketPos);
-
-	physicsRocketInitialOrientation();	
-	initialOrbitalInformation();
-	initialRocketRotation();
 }
 
 void Simulation::initWindowContext()

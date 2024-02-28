@@ -106,8 +106,6 @@ private:
 	void initialRocketRotation();
 	void initialOrbitalInformation();
 
-	void initialRocketOrientationProperties();
-
 	void initWindowContext();
     void mainLoop();
 
