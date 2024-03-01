@@ -54,9 +54,7 @@ add_executable("${CMAKE_PROJECT_NAME}"
 
     src/infrastructure/FileService.h
     src/infrastructure/FileService.cpp
-    src/infrastructure/ImageLoader.h
-    src/infrastructure/CommunicationBus.h
-    src/infrastructure/CommunicationBus.cpp
+    src/infrastructure/ImageLoader.h    
     src/infrastructure/EventProcessor.h
     src/infrastructure/EventProcessor.cpp
     
@@ -93,21 +91,6 @@ add_executable("${CMAKE_PROJECT_NAME}"
     src/renderer/TrajectoryPrediction.cpp
     src/renderer/Window.cpp
     
-    src/vmachine/Instructions.h
-    src/vmachine/Memory.h
-    "src/infrastructure/ODDMA.h"
-    "src/vmachine/Opcodes.h"
-    src/vmachine/Registers.h
-    "src/infrastructure/RocketCommand.h"
-    src/vmachine/Translator.h
-    src/vmachine/VMachine.h        
-    src/vmachine/Instructions.cpp
-    src/vmachine/Memory.cpp
-    "src/infrastructure/ODDMA.cpp"    
-    src/vmachine/Registers.cpp    
-    src/vmachine/Translator.cpp
-    src/vmachine/VMachine.cpp
-
     src/world/Launchpad.h
     src/world/Rocket.h
     src/world/Smoke.h
@@ -183,7 +166,6 @@ if(MSVC)
     endif()
 endif()
 
-
 enable_testing()
 add_executable(
   ofsim_tests  
@@ -241,26 +223,9 @@ add_executable(
 
     src/infrastructure/FileService.h
     src/infrastructure/FileService.cpp
-    src/infrastructure/ImageLoader.h
-    src/infrastructure/CommunicationBus.h
-    src/infrastructure/CommunicationBus.cpp
+    src/infrastructure/ImageLoader.h    
     src/infrastructure/EventProcessor.h
     src/infrastructure/EventProcessor.cpp
-
-    src/vmachine/Instructions.h
-    src/vmachine/Memory.h
-    "src/infrastructure/ODDMA.h"
-    "src/vmachine/Opcodes.h"
-    src/vmachine/Registers.h
-    "src/infrastructure/RocketCommand.h"
-    src/vmachine/Translator.h
-    src/vmachine/VMachine.h        
-    src/vmachine/Instructions.cpp
-    src/vmachine/Memory.cpp
-    "src/infrastructure/ODDMA.cpp"    
-    src/vmachine/Registers.cpp    
-    src/vmachine/Translator.cpp
-    src/vmachine/VMachine.cpp
 
     external_libraries/glad/glad.h 
     external_libraries/glad/glad.c
@@ -269,10 +234,7 @@ add_executable(
 
     "tests/SphereTests.cpp"    
     "tests/PhysicsSolverTests.cpp"
-    "tests/MemoryTests.cpp" 
-    "tests/com_bus_tests.cpp"
-    "tests/TranslatorTests.cpp" 
-    "tests/VMTests.cpp")
+)
 target_link_libraries(
     ofsim_tests
     ${OPENGL_LIBRARIES}

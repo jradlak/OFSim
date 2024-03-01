@@ -58,12 +58,7 @@ void Simulation::mainLoop()
 
 	f64 radius{ 0.000000001 };
 	f64 step{ 0.000000001 };
-
-	// <------ initialize Virtual Machine and ODDMA: ------>
-	this->communicationBus = std::make_unique<com_bus::Tbus_data>();
-	this->vm = std::make_unique<ofsim_vm::VMachine>(communicationBus.get());
-	this->oddma = std::make_unique<ODDMA>(*rocket, *physics, *vm, *communicationBus);	
-
+	
 	// <----- end of initialization section ----->
 
 	dvec3 toTheMoon = SolarSystemConstants::moonPos;
@@ -72,8 +67,6 @@ void Simulation::mainLoop()
 	{		
 		int factor = gui->getTimeFactor();
 				
-		oddma->provideRunningTime(runningTime);
-
 		// calculate lag:       
 		if (factor == 0) // simulation paused
 		{
@@ -166,13 +159,7 @@ void Simulation::mainLoop()
 		syncFramerate(currentTime(), MS_PER_UPDATE);
 		mainWindow->swapBuffers();
 		glfwPollEvents();
-	}
-
-	if (vm->isStarted()) 
-	{
-		vm->stop();
-		vmThread->join();		
-	}
+	}	
 }
 
 void Simulation::renderHUD()
@@ -182,9 +169,7 @@ void Simulation::renderHUD()
 	gui->renderFileSaveAsDialog();
 	gui->renderFileOpenDialog();
 	gui->renderSimulationControlWindow(runningTime);
-	gui->renderCodeEditor(orbitalProgramSourceCode);
-	std::map<unsigned long long, RocketCommand>& commandHistory = communicationBus->command_history;
-	gui->renderCommandHistory(commandHistory);
+	gui->renderCodeEditor(orbitalProgramSourceCode);	
 
 	gui->plotTelemetry(
 		telemetryCollector->getVelicityHistory(), telemetryCollector->getMaxVelocity(),
@@ -208,27 +193,12 @@ void Simulation::userInteraction(dvec3& toTheMoon, f64& radius, f64& step)
 	if (event.action == UserAction::PROGRAM_STOP_EXECUTION)
 	{
 		if (simulationMode == SimulationMode::STANDARD_SIMULATION)
-		{
-			oddma->stop();
-			oddma.reset();
-
-			vm->stop();
-			vmThread->join();
-			vmThread.reset();
-			vm.reset();
-
-			vm = std::make_unique<ofsim_vm::VMachine>(communicationBus.get());
-			this->oddma = std::make_unique<ODDMA>(*rocket, *physics, *vm, *communicationBus);
-		
+		{					
 			stop();
 			physics->reset();
 			
-			// tepetition of the tanslation of the loaded source code:
-			vm->translateSourceCode(orbitalProgramSourceCode);
-
 			runningTime = 0;
-			telemetryCollector->clear();
-			clear_command_history(*communicationBus);	
+			telemetryCollector->clear();			
 		}
 	}
 
@@ -236,9 +206,7 @@ void Simulation::userInteraction(dvec3& toTheMoon, f64& radius, f64& step)
 	{
 		std::cout << "Event received: " << (int)event.action << "\n";
 		std::cout << "Data reciewed " << event.data << "\n";
-
-		// load VM program source code from file:
-		this->orbitalProgramSourceCode = vm->translateSourceCodeFromFile(event.data.c_str());						
+					
 	}
 
 	if (event.action == UserAction::PROGRAM_START_EXECUTION)
@@ -248,10 +216,7 @@ void Simulation::userInteraction(dvec3& toTheMoon, f64& radius, f64& step)
 			std::cout << "No source code to execute!\n";
 			return;
 		}
-
-		// TODO: consider hide thread execution (simillar to ODDMA):
-		vmThread = std::make_unique<std::thread>(&ofsim_vm::VMachine::start, this->vm.get());
-		oddma->start();
+		
 		this->simulationMode = SimulationMode::STANDARD_SIMULATION;		
 	}
 

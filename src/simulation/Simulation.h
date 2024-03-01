@@ -4,6 +4,8 @@
 #include <iostream>
 #include <string>
 #include <memory>
+#include <chrono>
+#include <thread>
 
 #include "../world/SolarSystemConstants.h"
 #include "TelemetryCollector.h"
@@ -17,9 +19,6 @@
 #include "../world/SolarSystem.h"
 #include "../math_and_physics/PhysicsSolver.h"
 #include "../math_and_physics/MathTypes.h"
-#include "../infrastructure/CommunicationBus.h"
-#include "../infrastructure/ODDMA.h"
-#include "../vmachine/VMachine.h"
 
 enum class SimulationMode
 {
@@ -70,11 +69,7 @@ private:
 	std::unique_ptr<Window> mainWindow;
 	std::unique_ptr<ofsim_gui::Gui> gui;
 
-	// task and communication:
-	std::unique_ptr<com_bus::Tbus_data> communicationBus;
-	std::unique_ptr<ofsim_vm::VMachine> vm;
-	std::unique_ptr<std::thread> vmThread;
-	std::unique_ptr<ODDMA> oddma;
+	// telemetry:	
 	std::unique_ptr<TelemetryCollector> telemetryCollector;
 
 	// initial rocket and camera angles:
