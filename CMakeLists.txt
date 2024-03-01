@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.16)
 project(OSim)
 
 find_package( OpenGL REQUIRED )
+find_package(Python REQUIRED Development)
 
 include_directories( ${OPENGL_INCLUDE_DIRS} )
 
@@ -156,7 +157,7 @@ else()
     add_dependencies("${CMAKE_PROJECT_NAME}" copy_assets)
 endif()
 
-target_link_libraries("${CMAKE_PROJECT_NAME}" ${OPENGL_LIBRARIES} glfw glm imgui assimp)
+target_link_libraries("${CMAKE_PROJECT_NAME}" ${OPENGL_LIBRARIES} glfw glm imgui assimp Python::Python)
 
 if(MSVC)
     if(${CMAKE_VERSION} VERSION_LESS "3.6.0") 
