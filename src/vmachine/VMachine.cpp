@@ -26,6 +26,12 @@ void ofsim_vm::VMachine::translateSourceCode(std::string sourceCode)
 	loadCode();
 }
 
+void ofsim_vm::VMachine::loadCode()
+{
+	memory->clear(); // clear old program before load new one
+	Memory::memcopy(translator->code, memory->mem, 0, 0, translator->getCodeSize());
+}
+
 void VMachine::executionLoop()
 {
 	// code execution:		
@@ -39,6 +45,7 @@ void VMachine::executionLoop()
 		instructions->call(opcode, args);
 		delete[] args;
 
+		std::cout << "OLD_PC: " << oldpc << " args_size: " << args_size << " PC: " << pc << std::endl;
 		pc = registers->pc();
 		if (oldpc == pc)
 		{

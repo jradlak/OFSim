@@ -171,7 +171,7 @@ void Simulation::mainLoop()
 	if (vm->isStarted()) 
 	{
 		vm->stop();
-		vmThread->join();
+		vmThread->join();		
 	}
 }
 
@@ -209,10 +209,17 @@ void Simulation::userInteraction(dvec3& toTheMoon, f64& radius, f64& step)
 	{
 		if (simulationMode == SimulationMode::STANDARD_SIMULATION)
 		{
+			oddma->stop();
+			oddma.reset();
+
 			vm->stop();
 			vmThread->join();
 			vmThread.reset();
-			oddma->stop();		
+			vm.reset();
+
+			vm = std::make_unique<ofsim_vm::VMachine>(communicationBus.get());
+			this->oddma = std::make_unique<ODDMA>(*rocket, *physics, *vm, *communicationBus);
+		
 			stop();
 			physics->reset();
 			
@@ -231,7 +238,7 @@ void Simulation::userInteraction(dvec3& toTheMoon, f64& radius, f64& step)
 		std::cout << "Data reciewed " << event.data << "\n";
 
 		// load VM program source code from file:
-		this->orbitalProgramSourceCode = vm->translateSourceCodeFromFile(event.data.c_str());
+		this->orbitalProgramSourceCode = vm->translateSourceCodeFromFile(event.data.c_str());						
 	}
 
 	if (event.action == UserAction::PROGRAM_START_EXECUTION)

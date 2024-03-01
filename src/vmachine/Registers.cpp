@@ -22,7 +22,7 @@ void Registers::fl(unsigned char index, double value)
 
 void Registers::clear()
 {
-	for (int i = 0; i < 16; i++) {
+	for (int i = 0; i < number_of_registers; i++) {
 		r[i] = 0;
 		flr[i] = 0;		
 	}
@@ -35,7 +35,7 @@ void Registers::clear()
 
 void Registers::assertKnown(unsigned char index)
 {
-	if (index > size)
+	if (index > number_of_registers)
 	{
 		std::cout << "Unknown register!!! Program must be terminated!" << std::endl;
 		exit(0);

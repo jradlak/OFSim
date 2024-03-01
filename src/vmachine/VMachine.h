@@ -25,7 +25,7 @@ namespace ofsim_vm
 
 		void translateSourceCode(std::string sourceCode);
 
-		void loadCode() { Memory::memcopy(translator->code, memory->mem, 0, 0, translator->getCodeSize()); }
+		void loadCode();
 
 		void start();
 

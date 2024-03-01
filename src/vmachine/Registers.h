@@ -4,6 +4,8 @@
 
 namespace ofsim_vm
 {
+	constexpr unsigned int number_of_registers = 16;
+
 	class Registers
 	{
 	public:
@@ -30,10 +32,9 @@ namespace ofsim_vm
 
 		~Registers() { }
 
-	private:
-		unsigned int size = 16;
-		unsigned int r[16] = {};  // general purpose registers
-		double flr[16] = {};      // floating point double precision registers	
+	private:		
+		unsigned int r[number_of_registers] {};  // general purpose registers
+		double flr[number_of_registers] {};      // floating point double precision registers	
 		short creg = 0;			  // control register
 
 		short zfreg = 0;		  // zero flag
