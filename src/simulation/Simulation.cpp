@@ -32,6 +32,9 @@ void Simulation::start()
 
 void Simulation::mainLoop()
 {	
+	// <----- Python integration testing ----->
+	ofsim_infrastructure::FileService::doSomePython();
+
 	// <---- initialization section; ----->
 
 	// initialize physics solver:

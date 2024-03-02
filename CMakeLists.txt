@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.16)
 project(OSim)
 
 find_package( OpenGL REQUIRED )
-find_package(Python REQUIRED Development)
+find_package( Python REQUIRED Development)
 
 include_directories( ${OPENGL_INCLUDE_DIRS} )
 
@@ -242,6 +242,7 @@ target_link_libraries(
     glfw
     glm
     assimp
+    Python::Python
     GTest::gtest_main
 )
 
