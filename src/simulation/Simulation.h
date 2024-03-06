@@ -19,6 +19,8 @@
 #include "../world/SolarSystem.h"
 #include "../math_and_physics/PhysicsSolver.h"
 #include "../math_and_physics/MathTypes.h"
+#include "../python_integration/PythonMachine.h"
+
 
 enum class SimulationMode
 {

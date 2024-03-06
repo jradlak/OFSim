@@ -11,8 +11,6 @@ namespace ofsim_infrastructure
 	{		
 		static void saveSourceCode(std::string sourcePath, std::string orbitalProgramSrc);
 
-		static std::string loadSourceFile(std::string sourcePath);	
-
-		static void doSomePython();
+		static std::string loadSourceFile(std::string sourcePath);			
 	};
 }

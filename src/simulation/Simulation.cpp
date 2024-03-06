@@ -33,7 +33,18 @@ void Simulation::start()
 void Simulation::mainLoop()
 {	
 	// <----- Python integration testing ----->
-	ofsim_infrastructure::FileService::doSomePython();
+	std::string pyOrbitalCode = 
+	 R"(
+import orbital_fs
+print('in python: ')
+
+val = orbital_fs.orbital_thrust_get()
+print('in python:arnav.foo() returned ', val)
+
+orbital_fs.orbital_thrust_change(val*20+80)
+	)";
+
+	ofsim_python_integration::PythonMachine::runPythonOrbitalProgram(pyOrbitalCode);
 
 	// <---- initialization section; ----->
 

@@ -39,13 +39,3 @@ std::string FileService::loadSourceFile(std::string sourcePath)
 
 	return orbitalResult;
 }
-
-// python integration: https://www.codeproject.com/Articles/820116/Embedding-Python-program-in-a-C-Cplusplus-code
-
-void FileService::doSomePython()
-{
-	std::string hello = "print('Hello Python from C++!!!!!!!!!!!')";
-	Py_Initialize();
-	PyRun_SimpleString(hello.c_str());
-	Py_Finalize();
-}
