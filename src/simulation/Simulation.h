@@ -94,6 +94,10 @@ private:
 	i32 lastAltitudeDirection{ 1 };
 	i32 altitudeDirection{ 1 };
 
+	// python integration:
+	std::unique_ptr<ofsim_python_integration::PythonMachine> pythonMachine { nullptr };
+	std::unique_ptr<std::thread> pythonThread { nullptr };
+
 	SimulationMode simulationMode{ SimulationMode::WAITING_FOR_BEGIN };
 
 	std::string orbitalProgramSourceCode { "" };

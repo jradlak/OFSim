@@ -6,6 +6,8 @@
 #include <mutex>
 
 #include "../math_and_physics/MathTypes.h"
+#include "../world/Rocket.h"
+#include "../math_and_physics/PhysicsSolver.h"
 
 namespace ofsim_events 
 {
@@ -53,20 +55,31 @@ namespace ofsim_events
         public:
             UserEvent getUserEvent();
             void createUserEvent(UserAction action, std::string data);
+		
+			void setRocketValue(u64 value) { rocketValue = value;}
+			u64 getRocketValue() { return rocketValue; }
 
             EventProcessor(EventProcessor const&) = delete;
             void operator=(EventProcessor const&) = delete;
 
+			void povideRocketAndPhysics(Rocket* _rocket, ofsim_math_and_physics::PhysicsSolver* _physics) { rocket = _rocket; physics = _physics; }
+
             static EventProcessor* getInstance();
+			
         protected:
             EventProcessor() {};
             ~EventProcessor() {};
 
-        private:
+        private:			
+			Rocket* rocket;
+			ofsim_math_and_physics::PhysicsSolver* physics;
+
             UserEvent* userEvent = nullptr;
             u32 eventCounter {0};
 
             u64 currentTime();
+
+			f64 rocketValue { 123.0 };
 
             static EventProcessor* instance;
             static std::mutex mutex;

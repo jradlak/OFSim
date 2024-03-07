@@ -31,21 +31,7 @@ void Simulation::start()
 }
 
 void Simulation::mainLoop()
-{	
-	// <----- Python integration testing ----->
-	std::string pyOrbitalCode = 
-	 R"(
-import orbital_fs
-print('in python: ')
-
-val = orbital_fs.orbital_thrust_get()
-print('in python:arnav.foo() returned ', val)
-
-orbital_fs.orbital_thrust_change(val*20+80)
-	)";
-
-	ofsim_python_integration::PythonMachine::runPythonOrbitalProgram(pyOrbitalCode);
-
+{		
 	// <---- initialization section; ----->
 
 	// initialize physics solver:
@@ -173,7 +159,12 @@ orbital_fs.orbital_thrust_change(val*20+80)
 		syncFramerate(currentTime(), MS_PER_UPDATE);
 		mainWindow->swapBuffers();
 		glfwPollEvents();
-	}	
+	}
+
+	if (pythonThread != nullptr)
+	{
+		pythonThread->join();
+	}
 }
 
 void Simulation::renderHUD()
@@ -219,8 +210,10 @@ void Simulation::userInteraction(dvec3& toTheMoon, f64& radius, f64& step)
 	if (event.action == UserAction::PROGRAM_FILE_OPENED)
 	{
 		std::cout << "Event received: " << (int)event.action << "\n";
-		std::cout << "Data reciewed " << event.data << "\n";
-					
+		std::cout << "Data reciewed " << event.data << "\n";					
+
+		// load Python program source code from file:
+		orbitalProgramSourceCode = ofsim_infrastructure::FileService::loadSourceFile(event.data);
 	}
 
 	if (event.action == UserAction::PROGRAM_START_EXECUTION)
@@ -231,7 +224,10 @@ void Simulation::userInteraction(dvec3& toTheMoon, f64& radius, f64& step)
 			return;
 		}
 		
-		this->simulationMode = SimulationMode::STANDARD_SIMULATION;		
+		this->simulationMode = SimulationMode::STANDARD_SIMULATION;	
+		
+		pythonMachine = std::make_unique<ofsim_python_integration::PythonMachine>();
+		pythonThread = std::make_unique<std::thread>(&ofsim_python_integration::PythonMachine::runPythonOrbitalProgram, pythonMachine.get(), this->orbitalProgramSourceCode);		
 	}
 
 	if (event.action == UserAction::FILE_SAVE)
