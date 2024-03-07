@@ -56,8 +56,15 @@ namespace ofsim_events
             UserEvent getUserEvent();
             void createUserEvent(UserAction action, std::string data);
 		
-			void setRocketValue(u64 value) { rocketValue = value;}
-			u64 getRocketValue() { return rocketValue; }
+			dvec3 getRocketPosition() { return rocket->getPosition(); }
+			dvec3 getRocketRotation() { return rocket->getRotation(); }
+			dvec3 getRocketVelocity() { return rocket->getVelocity(); }
+
+			f64 getAltitude() { return physics->getAltitude(); }
+			f64 getThrustMagnitude() { return physics->getThrustMagnitude(); }
+			f64 getRocketMass() { return rocket->getMass(); }
+
+			void setThrustMagnitude(f64 thrust) { physics->updateThrustMagnitude(thrust); }
 
             EventProcessor(EventProcessor const&) = delete;
             void operator=(EventProcessor const&) = delete;
@@ -78,9 +85,7 @@ namespace ofsim_events
             u32 eventCounter {0};
 
             u64 currentTime();
-
-			f64 rocketValue { 123.0 };
-
+			
             static EventProcessor* instance;
             static std::mutex mutex;
     };

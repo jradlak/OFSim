@@ -1,8 +1,11 @@
 import orbital_fs
+import time
 
-print('in python: ')
+orbital_fs.orbital_thrust_change(0.24)
 
-val = orbital_fs.orbital_thrust_get()
-print('in python:orbital_fs.orbital_thrust_get() returned ', val)
+orbital_data = orbital_fs.get_orbital_data()
 
-orbital_fs.orbital_thrust_change(val["angle"]*20+80)
+while float(orbital_data["altitude"]) < 10000:    
+    orbital_data = orbital_fs.get_orbital_data()
+    print('rocket altitude: ', orbital_data["altitude"])
+    time.sleep(2)

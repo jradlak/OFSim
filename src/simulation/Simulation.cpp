@@ -59,6 +59,8 @@ void Simulation::mainLoop()
 	f64 radius{ 0.000000001 };
 	f64 step{ 0.000000001 };
 	
+	EventProcessor::getInstance()->povideRocketAndPhysics(rocket.get(), physics.get());
+
 	// <----- end of initialization section ----->
 
 	dvec3 toTheMoon = SolarSystemConstants::moonPos;

@@ -25,14 +25,14 @@ namespace ofsim_python_integration
     {                                     
         static PyObject *orbital_thrust_change(PyObject *self, PyObject *args);
 
-        static PyObject *orbital_thrust_get(PyObject *self, PyObject *args);        
+        static PyObject *get_orbital_data(PyObject *self, PyObject *args);        
 
         void runPythonOrbitalProgram(std::string sourceCode);
     };    
 
     static struct PyMethodDef methods[] = {
         {"orbital_thrust_change", PythonMachine::orbital_thrust_change, METH_VARARGS, "Change thrust of the rocket engine."},
-        {"orbital_thrust_get", PythonMachine::orbital_thrust_get, METH_VARARGS, "Get thrust of the rocker engine."},
+        {"get_orbital_data", PythonMachine::get_orbital_data, METH_VARARGS, "Get thrust of the rocker engine."},
         {NULL, NULL, 0, NULL}};
 
     static struct PyModuleDef modOrbitalFsDef = {
