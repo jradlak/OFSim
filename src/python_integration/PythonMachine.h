@@ -23,24 +23,9 @@ namespace ofsim_python_integration
 
     struct PythonMachine
     {                                     
-        static PyObject *orbital_thrust_change(PyObject *self, PyObject *args)
-        {                            
-            PyObject *a;
-            if (PyArg_UnpackTuple(args, "", 1, 1, &a))
-            {
-                double thrust = PyFloat_AsDouble(a);
-                ofsim_events::EventProcessor::getInstance()->setRocketValue(thrust);
-                std::cout << "orbital_thrust_change: " << thrust << std::endl;
-            }
+        static PyObject *orbital_thrust_change(PyObject *self, PyObject *args);
 
-            return PyLong_FromLong(0);
-        }
-
-        static PyObject *orbital_thrust_get(PyObject *self, PyObject *args)
-        {
-            u64 thrust = ofsim_events::EventProcessor::getInstance()->getRocketValue();
-            return PyFloat_FromDouble(thrust);
-        }
+        static PyObject *orbital_thrust_get(PyObject *self, PyObject *args);        
 
         void runPythonOrbitalProgram(std::string sourceCode);
     };    
