@@ -66,6 +66,9 @@ namespace ofsim_events
 
 			void setThrustMagnitude(f64 thrust) { physics->updateThrustMagnitude(thrust); }
 
+			void terminatePythonMachine(bool terminate) { shouldTerminatePythonMachine = terminate;}
+			bool isPythonMachineTerminated() { return shouldTerminatePythonMachine; }
+
             EventProcessor(EventProcessor const&) = delete;
             void operator=(EventProcessor const&) = delete;
 
@@ -83,6 +86,7 @@ namespace ofsim_events
 
             UserEvent* userEvent = nullptr;
             u32 eventCounter {0};
+			bool shouldTerminatePythonMachine { false };	
 
             u64 currentTime();
 			

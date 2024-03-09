@@ -14,7 +14,7 @@ namespace ofsim_python_integration
         {
             Py_Initialize();
         }
-
+        
         ~CPyInstance()
         {
             Py_Finalize();
@@ -28,6 +28,8 @@ namespace ofsim_python_integration
         static PyObject *get_orbital_data(PyObject *self, PyObject *args);        
 
         void runPythonOrbitalProgram(std::string sourceCode);
+
+        void terminateProgram();
     };    
 
     static struct PyMethodDef methods[] = {

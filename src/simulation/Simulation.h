@@ -27,7 +27,8 @@ enum class SimulationMode
 	WAITING_FOR_BEGIN,
 	STANDARD_SIMULATION,
 	TRAJECTORY_PREDICTION,
-	PRESENTATION_MODE
+	PRESENTATION_MODE,
+	FINISHED
 };
 
 class Simulation
@@ -109,6 +110,8 @@ private:
 
 	void initWindowContext();
     void mainLoop();
+
+	void terminatePythonMachine();	
 
     void renderHUD();
 

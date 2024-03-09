@@ -43,6 +43,9 @@ PyObject *ofsim_python_integration::PythonMachine::get_orbital_data(PyObject *se
     f64 mass = ofsim_events::EventProcessor::getInstance()->getRocketMass();
     PyDict_SetItemString(rocket_data, "rocketMass", PyFloat_FromDouble(mass));
 
+    bool isTerminated = ofsim_events::EventProcessor::getInstance()->isPythonMachineTerminated();
+    PyDict_SetItemString(rocket_data, "shouldStop", PyBool_FromLong(isTerminated));
+    
     return rocket_data;
 }
 
@@ -52,4 +55,9 @@ void ofsim_python_integration::PythonMachine::runPythonOrbitalProgram(std::strin
     CPyInstance hInstance;
 
     PyRun_SimpleString(sourceCode.c_str());
+}
+
+void ofsim_python_integration::PythonMachine::terminateProgram()
+{
+    ofsim_events::EventProcessor::getInstance()->terminatePythonMachine(true);
 }

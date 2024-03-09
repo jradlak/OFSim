@@ -163,10 +163,9 @@ void Simulation::mainLoop()
 		glfwPollEvents();
 	}
 
-	if (pythonThread != nullptr)
-	{
-		pythonThread->join();
-	}
+	simulationMode = SimulationMode::FINISHED;
+
+	terminatePythonMachine();	
 }
 
 void Simulation::renderHUD()
@@ -327,8 +326,23 @@ void Simulation::collectTelemetry()
 	}
 }
 
+void Simulation::terminatePythonMachine()
+{
+	if (pythonThread != nullptr)
+	{
+		pythonMachine->terminateProgram();				
+		pythonThread->join();	
+		pythonMachine.reset();
+		pythonThread.reset();
+		pythonMachine = nullptr;
+		pythonThread = nullptr;
+	}
+}
+
 void Simulation::stop()
 {
+	terminatePythonMachine();
+	
 	simulationMode = SimulationMode::WAITING_FOR_BEGIN;
 	
 	glm::dvec3 rocketPos = solarSystem->pointAboveEarthSurface(angle, dangle, -0.2);
