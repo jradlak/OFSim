@@ -65,6 +65,7 @@ namespace ofsim_events
 			f64 getRocketMass() { return rocket->getMass(); }
 
 			void setThrustMagnitude(f64 thrust) { physics->updateThrustMagnitude(thrust); }
+			void changeThrustRotatation(dvec3 deltaRotation) { physics->rotateRocket(deltaRotation); }
 
 			void terminatePythonMachine(bool terminate) { shouldTerminatePythonMachine = terminate;}
 			bool isPythonMachineTerminated() { return shouldTerminatePythonMachine; }

@@ -2,7 +2,7 @@
 
 // python integration: https://www.codeproject.com/Articles/820116/Embedding-Python-program-in-a-C-Cplusplus-code
 
-PyObject *ofsim_python_integration::PythonMachine::orbital_thrust_change(PyObject *self, PyObject *args)
+PyObject *ofsim_python_integration::PythonMachine::orbital_thrust_magnitude_change(PyObject *self, PyObject *args)
 {
     PyObject *a;
     if (PyArg_UnpackTuple(args, "", 1, 1, &a))
@@ -13,6 +13,26 @@ PyObject *ofsim_python_integration::PythonMachine::orbital_thrust_change(PyObjec
     }
 
     return PyLong_FromLong(0);
+}
+
+PyObject *ofsim_python_integration::PythonMachine::orbital_rocket_rotation_change(PyObject *self, PyObject *args)
+{
+    PyObject* listObj;
+
+    if (! PyArg_ParseTuple( args, "O", &listObj ))
+        return NULL;
+
+    PyObject* valueX = PyList_GetItem(listObj, 0);
+    double x = PyFloat_AsDouble(valueX);
+    PyObject* valueY = PyList_GetItem(listObj, 1);
+    double y = PyFloat_AsDouble(valueY);
+    PyObject* valueZ = PyList_GetItem(listObj, 2);
+    double z = PyFloat_AsDouble(valueZ);
+
+    dvec3 deltaRotation {x, y, z};
+    ofsim_events::EventProcessor::getInstance()->changeThrustRotatation(deltaRotation);
+
+    return PyLong_FromLong(0);;
 }
 
 PyObject *ofsim_python_integration::PythonMachine::get_orbital_data(PyObject *self, PyObject *args)
@@ -45,7 +65,7 @@ PyObject *ofsim_python_integration::PythonMachine::get_orbital_data(PyObject *se
 
     bool isTerminated = ofsim_events::EventProcessor::getInstance()->isPythonMachineTerminated();
     PyDict_SetItemString(rocket_data, "shouldStop", PyBool_FromLong(isTerminated));
-    
+
     return rocket_data;
 }
 
