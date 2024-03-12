@@ -177,6 +177,8 @@ void Simulation::renderHUD()
 	gui->renderSimulationControlWindow(runningTime);
 	gui->renderCodeEditor(orbitalProgramSourceCode);	
 
+	gui->renderCommandHistory(ofsim_events::EventProcessor::getInstance()->getCommandHistory());
+
 	gui->plotTelemetry(
 		telemetryCollector->getVelicityHistory(), telemetryCollector->getMaxVelocity(),
 		telemetryCollector->getAltitudeHistory(), telemetryCollector->getMaxAltitude(),
@@ -199,9 +201,9 @@ void Simulation::userInteraction(dvec3& toTheMoon, f64& radius, f64& step)
 	if (event.action == UserAction::PROGRAM_STOP_EXECUTION)
 	{
 		if (simulationMode == SimulationMode::STANDARD_SIMULATION)
-		{					
+		{	
 			stop();
-			physics->reset();
+			physics->reset();				
 			
 			runningTime = 0;
 			telemetryCollector->clear();			
@@ -350,6 +352,8 @@ void Simulation::stop()
 	glm::dvec3 towards = solarSystem->pointAboveEarthSurface(angle, dangle, -50.0);
 	physics->changeInitialAltitudeOrientation(CelestialBodyType::planet, 3185.0, towards);
 	
+	EventProcessor::getInstance()->clearCommandHistory();
+
 	initialOrbitalInformation();
 	initialRocketRotation();
 }

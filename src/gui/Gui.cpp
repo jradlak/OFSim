@@ -462,7 +462,7 @@ void Gui::restoreWindows()
     viewSourceCode = true;    
 }
 
-void Gui::renderCommandHistory(std::map<unsigned long long, RocketCommand>& commandHistory)
+void Gui::renderCommandHistory(std::map<u64, RocketCommand>& commandHistory)
 {
     if (!viewCommands) return;
 
@@ -471,39 +471,39 @@ void Gui::renderCommandHistory(std::map<unsigned long long, RocketCommand>& comm
 
     ImGui::Begin(i18n->t(commands_title));
 
-    std::map<unsigned long long, RocketCommand>::reverse_iterator itr;
+    std::map<u64, RocketCommand>::reverse_iterator itr;
     for (itr = commandHistory.rbegin(); itr != commandHistory.rend(); ++itr) 
     {
-        unsigned long long ctime = itr->first;
-        unsigned long long seconds = ctime / 1000;
-        unsigned long long millis = ctime % 1000;
+        u64 ctime = itr->first;
+        u64 seconds = ctime / 1000;
+        u64 millis = ctime % 1000;
 
         RocketCommand cmd = itr->second;
         
-        int code = cmd.code();
-        double value = cmd.value();
+        RocketCommandCode code = cmd.code();
+        f64 value = cmd.value();
         std::string cmdTxt = "";
         switch (code)
         {
-            case 1:
+            case RocketCommandCode::THRUST_MAGNITUDE_CHANGE:
                 cmdTxt = i18n->t(commands_thrust_change);
                 break;
-            case 2:
+            case RocketCommandCode::THRUST_ROTATION_CHANGE_X:
                 cmdTxt = i18n->t(commands_thrust_direction_x);
                 break;
-            case 3:
+            case RocketCommandCode::THRUST_ROTATION_CHANGE_Y:
                 cmdTxt = i18n->t(commands_thrust_direction_y);
                 break;
-            case 4:
+            case RocketCommandCode::THRUST_ROTATION_CHANGE_Z:
                 cmdTxt = i18n->t(commands_thrust_direction_z);
                 break;
-            case 5:
+            case RocketCommandCode::GYRO_ROTATION_CHANGE_X:
                 cmdTxt = i18n->t(commands_thrust_rotation_x);
                 break;
-            case 6:
+            case RocketCommandCode::GYRO_ROTATION_CHANGE_Y:
                 cmdTxt = i18n->t(commands_thrust_rotation_y);
                 break;
-            case 7:
+            case RocketCommandCode::GYRO_ROTATION_CHANGE_Z:
                 cmdTxt = i18n->t(commands_thrust_rotation_z);
                 break;
         }

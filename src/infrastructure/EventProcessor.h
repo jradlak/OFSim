@@ -4,10 +4,14 @@
 #include <chrono>
 #include <ctime>
 #include <mutex>
+#include <map>
+
+#include "RocketCommand.h"
 
 #include "../math_and_physics/MathTypes.h"
 #include "../world/Rocket.h"
 #include "../math_and_physics/PhysicsSolver.h"
+
 
 namespace ofsim_events 
 {
@@ -64,16 +68,19 @@ namespace ofsim_events
 			f64 getThrustMagnitude() { return physics->getThrustMagnitude(); }
 			f64 getRocketMass() { return rocket->getMass(); }
 
-			void setThrustMagnitude(f64 thrust) { physics->updateThrustMagnitude(thrust); }
-			void changeThrustRotatation(dvec3 deltaRotation) { physics->rotateRocket(deltaRotation); }
+			void setThrustMagnitude(f64 thrust);
+			void changeThrustRotatation(dvec3 deltaRotation);
 
 			void terminatePythonMachine(bool terminate) { shouldTerminatePythonMachine = terminate;}
 			bool isPythonMachineTerminated() { return shouldTerminatePythonMachine; }
 
+			void povideRocketAndPhysics(Rocket* _rocket, ofsim_math_and_physics::PhysicsSolver* _physics) { rocket = _rocket; physics = _physics; }
+
+			std::map<u64, RocketCommand> &getCommandHistory() { return command_history; }
+			void clearCommandHistory() { command_history.clear(); }
+
             EventProcessor(EventProcessor const&) = delete;
             void operator=(EventProcessor const&) = delete;
-
-			void povideRocketAndPhysics(Rocket* _rocket, ofsim_math_and_physics::PhysicsSolver* _physics) { rocket = _rocket; physics = _physics; }
 
             static EventProcessor* getInstance();
 			
@@ -88,6 +95,8 @@ namespace ofsim_events
             UserEvent* userEvent = nullptr;
             u32 eventCounter {0};
 			bool shouldTerminatePythonMachine { false };	
+
+			std::map<u64, RocketCommand> command_history;
 
             u64 currentTime();
 			

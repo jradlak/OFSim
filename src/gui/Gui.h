@@ -61,7 +61,7 @@ namespace ofsim_gui
 			std::vector<double> atmPressureHistory, double maxAtm,
 			std::vector<double> accelerationHistory, double maxAcc, double minAcc);
 
-		void renderCommandHistory(std::map<unsigned long long, RocketCommand> &commandHistory);
+		void renderCommandHistory(std::map<u64, RocketCommand> &commandHistory);
 
 		void renderDiagnostics(glm::dvec3 position, glm::dvec3 rotation = glm::dvec3(0.0, 0.0, 0.0));
 
