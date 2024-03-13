@@ -2,13 +2,14 @@ import orbital_fs
 import time
 
 # wait for 1 second:
-#time.sleep(1)
+time.sleep(1)
 
 orbital_fs.orbital_thrust_magnitude_change(0.24)
 
 orbital_data = orbital_fs.get_orbital_data()
 
 #waiting for the latitude to be less greater than 1500 m
+print('!!!initial rocket altitude: ', orbital_data["altitude"]) 
 while float(orbital_data["altitude"]) < 1.5 and not orbital_data["shouldStop"]:
     orbital_data = orbital_fs.get_orbital_data()
     print('rocket altitude: ', orbital_data["altitude"])    

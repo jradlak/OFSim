@@ -17,6 +17,8 @@ Simulation::Simulation()
 	camera->position = rocket->getPosition() + glm::dvec3(0.0, 0.024, 0.0);	
 }
 
+// ----- simulation initialization methods
+
 void Simulation::init()	
 {
 	lag = 0;
@@ -25,9 +27,86 @@ void Simulation::init()
 		(double)SCR_WIDTH / (double)SCR_HEIGHT, 0.001, 150000000.0);		
 }
 
+void Simulation::initialSolarSystemInformation()
+{
+	correctionOfRocketOrientation();
+	solarSystem->provideRocketInformationAndInit(angle, dangle, rocket.get());	
+}
+
+RocketPhysicalProperties Simulation::physicsRocketInitialOrientation()
+{
+    glm::dvec3 towards = solarSystem->pointAboveEarthSurface(angle, dangle, -50.0);
+    RocketPhysicalProperties rocketProperties = rocket->projectProperties();
+    physics = std::make_unique<ofsim_math_and_physics::PhysicsSolver>(rocketProperties, MS_PER_UPDATE);
+    physics->changeInitialAltitudeOrientation(CelestialBodyType::planet, 3185.0, towards);
+
+	return rocketProperties;
+}
+
+void Simulation::correctionOfRocketOrientation()
+{
+	glm::dvec3 newRotation = glm::dvec3(-50.000021, 48.8000050, 0.0);
+	glm::dvec3 deltaRotation = newRotation - rocket->getRotation();
+
+	physics->rotateRocket(deltaRotation);
+}
+
+void Simulation::initialOrbitalInformation()
+{	
+	lastAltitude = 0;
+	apogeum = 0;
+	perygeum = 0;
+	lastAltitudeDirection = 1;
+	altitudeDirection = 1;
+}
+
+/// ---- simualtion restart methods:
+
 void Simulation::start()
 {		
 	mainLoop();
+}
+
+void Simulation::terminatePythonMachine()
+{
+	if (pythonThread != nullptr)
+	{
+		pythonMachine->terminateProgram();				
+		pythonThread->join();	
+		pythonMachine.reset();
+		pythonThread.reset();
+		pythonMachine = nullptr;
+		pythonThread = nullptr;
+	}
+}
+
+void Simulation::stop()
+{
+	terminatePythonMachine();
+	
+	simulationMode = SimulationMode::WAITING_FOR_BEGIN;
+	
+	// dispose rocket and physics:
+	rocket.reset();
+	rocket = nullptr;
+	glm::dvec3 rocketPos = solarSystem->pointAboveEarthSurface(angle, dangle, -0.2);
+	rocket = std::make_unique<Rocket>("model3d_shader", rocketPos, 0.000013);
+	
+	physics.reset();
+	physics = nullptr;
+	physicsRocketInitialOrientation();	
+		
+	EventProcessor::getInstance()->clearCommandHistory();
+
+	initialSolarSystemInformation();
+	initialOrbitalInformation();
+	physics->reset();
+			
+	runningTime = 0;
+	telemetryCollector->clear();
+
+	EventProcessor::getInstance()->povideRocketAndPhysics(rocket.get(), physics.get());
+	EventProcessor::getInstance()->terminatePythonMachine(false);
 }
 
 void Simulation::mainLoop()
@@ -50,7 +129,7 @@ void Simulation::mainLoop()
 	runningTime = 0;
 	timePaused = 0;
 
-	initialPhysicsInformation();
+	initialSolarSystemInformation();
 	initialOrbitalInformation();
 
 	skyboxRenderer = std::make_unique<SkyBoxRenderer>();
@@ -202,11 +281,7 @@ void Simulation::userInteraction(dvec3& toTheMoon, f64& radius, f64& step)
 	{
 		if (simulationMode == SimulationMode::STANDARD_SIMULATION)
 		{	
-			stop();
-			physics->reset();				
-			
-			runningTime = 0;
-			telemetryCollector->clear();			
+			stop();						
 		}
 	}
 
@@ -326,69 +401,6 @@ void Simulation::collectTelemetry()
 
 		telemetryCollector->registerTelemetry(data);
 	}
-}
-
-void Simulation::terminatePythonMachine()
-{
-	if (pythonThread != nullptr)
-	{
-		pythonMachine->terminateProgram();				
-		pythonThread->join();	
-		pythonMachine.reset();
-		pythonThread.reset();
-		pythonMachine = nullptr;
-		pythonThread = nullptr;
-	}
-}
-
-void Simulation::stop()
-{
-	terminatePythonMachine();
-	
-	simulationMode = SimulationMode::WAITING_FOR_BEGIN;
-	
-	glm::dvec3 rocketPos = solarSystem->pointAboveEarthSurface(angle, dangle, -0.2);
-	rocket->reset(rocketPos);
-	glm::dvec3 towards = solarSystem->pointAboveEarthSurface(angle, dangle, -50.0);
-	physics->changeInitialAltitudeOrientation(CelestialBodyType::planet, 3185.0, towards);
-	
-	EventProcessor::getInstance()->clearCommandHistory();
-
-	initialOrbitalInformation();
-	initialRocketRotation();
-}
-
-void Simulation::initialPhysicsInformation()
-{
-	initialRocketRotation();
-	solarSystem->provideRocketInformationAndInit(angle, dangle, rocket.get());	
-}
-
-RocketPhysicalProperties Simulation::physicsRocketInitialOrientation()
-{
-    glm::dvec3 towards = solarSystem->pointAboveEarthSurface(angle, dangle, -50.0);
-    RocketPhysicalProperties rocketProperties = rocket->projectProperties();
-    physics = std::make_unique<ofsim_math_and_physics::PhysicsSolver>(rocketProperties, MS_PER_UPDATE);
-    physics->changeInitialAltitudeOrientation(CelestialBodyType::planet, 3185.0, towards);
-
-	return rocketProperties;
-}
-
-void Simulation::initialRocketRotation()
-{
-	glm::dvec3 newRotation = glm::dvec3(-50.000021, 48.8000050, 0.0);
-	glm::dvec3 deltaRotation = newRotation - rocket->getRotation();
-
-	physics->rotateRocket(deltaRotation);
-}
-
-void Simulation::initialOrbitalInformation()
-{	
-	lastAltitude = 0;
-	apogeum = 0;
-	perygeum = 0;
-	lastAltitudeDirection = 1;
-	altitudeDirection = 1;
 }
 
 void Simulation::initWindowContext()

@@ -104,8 +104,8 @@ private:
 	std::string orbitalProgramSourceCode { "" };
 
 	RocketPhysicalProperties physicsRocketInitialOrientation();
-	void initialPhysicsInformation();
-	void initialRocketRotation();
+	void initialSolarSystemInformation();
+	void correctionOfRocketOrientation();
 	void initialOrbitalInformation();
 
 	void initWindowContext();
