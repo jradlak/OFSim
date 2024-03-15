@@ -32,7 +32,9 @@ PyObject *ofsim_python_integration::PythonMachine::orbital_rocket_rotation_chang
     dvec3 deltaRotation {x, y, z};
     ofsim_events::EventProcessor::getInstance()->changeThrustRotatation(deltaRotation);
 
-    return PyLong_FromLong(0);;
+    Py_DecRef(listObj);
+
+    return PyLong_FromLong(0);
 }
 
 PyObject *ofsim_python_integration::PythonMachine::get_orbital_data(PyObject *self, PyObject *args)
@@ -65,7 +67,7 @@ PyObject *ofsim_python_integration::PythonMachine::get_orbital_data(PyObject *se
 
     bool isTerminated = ofsim_events::EventProcessor::getInstance()->isPythonMachineTerminated();
     PyDict_SetItemString(rocket_data, "shouldStop", PyBool_FromLong(isTerminated));
-
+    
     return rocket_data;
 }
 
@@ -74,7 +76,23 @@ void ofsim_python_integration::PythonMachine::runPythonOrbitalProgram(std::strin
     PyImport_AppendInittab("orbital_fs", &PyInit_orbital_fs);
     CPyInstance hInstance;
 
-    PyRun_SimpleString(sourceCode.c_str());
+    PyObject* result = PyRun_String(sourceCode.c_str(), Py_file_input, PyDict_New(), PyDict_New());
+    if (result == NULL)
+    {
+        PyObject *type, *value, *traceback;
+        PyErr_Fetch(&type, &value, &traceback);
+        
+        PyObject *str_exc = PyObject_Str(value);
+        
+        std::string error_message = PyUnicode_AsUTF8(str_exc);
+        std::cout << "Error: " << error_message << std::endl; 
+        ofsim_events::EventProcessor::getInstance()->publishPythonError({true, "Python Script Error", error_message});
+
+        Py_DECREF(type);
+        Py_DECREF(value);
+        ofsim_events::EventProcessor::getInstance()->createUserEvent(ofsim_events::UserAction::PROGRAM_RAISE_ERROR, "Python script error!");
+        //Py_DECREF(traceback);
+    }    
 }
 
 void ofsim_python_integration::PythonMachine::terminateProgram()

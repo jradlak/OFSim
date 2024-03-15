@@ -145,7 +145,7 @@ void Simulation::mainLoop()
 	dvec3 toTheMoon = SolarSystemConstants::moonPos;
 	bool frwd = true;
 	while (!mainWindow->shouldClose())
-	{		
+	{			
 		int factor = gui->getTimeFactor();
 				
 		// calculate lag:       
@@ -265,6 +265,8 @@ void Simulation::renderHUD()
 		telemetryCollector->getAccelarationHistory(), telemetryCollector->getMaxAcceleration(), telemetryCollector->getMinAcceleration());
 	renderTelemetry(gui.get(), rocket.get(), physics->getAltitude(), apogeum, perygeum, physics->getAtmosphereDragForceMagnitude());
 
+	gui->renderTranslationErrors(EventProcessor::getInstance()->getPythonError());
+
 	gui->endRendering();
 }
 
@@ -280,7 +282,7 @@ void Simulation::userInteraction(dvec3& toTheMoon, f64& radius, f64& step)
 	if (event.action == UserAction::PROGRAM_STOP_EXECUTION)
 	{
 		if (simulationMode == SimulationMode::STANDARD_SIMULATION)
-		{	
+		{				
 			stop();						
 		}
 	}
@@ -294,18 +296,24 @@ void Simulation::userInteraction(dvec3& toTheMoon, f64& radius, f64& step)
 		orbitalProgramSourceCode = ofsim_infrastructure::FileService::loadSourceFile(event.data);
 	}
 
-	if (event.action == UserAction::PROGRAM_START_EXECUTION)
+	if (event.action == UserAction::PROGRAM_TRANSLATE)
 	{
 		if (this->orbitalProgramSourceCode.empty())
 		{
 			std::cout << "No source code to execute!\n";
 			return;
 		}
-		
-		this->simulationMode = SimulationMode::STANDARD_SIMULATION;	
-		
+				
 		pythonMachine = std::make_unique<ofsim_python_integration::PythonMachine>();
-		pythonThread = std::make_unique<std::thread>(&ofsim_python_integration::PythonMachine::runPythonOrbitalProgram, pythonMachine.get(), this->orbitalProgramSourceCode);		
+		pythonThread = std::make_unique<std::thread>(&ofsim_python_integration::PythonMachine::runPythonOrbitalProgram, 
+			pythonMachine.get(), this->orbitalProgramSourceCode);
+		simulationMode = SimulationMode::STANDARD_SIMULATION;
+	}
+
+	if (event.action == UserAction::PROGRAM_RAISE_ERROR)
+	{
+		gui->setTimeFactor(-1);
+		stop();
 	}
 
 	if (event.action == UserAction::FILE_SAVE)

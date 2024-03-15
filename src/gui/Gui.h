@@ -20,6 +20,8 @@ namespace fs = std::filesystem;
 #include "../infrastructure/FileService.h"
 #include "../infrastructure/EventProcessor.h"
 
+#include "../python_integration/PythonError.h"
+
 namespace ofsim_gui 
 {
 	// Class description in the header file
@@ -49,8 +51,8 @@ namespace ofsim_gui
 		
 		void renderPresentationModeInfo(double distance);
 
-		void renderTranslationErrors(std::string errors);
-
+		void renderTranslationErrors(ofsim_python_integration::PythonError &error);
+	
 		void restoreWindows();
 
 		void endRendering();

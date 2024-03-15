@@ -22,7 +22,7 @@ namespace ofsim_python_integration
     };
 
     struct PythonMachine
-    {                                     
+    {                                    
         static PyObject *orbital_thrust_magnitude_change(PyObject *self, PyObject *args);
         
         static PyObject *orbital_rocket_rotation_change(PyObject *self, PyObject *args);

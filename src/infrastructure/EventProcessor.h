@@ -11,7 +11,7 @@
 #include "../math_and_physics/MathTypes.h"
 #include "../world/Rocket.h"
 #include "../math_and_physics/PhysicsSolver.h"
-
+#include "../python_integration/PythonError.h"
 
 namespace ofsim_events 
 {
@@ -21,7 +21,8 @@ namespace ofsim_events
 		FILE_OPEN,
 
 		PROGRAM_FILE_OPENED,
-		PROGRAM_START_EXECUTION,
+		PROGRAM_TRANSLATE,		
+		PROGRAM_RAISE_ERROR,
 		PROGRAM_STOP_EXECUTION,
 
 		FILE_SAVE,	
@@ -57,9 +58,11 @@ namespace ofsim_events
     class EventProcessor
     {
         public:
+			// UI events:
             UserEvent getUserEvent();
             void createUserEvent(UserAction action, std::string data);
 		
+			// Rocket status:
 			dvec3 getRocketPosition() { return rocket->getPosition(); }
 			dvec3 getRocketRotation() { return rocket->getRotation(); }
 			dvec3 getRocketVelocity() { return rocket->getVelocity(); }
@@ -68,20 +71,22 @@ namespace ofsim_events
 			f64 getThrustMagnitude() { return physics->getThrustMagnitude(); }
 			f64 getRocketMass() { return rocket->getMass(); }
 
+			// Rocket commands:
 			void setThrustMagnitude(f64 thrust);
 			void changeThrustRotatation(dvec3 deltaRotation);
-
-			void terminatePythonMachine(bool terminate) { shouldTerminatePythonMachine = terminate;}
-			bool isPythonMachineTerminated() { return shouldTerminatePythonMachine; }
-
-			void povideRocketAndPhysics(Rocket* _rocket, ofsim_math_and_physics::PhysicsSolver* _physics) { rocket = _rocket; physics = _physics; }
-
 			std::map<u64, RocketCommand> &getCommandHistory() { return command_history; }
 			void clearCommandHistory() { command_history.clear(); }
 
+			// Python integration:
+			void terminatePythonMachine(bool terminate) { shouldTerminatePythonMachine = terminate;}			
+			bool isPythonMachineTerminated() { return shouldTerminatePythonMachine; }
+			void publishPythonError(ofsim_python_integration::PythonError error) { pythonError = error; }
+			ofsim_python_integration::PythonError& getPythonError() { return pythonError; }
+
+			// utility methods:
+			void povideRocketAndPhysics(Rocket* _rocket, ofsim_math_and_physics::PhysicsSolver* _physics) { rocket = _rocket; physics = _physics; }
             EventProcessor(EventProcessor const&) = delete;
             void operator=(EventProcessor const&) = delete;
-
             static EventProcessor* getInstance();
 			
         protected:
@@ -95,6 +100,7 @@ namespace ofsim_events
             UserEvent* userEvent = nullptr;
             u32 eventCounter {0};
 			bool shouldTerminatePythonMachine { false };	
+			ofsim_python_integration::PythonError pythonError;
 
 			std::map<u64, RocketCommand> command_history;
 

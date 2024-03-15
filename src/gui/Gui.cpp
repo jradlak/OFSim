@@ -256,7 +256,7 @@ void Gui::renderSimulationControlWindow(unsigned long long time)
             plaing = true;
             timeFactor = 1;
 
-            eventProcessor->createUserEvent(UserAction::PROGRAM_START_EXECUTION, "");
+            eventProcessor->createUserEvent(UserAction::PROGRAM_TRANSLATE, "");
         }
     }
     
@@ -432,22 +432,24 @@ void Gui::renderPresentationModeInfo(double distance)
     ImGui::End();
 }
 
-void Gui::renderTranslationErrors(std::string errors)
+void Gui::renderTranslationErrors(ofsim_python_integration::PythonError &error)
 {
-    if (errors == "") return;
-    
-    ImGui::SetNextWindowSize(ImVec2(380, 110), ImGuiCond_Once);
-    ImGui::SetNextWindowPos(ImVec2(600, 200), ImGuiCond_Once);
+    if (!error.active)
+    {
+        return;
+    }
+        
+    ImGui::SetNextWindowSize(ImVec2(580, 110), ImGuiCond_Once);
+    ImGui::SetNextWindowPos(ImVec2(500, 200), ImGuiCond_Once);
 
     ImGui::Begin(i18n->t(translation_errors_title));
-    ImGui::Text(errors.c_str());
+    ImGui::TextWrapped(error.message.c_str());
     
     ImGui::NewLine();
 
-
     if (ImGui::Button("OK", ImVec2(120, 0)))
     {
-        
+        error.active = false;        
     }
 
     ImGui::End();
