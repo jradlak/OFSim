@@ -32,12 +32,12 @@ PyObject *ofsim_python_integration::PythonMachine::orbital_rocket_rotation_chang
     dvec3 deltaRotation {x, y, z};
     ofsim_events::EventProcessor::getInstance()->changeThrustRotatation(deltaRotation);
 
-    Py_DecRef(listObj);
+    //Py_DecRef(listObj);
 
     return PyLong_FromLong(0);
 }
 
-PyObject *ofsim_python_integration::PythonMachine::get_orbital_data(PyObject *self, PyObject *args)
+PyObject *ofsim_python_integration::PythonMachine::get_orbital_data(PyObject *self, PyObject *argsB)
 {
     PyObject* rocket_data = PyDict_New();
     
