@@ -163,7 +163,7 @@ void Simulation::mainLoop()
 		}		
 
 		// input processing:		
-		userInteraction(toTheMoon, radius, step);
+		userInteractionLogic(toTheMoon, radius, step);
 
 		if (simulationMode == SimulationMode::STANDARD_SIMULATION) 
 		{	
@@ -274,7 +274,7 @@ void Simulation::renderHUD()
  * @brief User interaction with the simulation
  * @details Interprets user events recieved from the GUI
 */
-void Simulation::userInteraction(dvec3& toTheMoon, f64& radius, f64& step)
+void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 {	
 	// recieve and interpret user events:
 	UserEvent event = EventProcessor::getInstance()->getUserEvent();
