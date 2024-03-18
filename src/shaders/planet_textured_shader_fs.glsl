@@ -4,7 +4,8 @@ out vec4 FragColor;
 
 in vec3 Normal;  
 in vec3 FragPos;  
-in vec2 TexCoord;  
+//in vec2 TexCoord
+in vec4 TexCoord;
 in float vFragDepth;
 
 uniform float logDepthBufFC;
@@ -27,12 +28,12 @@ void main()
     float diff = max(dot(norm, lightDir), 0.0);
     vec3 diffuse = diff * lightColor;
             
-    //vec2 longitudeLatitude = vec2((atan(TexCoord.y, TexCoord.x) / 3.1415926 + 1.0) * 0.5,
-    //                              (asin(TexCoord.z) / 3.1415926 + 0.5));
+    vec2 longitudeLatitude = vec2((atan(TexCoord.y, TexCoord.x) / 3.1415926 + 1.0) * 0.5,
+                                  (asin(TexCoord.z) / 3.1415926 + 0.5));
+
+    vec3 result = (ambient + diffuse) * texture2D(texture1, longitudeLatitude).rgb; // objectColor;
 
     //vec3 result = (ambient + diffuse) * texture2D(texture1, longitudeLatitude).rgb; // objectColor;
-    
-    vec3 result = (ambient + diffuse) * texture2D(texture1, TexCoord).rgb; // objectColor;
     
     FragColor = vec4(result, 1.0);
         

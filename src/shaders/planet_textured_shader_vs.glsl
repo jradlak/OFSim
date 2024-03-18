@@ -6,7 +6,7 @@ layout (location = 2) in vec2 aTexCoord;
 
 out vec3 FragPos;
 out vec3 Normal;
-out vec2 TexCoord;
+out vec4 TexCoord;
 out float vFragDepth;
 
 uniform mat4 model;
@@ -20,8 +20,7 @@ void main()
 
     gl_Position = transformation * vec4(aPos, 1.0);
     
-    //TexCoord = vec4(aPos, 1.0);
-    TexCoord = vec2(aTexCoord.x, aTexCoord.y);
+    TexCoord = vec4(aPos, 1.0);    
 
     vFragDepth = 1.0 + gl_Position.w;
 }
