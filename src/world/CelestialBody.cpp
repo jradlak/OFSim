@@ -10,11 +10,11 @@ CelestialBody::CelestialBody(CelestialBodyType _bodyType, std::string shaderName
 	
 	if (_bodyType == planet) 
 	{
-		sphere = new ofsim_math_and_physics::Sphere(0.5f, 256, 128);
+		sphere = new ofsim_math_and_physics::Sphere(1.0f, 256, 128);
 	}
 	else
 	{
-		sphere = new ofsim_math_and_physics::Sphere(0.5f, 32, 16);
+		sphere = new ofsim_math_and_physics::Sphere(1.0f, 32, 16);
 	}	
 }
 
