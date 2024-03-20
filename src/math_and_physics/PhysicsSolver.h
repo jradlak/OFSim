@@ -136,6 +136,6 @@ namespace ofsim_math_and_physics
 		
 		f64 calculateAltitude();
 		
-		dvec3 celestialBodyCenter(f64 bodySize) { return dvec3(0.0, -bodySize, 0.0); }	
+		dvec3 celestialBodyCenter(f64 bodySize) { return dvec3(0.0, 0.0, 0.0); }	
 	};
 }

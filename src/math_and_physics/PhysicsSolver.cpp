@@ -37,7 +37,7 @@ void PhysicsSolver::changeInitialAltitudeOrientation(
 u64 PhysicsSolver::calculateForces(u64 timeInterval)
 {
     altitude = calculateAltitude();
-    if (altitude > 0.2)
+    if (altitude >= 0.2)
     {
         while (timeInterval > MS_PER_UPDATE)
         {
@@ -225,7 +225,7 @@ double PhysicsSolver::calculateAltitude()
 {
     if (altitudeOrientation == planet)
     {
-        return length(rocketProperties.position - celestialBodyCenter(celestialBodySize)) - celestialBodySize + 0.5;
+        return length(rocketProperties.position - celestialBodyCenter(celestialBodySize)) - celestialBodySize * 2.0 + 0.5;
     }
 
     return 0.0;
