@@ -14,7 +14,7 @@ public:
 	SolarSystem();
 
 	void render(glm::dmat4 projection, glm::dmat4 view, glm::dvec3 _lightPos);
-
+	
 	void provideRocket(Rocket* _rocket) { rocket = _rocket; }
 	void provideRocketInformationAndInit(double _angle, double _dangle, Rocket* _rocket);
 	

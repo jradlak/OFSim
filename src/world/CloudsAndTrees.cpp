@@ -41,8 +41,8 @@ void CloudsAndTrees::calculatePositionsAndSizes()
         int min2 = rand() % 2;
         if (min2 == 0) rdangle *= -1;
 
-        glm::dvec3 cloudPos = earth.pointAboveTheSurface(angle + rangle, dangle + rdangle, 0.1);
-        glm::dvec3 treePos = earth.pointAboveTheSurface(angle - rangle, dangle - rdangle, -0.2);
+        glm::dvec3 cloudPos = earth.pointAboveTheSurface(angle + rangle, dangle + rdangle, 6371 + 0.2);
+        glm::dvec3 treePos = earth.pointAboveTheSurface(angle - rangle, dangle - rdangle, 6371 - 0.187);
 
         float size = (rand() % 100 + 7) / 100000.0;
 

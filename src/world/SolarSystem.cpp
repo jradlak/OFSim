@@ -6,7 +6,7 @@
 
 SolarSystem::SolarSystem()
 {	
-	earth = std::make_unique<Planet>(6371.0, SolarSystemConstants::earthPos);
+	earth = std::make_unique<Planet>(12742, SolarSystemConstants::earthPos);
 	moon = std::make_unique<Moon>(1737.0, SolarSystemConstants::moonPos);
 	sun = std::make_unique<Sun>(1392700.0, SolarSystemConstants::lightPos);	
 }

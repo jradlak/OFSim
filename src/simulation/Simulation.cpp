@@ -11,7 +11,7 @@ Simulation::Simulation()
 	solarSystem = std::make_unique<SolarSystem>();
 	
 	// rocket:
-	glm::dvec3 rocketPos = solarSystem->pointAboveEarthSurface(angle, dangle, -0.2);
+	glm::dvec3 rocketPos = solarSystem->pointAboveEarthSurface(angle, dangle, 6371 - 0.2);
 	rocket = std::make_unique<Rocket>("model3d_shader", rocketPos, 0.000013);
 	
 	camera->position = rocket->getPosition() + glm::dvec3(0.0, 0.024, 0.0);	

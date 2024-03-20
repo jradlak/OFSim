@@ -26,7 +26,7 @@ void Planet::init(int number, double _angle, double _dangle, glm::dvec3 _rotatio
 	cloudsAndTrees = new CloudsAndTrees(12, *this->celestialBody, _angle, _dangle);
 	cloudsAndTrees->provideInitialRotation(_rotation);
 
-	glm::dvec3 launchpadPos = pointAboveTheSurface(_angle, _dangle, -0.187);
+	glm::dvec3 launchpadPos = pointAboveTheSurface(_angle, _dangle, 6371 - 0.187);
 	this->launchpad = new Launchpad("model3d_shader", "assets/models/launchpad2.obj", launchpadPos, 0.05);
 	launchpad->updateRotation(_rotation);
 }
