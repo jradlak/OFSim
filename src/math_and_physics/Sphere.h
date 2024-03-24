@@ -13,7 +13,7 @@ namespace ofsim_math_and_physics
 
     //TODO: extract PuffCloud classB
     class Sphere
-    {
+    {        
     public:
         Sphere() 
             : radius(0.5f), sectorCount(32), stackCount(16), size(0.0f) { build(); }

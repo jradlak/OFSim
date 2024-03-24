@@ -107,6 +107,33 @@ void Window::key_callback(GLFWwindow *window, int key, int scancode, int action,
 	{
 		EventProcessor::getInstance()->createUserEvent(UserAction::CHANGE_MODE_TO_FORM_PRESENTATION, "");
 	}
+
+	Camera_Movement direction = NONE;
+	if (key == GLFW_KEY_W && action == GLFW_PRESS)
+	{
+		direction = FORWARD;
+	}
+
+	if (key == GLFW_KEY_S && action == GLFW_PRESS)
+	{
+		direction = BACKWARD;
+	}
+
+	if (key == GLFW_KEY_A && action == GLFW_PRESS)
+	{
+		direction = LEFT;
+	}
+
+	if (key == GLFW_KEY_D && action == GLFW_PRESS)
+	{
+		direction = RIGHT;
+	}
+
+	if (direction != NONE) 
+	{
+		Window* theWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));
+		theWindow->camera.processKeyboard(direction, 0.4);
+	}	
 }
 
 Window::~Window()

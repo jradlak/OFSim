@@ -16,7 +16,8 @@ namespace ofsim_renderer
         LEFT,
         RIGHT,
         ROLL_LEFT,
-        ROLL_RIGHT
+        ROLL_RIGHT,
+        NONE
     };
 
     // Initial camera values
