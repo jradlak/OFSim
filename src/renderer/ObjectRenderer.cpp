@@ -72,7 +72,7 @@ Shader* ObjectRenderer::getShader()
 
 void ObjectRenderer::render(glm::dmat4& projection, glm::dmat4& view,
 	double size,
-	glm::dvec3 position, 
+	const glm::dvec3& position, 
 	glm::dvec3 rotationAxis,
 	double rotationAngle)
 {
@@ -107,7 +107,7 @@ void ObjectRenderer::render(glm::dmat4& projection, glm::dmat4& view,
 void ObjectRenderer::renderWithRotation(glm::dmat4& projection,
 	glm::dmat4& view,
 	double size,
-	glm::dvec3 position,
+	const glm::dvec3& position,
 	glm::dvec3 rotation)
 {
 	shader->use();

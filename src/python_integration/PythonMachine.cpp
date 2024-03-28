@@ -1,7 +1,5 @@
 #include "PythonMachine.h"
 
-// python integration: https://www.codeproject.com/Articles/820116/Embedding-Python-program-in-a-C-Cplusplus-code
-
 PyObject *ofsim_python_integration::PythonMachine::orbital_thrust_magnitude_change(PyObject *self, PyObject *args)
 {
     PyObject *a;

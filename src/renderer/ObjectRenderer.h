@@ -24,14 +24,14 @@ public:
 	void render(glm::dmat4& projection, 
 		glm::dmat4& view,
 		double size,
-		glm::dvec3 position,
+		const glm::dvec3& position,
 		glm::dvec3 rotationAxis = glm::dvec3(0.0, 0.0, 0.0),
 		double rotationAngle = 0.0);
 
 	void renderWithRotation(glm::dmat4& projection,
 		glm::dmat4& view,
 		double size,
-		glm::dvec3 position,
+		const glm::dvec3& position,
 		glm::dvec3 rotation = glm::dvec3(0.0, 0.0, 0.0));
 
 	void loadTexture(std::string fileName);
