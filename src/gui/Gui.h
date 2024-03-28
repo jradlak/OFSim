@@ -113,7 +113,7 @@ namespace ofsim_gui
 		
 		I18n* i18n;
 
-		std::string directory;		
+		std::string directory { "C:\\!PJATK\\orb_progs" };
 		std::string savedFile { "" };
 
 		int selcted_language_item { 0 };

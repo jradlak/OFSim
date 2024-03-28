@@ -191,6 +191,13 @@ void Gui::renderFileOpenDialog()
             loadFilesInDirectory(directory); 
         }
     }
+    else 
+    {
+        if (directory != "")
+        {
+            loadFilesInDirectory(directory);
+        }
+    }
 
     ImGui::Separator();
 
