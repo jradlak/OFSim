@@ -89,7 +89,7 @@ void Simulation::stop()
 	// dispose rocket and physics:
 	rocket.reset();
 	rocket = nullptr;
-	glm::dvec3 rocketPos = solarSystem->pointAboveEarthSurface(angle, dangle, -0.2);
+	glm::dvec3 rocketPos = solarSystem->pointAboveEarthSurface(angle, dangle, 6371 - 0.2);
 	rocket = std::make_unique<Rocket>("model3d_shader", rocketPos, 0.000013);
 	
 	physics.reset();

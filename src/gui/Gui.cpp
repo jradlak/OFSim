@@ -234,7 +234,7 @@ void Gui::renderSimulationControlWindow(unsigned long long time)
     EventProcessor* eventProcessor = EventProcessor::getInstance();
 
     ImGui::SetNextWindowSize(ImVec2(450, 100), ImGuiCond_Once);
-    ImGui::SetNextWindowPos(ImVec2(100, 50), ImGuiCond_Once);
+    ImGui::SetNextWindowPos(ImVec2(60, 30), ImGuiCond_Once);
 
     ImGui::Begin(i18n->t(sim_panel_title));
 
@@ -300,7 +300,7 @@ void Gui::renderCodeEditor(std::string& text)
     if (!viewSourceCode) return;
 
     ImGui::SetNextWindowSize(ImVec2(450, 780), ImGuiCond_Once);
-    ImGui::SetNextWindowPos(ImVec2(100, 160), ImGuiCond_Once);
+    ImGui::SetNextWindowPos(ImVec2(60, 140), ImGuiCond_Once);
     
     ImGui::Begin(i18n->t(code_editor_title));
 
@@ -335,7 +335,7 @@ void Gui::renderTelemetry(TelemetryData& telemetryData)
     if (!viewTelemetryOn) return;
 
     ImGui::SetNextWindowSize(ImVec2(450, 150), ImGuiCond_Once);
-    ImGui::SetNextWindowPos(ImVec2(1250, 50), ImGuiCond_Once);
+    ImGui::SetNextWindowPos(ImVec2(1290, 30), ImGuiCond_Once);
 
     ImGui::Begin(i18n->t(telemetry_title));
     
@@ -590,8 +590,7 @@ void Gui::loadFilesInDirectory(std::string &directory)
     {
         for (const auto& entry : fs::directory_iterator(directory))
         {
-            std::string fileName = entry.path().u8string();
-                std::cout << fileName << std::endl;
+            std::string fileName = entry.path().u8string();                
                 filesInDirectory.push_back(fileName);
         }
     }
