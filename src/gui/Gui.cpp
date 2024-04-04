@@ -390,7 +390,7 @@ void Gui::plotTelemetry(
     if (!viewTelemetryPlot) return;
 
     ImGui::SetNextWindowSize(ImVec2(450, 510), ImGuiCond_Once);
-    ImGui::SetNextWindowPos(ImVec2(1250, 210), ImGuiCond_Once);
+    ImGui::SetNextWindowPos(ImVec2(1290, 210), ImGuiCond_Once);
     ImGui::Begin(i18n->t(telemetry_plots_title));
 
     int n = velocityHistory.size();
@@ -476,7 +476,7 @@ void Gui::renderCommandHistory(std::map<u64, RocketCommand>& commandHistory)
     if (!viewCommands) return;
 
     ImGui::SetNextWindowSize(ImVec2(450, 210), ImGuiCond_Once);
-    ImGui::SetNextWindowPos(ImVec2(1250, 730), ImGuiCond_Once);
+    ImGui::SetNextWindowPos(ImVec2(1290, 730), ImGuiCond_Once);
 
     ImGui::Begin(i18n->t(commands_title));
 
