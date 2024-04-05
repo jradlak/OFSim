@@ -30,7 +30,7 @@ TEST(PhysicsSolverTests, primitiveTest1)
 
     auto physicsSolver{ PhysicsSolver(rocketProperties, 12) };
 
-    physicsSolver.changeInitialAltitudeOrientation(
+    physicsSolver.establishInitialAltitudeOrientation(
         CelestialBodyType::planet, 
         1.0,
         dvec3(0.0, 0.0, 0.0));

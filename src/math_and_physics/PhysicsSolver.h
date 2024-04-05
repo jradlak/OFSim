@@ -45,7 +45,7 @@ namespace ofsim_math_and_physics
 		// change state methods:
 
 		// change the initial orientation of the rocket to face towards the planet 
-		void changeInitialAltitudeOrientation(
+		void establishInitialAltitudeOrientation(
 			CelestialBodyType _celestialBodyType, 
 			f64 _celestialBodySize,
 			dvec3 _towards);
