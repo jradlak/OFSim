@@ -1,10 +1,13 @@
 #pragma once
 #include <glm/glm.hpp>
 
+#include "../math_and_physics/MathTypes.h"
+
 namespace SolarSystemConstants
 {
-	const glm::dvec3 sunPosition { glm::dvec3(0.0, -3185.0, 149600000.0) };
-	const glm::dvec3 lightPos { sunPosition };
-	const glm::dvec3 earthPos { glm::dvec3(0.0, 0.0, 0.0) };
-	const glm::dvec3 moonPos { glm::dvec3(384400.0, -3185.0, 0.0) };
+	constexpr f64 earthSize = 6371.0; //6321.0;	
+	const dvec3 sunPosition { 0.0, 0, 149600000.0 };
+	const dvec3 lightPos { sunPosition };
+	const dvec3 earthPos { 0.0, 0.0, 0.0 };
+	const dvec3 moonPos { 384400.0, 0.0, 0.0 };
 };

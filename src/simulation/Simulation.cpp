@@ -35,9 +35,9 @@ void Simulation::initialSolarSystemInformation()
 
 void Simulation::physicsRocketInitialOrientation()
 {
-    glm::dvec3 towards = solarSystem->pointAboveEarthSurface(angle, dangle, 6321.0);
+    dvec3 towards = solarSystem->pointAboveEarthSurface(angle, dangle, SolarSystemConstants::earthSize - 50);
     RocketPhysicalProperties& rocketProperties = rocket->projectProperties();
-    physics = std::make_unique<ofsim_math_and_physics::PhysicsSolver>(rocketProperties, CelestialBodyType::planet, 6371.0, MS_PER_UPDATE);
+    physics = std::make_unique<ofsim_math_and_physics::PhysicsSolver>(rocketProperties, CelestialBodyType::planet, SolarSystemConstants::earthSize, MS_PER_UPDATE);
     physics->establishInitialAltitudeOrientation( towards);	
 }
 

@@ -1,42 +1,38 @@
 #include "Planet.h"
 
-Planet::Planet(double _size, const glm::dvec3& _position)
+Planet::Planet(f64 _size, const dvec3& _position)
 {
-	celestialBody = new CelestialBody(CelestialBodyType::planet, "planet_textured_shader", _size, _position, true);
+	celestialBody = std::make_unique<CelestialBody>(CelestialBodyType::planet, "planet_textured_shader", _size, _position, true);
 	celestialBody->init(glm::dvec3(0.25f, 0.75f, 0.55f), 9.81, "assets/textures/8k_earth_daymap.jpg");	
 }
 
-void Planet::render(glm::dmat4 projection, glm::dmat4 view, const glm::dvec3 lightPos)
+void Planet::init(i32 number, f64 _angle, f64 _dangle, dvec3 _rotation)
+{
+	cloudsAndTrees = std::make_unique<CloudsAndTrees>(12, *this->celestialBody, _angle, _dangle);
+	cloudsAndTrees->provideInitialRotation(_rotation);
+
+	dvec3 launchpadPos = pointAboveTheSurface(_angle, _dangle, 6371 - 0.187);
+	
+	launchpad = std::make_unique<Launchpad>("model3d_shader", "assets/models/launchpad2.obj", launchpadPos, 0.05);
+	launchpad->updateRotation(_rotation);
+}
+
+void Planet::render(dmat4 projection, dmat4 view, const dvec3 lightPos)
 {
 	celestialBody->render(projection, view, lightPos);
 	
-	if (cloudsAndTrees != NULL)
+	if (cloudsAndTrees != nullptr)
 	{
 		cloudsAndTrees->render(projection, view, lightPos);
 	}
 
-	if (launchpad != NULL)
+	if (launchpad != nullptr)
 	{
 		launchpad->render(projection, view, lightPos);
 	}
 }
 
-void Planet::init(int number, double _angle, double _dangle, glm::dvec3 _rotation)
-{
-	cloudsAndTrees = new CloudsAndTrees(12, *this->celestialBody, _angle, _dangle);
-	cloudsAndTrees->provideInitialRotation(_rotation);
-
-	glm::dvec3 launchpadPos = pointAboveTheSurface(_angle, _dangle, 6371 - 0.187);
-	this->launchpad = new Launchpad("model3d_shader", "assets/models/launchpad2.obj", launchpadPos, 0.05);
-	launchpad->updateRotation(_rotation);
-}
-
-glm::dvec3 Planet::pointAboveTheSurface(double theta, double phi, double distance)
+glm::dvec3 Planet::pointAboveTheSurface(f64 theta, f64 phi, f64 distance)
 {
 	return celestialBody->pointAboveTheSurface(theta, phi, distance);
-}
-
-Planet::~Planet()
-{
-	delete celestialBody;
 }
