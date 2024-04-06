@@ -28,11 +28,11 @@ TEST(PhysicsSolverTests, primitiveTest1)
         thrustMagnitude
     };
 
-    auto physicsSolver{ PhysicsSolver(rocketProperties, 12) };
+    auto physicsSolver{ PhysicsSolver(rocketProperties, 
+        CelestialBodyType::planet,
+        1.0,  12) };
 
-    physicsSolver.establishInitialAltitudeOrientation(
-        CelestialBodyType::planet, 
-        1.0,
+    physicsSolver.establishInitialAltitudeOrientation(       
         dvec3(0.0, 0.0, 0.0));
 
     u64 timeInterval{ 12 };

@@ -6,17 +6,16 @@ using namespace ofsim_math_and_physics;
 
 // the class and the method descriptions are in the header file
 
-PhysicsSolver::PhysicsSolver(RocketPhysicalProperties _rocketProperties, i32 _MS_PER_UPDATE)
-	: rocketProperties(_rocketProperties), MS_PER_UPDATE(_MS_PER_UPDATE), thrustMagnitude(0.01) {}
+PhysicsSolver::PhysicsSolver(
+    RocketPhysicalProperties& _rocketProperties,
+    CelestialBodyType _celestialBodyType,
+    f64 _celestialBodySize, 
+    i32 _MS_PER_UPDATE)
+	: rocketProperties(_rocketProperties), celestialBodyType(_celestialBodyType), celestialBodySize(_celestialBodySize),
+    MS_PER_UPDATE(_MS_PER_UPDATE), thrustMagnitude(0.01) {}
 
-void PhysicsSolver::establishInitialAltitudeOrientation(
-    CelestialBodyType _celestialBodyType, 
-    f64 _celestialBodySize,
-    dvec3 _towards)
-{
-	altitudeOrientation = _celestialBodyType;
-	celestialBodySize = _celestialBodySize;
-
+void PhysicsSolver::establishInitialAltitudeOrientation(dvec3 _towards)
+{	
     towards = _towards; 
     lastPos = rocketProperties.position;
 
@@ -31,7 +30,7 @@ void PhysicsSolver::establishInitialAltitudeOrientation(
     initialTowards = towards;
 
     rocketProperties.rotation = rotation;
-    rocketProperties.towards = towards;    
+    rocketProperties.towards = towards;
 }
 
 u64 PhysicsSolver::calculateForces(u64 timeInterval)
@@ -223,7 +222,7 @@ void PhysicsSolver::calculateAtmosphericDragForce()
 
 double PhysicsSolver::calculateAltitude()
 {
-    if (altitudeOrientation == planet)
+    if (celestialBodyType == planet)
     {
         return length(rocketProperties.position - celestialBodyCenter(celestialBodySize)) - celestialBodySize * 2.0 + 0.5;
     }

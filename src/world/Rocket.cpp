@@ -1,27 +1,25 @@
 #include "Rocket.h"
 
 Rocket::Rocket(std::string shaderName, glm::dvec3 _position, double _size)
-	: position(_position), initialPosition(_position), size(_size)
 {	
+	rocketProperties.position = _position;
+	rocketProperties.initialPosition = _position;
+	rocketProperties.rotation = glm::dvec3(0.0);
+	rocketProperties.velocity = dvec3(0);
+
 	modelRenderer = std::make_unique<ofsim_renderer::ModelRenderer>(shaderName, "assets/models/12216_rocket_v1_l2.obj");
 	
 	smoke = std::make_unique<Smoke>();
 
-	mass = 10.0;
-	
-	rotation = glm::dvec3(0.0);
-}
-
-RocketPhysicalProperties Rocket::projectProperties()
-{
-	return { position, initialPosition, towards, rotation, velocity, size, mass, thrustMagnitude };
+	rocketProperties.size = _size;
+	rocketProperties.mass = 10.0;
 }
 
 void Rocket::reset(glm::dvec3 _position)
 {
-	mass = 10;	
-	velocity = glm::dvec3(0.0, 0.0, 0.0);
-	position = _position;
+	rocketProperties.mass = 10;
+	rocketProperties.velocity = dvec3(0.0, 0.0, 0.0);
+	rocketProperties.position = _position;
 }
 
 void Rocket::render(glm::dmat4 projection, glm::dmat4 view, glm::dvec3 _lightPos)
@@ -33,58 +31,13 @@ void Rocket::render(glm::dmat4 projection, glm::dmat4 view, glm::dvec3 _lightPos
 	shader->setVec3("lightColor", 1.0f, 1.0f, 1.0f);
 	shader->setVec3("lightPos", _lightPos);
 
-	modelRenderer->renderWithRotation(projection, view, size, position, rotation);
+	modelRenderer->renderWithRotation(projection, view, rocketProperties.size, rocketProperties.position, rocketProperties.rotation);
 	 
-	glm::dvec3 direction = glm::normalize(position - towards);
-	glm::dvec3 smokePosition = position - (direction / 100.0) + glm::dvec3(0.004, 0.0015, 0.0);
+	glm::dvec3 direction = glm::normalize(rocketProperties.position - rocketProperties.towards);
+	glm::dvec3 smokePosition = rocketProperties.position - (direction / 100.0) + glm::dvec3(0.004, 0.0015, 0.0);
 	 
-	if (thrustMagnitude > 0.01 && mass > 3.0)
+	if (rocketProperties.thrustMagnitude > 0.01 && rocketProperties.mass > 3.0)
 	{
 		smoke->puff(projection, view, _lightPos, smokePosition);
 	}
-}
-
-glm::dvec3 Rocket::getPosition()
-{
-	return position;
-}
-
-double Rocket::getMass()
-{
-	return mass;
-}
-
-glm::dvec3 Rocket::getVelocity()
-{
-	return velocity;
-}
-
-glm::dvec3 Rocket::getRotation()
-{
-	return rotation;
-}
-
-void Rocket::updateMass(double newMass)
-{
-	mass = newMass;
-}
-
-void Rocket::updatePosition(glm::dvec3 newPosition)
-{
-	position = newPosition;
-} 
-
-void Rocket::updateVelocity(glm::dvec3 newVelocity)
-{
-	velocity = newVelocity;
-}
-
-void Rocket::updateRotation(glm::dvec3 _rotation)
-{
-	rotation = _rotation;
-}
-
-void Rocket::updateTowards(glm::dvec3 newTowards)
-{
-	towards = newTowards;
 }

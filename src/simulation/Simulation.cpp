@@ -33,14 +33,12 @@ void Simulation::initialSolarSystemInformation()
 	solarSystem->provideRocketInformationAndInit(angle, dangle, rocket.get());	
 }
 
-RocketPhysicalProperties Simulation::physicsRocketInitialOrientation()
+void Simulation::physicsRocketInitialOrientation()
 {
     glm::dvec3 towards = solarSystem->pointAboveEarthSurface(angle, dangle, 6321.0);
-    RocketPhysicalProperties rocketProperties = rocket->projectProperties();
-    physics = std::make_unique<ofsim_math_and_physics::PhysicsSolver>(rocketProperties, MS_PER_UPDATE);
-    physics->establishInitialAltitudeOrientation(CelestialBodyType::planet, 6371.0, towards);
-
-	return rocketProperties;
+    RocketPhysicalProperties& rocketProperties = rocket->projectProperties();
+    physics = std::make_unique<ofsim_math_and_physics::PhysicsSolver>(rocketProperties, CelestialBodyType::planet, 6371.0, MS_PER_UPDATE);
+    physics->establishInitialAltitudeOrientation( towards);	
 }
 
 void Simulation::correctionOfRocketOrientation()
@@ -114,7 +112,7 @@ void Simulation::mainLoop()
 	// <---- initialization section; ----->
 
 	// initialize physics solver:
-    RocketPhysicalProperties rocketProperties = physicsRocketInitialOrientation();
+    physicsRocketInitialOrientation();
 
     // initialize communication Bus and telemetry collector:	
 	telemetryCollector = std::make_unique<TelemetryCollector>();

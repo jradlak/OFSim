@@ -16,41 +16,38 @@
 
 struct RocketPhysicalProperties
 {	
-	dvec3 &position;
-	dvec3 &initialPosition;
-	dvec3 &towards;
-	dvec3 &rotation;	
-	dvec3 &velocity;
+	dvec3 position;
+	dvec3 initialPosition;
+	dvec3 towards;
+	dvec3 rotation;	
+	dvec3 velocity;
 
-	f64 &size, &mass, &thrustMagnitude;		
+	f64 size, mass, thrustMagnitude;		
 };
 
 class Rocket
 {
 public:
 	Rocket(std::string shaderName, glm::dvec3 _position, double _size);
-
-	void init() {}
 	
 	void render(glm::dmat4 projection, glm::dmat4 view, glm::dvec3 _lightPos);
 
-	glm::dvec3 getPosition();
-
-	void updateMass(double newMass);
-	void updatePosition(glm::dvec3 newPosition);
-	void updateVelocity(glm::dvec3 newVelocity);
+	void updateMass(double newMass) { rocketProperties.mass = newMass;  }
+	void updatePosition(const dvec3 &newPosition) { rocketProperties.position = newPosition; }
+	void updateVelocity(const glm::dvec3 &newVelocity) { rocketProperties.velocity = newVelocity; }
 	
-	void updateRotation(glm::dvec3 rotation);
-	void updateTowards(glm::dvec3 newTowards);
-	void updateThrustMagnitude(double newMagnitude) { thrustMagnitude = newMagnitude; }
+	void updateRotation(const glm::dvec3 &newRotation) { rocketProperties.rotation = newRotation; }
+	void updateTowards(const glm::dvec3& newTowards) { rocketProperties.towards = newTowards; }
+	void updateThrustMagnitude(double newMagnitude) { rocketProperties.thrustMagnitude = newMagnitude; }
 
-	RocketPhysicalProperties projectProperties();
+	RocketPhysicalProperties& projectProperties() { return rocketProperties; }
 
 	void reset(glm::dvec3 _position);
 
-	f64 getMass();
-	glm::dvec3 getVelocity();
-	glm::dvec3 getRotation();
+	f64 getMass() { return rocketProperties.mass; }
+	glm::dvec3& getVelocity() { return rocketProperties.velocity; }
+	glm::dvec3& getPosition() { return rocketProperties.position; }
+	glm::dvec3& getRotation() {	return rocketProperties.rotation; }
 
 	~Rocket() {}
 	
@@ -59,15 +56,11 @@ private:
 	std::unique_ptr<ofsim_renderer::ModelRenderer> modelRenderer;	
 	std::unique_ptr<Smoke> smoke;
 
-	// orientation:
-	glm::dvec3 position{ dvec3(0.0, 0.0, 0.0) };
-	glm::dvec3 initialPosition{ dvec3(0.0, 0.0, 0.0) };
-	glm::dvec3 towards{ dvec3(0.0, 0.0, 0.0) };
-	glm::dvec3 rotation{ dvec3(0.0, 0.0, 0.0) };
-			
-	// physics:
-	double size;
-	glm::dvec3 velocity{ dvec3(0.0, 0.0, 0.0) };
-	double mass{ 10.0 };
-	double thrustMagnitude;	
+	// orientation and physical properties: 
+	RocketPhysicalProperties rocketProperties;
+
+	// scalar physics:
+	//double size;	
+	//double mass{ 10.0 };
+	//double thrustMagnitude;	
 };
