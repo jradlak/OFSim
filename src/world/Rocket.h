@@ -32,14 +32,6 @@ public:
 	
 	void render(glm::dmat4 projection, glm::dmat4 view, glm::dvec3 _lightPos);
 
-	void updateMass(double newMass) { rocketProperties.mass = newMass;  }
-	void updatePosition(const dvec3 &newPosition) { rocketProperties.position = newPosition; }
-	void updateVelocity(const glm::dvec3 &newVelocity) { rocketProperties.velocity = newVelocity; }
-	
-	void updateRotation(const glm::dvec3 &newRotation) { rocketProperties.rotation = newRotation; }
-	void updateTowards(const glm::dvec3& newTowards) { rocketProperties.towards = newTowards; }
-	void updateThrustMagnitude(double newMagnitude) { rocketProperties.thrustMagnitude = newMagnitude; }
-
 	RocketPhysicalProperties& projectProperties() { return rocketProperties; }
 
 	void reset(glm::dvec3 _position);
@@ -57,10 +49,5 @@ private:
 	std::unique_ptr<Smoke> smoke;
 
 	// orientation and physical properties: 
-	RocketPhysicalProperties rocketProperties;
-
-	// scalar physics:
-	//double size;	
-	//double mass{ 10.0 };
-	//double thrustMagnitude;	
+	RocketPhysicalProperties rocketProperties;	
 };

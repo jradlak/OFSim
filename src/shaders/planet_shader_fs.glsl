@@ -12,7 +12,7 @@ uniform vec3 lightPos;
 uniform vec3 lightColor;
 uniform vec3 objectColor;
 
-// make islands-like color pattern
+// islands-like color pattern
 int computeColor() 
 {
     highp int x = int(FragPos.x / 100);   

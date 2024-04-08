@@ -11,7 +11,7 @@ Simulation::Simulation()
 	solarSystem = std::make_unique<SolarSystem>();
 	
 	// rocket:
-	glm::dvec3 rocketPos = solarSystem->pointAboveEarthSurface(angle, dangle, 6371 - 0.2);
+	glm::dvec3 rocketPos = rocketInitialPosition();
 	rocket = std::make_unique<Rocket>("model3d_shader", rocketPos, 0.000013);
 	
 	camera->position = rocket->getPosition() + glm::dvec3(0.0, 0.024, 0.0);	
@@ -29,24 +29,20 @@ void Simulation::init()
 
 void Simulation::initialSolarSystemInformation()
 {
-	correctionOfRocketOrientation();
+	//correctionOfRocketOrientation();
 	solarSystem->provideRocketInformationAndInit(angle, dangle, rocket.get());	
 }
 
 void Simulation::physicsRocketInitialOrientation()
 {
-    dvec3 towards = solarSystem->pointAboveEarthSurface(angle, dangle, SolarSystemConstants::earthSize - 50);
+    dvec3 pointTowards = solarSystem->pointAboveEarthSurface(angle, dangle, SolarSystemConstants::earthSize - 50);
     RocketPhysicalProperties& rocketProperties = rocket->projectProperties();
-    physics = std::make_unique<ofsim_math_and_physics::PhysicsSolver>(rocketProperties, CelestialBodyType::planet, SolarSystemConstants::earthSize, MS_PER_UPDATE);
-    physics->establishInitialAltitudeOrientation( towards);	
-}
-
-void Simulation::correctionOfRocketOrientation()
-{
-	glm::dvec3 newRotation = glm::dvec3(-50.000021, 48.8000050, 0.0);
-	glm::dvec3 deltaRotation = newRotation - rocket->getRotation();
-
-	physics->rotateRocket(deltaRotation);
+    physics = std::make_unique<ofsim_math_and_physics::PhysicsSolver>(
+		rocketProperties,
+		CelestialBodyType::planet,
+		SolarSystemConstants::earthSize,
+		MS_PER_UPDATE);
+    physics->establishInitialOrientation(pointTowards, rocketInitialPosition());
 }
 
 void Simulation::initialOrbitalInformation()

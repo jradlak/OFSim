@@ -5,7 +5,7 @@
 
 namespace SolarSystemConstants
 {
-	constexpr f64 earthSize = 6371.0; //6321.0;	
+	constexpr f64 earthSize = 6371.0;
 	const dvec3 sunPosition { 0.0, 0, 149600000.0 };
 	const dvec3 lightPos { sunPosition };
 	const dvec3 earthPos { 0.0, 0.0, 0.0 };

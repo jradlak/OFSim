@@ -14,23 +14,22 @@ PhysicsSolver::PhysicsSolver(
 	: rocketProperties(_rocketProperties), celestialBodyType(_celestialBodyType), celestialBodySize(_celestialBodySize),
     MS_PER_UPDATE(_MS_PER_UPDATE), thrustMagnitude(0.01) {}
 
-void PhysicsSolver::establishInitialAltitudeOrientation(dvec3 _towards)
+void PhysicsSolver::establishInitialOrientation(dvec3 _pointTowards, dvec3 rocketInitialPosition)
 {	
-    towards = _towards; 
-    lastPos = rocketProperties.position;
+    dvec3 earthCenter = celestialBodyCenter(celestialBodySize);
+    dvec3 normalSphereVector = normalize(rocketInitialPosition - celestialBodyCenter(celestialBodySize));
 
+    pointTowards = _pointTowards;
+    
     thrustCutOff = false;
-
-    dvec3 direction = normalize(rocketProperties.position - towards);
-    quat qlook = Geometry::gLookAt(direction, dvec3(0.0, 1.0, 0.0));
-    dvec3 rotation = eulerAngles(qlook) * 180.0f / 3.14159265358979323846f;
-
+    
+    dvec3 direction = normalSphereVector;
     thrustVector = direction * thrustMagnitude; 
     
-    initialTowards = towards;
+    initialTowards = pointTowards;
 
-    rocketProperties.rotation = rotation;
-    rocketProperties.towards = towards;
+    rocketProperties.rotation = dvec3(-10.0, 70.0, 0) - (normalSphereVector * (180.0 / M_PI));
+    rocketProperties.towards = pointTowards;
 }
 
 u64 PhysicsSolver::calculateForces(u64 timeInterval)
@@ -62,7 +61,7 @@ u64 PhysicsSolver::calculateForces(u64 timeInterval)
 
             deltaP = rocketProperties.position - lastPos;
             lastPos = rocketProperties.position;
-            towards += deltaP;
+            pointTowards += deltaP;
 
             calculateAtmosphereGradient();
             calculateAtmosphericDragForce();
@@ -204,14 +203,14 @@ void PhysicsSolver::calculateAtmosphericDragForce()
         dvec3 forceDirection = normalize(rocketProperties.velocity) * -1.0;
         f64 velocityMagnitude = 1.1 * length(rocketProperties.velocity);
         f64 altitudeMagnitude = 1.0 / (altitude * 1.2);
-        if (altitude > 20.0)
+        if (altitude > dense_atmosphere_boundary)
         {
             altitudeMagnitude *= 1.0 / altitude;
         }
 
         dvec3 dragForce = forceDirection * velocityMagnitude * altitudeMagnitude;
 
-        if (length(dragForce) > 0.0001 && altitude < 98.0)
+        if (length(dragForce) > 0.0001 && altitude < upper_atmosphere_boundary)
         {            
             addForce(dragForce);
         }

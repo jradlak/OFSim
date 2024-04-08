@@ -14,6 +14,9 @@
 
 namespace ofsim_math_and_physics
 {
+	constexpr f32 upper_atmosphere_boundary = 98.0f;
+	constexpr f32 dense_atmosphere_boundary = 20.0f;
+
 	/*
 	The PhysicsSolver class is a part of a simulation engine, specifically designed to handle the physics 
 	calculations related to a rocket's movement and interaction with celestial bodies.
@@ -48,7 +51,7 @@ namespace ofsim_math_and_physics
 		// change state methods:
 
 		// change the initial orientation of the rocket to face towards the planet 
-		void establishInitialAltitudeOrientation(dvec3 _towards);
+		void establishInitialOrientation(dvec3 _towards, dvec3 rocketInitialPosition);
 
 		u64 calculateForces(u64 timeInterval);
 
@@ -108,7 +111,7 @@ namespace ofsim_math_and_physics
 		i32 lastKeyPressed;
 		bool mustRecalculateVectors = false;
 
-		dvec3 towards;
+		dvec3 pointTowards;
 		dvec3 lastPos;
 
 		dvec3 initialTowards;

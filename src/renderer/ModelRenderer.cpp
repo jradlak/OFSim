@@ -17,10 +17,10 @@ void ModelRenderer::renderWithRotation(dmat4& projection, dmat4& view, f64 size,
 
 	glm::dmat4 model = glm::dmat4(1.0);
 	
+	// calculate rotations:			
 	model = glm::translate(model, position);
+	model = glm::scale(model, dvec3(size));
 
-	// calculate rotations:	
-		
 	if (rotation.x != 0.0)
 	{
 		model = glm::rotate(model, glm::radians(rotation.x), dvec3(1.0, 0.0, 0.0));
@@ -35,10 +35,7 @@ void ModelRenderer::renderWithRotation(dmat4& projection, dmat4& view, f64 size,
 	{
 		model = glm::rotate(model, glm::radians(rotation.z), dvec3(0.0, 0.0, 1.0));
 	}
-
-	//model = glm::rotate(model, glm::radians(20.0), rotation);
-
-	model = glm::scale(model, dvec3(size));
+			
 	shader->setMat4("model", mat4(model));
 
 	glm::mat4 transformation = mat4((projection * view * model));
