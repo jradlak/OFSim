@@ -13,12 +13,36 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(GLFW_BUILD_DOCS OFF CACHE BOOL  "GLFW lib only")
 set(GLFW_INSTALL OFF CACHE BOOL  "GLFW lib only")
 
-add_subdirectory(external_libraries/glfw)
 add_subdirectory(external_libraries/imgui)
-add_subdirectory(external_libraries/glm)
+
+# <================ Setup libraries =================>:
+
+include(FetchContent)
+
+# Low level 3D Graphics and Math libraries:
+FetchContent_Declare(glfw GIT_REPOSITORY https://github.com/glfw/glfw.git GIT_TAG master)
+FetchContent_Declare(glad GIT_REPOSITORY https://github.com/SasLuca/MyGlad.git GIT_TAG master)
+
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(glfw)
+FetchContent_MakeAvailable(glad)
+
+FetchContent_Declare(
+	glm
+	GIT_REPOSITORY https://github.com/g-truc/glm.git
+	GIT_TAG		   0.9.9.2
+)
+FetchContent_GetProperties(glm)
+if(NOT glm_POPULATED)
+	FetchContent_Populate(glm)
+	set(GLM_TEST_ENABLE OFF CACHE BOOL "" FORCE)
+	add_subdirectory(${glm_SOURCE_DIR} ${glm_BINARY_DIR})
+endif()
+message(STATUS "${Green} GLM Should Be Downloaded ${ColourReset}")
 
 #Assimp Library:
-include(FetchContent)
 set(FETCHCONTENT_BASE_DIR ${PROJECT_SOURCE_DIR}/libs CACHE PATH "Missing description." FORCE)
 FetchContent_Declare(assimp
 GIT_REPOSITORY https://github.com/assimp/assimp.git
@@ -115,9 +139,7 @@ add_executable("${CMAKE_PROJECT_NAME}"
     src/world/Planet.cpp
     src/world/SolarSystem.cpp
     src/world/Sun.cpp
-    
-    external_libraries/glad/glad.h 
-    external_libraries/glad/glad.c
+        
     external_libraries/stb_image.h
     external_libraries/stb_image.cpp   
  )
@@ -160,7 +182,7 @@ else()
     add_dependencies("${CMAKE_PROJECT_NAME}" copy_assets)
 endif()
 
-target_link_libraries("${CMAKE_PROJECT_NAME}" ${OPENGL_LIBRARIES} glfw glm imgui assimp Python::Python)
+target_link_libraries("${CMAKE_PROJECT_NAME}" ${OPENGL_LIBRARIES} glad glfw glm imgui assimp Python::Python)
 
 if(MSVC)
     if(${CMAKE_VERSION} VERSION_LESS "3.6.0") 
@@ -231,8 +253,7 @@ add_executable(
     src/infrastructure/EventProcessor.h
     src/infrastructure/EventProcessor.cpp
 
-    external_libraries/glad/glad.h 
-    external_libraries/glad/glad.c
+  
     external_libraries/stb_image.h
     external_libraries/stb_image.cpp  
 
@@ -242,6 +263,7 @@ add_executable(
 target_link_libraries(
     ofsim_tests
     ${OPENGL_LIBRARIES}
+    glad
     glfw
     glm
     assimp

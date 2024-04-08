@@ -22,7 +22,7 @@ namespace ofsim_math_and_physics
 	Here's a brief overview of its responsibilities:
 
 	State Changes: It provides methods to change the state of the rocket, such as changeAltitudeOrientation, 
-	updateKeyPressed, updateThrustMagnitude, rotateVectors, rotateRocket, and resetForces. 
+	updateKeyPressed, updateThrustMagnitude, rotateRocket, and resetForces. 
 	These methods alter the rocket's position, orientation, thrust, and other physical properties.
 
 	Force Calculations: The calculateForces method calculates the net force acting on the rocket

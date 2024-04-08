@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../external_libraries/glad/glad.h"
+#include <glad/glad.h>
 #include "../math_and_physics/MathTypes.h"
 
 #include "../infrastructure/EventProcessor.h"

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../external_libraries/glad/glad.h"
+#include <glad/glad.h>
 #include "../../external_libraries/stb_image.h"
 
 #include <glm/glm.hpp>
