@@ -81,11 +81,10 @@ namespace ofsim_math_and_physics
 
 	private:
 
-		const f32 orr { 0.25 }, og { 0.55 }, ob { 0.75 };
-
-		//earth's atmosphere gradient color:
+		//earth's atmosphere gradient color and its oryginal values		
 		f32 r { 0.25 }, g { 0.55 }, b { 0.75 };
-		
+		const f32 orr{ 0.25 }, og{ 0.55 }, ob{ 0.75 };
+
 		// PRIVATE VARIABLES:
 
 		std::vector<dvec3> forces;
