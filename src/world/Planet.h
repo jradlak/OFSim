@@ -16,8 +16,8 @@ public:
 	
 	void init(i32 number, f64 _angle, f64 _dangle, dvec3 _rotation);
 
-	dvec3 pointAboveTheSurface(f64 theta, f64 phi, f64 distance);
-
+	dvec3 pointAboveTheSurface(f64 theta, f64 phi, f64 distance) { return celestialBody->pointAboveTheSurface(theta, phi, distance); }
+	
 private:
 	std::unique_ptr<CelestialBody> celestialBody = nullptr;
 	std::unique_ptr<CloudsAndTrees> cloudsAndTrees = nullptr;

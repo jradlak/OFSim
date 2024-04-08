@@ -31,8 +31,3 @@ void Planet::render(dmat4 projection, dmat4 view, const dvec3 lightPos)
 		launchpad->render(projection, view, lightPos);
 	}
 }
-
-glm::dvec3 Planet::pointAboveTheSurface(f64 theta, f64 phi, f64 distance)
-{
-	return celestialBody->pointAboveTheSurface(theta, phi, distance);
-}
