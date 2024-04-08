@@ -104,7 +104,7 @@ private:
 	std::string orbitalProgramSourceCode { "" };
 
 	dvec3 rocketInitialPosition() { return solarSystem
-		->pointAboveEarthSurface(angle, dangle, SolarSystemConstants::earthSize); }
+		->pointAboveEarthSurface(angle, dangle, SolarSystemConstants::earthSize - 0.2); }
 
 	void physicsRocketInitialOrientation();
 	void initialSolarSystemInformation();

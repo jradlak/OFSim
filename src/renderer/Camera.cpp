@@ -1,5 +1,4 @@
 #include "Camera.h"
-#include "../math_and_physics/Geometry.h"
 
 using namespace ofsim_renderer;
 

@@ -8,7 +8,6 @@
 #include <glm/gtx/rotate_vector.hpp>
 #include <glm/gtx/euler_angles.hpp> 
 
-#include "Geometry.h"
 #include "../world/CelestialBody.h"
 #include "../world/Rocket.h"
 
@@ -60,8 +59,8 @@ namespace ofsim_math_and_physics
 		void updateThrustMagnitude(f64 newMagintude);
 
 		// similar to above: rotate the rocket's orientation (and by design thrust verctor) by a given angle
-		void rotateRocket(dvec3 deltaRotation);
-
+		void rotateRocket(dvec3 deltaRotation) { rotateVectors(deltaRotation); }
+				
 		// Computes the trajectory prediction of the rocket based on its current state and the forces acting on it.
 		void predictTrajectory(u64 elapsedTime);
 
@@ -131,7 +130,7 @@ namespace ofsim_math_and_physics
 		void updatePhysics(f64 deltaTime);
 		void addForce(vec3 force) { forces.push_back(force); }
 
-		void rotateVectors(dvec3 newRotation, dvec3 deltaRotation);
+		void rotateVectors(dvec3 deltaRotation);
 
 		void calculateAtmosphereGradient();
 		void calculateAtmosphericDragForce();

@@ -1,5 +1,7 @@
 #include "Rocket.h"
 
+#include "SolarSystemConstants.h"
+
 Rocket::Rocket(std::string shaderName, glm::dvec3 _position, double _size)
 {	
 	rocketProperties.position = _position;
@@ -32,8 +34,8 @@ void Rocket::render(glm::dmat4 projection, glm::dmat4 view, glm::dvec3 _lightPos
 
 	modelRenderer->renderWithRotation(projection, view, rocketProperties.size, rocketProperties.position, rocketProperties.rotation);
 	 
-	glm::dvec3 direction = glm::normalize(rocketProperties.position - rocketProperties.towards);
-	glm::dvec3 smokePosition = rocketProperties.position - (direction / 100.0) + glm::dvec3(0.004, 0.0015, 0.0);
+	glm::dvec3 direction = glm::normalize(rocketProperties.position - SolarSystemConstants::earthPos);
+	glm::dvec3 smokePosition = rocketProperties.position - (direction / 100.0) + glm::dvec3(0.003, 0.0014, 0.0);
 	 
 	if (rocketProperties.thrustMagnitude > 0.01 && rocketProperties.mass > 3.0)
 	{

@@ -63,10 +63,10 @@ add_executable("${CMAKE_PROJECT_NAME}"
     src/python_integration/PythonMachine.cpp
     
     src/math_and_physics/MathTypes.h
-    src/math_and_physics/Geometry.h
+    
     src/math_and_physics/PhysicsSolver.h
     src/math_and_physics/Sphere.h
-    src/math_and_physics/Geometry.cpp
+    
     src/math_and_physics/PhysicsSolver.cpp
     src/math_and_physics/Sphere.cpp
 
@@ -215,10 +215,10 @@ add_executable(
     src/world/Sun.cpp
 
     src/math_and_physics/MathTypes.h
-    src/math_and_physics/Geometry.h
+    
     src/math_and_physics/PhysicsSolver.h
     src/math_and_physics/Sphere.h
-    src/math_and_physics/Geometry.cpp
+    
     src/math_and_physics/PhysicsSolver.cpp
     src/math_and_physics/Sphere.cpp
     

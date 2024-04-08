@@ -1,3 +1,5 @@
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/rotate_vector.hpp>
 #include "PhysicsSolver.h"
 
 #include <iostream>
@@ -28,7 +30,7 @@ void PhysicsSolver::establishInitialOrientation(dvec3 _pointTowards, dvec3 rocke
     
     initialTowards = pointTowards;
 
-    rocketProperties.rotation = dvec3(-10.0, 70.0, 0) - (normalSphereVector * (180.0 / M_PI));
+    rocketProperties.rotation = dvec3(-13.0, 73.0, 0) - (normalSphereVector * (180.0 / M_PI));
     rocketProperties.towards = pointTowards;
 }
 
@@ -153,32 +155,25 @@ void PhysicsSolver::updateThrustMagnitude(f64 newMagintude)
     }        
 }
 
-void PhysicsSolver::rotateVectors(dvec3 newRotation, dvec3 deltaRotation)
+void PhysicsSolver::rotateVectors(dvec3 deltaRotation)
 {    
     // rotate thrust vector:
     if (deltaRotation.x != 0)
     {
-        thrustVector = Geometry::rotateVector(thrustVector, dvec3(1.0, 0.0, 0.0), deltaRotation.x);
+        thrustVector = glm::rotateX(thrustVector, glm::radians(deltaRotation.x));
     }
 
     if (deltaRotation.y != 0)
     {
-        thrustVector = Geometry::rotateVector(thrustVector, dvec3(0.0, 1.0, 0.0), deltaRotation.y);
+        thrustVector = glm::rotateY(thrustVector, glm::radians(deltaRotation.y));
     }
 
     if (deltaRotation.z != 0)
     {
-        thrustVector = Geometry::rotateVector(thrustVector, dvec3(0.0, 0.0, 1.0), deltaRotation.z);
+        thrustVector = glm::rotateZ(thrustVector, glm::radians(deltaRotation.z));
     }
 
-    rocketProperties.rotation = newRotation;    
-}
-
-void PhysicsSolver::rotateRocket(dvec3 deltaRotation)
-{
-    dvec3 orgRotation = rocketProperties.rotation;
-    orgRotation += deltaRotation;
-    rotateVectors(orgRotation, deltaRotation);
+    rocketProperties.rotation += deltaRotation;    
 }
 
 void PhysicsSolver::calculateAtmosphereGradient()
