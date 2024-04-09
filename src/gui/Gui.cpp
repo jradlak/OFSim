@@ -33,18 +33,18 @@ void Gui::renderMenuBar()
         {
             if (ImGui::MenuItem(i18n->t(menu_new))) 
             { 
-                eventProcessor->createUserEvent(UserAction::FILE_NEW, ""); 
+                eventProcessor->createEvent(UserAction::FILE_NEW, ""); 
             }
 
             if (ImGui::MenuItem(i18n->t(menu_open))) 
             {                 
                 viewFileOpen = true;
-                eventProcessor->createUserEvent(UserAction::FILE_OPEN, "");                
+                eventProcessor->createEvent(UserAction::FILE_OPEN, "");                
             }
 
             if (ImGui::MenuItem(i18n->t(menu_save))) 
             { 
-                eventProcessor->createUserEvent(UserAction::FILE_SAVE, "");
+                eventProcessor->createEvent(UserAction::FILE_SAVE, "");
             }
 
             if (ImGui::MenuItem(i18n->t(menu_save_as)))
@@ -55,7 +55,7 @@ void Gui::renderMenuBar()
             ImGui::Separator();
             if (ImGui::MenuItem(i18n->t(menu_close))) 
             {  
-                eventProcessor->createUserEvent(UserAction::FILE_EXIT, "");
+                eventProcessor->createEvent(UserAction::FILE_EXIT, "");
             }
 
             ImGui::EndMenu();
@@ -76,14 +76,14 @@ void Gui::renderMenuBar()
         {
             if (ImGui::MenuItem(i18n->t(menu_manual))) 
             { 
-                eventProcessor->createUserEvent(UserAction::HELP_HELP, "");               
+                eventProcessor->createEvent(UserAction::HELP_HELP, "");               
             }
             
             ImGui::Separator();
             
             if (ImGui::MenuItem(i18n->t(menu_about))) 
             { 
-                eventProcessor->createUserEvent(UserAction::HELP_ABOUT, "");
+                eventProcessor->createEvent(UserAction::HELP_ABOUT, "");
             }
 
             ImGui::EndMenu();
@@ -159,7 +159,7 @@ void Gui::renderFileSaveAsDialog()
     if (ImGui::Button("OK", ImVec2(120, 0)))
     {        
         viewFileSaveAs = false;
-        eventProcessor->createUserEvent(UserAction::FILE_SAVED_AS, "");
+        eventProcessor->createEvent(UserAction::FILE_SAVED_AS, "");
     }
 
     ImGui::SetItemDefaultFocus();
@@ -217,7 +217,7 @@ void Gui::renderFileOpenDialog()
     {         
         std::string selectedFile = filesInDirectory[item_current];
         viewFileOpen = false; 
-        eventProcessor->createUserEvent(UserAction::PROGRAM_FILE_OPENED, selectedFile);
+        eventProcessor->createEvent(UserAction::PROGRAM_FILE_OPENED, selectedFile);
     }
 
     ImGui::SetItemDefaultFocus();
@@ -263,7 +263,7 @@ void Gui::renderSimulationControlWindow(unsigned long long time)
             plaing = true;
             timeFactor = 1;
 
-            eventProcessor->createUserEvent(UserAction::PROGRAM_TRANSLATE, "");
+            eventProcessor->createEvent(UserAction::PROGRAM_TRANSLATE, "");
         }
     }
     
@@ -274,7 +274,7 @@ void Gui::renderSimulationControlWindow(unsigned long long time)
         pp_texture = play_texture;
         plaing = false;
         timeFactor = -1;
-        eventProcessor->createUserEvent(UserAction::PROGRAM_STOP_EXECUTION, "");
+        eventProcessor->createEvent(UserAction::PROGRAM_STOP_EXECUTION, "");
     }
 
     ImGui::SameLine();

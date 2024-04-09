@@ -43,30 +43,31 @@ namespace ofsim_events
 		NONE
 	};
 
-	struct UserEvent
+	// This kind of event is producend by the user interface or by te Ptyhon machine when scriupt error occurs.
+	struct SimulationEvent
 	{		
 		u32 id { 0 };
 		u64 timestamp { 0 };
 		UserAction action;
 		std::string data;
 
-		UserEvent() : action(UserAction::NONE) {}
-		UserEvent(u32 _id, u64 _timestamp, UserAction _action, std::string _data)
+		SimulationEvent() : action(UserAction::NONE) {}
+		SimulationEvent(u32 _id, u64 _timestamp, UserAction _action, std::string _data)
 			: id(_id), timestamp(_timestamp), action(_action), data(_data) {}
 	};
 
+	// Central singleton responsible for creating nad passing events and data between different parts of the application.	
     class EventProcessor
     {
         public:
 			// UI events:
-            UserEvent getUserEvent();
-            void createUserEvent(UserAction action, std::string data);
+            SimulationEvent getEvent();
+            void createEvent(UserAction action, std::string data);
 		
 			// Rocket status:
 			dvec3 getRocketPosition() { return rocket->getPosition(); }
 			dvec3 getRocketRotation() { return rocket->getRotation(); }
 			dvec3 getRocketVelocity() { return rocket->getVelocity(); }
-
 			f64 getAltitude() { return physics->getAltitude(); }
 			f64 getThrustMagnitude() { return physics->getThrustMagnitude(); }
 			f64 getRocketMass() { return rocket->getMass(); }
@@ -97,7 +98,7 @@ namespace ofsim_events
 			Rocket* rocket;
 			ofsim_math_and_physics::PhysicsSolver* physics;
 
-            UserEvent* userEvent = nullptr;
+            SimulationEvent* userEvent = nullptr;
             u32 eventCounter {0};
 			bool shouldTerminatePythonMachine { false };	
 			ofsim_python_integration::PythonError pythonError;

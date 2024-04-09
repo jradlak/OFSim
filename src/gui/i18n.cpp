@@ -55,15 +55,15 @@ void I18n::initLabels()
 	enLabels[menu_program_source_code] = "Flight program source code";
 	plLabels[menu_help] = "Pomoc";
 	enLabels[menu_help] = "Help";
-	plLabels[menu_manual] = "Instrukcja obs�ugi";
+	plLabels[menu_manual] = "Instrukcja obslugi";
 	enLabels[menu_manual] = "Operation manual";
 	plLabels[menu_about] = "O programie...";
 	enLabels[menu_about] = "About...";
 
-	plLabels[splash_info] = "Symulator Lot�w Orbitalnych";
+	plLabels[splash_info] = "Symulator Lotow Orbitalnych";
 	enLabels[splash_info] = "Orbital Flight Simulator";
-	plLabels[splash_version] = "Wersja: 0.23.1 alpha";
-	enLabels[splash_version] = "Version: 0.23.1 alpha";
+	plLabels[splash_version] = "Wersja: 0.23.2 alpha";
+	enLabels[splash_version] = "Version: 0.23.2 alpha";
 
 	plLabels[dialog_title] = "Wczytaj kod zrodlowy programu lotu";
 	enLabels[dialog_title] = "Load the source code of the flight program";
@@ -71,7 +71,7 @@ void I18n::initLabels()
 	enLabels[dialog_directory] = "Directory: ";
 	plLabels[dialog_load] = "Wczytaj";
 	enLabels[dialog_load] = "Load";
-	plLabels[dialog_file_list] = "Lista plik�w: ";
+	plLabels[dialog_file_list] = "Lista plikow: ";
 	enLabels[dialog_file_list] = "List of files: ";
 	plLabels[dialog_cancel] = "Anuluj";
 	enLabels[dialog_cancel] = "Cancel";
@@ -93,7 +93,7 @@ void I18n::initLabels()
 
 	plLabels[telemetry_title] = "Telemetria";
 	enLabels[telemetry_title] = "Telemetry";
-	plLabels[telemetry_altitude] = "Wysoko�� punktu widzenia: ";
+	plLabels[telemetry_altitude] = "Wysokosc punktu widzenia: ";
 	enLabels[telemetry_altitude] = "Altitude: ";	
 	plLabels[telemetry_mass] = "Masa rakiety: ";
 	enLabels[telemetry_mass] = "Mass of the rocket: ";

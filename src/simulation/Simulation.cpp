@@ -271,7 +271,7 @@ void Simulation::renderHUD()
 void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 {	
 	// recieve and interpret user events:
-	UserEvent event = EventProcessor::getInstance()->getUserEvent();
+	SimulationEvent event = EventProcessor::getInstance()->getEvent();
 
 	if (event.action == UserAction::PROGRAM_STOP_EXECUTION)
 	{

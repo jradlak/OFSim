@@ -16,25 +16,25 @@ EventProcessor *EventProcessor::getInstance()
     return instance;
 }
 
-UserEvent EventProcessor::getUserEvent()
+SimulationEvent EventProcessor::getEvent()
 {
     if (userEvent == nullptr)
     {
-         return UserEvent();
+         return SimulationEvent();
     }
 
-    UserEvent event = UserEvent(userEvent->id, userEvent->timestamp, userEvent->action, userEvent->data);
+    SimulationEvent event = SimulationEvent(userEvent->id, userEvent->timestamp, userEvent->action, userEvent->data);
     delete userEvent;
     userEvent = nullptr;
 
     return event;
 }
 
-void EventProcessor::createUserEvent(UserAction action, std::string data)
+void EventProcessor::createEvent(UserAction action, std::string data)
 {
     if (userEvent == nullptr)
     {
-        userEvent = new UserEvent(eventCounter++, currentTime(), action, data);
+        userEvent = new SimulationEvent(eventCounter++, currentTime(), action, data);
     }
 }
 

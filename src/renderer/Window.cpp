@@ -100,12 +100,12 @@ void Window::key_callback(GLFWwindow *window, int key, int scancode, int action,
 
 	if (key == GLFW_KEY_M && action == GLFW_PRESS)
 	{
-		EventProcessor::getInstance()->createUserEvent(UserAction::CHANGE_MODE_TO_FROM_PREDICTION, "");
+		EventProcessor::getInstance()->createEvent(UserAction::CHANGE_MODE_TO_FROM_PREDICTION, "");
 	}
 
 	if (key == GLFW_KEY_K && action == GLFW_PRESS)
 	{
-		EventProcessor::getInstance()->createUserEvent(UserAction::CHANGE_MODE_TO_FORM_PRESENTATION, "");
+		EventProcessor::getInstance()->createEvent(UserAction::CHANGE_MODE_TO_FORM_PRESENTATION, "");
 	}
 
 	Camera_Movement direction = NONE;
