@@ -7,10 +7,6 @@
 
 namespace ofsim_infrastructure
 {
-	struct FileService
-	{		
-		static void saveSourceCode(std::string sourcePath, std::string orbitalProgramSrc);
-
-		static std::string loadSourceFile(std::string sourcePath);			
-	};
+	void saveSourceCode(std::string sourcePath, std::string orbitalProgramSrc);
+	std::string loadSourceCode(std::string sourcePath);
 }

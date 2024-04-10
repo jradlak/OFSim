@@ -83,18 +83,21 @@ namespace ofsim_events
 			bool isPythonMachineTerminated() { return shouldTerminatePythonMachine; }
 			void publishPythonError(ofsim_python_integration::PythonError error) { pythonError = error; }
 			ofsim_python_integration::PythonError& getPythonError() { return pythonError; }
-
+			
+			static EventProcessor* getInstance();
+			
 			// utility methods:
 			void povideRocketAndPhysics(Rocket* _rocket, ofsim_math_and_physics::PhysicsSolver* _physics) { rocket = _rocket; physics = _physics; }
             EventProcessor(EventProcessor const&) = delete;
             void operator=(EventProcessor const&) = delete;
-            static EventProcessor* getInstance();
-			
+            			
         protected:
             EventProcessor() {};
             ~EventProcessor() {};
 
-        private:			
+        private:
+			// since this class is a sigleton I don't figure it out how to pass references to objects instead of pointers,
+			// because references should be intilized immediately
 			Rocket* rocket;
 			ofsim_math_and_physics::PhysicsSolver* physics;
 

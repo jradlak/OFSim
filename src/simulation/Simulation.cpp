@@ -28,8 +28,7 @@ void Simulation::init()
 }
 
 void Simulation::initialSolarSystemInformation()
-{
-	//correctionOfRocketOrientation();
+{	
 	solarSystem->provideRocketInformationAndInit(angle, dangle, rocket.get());	
 }
 
@@ -287,7 +286,7 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 		std::cout << "Data reciewed " << event.data << "\n";					
 
 		// load Python program source code from file:
-		orbitalProgramSourceCode = ofsim_infrastructure::FileService::loadSourceFile(event.data);
+		orbitalProgramSourceCode = ofsim_infrastructure::loadSourceCode(event.data);
 	}
 
 	if (event.action == UserAction::PROGRAM_TRANSLATE)
@@ -312,13 +311,13 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 
 	if (event.action == UserAction::FILE_SAVE)
 	{
-		ofsim_infrastructure::FileService::saveSourceCode(SOURCE_CODE_FILE_NAME, orbitalProgramSourceCode);		
+		ofsim_infrastructure::saveSourceCode(SOURCE_CODE_FILE_NAME, orbitalProgramSourceCode);		
 	}
 
 	if (event.action == UserAction::FILE_SAVED_AS)
 	{
 		std::string fileSaved = gui->getSavedFile();
-		ofsim_infrastructure::FileService::saveSourceCode(fileSaved, orbitalProgramSourceCode);
+		ofsim_infrastructure::saveSourceCode(fileSaved, orbitalProgramSourceCode);
 	}
 
 	if (event.action == UserAction::FILE_EXIT)
