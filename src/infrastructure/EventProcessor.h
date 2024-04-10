@@ -96,7 +96,8 @@ namespace ofsim_events
             ~EventProcessor() {};
 
         private:
-			// since this class is a sigleton I don't figure it out how to pass references to objects instead of pointers,
+			// since this class is a sigleton I don't figure it out how to pass references to 
+			// objects instead of pointers,
 			// because references should be intilized immediately
 			Rocket* rocket;
 			ofsim_math_and_physics::PhysicsSolver* physics;

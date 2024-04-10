@@ -9,7 +9,7 @@ Rocket::Rocket(std::string shaderName, glm::dvec3 _position, double _size)
 	rocketProperties.rotation = glm::dvec3(0.0);
 	rocketProperties.velocity = dvec3(0);
 
-	modelRenderer = std::make_unique<ofsim_renderer::ModelRenderer>(shaderName, "assets/models/12216_rocket_v1_l2.obj");
+	modelRenderer = std::make_unique<ofsim_renderer::ModelRenderer>(shaderName, "assets/models/large_rocket.obj");
 	
 	smoke = std::make_unique<Smoke>();
 

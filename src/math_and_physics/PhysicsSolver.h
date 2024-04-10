@@ -10,6 +10,7 @@
 
 #include "../world/CelestialBody.h"
 #include "../world/Rocket.h"
+#include "../world/SolarSystemConstants.h"
 
 namespace ofsim_math_and_physics
 {
@@ -42,7 +43,8 @@ namespace ofsim_math_and_physics
 	class PhysicsSolver
 	{
 	public:
-		PhysicsSolver(RocketPhysicalProperties& _rocketProperties,
+		PhysicsSolver(
+			RocketPhysicalProperties& _rocketProperties,
 			CelestialBodyType _celestialBodyType,
 			f64 _celestialBodySize,
 			i32 _MS_PER_UPDATE);
@@ -59,7 +61,7 @@ namespace ofsim_math_and_physics
 		void updateThrustMagnitude(f64 newMagintude);
 
 		// similar to above: rotate the rocket's orientation (and by design thrust verctor) by a given angle
-		void rotateRocket(dvec3 deltaRotation) { rotateVectors(deltaRotation); }
+		void rotateRocket(dvec3 deltaRotation) { rotateRocketAndThrust(deltaRotation); }
 				
 		// Computes the trajectory prediction of the rocket based on its current state and the forces acting on it.
 		void predictTrajectory(u64 elapsedTime);
@@ -71,54 +73,45 @@ namespace ofsim_math_and_physics
 		f64 getAltitude() { return altitude; }
 		f64 getThrustMagnitude() { return thrustMagnitude; }	
 		std::vector<f32> atmosphereRgb() { return { r, g, b }; }
-		f64 getAtmosphereDragForceMagnitude() { return altitude > 98.0 ? 0.0 : atmosphereDragForceMagnitude; }
+		f64 getAtmosphereDragForceMagnitude() { return altitude > max_altitude ? 0.0 : atmosphereDragForceMagnitude; }
 		dvec3 getDeltaPosition() { return deltaP; }
 		std::vector<f64> getTrajectoryPredictionX() { return trajectoryPredictionX; }
 		std::vector<f64> getTrajectoryPredictionY() { return trajectoryPredictionY; }
 		std::vector<f64> getTrajectoryPredictionZ() { return trajectoryPredictionZ; }
 
-		~PhysicsSolver() {}
-
 	private:
+		// constants:		
+		const f32 orr{ 0.25 }, og{ 0.55 }, ob{ 0.75 };	// earth's atmosphere gradient color oryginal values		
+		const f32 min_altitude = 0.2; // from threre we start to calculate physics
+		const f32 max_altitude = 98.0; // upper bounday of the atmosphere
+		const f32 min_mass = 3.0; // mass of the rocket without the fuel
+		const f32 min_thrust = 0.0001; // thrust magnitude when the engine is off
+		const u32 prediction_steps = 512; // number of steps in the trajectory prediction
 
-		//earth's atmosphere gradient color and its oryginal values		
-		f32 r { 0.25 }, g { 0.55 }, b { 0.75 };
-		const f32 orr{ 0.25 }, og{ 0.55 }, ob{ 0.75 };
+		//earth's atmosphere gradient color:
+		f32 r { 0.25 }, g { 0.55 }, b { 0.75 };		
 
 		// PRIVATE VARIABLES:
 
 		std::vector<dvec3> forces;
 
 		CelestialBodyType celestialBodyType;
-		//Rocket& rocket;
 		RocketPhysicalProperties& rocketProperties;
 		
 		f64 altitude;
 		f64 celestialBodySize;
 		f64 atmosphereDragForceMagnitude { 0.0 };
 
-		f64 GConst = -0.00981;
-
-		int MS_PER_UPDATE;
+		int ms_per_update;
 
 		dvec3 thrustVector;
 		f64 thrustMagnitude;
-
-		bool thrustCutOff;
-
-		i32 lastKeyPressed;
-		bool mustRecalculateVectors = false;
-
-		dvec3 pointTowards;
-		dvec3 lastPos;
-
-		dvec3 initialTowards;
-
+		bool thrustCutOff;	
+		
+		dvec3 lastPos;	
 		dvec3 deltaP;
-
-		f64 theta = 30.0; // TODO: find better initial vaules
-		f64 phi = 30.0;
-
+			
+		// trajectory prediction:
 		std::vector<f64> trajectoryPredictionX;
 		std::vector<f64> trajectoryPredictionY;
 		std::vector<f64> trajectoryPredictionZ;
@@ -129,13 +122,20 @@ namespace ofsim_math_and_physics
 		void updatePhysics(f64 deltaTime);
 		void addForce(vec3 force) { forces.push_back(force); }
 
-		void rotateVectors(dvec3 deltaRotation);
+		// rotate the rocket's orientation by a given angle
+		// as well as the thrust vector
+		void rotateRocketAndThrust(dvec3 deltaRotation);
 
+		// atmosphere gradient simulation
+		// taking the altitude into account and gradually changing the atmosphere color
 		void calculateAtmosphereGradient();
+		
+		// calculate the atmospheric drag force acting on the rocket
+		// based on the altitude and the rocket's velocity
 		void calculateAtmosphericDragForce();
 		
 		f64 calculateAltitude();
 		
-		dvec3 celestialBodyCenter(f64 bodySize) { return dvec3(0.0, 0.0, 0.0); }	
+		dvec3 celestialBodyCenter(f64 bodySize) { return SolarSystemConstants::earthPos; }
 	};
 }

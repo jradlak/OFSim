@@ -14,32 +14,30 @@ PhysicsSolver::PhysicsSolver(
     f64 _celestialBodySize, 
     i32 _MS_PER_UPDATE)
 	: rocketProperties(_rocketProperties), celestialBodyType(_celestialBodyType), celestialBodySize(_celestialBodySize),
-    MS_PER_UPDATE(_MS_PER_UPDATE), thrustMagnitude(0.01) {}
+    ms_per_update(_MS_PER_UPDATE), thrustMagnitude(0.01) {}
 
 void PhysicsSolver::establishInitialOrientation(dvec3 _pointTowards, dvec3 rocketInitialPosition)
-{	
-    dvec3 earthCenter = celestialBodyCenter(celestialBodySize);
+{	    
     dvec3 normalSphereVector = normalize(rocketInitialPosition - celestialBodyCenter(celestialBodySize));
-
-    pointTowards = _pointTowards;
     
     thrustCutOff = false;
     
     dvec3 direction = normalSphereVector;
     thrustVector = direction * thrustMagnitude; 
-    
-    initialTowards = pointTowards;
-
-    rocketProperties.rotation = dvec3(-13.0, 73.0, 0) - (normalSphereVector * (180.0 / M_PI));
-    rocketProperties.towards = pointTowards;
+       
+    // I don't quite understand why I have to do this rotation correction thing.
+    // It seems to be a hack to make the rocket face the planet correctly, but to my klowledge,
+    // normalSphereVector should be pointing towards the planet, so the rocket should face the planet    
+    dvec3 roationCorrection = dvec3(-40.0, -18.0, 0); // TODO: why is this necessary?
+    rocketProperties.rotation = roationCorrection - (normalSphereVector * (180.0 / M_PI));    
 }
 
 u64 PhysicsSolver::calculateForces(u64 timeInterval)
 {
     altitude = calculateAltitude();
-    if (altitude >= 0.2)
+    if (altitude >= min_altitude)
     {
-        while (timeInterval > MS_PER_UPDATE)
+        while (timeInterval > ms_per_update)
         {
             double mass = rocketProperties.mass;
 
@@ -48,9 +46,9 @@ u64 PhysicsSolver::calculateForces(u64 timeInterval)
                 addForce(thrustVector);
             }
 
-            if (mass < 3.0)
+            if (mass < min_mass)
             {
-                updateThrustMagnitude(0.0001);                
+                updateThrustMagnitude(min_thrust);
             }
             
             if (!thrustCutOff)
@@ -58,12 +56,11 @@ u64 PhysicsSolver::calculateForces(u64 timeInterval)
                 rocketProperties.mass = (mass -= 0.0004);
             }
 
-            updatePhysics(MS_PER_UPDATE / 1000.0f);
-            timeInterval -= MS_PER_UPDATE;
+            updatePhysics(ms_per_update / 1000.0f);
+            timeInterval -= ms_per_update;
 
             deltaP = rocketProperties.position - lastPos;
-            lastPos = rocketProperties.position;
-            pointTowards += deltaP;
+            lastPos = rocketProperties.position;            
 
             calculateAtmosphereGradient();
             calculateAtmosphericDragForce();
@@ -77,8 +74,9 @@ void PhysicsSolver::updatePhysics(f64 deltaTime)
 {
     dvec3 &velocity = rocketProperties.velocity;
     dvec3 &position = rocketProperties.position;
-
-    dvec3 gravityForceVector = normalize(rocketProperties.position - celestialBodyCenter(celestialBodySize)) * GConst;
+   
+    dvec3 gravityForceVector = normalize(rocketProperties.position - celestialBodyCenter(celestialBodySize))
+        * SolarSystemConstants::GConst;
 
     dvec3 sumOfForces = dvec3(0.0);
     
@@ -103,20 +101,21 @@ void PhysicsSolver::predictTrajectory(u64 elapsedTime)
     dvec3 position = rocketProperties.position;
 
     elapsedTime /= 1000;
-    i32 n = 512;
+    i32 n = prediction_steps;
     f64 currentTime = 4000.0 - elapsedTime;
     f64 deltaTime = (f64)currentTime / n;
 
     for (u32 index = 0; index < n; index++)
     {
-        dvec3 gravityForceVector = normalize(position - celestialBodyCenter(celestialBodySize)) * GConst;
+        dvec3 gravityForceVector = normalize(position - celestialBodyCenter(celestialBodySize))
+            * SolarSystemConstants::GConst;
 
         currentVelocity += gravityForceVector * deltaTime;
         position += currentVelocity * deltaTime;
         currentTime += deltaTime;
 
         f64 altitude = length(position - celestialBodyCenter(celestialBodySize)) - celestialBodySize + 0.5;
-        if (altitude < 0.3)
+        if (altitude < min_altitude)
         {
             break;
         }
@@ -132,7 +131,7 @@ void PhysicsSolver::predictTrajectory(u64 elapsedTime)
 void PhysicsSolver::reset()
 {
     resetForces();
-    thrustMagnitude = 0.01;
+    thrustMagnitude = min_thrust;
     thrustCutOff = true;
                         
     altitude = 0.0;
@@ -155,8 +154,8 @@ void PhysicsSolver::updateThrustMagnitude(f64 newMagintude)
     }        
 }
 
-void PhysicsSolver::rotateVectors(dvec3 deltaRotation)
-{    
+void PhysicsSolver::rotateRocketAndThrust(dvec3 deltaRotation)
+{        
     // rotate thrust vector:
     if (deltaRotation.x != 0)
     {
@@ -172,13 +171,13 @@ void PhysicsSolver::rotateVectors(dvec3 deltaRotation)
     {
         thrustVector = glm::rotateZ(thrustVector, glm::radians(deltaRotation.z));
     }
-
+    
+    // rotate rocket orientation:
     rocketProperties.rotation += deltaRotation;    
 }
 
 void PhysicsSolver::calculateAtmosphereGradient()
 {
-    //atmosphere gradient simulation:
     f32 factor = altitude > 4.0 ? 0.001 * altitude * altitude : 0.0;
         
     b = ob - factor;
