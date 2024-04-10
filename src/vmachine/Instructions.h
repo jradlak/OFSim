@@ -2,14 +2,15 @@
 
 #include "Registers.h"
 #include "Memory.h"
+#include "../infrastructure/EventProcessor.h"
 
 namespace ofsim_vm
 {
 	class Instructions
 	{
 	public:
-		Instructions(Memory& _memory, Registers& _registers)
-			:memory(_memory), registers(_registers) {}
+		Instructions(Memory& _memory, Registers& _registers, ofsim_events::EventProcessor& _eventProcessor)
+			:memory(_memory), registers(_registers), eventProcessor(_eventProcessor) {}
 
 		// copy data operations:
 		void mov(unsigned char* args);
@@ -60,7 +61,7 @@ namespace ofsim_vm
 		void ja(unsigned char* args);
 
 		// unconditional jumps:
-		void jmp(unsigned char* args);  // jump to address
+		void jmp(unsigned char* args);   // jump to address
 		void jmpr(unsigned char* args);  // jump to address from register
 
 		// special instructions:
@@ -68,11 +69,16 @@ namespace ofsim_vm
 
 		void call(unsigned int opcode, unsigned char* args);
 
-		void cmd(unsigned char* args);  // execute spaceship command
+		// execute spaceship command
+		void cmd(unsigned char* args);
+
+		// ferch speceship data into memory
+		void ftc(unsigned char* args);
 
 		~Instructions() {}
 
 	private:
+		ofsim_events::EventProcessor& eventProcessor;
 		Memory& memory;
 		Registers& registers;
 	};

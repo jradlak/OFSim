@@ -2,12 +2,12 @@
 
 using namespace ofsim_vm;
 
-VMachine::VMachine()
+VMachine::VMachine(ofsim_events::EventProcessor& _eventProcessor) : eventProcessor(_eventProcessor)
 {
 	memory = std::make_unique<Memory>();
 	registers = std::make_unique<Registers>();
 	opcodes = std::make_unique<Opcodes>();
-	instructions = std::make_unique<Instructions>(*memory, *registers);
+	instructions = std::make_unique<Instructions>(*memory, *registers, eventProcessor);
 	translator = std::make_unique<Translator>();
 }
 

@@ -20,10 +20,15 @@ namespace ofsim_events
 		FILE_NEW,
 		FILE_OPEN,
 
-		PROGRAM_FILE_OPENED,
-		PROGRAM_TRANSLATE,		
-		PROGRAM_RAISE_ERROR,
-		PROGRAM_STOP_EXECUTION,
+		PYTHON_PROGRAM_FILE_OPENED,
+		PYTHON_PROGRAM_TRANSLATED,		
+		PYTHON_PROGRAM_RAISED_ERROR,
+		PYTHON_PROGRAM_EXECUTION_STOPPED,
+
+		VM_PROGRAM_FILE_OPENED,
+		VM_PROGRAM_TRANSLATED,
+		VM_PROGRAM_RAISED_ERROR,
+		VM_PROGRAM_EXECUTION_STOPPED,
 
 		FILE_SAVE,	
 		FILE_SAVED_AS,
@@ -84,8 +89,13 @@ namespace ofsim_events
 			void publishPythonError(ofsim_python_integration::PythonError error) { pythonError = error; }
 			ofsim_python_integration::PythonError& getPythonError() { return pythonError; }
 			
-			static EventProcessor* getInstance();
+			// VM integration:
+			void processVMCommand(RocketCommand command);
 			
+			u64 currentTime();
+
+			static EventProcessor* getInstance();
+					
 			// utility methods:
 			void povideRocketAndPhysics(Rocket* _rocket, ofsim_math_and_physics::PhysicsSolver* _physics) { rocket = _rocket; physics = _physics; }
             EventProcessor(EventProcessor const&) = delete;
@@ -108,9 +118,7 @@ namespace ofsim_events
 			ofsim_python_integration::PythonError pythonError;
 
 			std::map<u64, RocketCommand> command_history;
-
-            u64 currentTime();
-			
+           			
             static EventProcessor* instance;
             static std::mutex mutex;
     };

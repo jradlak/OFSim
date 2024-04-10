@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 
+#include "../src/infrastructure/EventProcessor.h"
 #include "../src/vmachine/VMachine.h"
 
 namespace vm_tests
@@ -39,8 +40,9 @@ data:
 
 	TEST(VMachineTests, simpleRun)
 	{
-		// Arrange		
-		VMachine vm;
+		// Arrange	
+		ofsim_events::EventProcessor* eventProcessor = ofsim_events::EventProcessor::getInstance();
+		VMachine vm(*eventProcessor);
 		vm.translateSourceCode(hello_world_vm);
 		
 		// Act

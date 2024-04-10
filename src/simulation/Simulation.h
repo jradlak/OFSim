@@ -20,7 +20,7 @@
 #include "../math_and_physics/PhysicsSolver.h"
 #include "../math_and_physics/MathTypes.h"
 #include "../python_integration/PythonMachine.h"
-
+#include "../vmachine/VMachine.h"
 
 enum class SimulationMode
 {
@@ -95,9 +95,13 @@ private:
 	i32 lastAltitudeDirection{ 1 };
 	i32 altitudeDirection{ 1 };
 
-	// python integration:
+	// Python integration:
 	std::unique_ptr<ofsim_python_integration::PythonMachine> pythonMachine { nullptr };
 	std::unique_ptr<std::thread> pythonThread { nullptr };
+
+	// VM integration:
+	std::unique_ptr<ofsim_vm::VMachine> vmachine { nullptr };
+	std::unique_ptr<std::thread> vmThread { nullptr };
 
 	SimulationMode simulationMode{ SimulationMode::WAITING_FOR_BEGIN };
 
@@ -114,6 +118,7 @@ private:
     void mainLoop();
 
 	void terminatePythonMachine();	
+	void terminateVMachine();
 
     void renderHUD();
 

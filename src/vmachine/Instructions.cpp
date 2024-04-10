@@ -371,7 +371,30 @@ void Instructions::cmd(unsigned char* args)
 	double value = registers.fl(r_src_addr);
 	
 	RocketCommand cmd((RocketCommandCode)cmd_code, value);
-	//com_bus::publish_command(commandBus, cmd);	
+	eventProcessor.processVMCommand(cmd);
+}
+
+void ofsim_vm::Instructions::ftc(unsigned char* args)
+{	
+	dvec3 rotation = eventProcessor.getRocketRotation();
+	double rotation_x = rotation.x;
+	double rotation_y = rotation.y;
+	double rotation_z = rotation.z;
+
+	dvec3 position = eventProcessor.getRocketPosition();
+	double position_x = position.x;
+	double position_y = position.y;
+	double position_z = position.z;
+	
+	dvec3 velocity = eventProcessor.getRocketVelocity();
+	double velocity_x = velocity.x;
+	double velocity_y = velocity.y;
+	double velocity_z = velocity.z;
+
+	double mass = eventProcessor.getRocketMass();
+	double thrust_magnitude = eventProcessor.getThrustMagnitude();
+	double altitude = eventProcessor.getAltitude();
+	double timestamp = eventProcessor.currentTime();
 }
 
 void Instructions::call(unsigned int opcode, unsigned char* args)

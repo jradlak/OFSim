@@ -5,6 +5,29 @@ using namespace ofsim_events;
 EventProcessor* EventProcessor::instance = nullptr;
 std::mutex EventProcessor::mutex;
 
+void ofsim_events::EventProcessor::processVMCommand(RocketCommand command)
+{
+    switch (command.code())
+    {
+        case RocketCommandCode::THRUST_MAGNITUDE_CHANGE:
+			physics->updateThrustMagnitude(command.value());
+			break;
+		case RocketCommandCode::THRUST_ROTATION_CHANGE_X:
+			physics->rotateRocket(dvec3(command.value(), 0, 0));
+			break;
+		case RocketCommandCode::THRUST_ROTATION_CHANGE_Y:
+			physics->rotateRocket(dvec3(0, command.value(), 0));
+			break;
+		case RocketCommandCode::THRUST_ROTATION_CHANGE_Z:
+			physics->rotateRocket(dvec3(0, 0, command.value()));
+			break;
+		default:
+			break;  
+    }
+
+    command_history.insert(std::pair<u64, RocketCommand>(currentTime(), command));
+}
+
 EventProcessor *EventProcessor::getInstance()
 {
     std::lock_guard<std::mutex> lock(mutex);

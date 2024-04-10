@@ -217,7 +217,7 @@ void Gui::renderFileOpenDialog()
     {         
         std::string selectedFile = filesInDirectory[item_current];
         viewFileOpen = false; 
-        eventProcessor->createEvent(UserAction::PROGRAM_FILE_OPENED, selectedFile);
+        eventProcessor->createEvent(UserAction::PYTHON_PROGRAM_FILE_OPENED, selectedFile);
     }
 
     ImGui::SetItemDefaultFocus();
@@ -263,7 +263,7 @@ void Gui::renderSimulationControlWindow(unsigned long long time)
             plaing = true;
             timeFactor = 1;
 
-            eventProcessor->createEvent(UserAction::PROGRAM_TRANSLATE, "");
+            eventProcessor->createEvent(UserAction::PYTHON_PROGRAM_TRANSLATED, "");
         }
     }
     
@@ -274,7 +274,7 @@ void Gui::renderSimulationControlWindow(unsigned long long time)
         pp_texture = play_texture;
         plaing = false;
         timeFactor = -1;
-        eventProcessor->createEvent(UserAction::PROGRAM_STOP_EXECUTION, "");
+        eventProcessor->createEvent(UserAction::PYTHON_PROGRAM_EXECUTION_STOPPED, "");
     }
 
     ImGui::SameLine();

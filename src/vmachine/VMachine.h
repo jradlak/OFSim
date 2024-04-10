@@ -12,13 +12,14 @@
 #include "Opcodes.h"
 
 #include "../math_and_physics/MathTypes.h"
+#include "../infrastructure/EventProcessor.h"
 
 namespace ofsim_vm
 {
 	class VMachine
 	{
 	public:
-		VMachine();
+		VMachine(ofsim_events::EventProcessor& _eventProcessor);
 
 		// Translates source code from the file path, and returs loaded source txt file
 		std::string translateSourceCodeFromFile(const char* _sourcePath);
@@ -41,12 +42,12 @@ namespace ofsim_vm
 
 		Memory *getMemory() { return memory.get(); }
 
-		bool isStarted() { return started; }
-
-		~VMachine() {}
+		bool isStarted() { return started; }		
 
 	private:
 		void executionLoop();
+
+		ofsim_events::EventProcessor& eventProcessor;
 
 		std::unique_ptr<Memory> memory;
 		std::unique_ptr<Registers> registers;

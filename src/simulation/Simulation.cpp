@@ -73,6 +73,20 @@ void Simulation::terminatePythonMachine()
 	}
 }
 
+void Simulation::terminateVMachine()
+{
+	if (vmThread != nullptr)
+	{
+		vmachine->stop();
+		vmThread->join();
+		vmThread.reset();
+		vmachine.reset();
+		vmThread.reset();
+		vmachine = nullptr;
+		vmThread = nullptr;
+	 }
+}
+
 void Simulation::stop()
 {
 	terminatePythonMachine();
@@ -238,6 +252,7 @@ void Simulation::mainLoop()
 	simulationMode = SimulationMode::FINISHED;
 
 	terminatePythonMachine();	
+	terminateVMachine();
 }
 
 void Simulation::renderHUD()
@@ -272,7 +287,7 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 	// recieve and interpret user events:
 	SimulationEvent event = EventProcessor::getInstance()->getEvent();
 
-	if (event.action == UserAction::PROGRAM_STOP_EXECUTION)
+	if (event.action == UserAction::PYTHON_PROGRAM_EXECUTION_STOPPED)
 	{
 		if (simulationMode == SimulationMode::STANDARD_SIMULATION)
 		{				
@@ -280,7 +295,7 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 		}
 	}
 
-	if (event.action == UserAction::PROGRAM_FILE_OPENED)
+	if (event.action == UserAction::PYTHON_PROGRAM_FILE_OPENED)
 	{
 		std::cout << "Event received: " << (int)event.action << "\n";
 		std::cout << "Data reciewed " << event.data << "\n";					
@@ -289,7 +304,7 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 		orbitalProgramSourceCode = ofsim_infrastructure::loadSourceCode(event.data);
 	}
 
-	if (event.action == UserAction::PROGRAM_TRANSLATE)
+	if (event.action == UserAction::PYTHON_PROGRAM_TRANSLATED)
 	{
 		if (this->orbitalProgramSourceCode.empty())
 		{
@@ -300,10 +315,14 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 		pythonMachine = std::make_unique<ofsim_python_integration::PythonMachine>();
 		pythonThread = std::make_unique<std::thread>(&ofsim_python_integration::PythonMachine::runPythonOrbitalProgram, 
 			pythonMachine.get(), this->orbitalProgramSourceCode);
+		
+		simulationMode = SimulationMode::WAITING_FOR_BEGIN;
+		// vm integration:
+
 		simulationMode = SimulationMode::STANDARD_SIMULATION;
 	}
 
-	if (event.action == UserAction::PROGRAM_RAISE_ERROR)
+	if (event.action == UserAction::PYTHON_PROGRAM_RAISED_ERROR)
 	{
 		gui->setTimeFactor(-1);
 		stop();

@@ -88,7 +88,7 @@ void ofsim_python_integration::PythonMachine::runPythonOrbitalProgram(std::strin
 
         Py_DECREF(type);
         Py_DECREF(value);
-        ofsim_events::EventProcessor::getInstance()->createEvent(ofsim_events::UserAction::PROGRAM_RAISE_ERROR, "Python script error!");
+        ofsim_events::EventProcessor::getInstance()->createEvent(ofsim_events::UserAction::PYTHON_PROGRAM_RAISED_ERROR, "Python script error!");
         //Py_DECREF(traceback);
     }    
 }
