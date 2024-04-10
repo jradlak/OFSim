@@ -1,8 +1,8 @@
 #pragma once
 
-enum class RocketCommandCode
+enum class RocketCommandCode : unsigned int
 {
-	THRUST_MAGNITUDE_CHANGE,
+	THRUST_MAGNITUDE_CHANGE = 0,
 	THRUST_ROTATION_CHANGE_X,
 	THRUST_ROTATION_CHANGE_Y,
 	THRUST_ROTATION_CHANGE_Z,

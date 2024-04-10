@@ -139,10 +139,22 @@ add_executable("${CMAKE_PROJECT_NAME}"
     src/world/Planet.cpp
     src/world/SolarSystem.cpp
     src/world/Sun.cpp
-        
+  
+    src/vmachine/Instructions.cpp
+    src/vmachine/Instructions.h
+    src/vmachine/Memory.cpp
+    src/vmachine/Memory.h
+    src/vmachine/Opcodes.h
+    src/vmachine/Registers.cpp
+    src/vmachine/Registers.h
+    src/vmachine/Translator.cpp
+    src/vmachine/Translator.h
+    src/vmachine/VMachine.cpp
+    src/vmachine/VMachine.h
+    
     external_libraries/stb_image.h
     external_libraries/stb_image.cpp   
- )
+  )
 
 #copy shaders to binary directory:
 if(MSVC)
@@ -253,13 +265,26 @@ add_executable(
     src/infrastructure/EventProcessor.h
     src/infrastructure/EventProcessor.cpp
 
+    src/vmachine/Instructions.cpp
+    src/vmachine/Instructions.h
+    src/vmachine/Memory.cpp
+    src/vmachine/Memory.h
+    src/vmachine/Opcodes.h
+    src/vmachine/Registers.cpp
+    src/vmachine/Registers.h
+    src/vmachine/Translator.cpp
+    src/vmachine/Translator.h
+    src/vmachine/VMachine.cpp
+    src/vmachine/VMachine.h
   
     external_libraries/stb_image.h
     external_libraries/stb_image.cpp  
 
     "tests/SphereTests.cpp"    
     "tests/PhysicsSolverTests.cpp"
-)
+    "tests/MemoryTests.cpp"
+    "tests/TranslatorTests.cpp"
+    "tests/VMTests.cpp")
 target_link_libraries(
     ofsim_tests
     ${OPENGL_LIBRARIES}
