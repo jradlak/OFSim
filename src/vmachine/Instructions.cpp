@@ -395,6 +395,23 @@ void ofsim_vm::Instructions::ftc(unsigned char* args)
 	double thrust_magnitude = eventProcessor.getThrustMagnitude();
 	double altitude = eventProcessor.getAltitude();
 	double timestamp = eventProcessor.currentTime();
+
+	memory.storeDWord(65528, rotation_x);
+	memory.storeDWord(65520, rotation_y);
+	memory.storeDWord(65512, rotation_z);
+
+	memory.storeDWord(65504, velocity_x);
+	memory.storeDWord(65496, velocity_y);
+	memory.storeDWord(65488, velocity_z);
+
+	memory.storeDWord(65480, position_x);
+	memory.storeDWord(65472, position_y);
+	memory.storeDWord(65464, position_z);
+
+	memory.storeDWord(65456, mass);
+	memory.storeDWord(65448, thrust_magnitude);
+	memory.storeDWord(65440, altitude);
+	memory.storeDWord(65432, timestamp);
 }
 
 void Instructions::call(unsigned int opcode, unsigned char* args)
@@ -437,6 +454,7 @@ void Instructions::call(unsigned int opcode, unsigned char* args)
 		case 0x22: jmp(args); break;
 		case 0x23: jmpr(args); break;
 		case 0x24: halt(args); break;
-		case 0x25: cmd(args); break;	
+		case 0x25: cmd(args); break;
+		case 0x26: ftc(args); break;
 	}
 }

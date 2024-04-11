@@ -106,6 +106,7 @@ private:
 	SimulationMode simulationMode{ SimulationMode::WAITING_FOR_BEGIN };
 
 	std::string orbitalProgramSourceCode { "" };
+	std::string orbitalProgramName { "" };
 
 	dvec3 rocketInitialPosition() { return solarSystem
 		->pointAboveEarthSurface(angle, dangle, SolarSystemConstants::earthSize - 0.2); }

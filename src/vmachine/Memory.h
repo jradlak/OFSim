@@ -27,14 +27,14 @@ namespace ofsim_vm
 		timestamp	65432
 	*/
 
-	constexpr unsigned int mem_size = 64 * 1024;	
+	constexpr unsigned int mem_size = 64 * 1024;	// 64 KB
 
 	class Memory
 	{
 	public:		
-		unsigned char mem[mem_size] = { };
+		unsigned char mem[mem_size] { 0 };
 
-		Memory() { }
+		Memory() { clear(); }
 
 		static void memcopy(unsigned char* src, unsigned char* dst, unsigned int addr_s, unsigned int addr_d, unsigned int length);
 
@@ -51,9 +51,7 @@ namespace ofsim_vm
 		void storeDWord(unsigned int addr, double dword);
 
 		void clear();
-
-		~Memory() { }
-
+	
 	private:
 		std::mutex memMutex;
 		void assertConditions(unsigned int addr) const;

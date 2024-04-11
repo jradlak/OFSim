@@ -295,45 +295,39 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 		}
 	}
 
-	if (event.action == UserAction::PYTHON_PROGRAM_FILE_OPEN)
+	if (event.action == UserAction::PROGRAM_FILE_OPEN)
 	{		
-		// load Python program source code from file:
+		// load program source code from file (Python or VM):
+		orbitalProgramName = event.data;
 		orbitalProgramSourceCode = ofsim_infrastructure::loadSourceCode(event.data);
 	}
 
-	if (event.action == UserAction::VM_PROGRAM_FILE_OPEN)
-	{
-		// load VM program source code from file:
-		orbitalProgramSourceCode = ofsim_infrastructure::loadSourceCode(event.data);
-	}
-
-	if (event.action == UserAction::PYTHON_PROGRAM_TRANSLATE)
+	if (event.action == UserAction::PROGRAM_TRANSLATE)
 	{
 		if (this->orbitalProgramSourceCode.empty())
 		{
 			std::cout << "No source code to execute!\n";
+			return;
+		}
+		
+		if (this->orbitalProgramName.find(".py") != std::string::npos)
+		{
+			pythonMachine = std::make_unique<ofsim_python_integration::PythonMachine>();
+			pythonThread = std::make_unique<std::thread>(&ofsim_python_integration::PythonMachine::runPythonOrbitalProgram,
+				pythonMachine.get(), this->orbitalProgramSourceCode);
+		}
+		else if (this->orbitalProgramName.find(".oasm") != std::string::npos)
+		{
+			vmachine = std::make_unique<ofsim_vm::VMachine>(*EventProcessor::getInstance());
+			vmachine->translateSourceCode(this->orbitalProgramSourceCode);
+			vmThread = std::make_unique<std::thread>(&ofsim_vm::VMachine::start, vmachine.get());
+		} 
+		else 
+		{
+			std::cout << "Unknown file extension!\n";
 			return;
 		}
 				
-		pythonMachine = std::make_unique<ofsim_python_integration::PythonMachine>();
-		pythonThread = std::make_unique<std::thread>(&ofsim_python_integration::PythonMachine::runPythonOrbitalProgram, 
-			pythonMachine.get(), this->orbitalProgramSourceCode);
-		
-		simulationMode = SimulationMode::STANDARD_SIMULATION;
-	}
-
-	if (event.action == UserAction::VM_PROGRAM_TRANSLATE)
-	{
-		if (this->orbitalProgramSourceCode.empty())
-		{
-			std::cout << "No source code to execute!\n";
-			return;
-		}
-
-		vmachine = std::make_unique<ofsim_vm::VMachine>(*EventProcessor::getInstance());
-		vmachine->translateSourceCode(this->orbitalProgramSourceCode);
-		vmThread = std::make_unique<std::thread>(&ofsim_vm::VMachine::start, vmachine.get());
-
 		simulationMode = SimulationMode::STANDARD_SIMULATION;
 	}
 

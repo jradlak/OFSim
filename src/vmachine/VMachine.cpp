@@ -43,9 +43,7 @@ void VMachine::executionLoop()
 		unsigned char* args = new unsigned char[args_size];
 		Memory::memcopy(memory->mem, args, pc + 1, 0, args_size);
 		instructions->call(opcode, args);
-		delete[] args;
-
-		std::cout << "OLD_PC: " << oldpc << " args_size: " << args_size << " PC: " << pc << std::endl;
+		delete[] args;		
 		pc = registers->pc();
 		if (oldpc == pc)
 		{
