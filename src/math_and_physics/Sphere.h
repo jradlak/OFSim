@@ -9,7 +9,7 @@
 
 namespace ofsim_math_and_physics
 {
-    constexpr f32 M_PI { 3.141592653589793238462643383279502884197169399375105820974944592307816406286f };
+    //constexpr f32 M_PI { 3.141592653589793238462643383279502884197169399375105820974944592307816406286f };
 
     //TODO: extract PuffCloud classB
     class Sphere
@@ -29,9 +29,7 @@ namespace ofsim_math_and_physics
         void updateSize(f32 newSize) { size = newSize; }
         dvec3 getPosition() { return position; }
         void updatePosition(glm::dvec3 newPosition) { position = newPosition; }
-
-        ~Sphere() {}
-
+    
     private:
         std::vector<f32> verticesAndNormals;
         std::vector<f32> texCoords;

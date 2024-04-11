@@ -90,6 +90,7 @@ void Translator::translateLine(std::string sourceLine, int lineNumber)
             case 0x23: trnsl_register(instr, sourceLine); break;
             case 0x24: trnsl_halt(instr, sourceLine); break;
             case 0x25: trnsl_register_to_register(instr, sourceLine); break;
+            case 0x26: trnsl_ftc(instr, sourceLine); break;
         }
     }
     else
@@ -277,6 +278,13 @@ void Translator::trnsl_halt(std::tuple<unsigned int, unsigned int> instr, std::s
     unsigned int opcode = std::get<0>(instr);
     unsigned int addr = instr_addr - 1;
     code[addr++] = opcode;
+}
+
+void ofsim_vm::Translator::trnsl_ftc(std::tuple<unsigned int, unsigned int> instr, std::string line)
+{
+    unsigned int opcode = std::get<0>(instr);   
+    unsigned int addr = instr_addr - 1; 
+    code[addr] = opcode;
 }
 
 std::tuple<unsigned int, unsigned int> Translator::recognizeInstr(std::string sourceLine)
