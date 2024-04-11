@@ -3,6 +3,9 @@
 
 #include <iostream>
 
+#include <string>
+#include <string_view>
+
 using namespace ofsim_gui;
 using namespace ofsim_events;
 
@@ -217,7 +220,14 @@ void Gui::renderFileOpenDialog()
     {         
         std::string selectedFile = filesInDirectory[item_current];
         viewFileOpen = false; 
-        eventProcessor->createEvent(UserAction::PYTHON_PROGRAM_FILE_OPENED, selectedFile);
+        if (selectedFile.find(".oasm") != std::string::npos)
+        {
+            eventProcessor->createEvent(UserAction::VM_PROGRAM_FILE_OPEN, selectedFile);    
+        } 
+        else if (selectedFile.find(".py") != std::string::npos)
+        {
+            eventProcessor->createEvent(UserAction::PYTHON_PROGRAM_FILE_OPEN, selectedFile);    
+        }        
     }
 
     ImGui::SetItemDefaultFocus();
@@ -263,7 +273,7 @@ void Gui::renderSimulationControlWindow(unsigned long long time)
             plaing = true;
             timeFactor = 1;
 
-            eventProcessor->createEvent(UserAction::PYTHON_PROGRAM_TRANSLATED, "");
+            eventProcessor->createEvent(UserAction::PYTHON_PROGRAM_TRANSLATE, "");
         }
     }
     
@@ -274,7 +284,7 @@ void Gui::renderSimulationControlWindow(unsigned long long time)
         pp_texture = play_texture;
         plaing = false;
         timeFactor = -1;
-        eventProcessor->createEvent(UserAction::PYTHON_PROGRAM_EXECUTION_STOPPED, "");
+        eventProcessor->createEvent(UserAction::PYTHON_PROGRAM_EXECUTION_STOP, "");
     }
 
     ImGui::SameLine();

@@ -287,7 +287,7 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 	// recieve and interpret user events:
 	SimulationEvent event = EventProcessor::getInstance()->getEvent();
 
-	if (event.action == UserAction::PYTHON_PROGRAM_EXECUTION_STOPPED)
+	if (event.action == UserAction::PYTHON_PROGRAM_EXECUTION_STOP)
 	{
 		if (simulationMode == SimulationMode::STANDARD_SIMULATION)
 		{				
@@ -295,16 +295,19 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 		}
 	}
 
-	if (event.action == UserAction::PYTHON_PROGRAM_FILE_OPENED)
-	{
-		std::cout << "Event received: " << (int)event.action << "\n";
-		std::cout << "Data reciewed " << event.data << "\n";					
-
+	if (event.action == UserAction::PYTHON_PROGRAM_FILE_OPEN)
+	{		
 		// load Python program source code from file:
 		orbitalProgramSourceCode = ofsim_infrastructure::loadSourceCode(event.data);
 	}
 
-	if (event.action == UserAction::PYTHON_PROGRAM_TRANSLATED)
+	if (event.action == UserAction::VM_PROGRAM_FILE_OPEN)
+	{
+		// load VM program source code from file:
+		orbitalProgramSourceCode = ofsim_infrastructure::loadSourceCode(event.data);
+	}
+
+	if (event.action == UserAction::PYTHON_PROGRAM_TRANSLATE)
 	{
 		if (this->orbitalProgramSourceCode.empty())
 		{
@@ -316,6 +319,21 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 		pythonThread = std::make_unique<std::thread>(&ofsim_python_integration::PythonMachine::runPythonOrbitalProgram, 
 			pythonMachine.get(), this->orbitalProgramSourceCode);
 		
+		simulationMode = SimulationMode::STANDARD_SIMULATION;
+	}
+
+	if (event.action == UserAction::VM_PROGRAM_TRANSLATE)
+	{
+		if (this->orbitalProgramSourceCode.empty())
+		{
+			std::cout << "No source code to execute!\n";
+			return;
+		}
+
+		vmachine = std::make_unique<ofsim_vm::VMachine>(*EventProcessor::getInstance());
+		vmachine->translateSourceCode(this->orbitalProgramSourceCode);
+		vmThread = std::make_unique<std::thread>(&ofsim_vm::VMachine::start, vmachine.get());
+
 		simulationMode = SimulationMode::STANDARD_SIMULATION;
 	}
 
@@ -464,7 +482,8 @@ void Simulation::calcApogeumAndPerygeum()
 	}
 }
 
-void Simulation::renderTelemetry(ofsim_gui::Gui* gui, Rocket* rocket, double altitude, double apogeum, double perygeum, double atmosphereDragForceMagnitude)
+void Simulation::renderTelemetry(ofsim_gui::Gui* gui, Rocket* rocket, 
+	double altitude, double apogeum, double perygeum, double atmosphereDragForceMagnitude)
 {
 	TelemetryData data;
 	
