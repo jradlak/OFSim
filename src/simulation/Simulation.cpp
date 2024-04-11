@@ -162,8 +162,8 @@ void Simulation::mainLoop()
 		}
 		else if (factor > 0) // simulation running
 		{
-			unsigned long long current = currentTime() - timePaused;
-			unsigned long long elapsed = (current - previous) * factor;
+			u64 current = currentTime() - timePaused;
+			u64 elapsed = (current - previous) * factor;
 			previous = current;
 			lag += elapsed;
 			runningTime += elapsed;						
@@ -316,9 +316,6 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 		pythonThread = std::make_unique<std::thread>(&ofsim_python_integration::PythonMachine::runPythonOrbitalProgram, 
 			pythonMachine.get(), this->orbitalProgramSourceCode);
 		
-		simulationMode = SimulationMode::WAITING_FOR_BEGIN;
-		// vm integration:
-
 		simulationMode = SimulationMode::STANDARD_SIMULATION;
 	}
 
