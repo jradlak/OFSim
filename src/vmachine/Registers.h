@@ -9,7 +9,7 @@ namespace ofsim_vm
 	class Registers
 	{
 	public:
-		Registers() { }
+		Registers() { clear(); }
 
 		unsigned int& operator[](unsigned char index);
 
@@ -29,12 +29,10 @@ namespace ofsim_vm
 		void pc(unsigned int value) { pcreg = value; }
 
 		void clear();
-
-		~Registers() { }
-
+	
 	private:		
-		unsigned int r[number_of_registers] {};  // general purpose registers
-		double flr[number_of_registers] {};      // floating point double precision registers	
+		unsigned int r[number_of_registers] { 0 };  // general purpose registers
+		double flr[number_of_registers] { 0 };      // floating point double precision registers	
 		short creg = 0;			  // control register
 
 		short zfreg = 0;		  // zero flag
