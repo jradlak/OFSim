@@ -91,7 +91,9 @@ namespace ofsim_events
 			
 			// VM integration:
 			void processVMCommand(RocketCommand command);
-			
+			void provideRunnigTume(u64 _runntingTime) { runningTime = _runntingTime; }
+			u64 getRunningTime() { return runningTime; }
+
 			u64 currentTime();
 
 			static EventProcessor* getInstance();
@@ -121,5 +123,7 @@ namespace ofsim_events
            			
             static EventProcessor* instance;
             static std::mutex mutex;
+
+			u64 runningTime { 0 };
     };
 }

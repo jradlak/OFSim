@@ -1,5 +1,8 @@
 #include "EventProcessor.h"
 
+#include <thread>
+#include <chrono>
+
 using namespace ofsim_events;
 
 EventProcessor* EventProcessor::instance = nullptr;
@@ -7,8 +10,11 @@ std::mutex EventProcessor::mutex;
 
 void ofsim_events::EventProcessor::processVMCommand(RocketCommand command)
 {
+    std::cout << "Processing command: " << (int)command.code() << std::endl;
+    std::cout << "Command value: " << command.value() << std::endl;
+
     switch (command.code())
-    {
+    {        
         case RocketCommandCode::THRUST_MAGNITUDE_CHANGE:
 			physics->updateThrustMagnitude(command.value());
 			break;
@@ -21,9 +27,21 @@ void ofsim_events::EventProcessor::processVMCommand(RocketCommand command)
 		case RocketCommandCode::THRUST_ROTATION_CHANGE_Z:
 			physics->rotateRocket(dvec3(0, 0, command.value()));
 			break;
+        case RocketCommandCode::GYRO_ROTATION_CHANGE_X:
+            physics->rotateRocket(dvec3(command.value(), 0, 0));
+            break;
+        case RocketCommandCode::GYRO_ROTATION_CHANGE_Y:
+            physics->rotateRocket(dvec3(0, command.value(), 0));
+            break;
+        case RocketCommandCode::GYRO_ROTATION_CHANGE_Z:
+            physics->rotateRocket(dvec3(0, 0, command.value()));
+            break;
 		default:
 			break;  
     }
+
+    // simulate command processing time (innertia effect):
+    std::this_thread::sleep_for(std::chrono::milliseconds(50));
 
     command_history.insert(std::pair<u64, RocketCommand>(currentTime(), command));
 }

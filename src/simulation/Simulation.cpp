@@ -152,7 +152,8 @@ void Simulation::mainLoop()
 	dvec3 toTheMoon = SolarSystemConstants::moonPos;
 	bool frwd = true;
 	while (!mainWindow->shouldClose())
-	{			
+	{	
+		EventProcessor::getInstance()->provideRunnigTume(runningTime);		
 		int factor = gui->getTimeFactor();
 				
 		// calculate lag:       
