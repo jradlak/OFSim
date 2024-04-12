@@ -3,6 +3,8 @@ Orbital Flight Simulator
 
 **Change list**
 
+0.24.1 - Fully working VM integration
+
 0.24.0 - Restore a previously removed virtual machine.
 
 0.23.2 - Serious code reactorings: remove quaternions, and simplification of the inital rocket orientation code.

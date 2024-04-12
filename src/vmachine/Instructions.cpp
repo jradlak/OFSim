@@ -394,7 +394,7 @@ void ofsim_vm::Instructions::ftc(unsigned char* args)
 	double mass = eventProcessor.getRocketMass();
 	double thrust_magnitude = eventProcessor.getThrustMagnitude();
 	double altitude = eventProcessor.getAltitude();
-	double timestamp = eventProcessor.currentTime();
+	double runningTime = eventProcessor.getRunningTime();
 
 	memory.storeDWord(65528, rotation_x);
 	memory.storeDWord(65520, rotation_y);
@@ -411,7 +411,7 @@ void ofsim_vm::Instructions::ftc(unsigned char* args)
 	memory.storeDWord(65456, mass);
 	memory.storeDWord(65448, thrust_magnitude);
 	memory.storeDWord(65440, altitude);
-	memory.storeDWord(65432, timestamp);
+	memory.storeDWord(65432, runningTime);
 }
 
 void Instructions::call(unsigned int opcode, unsigned char* args)

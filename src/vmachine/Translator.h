@@ -56,5 +56,6 @@ namespace ofsim_vm
 		void trnsl_constant(std::tuple<unsigned int, unsigned int> instr, std::string line);
 		void trnsl_register(std::tuple<unsigned int, unsigned int> instr, std::string line);
 		void trnsl_halt(std::tuple<unsigned int, unsigned int> instr, std::string line);
+		void trnsl_ftc(std::tuple<unsigned int, unsigned int> instr, std::string line);
 	};
 }
