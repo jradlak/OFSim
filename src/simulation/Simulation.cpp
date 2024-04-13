@@ -80,8 +80,7 @@ void Simulation::terminateVMachine()
 		vmachine->stop();
 		vmThread->join();
 		vmThread.reset();
-		vmachine.reset();
-		vmThread.reset();
+		vmachine.reset();		
 		vmachine = nullptr;
 		vmThread = nullptr;
 	 }
@@ -369,7 +368,7 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 				telemetryCollector->getTelemetryHistory());
 
 			if (event.action == UserAction::CHANGE_MODE_TO_FROM_PREDICTION) // m
-			{
+            {
 				if (simulationMode != SimulationMode::TRAJECTORY_PREDICTION)
 				{
 					camera->updatePosition(solarSystem->pointAboveEarthSurface(35, 35, 7521.0), rocket->getRotation());

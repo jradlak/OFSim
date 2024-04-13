@@ -28,7 +28,7 @@ void PhysicsSolver::establishInitialOrientation(dvec3 _pointTowards, dvec3 rocke
     // I don't quite understand why I have to do this rotation correction thing.
     // It seems to be a hack to make the rocket face the planet correctly, but to my klowledge,
     // normalSphereVector should be pointing towards the planet, so the rocket should face the planet    
-    dvec3 roationCorrection = dvec3(-40.0, -18.0, 0); // TODO: why is this necessary?
+    dvec3 roationCorrection = dvec3(-40.0, -12.0, 0); // TODO: why is this necessary?
     rocketProperties.rotation = roationCorrection - (normalSphereVector * (180.0 / M_PI));    
 }
 
