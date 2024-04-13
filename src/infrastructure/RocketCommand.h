@@ -8,8 +8,7 @@ enum class RocketCommandCode : unsigned int
 	THRUST_ROTATION_CHANGE_Z,
 	GYRO_ROTATION_CHANGE_X,
 	GYRO_ROTATION_CHANGE_Y,
-	GYRO_ROTATION_CHANGE_Z,
-	GET_ROCKET_DATA
+    GYRO_ROTATION_CHANGE_Z
 };
 
 class RocketCommand

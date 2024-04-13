@@ -109,13 +109,13 @@ void Gui::renderSplashScreen()
 
     ImGui::NewLine();
 
-    ImGui::TextWrapped(i18n->t(splash_info));
+    ImGui::TextWrapped("%s", i18n->t(splash_info));
 
     ImGui::NewLine();
    
     ImGui::Separator();
 
-    ImGui::Text(i18n->t(splash_version));
+    ImGui::Text("%s", i18n->t(splash_version));
     ImGui::Text("Jakub Radlak 2021 - 2024");
 
     ImGui::Separator();
@@ -156,7 +156,7 @@ void Gui::renderFileSaveAsDialog()
 
     ImGui::Begin(i18n->t(dialog_save_title));
 
-    ImGui::Text(i18n->t(dialog_save_file_name));
+    ImGui::Text("%s", i18n->t(dialog_save_file_name));
     ImGui::InputText(" ", &savedFile);
 
     if (ImGui::Button("OK", ImVec2(120, 0)))
@@ -184,7 +184,7 @@ void Gui::renderFileOpenDialog()
 
     ImGui::Begin(i18n->t(dialog_title));
     
-    ImGui::Text(i18n->t(dialog_directory));
+    ImGui::Text("%s", i18n->t(dialog_directory));
     ImGui::InputText(" ", &directory);
     ImGui::SameLine();
     if (ImGui::Button(i18n->t(dialog_load), ImVec2(60, 0)))
@@ -204,7 +204,7 @@ void Gui::renderFileOpenDialog()
 
     ImGui::Separator();
 
-    ImGui::Text(i18n->t(dialog_file_list));
+    ImGui::Text("%s", i18n->t(dialog_file_list));
     const char* items[10];
     for (int i = 0; i < filesInDirectory.size(); i++)
     {
@@ -245,11 +245,11 @@ void Gui::renderSimulationControlWindow(unsigned long long time)
     unsigned long long millis = time % 1000;
 
     std::string strClock = i18n->t(sim_panel_clock) + std::to_string(seconds) + "." + std::to_string(millis) + "s";
-    ImGui::Text(strClock.c_str());
+    ImGui::Text("%s", strClock.c_str());
 
     ImGui::SameLine();
     std::string strTimeFactor = i18n->t(sim_panel_time_compression) + std::to_string(timeFactor) + "x";
-    ImGui::Text(strTimeFactor.c_str());
+    ImGui::Text("%s", strTimeFactor.c_str());
 
     if (ImGui::ImageButton((void*)(intptr_t)pp_texture, ImVec2(32, 32))) {
         if (plaing)
@@ -343,22 +343,22 @@ void Gui::renderTelemetry(TelemetryData& telemetryData)
     ImGui::Begin(i18n->t(telemetry_title));
     
     std::string ssAltitude = i18n->t(telemetry_altitude) + std::to_string(telemetryData.altitude) + " km";
-    ImGui::Text(ssAltitude.c_str());
+    ImGui::Text("%s", ssAltitude.c_str());
 
     std::string ssMass = i18n->t(telemetry_mass) + std::to_string(telemetryData.mass) + "t";
-    ImGui::Text(ssMass.c_str());
+    ImGui::Text("%s", ssMass.c_str());
 
     std::string ssPressure = i18n->t(telemetry_atm_press) + std::to_string(telemetryData.atmPressure * 10);
-    ImGui::Text(ssPressure.c_str());
+    ImGui::Text("%s", ssPressure.c_str());
 
     std::string ssVelocity = i18n->t(telemetry_velocity) + std::to_string(telemetryData.velocity) + "km/s";
-    ImGui::Text(ssVelocity.c_str());
+    ImGui::Text("%s", ssVelocity.c_str());
 
     std::string ssPosition = i18n->t(telemetry_position) +
         std::to_string(telemetryData.position.x) + ", " +
         std::to_string(telemetryData.position.y) + ", " +
         std::to_string(telemetryData.position.z) + ")";
-    ImGui::Text(ssPosition.c_str());
+    ImGui::Text("%s", ssPosition.c_str());
 
     std::string ssApogeum = i18n->t(telemetry_apogee);
     if (telemetryData.apogeum != 0)
@@ -372,8 +372,8 @@ void Gui::renderTelemetry(TelemetryData& telemetryData)
         ssPerygeum = i18n->t(telemetry_perigee) + std::to_string(telemetryData.perygeum) + " km";
     }
 
-    ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), ssApogeum.c_str());
-    ImGui::TextColored(ImVec4(1.0f, 0.0f, 1.0f, 1.0f), ssPerygeum.c_str());
+    ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "%s", ssApogeum.c_str());
+    ImGui::TextColored(ImVec4(1.0f, 0.0f, 1.0f, 1.0f), "%s", ssPerygeum.c_str());
     
     ImGui::End();
 }
@@ -437,7 +437,7 @@ void Gui::renderPresentationModeInfo(double distance)
     ImGui::NewLine();
 
     std::string ssDistance = i18n->t(presentation_distance) + std::to_string(distance) + " km";
-    ImGui::Text(ssDistance.c_str());
+    ImGui::Text("%s", ssDistance.c_str());
 
     ImGui::End();
 }
@@ -453,7 +453,7 @@ void Gui::renderTranslationErrors(ofsim_python_integration::PythonError &error)
     ImGui::SetNextWindowPos(ImVec2(500, 200), ImGuiCond_Once);
 
     ImGui::Begin(i18n->t(translation_errors_title));
-    ImGui::TextWrapped(error.message.c_str());
+    ImGui::TextWrapped("%s", error.message.c_str());
     
     ImGui::NewLine();
 
@@ -524,7 +524,7 @@ void Gui::renderCommandHistory(std::map<u64, RocketCommand>& commandHistory)
             + cmdTxt + " "
             + std::to_string(value);
 
-        ImGui::Text(message.c_str());
+        ImGui::Text("%s", message.c_str());
     }
 
     ImGui::End();
@@ -546,8 +546,8 @@ void Gui::renderDiagnostics(glm::dvec3 position, glm::dvec3 rotation)
         + std::to_string(rotation.y) + ", "
         + std::to_string(rotation.z);
 
-    ImGui::Text(positionTxt.c_str());
-    ImGui::Text(rotationTxt.c_str());
+    ImGui::Text("%s", positionTxt.c_str());
+    ImGui::Text("%s", rotationTxt.c_str());
 
     ImGui::End();
 }
