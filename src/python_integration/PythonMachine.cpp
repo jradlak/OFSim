@@ -18,7 +18,9 @@ PyObject *ofsim_python_integration::PythonMachine::orbital_rocket_rotation_chang
     PyObject* listObj;
 
     if (! PyArg_ParseTuple( args, "O", &listObj ))
+    {
         return NULL;
+    }
 
     PyObject* valueX = PyList_GetItem(listObj, 0);
     double x = PyFloat_AsDouble(valueX);

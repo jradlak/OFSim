@@ -9,7 +9,6 @@
 
 #include "../world/SolarSystemConstants.h"
 #include "TelemetryCollector.h"
-#include "../infrastructure/FileService.h"
 #include "../renderer/Camera.h"
 #include "../renderer/Window.h"
 #include "../renderer/TrajectoryPrediction.h"

@@ -1,4 +1,5 @@
 #include "Translator.h"
+#include "Memory.h"
 
 static inline std::string& ltrim(std::string& s);
 static inline std::string& rtrim(std::string& s);
