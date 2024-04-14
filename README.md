@@ -1,7 +1,7 @@
 # OFSim
 Orbital Flight Simulator
 
-**Introduction:**
+**=====Introduction:=====**
 
 The idea of the program is to simulate ballistic flights (including orbital) of a rocket in the gravitational field of a planet with parameters similar to Earth.
 The rocket is controlled by a specially designed virtual computer(virtual machine).
@@ -14,7 +14,7 @@ Additionally, in addition to the built-in assembly language, it is possible to w
 The program includes a special mode that displays a graph of the rocket's predicted trajectory. 
 The simulation is performed in real time and on a real scale.
 
-**Compilation guide:**
+**=====Compilation guide:=====**
 
 Prerequirements:
 
@@ -48,20 +48,20 @@ cd build/
 ```
 If you use Visual Studio 2022 on Windows, you can import the project into the IDE - the configuration should be automatic.
 
-**Screenshots:**
+**=====Screenshots:=====**
 
 ![Trajectory prediction mode](https://github.com/jradlak/OFSim/blob/master/doc/Images/trajectoryPrediction.jpg)
 ![Excentric orbit](https://github.com/jradlak/OFSim/blob/master/doc/Images/excentricOrbit.png)
 
 
-**Quick start guide:**
+**=====Quick start guide:=====**
 
 1. To start the simulation, you must load the flight control program. In menu (Program->Open...) Manual control is not supported.
 2. Sample flight programs are available in the folder: src/orb_progs. Python and oasm (virtual machine) source codes are supported. The simulator will automatically recognize the program type and launch the appropriate interpreter.
 3. The program allows you to pause and reset the simulation. Time acceleration is also available. 
 4. Additional instructions on how to use the program can be found in the doc directory.
 
-**Things To Do:**
+**=====Things To Do:=====**
 
 ASAP:
 1. Fix initial rocket orientation code. Rocket should be parallel to the normal vector at a point on the sphere. Additional correction shlouldn't be needed.
@@ -71,7 +71,7 @@ Less urgent:
 1. Saving files in the source code editor. Currently, the editor only displays the loaded program text.
 2. Correcting the position of the sun and moon. Currently, they are located polar to the planet, despite maintaining the correct distances.
 
-**Plans for the future:**
+**=====Plans for the future:=====**
 
 1. Simulation of the entire solar system in real time and at true scale. Currently, the simulator only includes the Earth, Moon and Sun.
 2. Dynamics of the Solar system in real time.
@@ -80,7 +80,7 @@ Less urgent:
 5. Ability to build your own spaceships.
 6. Better graphics. Shadows, tesselation of the terrain. 
 
-**Changelog:**
+**=====Changelog:=====**
 
 0.24.1 - Fully working VM integration.
 
