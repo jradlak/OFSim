@@ -1,7 +1,8 @@
 # OFSim
 Orbital Flight Simulator
 
-** Introduction **
+**Introduction:**
+
 The idea of the program is to simulate ballistic flights (including orbital) of a rocket in the gravitational field of a planet with parameters similar to Earth.
 The rocket is controlled by a specially designed virtual computer(virtual machine).
 Rocket control involves writing programs in the assembly language of the virtual machine.
@@ -10,11 +11,10 @@ the program can issue commands to the rocket, such as changing the direction and
 
 Additionally, in addition to the built-in assembly language, it is possible to write flight programs in Python.
 
-
 The program includes a special mode that displays a graph of the aircraft's predicted trajectory. 
 The simulation is performed in real time and on a real scale.
 
-**screenshots**
+**Screenshots:**
 
 ![Trajectory prediction mode](https://github.com/jradlak/OFSim/blob/master/doc/Images/trajectoryPrediction.jpg)
 
