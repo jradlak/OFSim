@@ -36,7 +36,7 @@ Less urgent:
 3. Better rocket flight control programs, including more types of orbits, gravity assists, etc. 
 4. Better physics simulation. Right now the rocket is physically treated as a ball of variable mass. The forces acting on the rocket do not take into account its shape and mass distribution. 
 5. Ability to build your own spaceships.
-6. Better graphics
+6. Better graphics. Shadows, tesselation of the terrain. 
 
 **Changelog:**
 

@@ -10,7 +10,7 @@ void TelemetryCollector::registerTelemetry(TelemetryData data)
 		altitideHistory.push_back(data.altitude);
 		atmPressureHistory.push_back(data.atmPressure);
 
-		if (velocityHistory.size() > 2048)
+        if (velocityHistory.size() > history_size)
 		{
 			velocityHistory.erase(velocityHistory.begin());
 			altitideHistory.erase(altitideHistory.begin());

@@ -415,7 +415,7 @@ void Simulation::createGui()
 
 void Simulation::collectTelemetry()
 {
-	unsigned long long tickTock = runningTime / 1000;
+    u64 tickTock = runningTime / 1000;
 	if (runningTime > 0)
 	{
 		TelemetryData data;

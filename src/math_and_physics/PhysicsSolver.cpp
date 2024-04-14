@@ -102,7 +102,7 @@ void PhysicsSolver::predictTrajectory(u64 elapsedTime)
 
     elapsedTime /= 1000;
     i32 n = prediction_steps;
-    f64 currentTime = 4000.0 - elapsedTime;
+    f64 currentTime = 8000.0 - elapsedTime;
     f64 deltaTime = (f64)currentTime / n;
 
     for (u32 index = 0; index < n; index++)

@@ -26,7 +26,9 @@ public:
 	~TelemetryCollector() {}
 
 private:
-	std::vector<TelemetryData> telemetryHistory;
+    const unsigned int history_size { 2048 };
+
+    std::vector<TelemetryData> telemetryHistory;
 	std::vector<double> velocityHistory;
 	std::vector<double> altitideHistory;
 	std::vector<double> acceletationHistory;

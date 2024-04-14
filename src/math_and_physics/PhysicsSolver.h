@@ -81,9 +81,9 @@ namespace ofsim_math_and_physics
 		const f32 orr{ 0.25 }, og{ 0.55 }, ob{ 0.75 };	// earth's atmosphere gradient color oryginal values		
 		const f32 min_altitude = 0.2; // from threre we start to calculate physics
 		const f32 max_altitude = 98.0; // upper bounday of the atmosphere
-		const f32 min_mass = 3.0; // mass of the rocket without the fuel
+        const f32 min_mass = 2.0; // mass of the rocket without the fuel
 		const f32 min_thrust = 0.0001; // thrust magnitude when the engine is off
-		const u32 prediction_steps = 512; // number of steps in the trajectory prediction
+        const u32 prediction_steps = 2048; // number of steps in the trajectory prediction
 
 		//earth's atmosphere gradient color:
 		f32 r { 0.25 }, g { 0.55 }, b { 0.75 };		
