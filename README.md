@@ -11,13 +11,55 @@ the program can issue commands to the rocket, such as changing the direction and
 
 Additionally, in addition to the built-in assembly language, it is possible to write flight programs in Python.
 
-The program includes a special mode that displays a graph of the aircraft's predicted trajectory. 
+The program includes a special mode that displays a graph of the rocket's predicted trajectory. 
 The simulation is performed in real time and on a real scale.
+
+**Compilation guide:**
+
+Prerequirements:
+
+Due to the fact that the program uses Python as one of the rocket flight control languages, 
+it is required to install Python development libraries. On Windows, simply select the option to install development libraries in the Python installer. Linux requires instalation python-dev package:
+```
+(Debian/Ubuntu):
+
+sudo apt install python3-dev
+```
+Additionally, Linux requires the installation of OpenGL and the other libraries needed to compile the project's dependent libraries. Under Windows everything should be already present.
+```
+(Debian/Ubuntu):
+
+sudo apt install libgl1-mesa-dev libxrandr-dev libxi-dev libxinerama-dev libxcursor-dev pkg-config libxkbcommon-x11-dev
+```
+
+Set of libraries may differ on your system. Pay attention to CMake messages during compilation process.
+
+Compilation:
+
+Project requires CMake and C++ (g++ or MSVC++) compiler supporting at least C++17.
+```
+(in the project's home directory):
+
+cmake -S . -B build
+cmake --build build
+
+cd build/
+./OFSim
+```
+If you use Visual Studio 2022 on Windows, you can import the project into the IDE - the configuration should be automatic.
 
 **Screenshots:**
 
 ![Trajectory prediction mode](https://github.com/jradlak/OFSim/blob/master/doc/Images/trajectoryPrediction.jpg)
 ![Excentric orbit](https://github.com/jradlak/OFSim/blob/master/doc/Images/excentricOrbit.png)
+
+
+**Quick start guide:**
+
+1. To start the simulation, you must load the flight control program. In menu (Program->Open...) Manual control is not supported.
+2. Sample flight programs are available in the folder: src/orb_progs. Python and oasm (virtual machine) source codes are supported. The simulator will automatically recognize the program type and launch the appropriate interpreter.
+3. The program allows you to pause and reset the simulation. Time acceleration is also available. 
+4. Additional instructions on how to use the program can be found in the doc directory.
 
 **Things To Do:**
 
@@ -36,7 +78,7 @@ Less urgent:
 3. Better rocket flight control programs, including more types of orbits, gravity assists, etc. 
 4. Better physics simulation. Right now the rocket is physically treated as a ball of variable mass. The forces acting on the rocket do not take into account its shape and mass distribution. 
 5. Ability to build your own spaceships.
-6. Better graphics
+6. Better graphics. Shadows, tesselation of the terrain. 
 
 **Changelog:**
 
