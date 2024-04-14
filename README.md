@@ -4,11 +4,12 @@ Orbital Flight Simulator
 **Things To Do**
 
 ASAP:
-1. Fix initial rocket orientation code. It should be parallel to the normal vector at a point on the sphere.
+1. Fix initial rocket orientation code. Rocket should be parallel to the normal vector at a point on the sphere. Additional correction shlouldn't be needed.
 2. The rotation of the rocket does not completely coincide with the rotation of the thrust vector.
 
 Less urgent:
-1. Saving files in the source code editor. 
+1. Saving files in the source code editor. Currently, the editor only displays the loaded program text.
+2. Correcting the position of the sun and moon. Currently, they are located polar to the planet, despite maintaining the correct distances.
 
 **plans for the future**
 
