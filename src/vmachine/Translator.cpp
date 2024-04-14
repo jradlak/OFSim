@@ -115,6 +115,9 @@ void Translator::translateLine(std::string sourceLine, int lineNumber)
         }
         else
         {
+            // TODO: unrecognized token
+            // TODO: error handling
+
             // std::string errMsg = i18n->t(translate_error);
 
             // errMsg = std::regex_replace(errMsg, std::regex("@lineNumber"), std::to_string(lineNumber));

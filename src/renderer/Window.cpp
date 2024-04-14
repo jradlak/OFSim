@@ -2,6 +2,7 @@
 #include <map>
 
 #include "Window.h"
+#include "../infrastructure/EventProcessor.h"
 
 using namespace ofsim_renderer;
 using namespace ofsim_events;
@@ -49,21 +50,6 @@ int Window::initialize()
 	glfwSetWindowUserPointer(mainWindow, this);
 
 	return 0;
-}
-
-bool Window::shouldClose()
-{
-	return glfwWindowShouldClose(mainWindow);
-}
-
-void Window::swapBuffers()
-{
-	glfwSwapBuffers(mainWindow);
-}
-
-GLFWwindow* Window::getWindow()
-{
-	return mainWindow;
 }
 
 void Window::framebuffer_size_callback(GLFWwindow* window, int width, int height)

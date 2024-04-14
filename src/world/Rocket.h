@@ -7,7 +7,6 @@
 #include <vector>
 #include <memory>
 
-#include "../renderer/ObjectRenderer.h"
 #include "../renderer/ModelRenderer.h"
 
 #include "../math_and_physics/MathTypes.h"

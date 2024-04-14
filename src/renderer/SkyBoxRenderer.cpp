@@ -1,10 +1,5 @@
 #include "SkyBoxRenderer.h"
 
-SkyBoxRenderer::SkyBoxRenderer()
-{
-    skyboxShader = new Shader("shaders/skybox_vs.glsl", "shaders/skybox_fs.glsl");    
-}
-
 void SkyBoxRenderer::init()
 {
     float skyboxVertices[] = {
@@ -95,9 +90,7 @@ void SkyBoxRenderer::render(glm::dmat4& projection,
 SkyBoxRenderer::~SkyBoxRenderer()
 {
     glDeleteVertexArrays(1, &skyboxVAO);
-    glDeleteBuffers(1, &skyboxVBO);
-
-    delete skyboxShader;    
+    glDeleteBuffers(1, &skyboxVBO);    
 }
 
 unsigned int SkyBoxRenderer::loadCubemap()

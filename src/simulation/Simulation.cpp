@@ -160,7 +160,7 @@ void Simulation::mainLoop()
 		{
 			timePaused = currentTime() - previous;			
 		}
-		else if (factor > 0) // simulation running
+        else if (factor > 0) // simulation running
 		{
 			u64 current = currentTime() - timePaused;
 			u64 elapsed = (current - previous) * factor;

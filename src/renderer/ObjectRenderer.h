@@ -9,6 +9,7 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 
 #include "Shader.h"
 
@@ -19,7 +20,8 @@ public:
 
 	void init(std::vector<float> vertices, std::vector<int> indices);
 
-	Shader* getShader();
+    // TODO: think about how to solve it better!
+    Shader* getShader() { return shader.get(); }
 
 	void render(glm::dmat4& projection, 
 		glm::dmat4& view,
@@ -36,10 +38,10 @@ public:
 
 	void loadTexture(std::string fileName);
 
-	~ObjectRenderer();
+    ~ObjectRenderer();
 
 private:
-	Shader* shader;
+    std::unique_ptr<Shader> shader;
 	unsigned int VAO, VBO, IBO;
 	unsigned int indexCount;
 

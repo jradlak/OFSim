@@ -10,7 +10,7 @@
 class TrajectoryPrediction
 {
 public:
-	TrajectoryPrediction();
+    TrajectoryPrediction() { renderer = std::make_unique<ObjectRenderer>("ball_shader"); }
 
 	void initWithPositions(
 		std::vector<double> px,

@@ -6,15 +6,15 @@ CelestialBody::CelestialBody(CelestialBodyType _bodyType, std::string shaderName
 {	
 	bodyType = _bodyType;
 	diameter = _size;
-	objectRenderer = new ObjectRenderer(shaderName, _textured);
+    objectRenderer = std::make_unique<ObjectRenderer>(shaderName, _textured);
 	
 	if (_bodyType == planet) 
 	{
-		sphere = new ofsim_math_and_physics::Sphere(1.0f, 256, 128);
+        sphere = std::make_unique<ofsim_math_and_physics::Sphere>(1.0f, 256, 128);
 	}
 	else
 	{
-		sphere = new ofsim_math_and_physics::Sphere(1.0f, 32, 16);
+        sphere = std::make_unique<ofsim_math_and_physics::Sphere>(1.0f, 32, 16);
 	}	
 }
 
@@ -65,10 +65,4 @@ glm::dvec3 CelestialBody::pointAboveTheSurface(double theta, double phi, double 
 
 	glm::dvec3 result = position + glm::dvec3(x, y, z);
 	return result;
-}
-
-CelestialBody::~CelestialBody()
-{
-	delete sphere;
-	delete objectRenderer;
 }

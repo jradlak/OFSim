@@ -2,7 +2,7 @@
 
 ObjectRenderer::ObjectRenderer(std::string shaderName, bool _textured) : textured(_textured)
 {
-	shader = new Shader(("shaders/" + shaderName + "_vs.glsl").c_str(), ("shaders/" + shaderName + "_fs.glsl").c_str());
+    shader = std::make_unique<Shader>(("shaders/" + shaderName + "_vs.glsl").c_str(), ("shaders/" + shaderName + "_fs.glsl").c_str());
 	logDepthBufFC = 2.0 / log(150000000000000000.0 + 1.0) / 0.69315;
 }
 
@@ -63,11 +63,6 @@ void ObjectRenderer::init(std::vector<float> _vertices, std::vector<int> _indice
 
 	delete[] vertices;
 	delete[] indices;
-}
-
-Shader* ObjectRenderer::getShader()
-{
-	return shader;
 }
 
 void ObjectRenderer::render(glm::dmat4& projection, glm::dmat4& view,
@@ -195,7 +190,6 @@ void ObjectRenderer::clear()
 }
 
 ObjectRenderer::~ObjectRenderer()
-{
-	delete shader;
+{	
 	clear();
 }

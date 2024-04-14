@@ -8,6 +8,7 @@
 
 #include <vector>
 #include <string>
+#include <memory>
 
 #include "../math_and_physics/Sphere.h"
 #include "../renderer/ObjectRenderer.h"
@@ -19,8 +20,6 @@ class CelestialBody
 public:
 	CelestialBody(CelestialBodyType _bodyType, std::string shaderName, double _size, glm::dvec3 _position, bool _textured = false);
 	
-	~CelestialBody();
-
 	void init();
 	void init(glm::dvec3 _objectColor, double _gravity, std::string textureFile);
 	void init(glm::dvec3 _objectColor, double _gravity);
@@ -31,9 +30,8 @@ public:
 
 private:
 	CelestialBodyType bodyType;
-	ofsim_math_and_physics::Sphere* sphere;
-	
-	ObjectRenderer* objectRenderer;
+    std::unique_ptr<ofsim_math_and_physics::Sphere> sphere;
+    std::unique_ptr<ObjectRenderer> objectRenderer;
 
 	glm::dvec3 position;
 	double diameter;

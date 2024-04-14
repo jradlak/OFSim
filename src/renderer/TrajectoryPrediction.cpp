@@ -1,10 +1,5 @@
 #include "TrajectoryPrediction.h"
 
-TrajectoryPrediction::TrajectoryPrediction()
-{
-	renderer = std::make_unique<ObjectRenderer>("ball_shader");
-}
-
 void TrajectoryPrediction::initWithPositions(
 	std::vector<double> px,
 	std::vector<double> py,

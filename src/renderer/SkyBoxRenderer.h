@@ -9,6 +9,7 @@
 
 #include <vector>
 #include <string>
+#include <memory>
 
 #include "Shader.h"
 #include "Camera.h"
@@ -16,7 +17,7 @@
 class SkyBoxRenderer
 {
 public:
-	SkyBoxRenderer();
+    SkyBoxRenderer() { skyboxShader = std::make_unique<Shader>("shaders/skybox_vs.glsl", "shaders/skybox_fs.glsl"); }
 
 	void init();
 
@@ -27,7 +28,7 @@ public:
 	~SkyBoxRenderer();
 
 private:
-	Shader* skyboxShader;
+    std::unique_ptr<Shader> skyboxShader;
 	unsigned int skyboxVAO, skyboxVBO;
 	unsigned int cubemapTexture;
 	

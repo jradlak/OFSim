@@ -1,6 +1,17 @@
 # OFSim
 Orbital Flight Simulator
 
+**Things To Do**
+
+ASAP:
+1. Fix initial rocket orientation code. It should be parallel to the normal vector at a point on the sphere.
+2. The rotation of the rocket does not completely coincide with the rotation of the thrust vector.
+
+Less urgent:
+1. Saving files in the source code editor. 
+
+**plans for the future**
+
 **Change list**
 
 0.24.1 - Fully working VM integration.
