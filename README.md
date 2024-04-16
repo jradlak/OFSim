@@ -3,13 +3,13 @@ Orbital Flight Simulator
 
 **=====Introduction:=====**
 
-The idea of the program is to simulate ballistic flights (including orbital) of a rocket in the gravitational field of a planet with parameters similar to Earth.
-The rocket is controlled by a specially designed virtual computer(virtual machine).
-Rocket control involves writing programs in the assembly language of the virtual machine.
+The idea of the program is to simulate ballistic flights (including orbital) of a rocket in the gravitational field of a planet with parameters similar to Earth. 
+The rocket is controlled by a specially designed virtual computer (virtual machine). 
+Rocket control involves writing programs in the assembly language of the virtual machine. 
 The assembly program has access to the computer's memory, where telemetry data of the rocket's flight is stored.Based on this data,
 the program can issue commands to the rocket, such as changing the direction and length of the thrust vector, controlling a set of rotating gyroscopes in orbit, etc.
 
-Additionally, in addition to the built-in assembly language, it is possible to write flight programs in Python.
+In addition to the built-in assembly language, it is possible to write flight programs in Python.
 
 The program includes a special mode that displays a graph of the rocket's predicted trajectory. 
 The simulation is performed in real time and on a real scale.
@@ -50,8 +50,8 @@ If you use Visual Studio 2022 on Windows, you can import the project into the ID
 
 **=====Screenshots:=====**
 
-![Trajectory prediction mode](https://github.com/jradlak/OFSim/blob/master/doc/Images/trajectoryPrediction.jpg)
 ![Excentric orbit](https://github.com/jradlak/OFSim/blob/master/doc/Images/excentricOrbit.png)
+![Trajectory prediction mode](https://github.com/jradlak/OFSim/blob/master/doc/Images/trajectoryPrediction.jpg)
 
 
 **=====Quick start guide:=====**
