@@ -142,7 +142,7 @@ void I18n::initLabels()
 	plLabels[commands_thrust_rotation_z] = "zmiana rotacji zyroskopowej w osi Z: ";
 	enLabels[commands_thrust_rotation_z] = "change gyroscopic rotation in Z axis: ";
 
-	plLabels[splash_title] = "Symulator Lotow Orbitalnych";
+    plLabels[splash_title] = "Orbital Flight Simulator";
 	enLabels[splash_title] = "Orbital Flight Simulator";
 	plLabels[splash_info] =
 		"Idea programu jest symulowanie lotow balistycznych (w tym orbitalnych) rakiety w polu grawitacyjnym planety o parametrach zblizonych do ziemskich."
@@ -154,7 +154,7 @@ void I18n::initLabels()
 
 	enLabels[splash_info] = "The idea of the program is to simulate ballistic flights (including orbital) of a rocket in the gravitational field of a planet with parameters similar to Earth."
 		"The rocket is controlled by a specially designed virtual computer(virtual machine)."
-		"Rocket control involves writing programs in the assembly language of the virtual machine."
+        "Rocket control involves writing programs in the assembly language of the virtual machine."
 		"The assembly program has access to the computer's memory, where telemetry data of the rocket's flight is stored.Based on this data,"
 		" the program can issue commands to the rocket, such as changing the direction and length of the thrust vector, controlling a set of rotating gyroscopes in orbit, etc.";	
 

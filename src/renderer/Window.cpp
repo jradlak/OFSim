@@ -16,6 +16,8 @@ Window::Window(Camera& _camera, const u32 _width, const u32 _height)
 
 	deltaTime = 0.0f;
 	lastFrame = 0.0f;
+
+    i18n = ofsim_gui::I18n::getInstance();
 }
 
 int Window::initialize()
@@ -25,7 +27,7 @@ int Window::initialize()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	mainWindow = glfwCreateWindow(width, height, "Symulator Lotow Orbitalnych", NULL, NULL);
+    mainWindow = glfwCreateWindow(width, height, i18n->t(ofsim_gui::splash_title), NULL, NULL);
 	if (mainWindow == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;

@@ -3,6 +3,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include "../gui/i18n.h"
 #include "../math_and_physics/MathTypes.h"
 
 #include "Camera.h"
@@ -35,6 +36,8 @@ private:
     float lastFrame;
 
     int eventsCreated = 0;
+
+    ofsim_gui::I18n* i18n;
 
     static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
     
