@@ -1,0 +1,78 @@
+; wait one second before starting the engine:
+
+fset f2, 1000
+set r1, 65432
+wait_1_second:
+  ftc
+  fld f1, r1
+  fcmp f1, f2
+jc wait_1_second
+
+; set the engine thrust value and send the command to the rocket:
+
+fset f3, 0.24
+set r8, 1
+cmd r8, f3
+
+; wait for the rocket to reach an altitude of 1.5 km:
+
+check_altitude_loop:
+  ftc
+  set r3, 65440
+  fld f1, r3
+  fset f2, 1.5
+  fcmp f1, f2
+jc check_altitude_loop
+
+; set the register values needed to execute
+; the trajectory change commands:
+
+set r3, 3
+set r1, 2
+set r4, 20
+set r5, 1
+set r2, 0
+
+; a loop responsible for sending a series of commands
+; to the rocket about changing
+; the direction of the thrust vector:
+
+change_trajectory_Y:
+  ftc
+  fset f9, -1.27
+  cmd r3, f9
+  sub r4, r5
+  cmp r4, r2
+jnc change_trajectory_Y
+
+; a series of instructions responsible for
+; waiting 180 seconds:
+
+set r1, 65432
+fset f2, 180000
+wait_180_seconds:
+  ftc
+  fld f1, r1
+  fcmp f1, f2
+jc wait_180_seconds
+
+; after exceeding the time, sending a command
+; to cut off the ignition
+; (in practice, reducing it to the value of 0.001):
+
+fset f3, 0.001
+set r8, 1
+cmd r8, f3
+
+; the last loop waiting for the altitude to exceed 100 km,
+; after exceeding it, the program stops:
+
+set r3, 65440
+fset f2, 100
+finish_check_altitude:
+  ftc
+  fld f1, r3
+  fcmp f1, f2
+jc finish_check_altitude
+
+halt

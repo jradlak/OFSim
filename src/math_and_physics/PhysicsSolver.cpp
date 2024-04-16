@@ -21,7 +21,7 @@ void PhysicsSolver::establishInitialOrientation(dvec3 _pointTowards, dvec3 rocke
     dvec3 normalSphereVector = normalize(rocketInitialPosition - celestialBodyCenter(celestialBodySize));
     
     thrustCutOff = false;
-    
+
     dvec3 direction = normalSphereVector;
     thrustVector = direction * thrustMagnitude; 
        

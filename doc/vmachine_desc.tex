@@ -492,4 +492,103 @@ void VMachine::executionLoop() {
 Comments in the code in \ref{lst:execLoop} describe the behaviour of the method. There is another interesting observation: conditional and unconditional jump instructions can change the program counter (PC) register. In this case, the execution loop method cannot increment PC - this is reflected in the ``if'' statement in the method.
 
 
+\section{Examples of the Virtual Machine programs}
+
+Two demo flight oasm programs are provided with the application.
+
+\begin{itemize}
+\item The first program is the control program for simple ballistic flight, the highest phase of which is above the atmosphere.
+
+\item The second program controls orbital flight. The orbit is highly eccentric and unstable. In the flyby phase near the perigee of the orbit, the rocket enters the upper atmosphere, which causes the rocket to gradually decelerate. The apogee and perigee of the orbit decrease with each successive orbit - the rocket will eventually fall to the Earth.
+
+\end{itemize}
+
+Listing \ref{lst:ballistic} displays short ballistic program written in the Orbital Flight Simulator assembly language.
+
+\begin{lstlisting}[caption=Ballistic program, label={lst:ballistic}, style=customg]
+; wait one second before starting the engine:
+
+fset f2, 1000
+set r1, 65432
+wait_1_second:
+  ftc
+  fld f1, r1
+  fcmp f1, f2
+jc wait_1_second
+
+; set the engine thrust value and send the command to the rocket:
+
+fset f3, 0.24
+set r8, 1
+cmd r8, f3
+
+; wait for the rocket to reach an altitude of 1.5 km:
+
+check_altitude_loop:
+  ftc
+  set r3, 65440
+  fld f1, r3
+  fset f2, 1.5
+  fcmp f1, f2
+jc check_altitude_loop
+
+; set the register values needed to execute
+; the trajectory change commands:
+
+set r3, 3
+set r1, 2
+set r4, 20
+set r5, 1
+set r2, 0
+
+; a loop responsible for sending a series of commands
+; to the rocket about changing
+; the direction of the thrust vector:
+
+change_trajectory_Y:
+  ftc
+  fset f9, -1.27
+  cmd r3, f9
+  sub r4, r5
+  cmp r4, r2
+jnc change_trajectory_Y
+
+; a series of instructions responsible for
+; waiting 180 seconds:
+
+set r1, 65432
+fset f2, 180000
+wait_180_seconds:
+  ftc
+  fld f1, r1
+  fcmp f1, f2
+jc wait_180_seconds
+
+; after exceeding the time, sending a command
+; to cut off the ignition
+; (in practice, reducing it to the value of 0.001):
+
+fset f3, 0.001
+set r8, 1
+cmd r8, f3
+
+; the last loop waiting for the altitude to exceed 100 km,
+; after exceeding it, the program stops:
+
+set r3, 65440
+fset f2, 100
+finish_check_altitude:
+  ftc
+  fld f1, r3
+  fcmp f1, f2
+jc finish_check_altitude
+
+halt
+\end{lstlisting}
+
+\noindent
+Comments in the program code describe the actions of individual sections of the code. The idea of this program is to use short loops that send commands to change the rocket's trajectory or allow the program to wait for external conditions to occur. Trajectory changes occur at exact points in time or at exact points in altitude. The current altitude and time points are read from the main memory from specific addresses. These addresses are described in the memory organization section of this article.
+
+The other two demo programs work in a similar way. However, there are more critical points in time and space to consider in their case. Rocket flight programming is often limited to checking the occurrence of certain conditions and, if they occur, performing appropriate calculations in order to decide on the commands transmitted to the rocket. The key elements to make a decision are: the real-time clock and telemetry data saved in real-time in the memory of the virtual machine.
+
 \end{document}
