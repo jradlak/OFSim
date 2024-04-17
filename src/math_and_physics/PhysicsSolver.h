@@ -11,8 +11,12 @@
 
 namespace ofsim_math_and_physics
 {
-	constexpr f32 upper_atmosphere_boundary = 98.0f;
-	constexpr f32 dense_atmosphere_boundary = 20.0f;
+    constexpr f32 upper_atmosphere_boundary { 98.0f };
+    constexpr f32 dense_atmosphere_boundary { 20.0f };
+
+    // initial rocket and camera rotation angles:
+    constexpr f64 theta{ 30.0 };
+    constexpr f64 phi{ 60.0 };
 
 	/*
 	The PhysicsSolver class is a part of a simulation engine, specifically designed to handle the physics 
@@ -49,7 +53,7 @@ namespace ofsim_math_and_physics
 		// change state methods:
 
 		// change the initial orientation of the rocket to face towards the planet 
-		void establishInitialOrientation(dvec3 _towards, dvec3 rocketInitialPosition);
+        void establishInitialOrientation(dvec3 rocketInitialPosition);
 
 		u64 calculateForces(u64 timeInterval);
 
@@ -74,7 +78,7 @@ namespace ofsim_math_and_physics
 		dvec3 getDeltaPosition() { return deltaP; }
 		std::vector<f64> getTrajectoryPredictionX() { return trajectoryPredictionX; }
 		std::vector<f64> getTrajectoryPredictionY() { return trajectoryPredictionY; }
-		std::vector<f64> getTrajectoryPredictionZ() { return trajectoryPredictionZ; }
+        std::vector<f64> getTrajectoryPredictionZ() { return trajectoryPredictionZ; }
 
 	private:
 		// constants:		
@@ -107,7 +111,7 @@ namespace ofsim_math_and_physics
 		
 		dvec3 lastPos;	
 		dvec3 deltaP;
-			
+
 		// trajectory prediction:
 		std::vector<f64> trajectoryPredictionX;
 		std::vector<f64> trajectoryPredictionY;

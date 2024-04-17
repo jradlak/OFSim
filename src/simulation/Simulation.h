@@ -74,10 +74,6 @@ private:
 	// telemetry:	
 	std::unique_ptr<TelemetryCollector> telemetryCollector;
 
-	// initial rocket and camera angles (polar coordinates):
-	f32 angle{ 30.0 };
-	f32 dangle{ 60.0 };
-	
 	// frame times:
 	u64 lag;
 	u64 previous;
@@ -108,7 +104,7 @@ private:
 	std::string orbitalProgramName { "" };
 
 	dvec3 rocketInitialPosition() { return solarSystem
-		->pointAboveEarthSurface(angle, dangle, SolarSystemConstants::earthSize - 0.2); }
+        ->pointAboveEarthSurface(theta, phi, SolarSystemConstants::earthSize - 0.2); }
 
 	void physicsRocketInitialOrientation();
 	void initialSolarSystemInformation();

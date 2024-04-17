@@ -29,19 +29,18 @@ void Simulation::init()
 
 void Simulation::initialSolarSystemInformation()
 {	
-	solarSystem->provideRocketInformationAndInit(angle, dangle, rocket.get());	
+    solarSystem->provideRocketInformationAndInit(theta, phi, rocket.get());
 }
 
 void Simulation::physicsRocketInitialOrientation()
-{
-    dvec3 pointTowards = solarSystem->pointAboveEarthSurface(angle, dangle, SolarSystemConstants::earthSize - 50);
+{    
     RocketPhysicalProperties& rocketProperties = rocket->projectProperties();
     physics = std::make_unique<ofsim_math_and_physics::PhysicsSolver>(
 		rocketProperties,
 		CelestialBodyType::planet,
 		SolarSystemConstants::earthSize,
 		MS_PER_UPDATE);
-    physics->establishInitialOrientation(pointTowards, rocketInitialPosition());
+    physics->establishInitialOrientation(rocketInitialPosition());
 }
 
 void Simulation::initialOrbitalInformation()
@@ -95,7 +94,7 @@ void Simulation::stop()
 	// dispose rocket and physics:
 	rocket.reset();
 	rocket = nullptr;
-	glm::dvec3 rocketPos = solarSystem->pointAboveEarthSurface(angle, dangle, 6371 - 0.2);
+    glm::dvec3 rocketPos = solarSystem->pointAboveEarthSurface(theta, phi, 6371 - 0.2);
 	rocket = std::make_unique<Rocket>("model3d_shader", rocketPos, 0.000013);
 	
 	physics.reset();

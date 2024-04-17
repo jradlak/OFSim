@@ -1,5 +1,6 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/rotate_vector.hpp>
+#include <glm/gtx/vector_angle.hpp>
 #include "PhysicsSolver.h"
 
 #include <iostream>
@@ -16,20 +17,12 @@ PhysicsSolver::PhysicsSolver(
 	: rocketProperties(_rocketProperties), celestialBodyType(_celestialBodyType), celestialBodySize(_celestialBodySize),
     ms_per_update(_MS_PER_UPDATE), thrustMagnitude(0.01) {}
 
-void PhysicsSolver::establishInitialOrientation(dvec3 _pointTowards, dvec3 rocketInitialPosition)
+void PhysicsSolver::establishInitialOrientation(dvec3 rocketInitialPosition)
 {	    
-    dvec3 normalSphereVector = normalize(rocketInitialPosition - celestialBodyCenter(celestialBodySize));
-    
-    thrustCutOff = false;
+    dvec3 direction = normalize(rocketInitialPosition - celestialBodyCenter(celestialBodySize));
 
-    dvec3 direction = normalSphereVector;
-    thrustVector = direction * thrustMagnitude; 
-       
-    // I don't quite understand why I have to do this rotation correction thing.
-    // It seems to be a hack to make the rocket face the planet correctly, but to my klowledge,
-    // normalSphereVector should be pointing towards the planet, so the rocket should face the planet    
-    dvec3 roationCorrection = dvec3(-40.0, -12.0, 0); // TODO: why is this necessary?
-    rocketProperties.rotation = roationCorrection - (normalSphereVector * (180.0 / M_PI));    
+    thrustVector = direction * thrustMagnitude;
+    rocketProperties.rotation = dvec3(theta, 0 ,phi) - dvec3(0.0, 0, 12.0);
 }
 
 u64 PhysicsSolver::calculateForces(u64 timeInterval)
