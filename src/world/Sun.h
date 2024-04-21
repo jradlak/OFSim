@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include "CelestialBody.h"
 
 class Sun
@@ -10,8 +11,6 @@ public:
 
 	void render(glm::dmat4 projection, glm::dmat4 view, glm::dvec3 lightPos);
 
-	~Sun();
-
 private:
-	CelestialBody* celestialBody;
+    std::unique_ptr<CelestialBody> celestialBody;
 };
