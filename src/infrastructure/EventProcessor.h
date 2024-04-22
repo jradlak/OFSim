@@ -99,7 +99,7 @@ namespace ofsim_events
 			static EventProcessor* getInstance();
 					
 			// utility methods:
-			void povideRocketAndPhysics(Rocket* _rocket, ofsim_math_and_physics::PhysicsSolver* _physics) { rocket = _rocket; physics = _physics; }
+            void povideRocketAndPhysics(ofsim_world::Rocket* _rocket, ofsim_math_and_physics::PhysicsSolver* _physics) { rocket = _rocket; physics = _physics; }
             EventProcessor(EventProcessor const&) = delete;
             void operator=(EventProcessor const&) = delete;
             			
@@ -111,7 +111,7 @@ namespace ofsim_events
 			// since this class is a sigleton I don't figure it out how to pass references to 
 			// objects instead of pointers,
 			// because references should be intilized immediately
-			Rocket* rocket;
+            ofsim_world::Rocket* rocket;
 			ofsim_math_and_physics::PhysicsSolver* physics;
 
             SimulationEvent* userEvent = nullptr;

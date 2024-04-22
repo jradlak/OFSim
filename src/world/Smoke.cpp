@@ -2,6 +2,9 @@
 
 const int SMOKE_SIZE = 128;
 
+using namespace ofsim_world;
+using namespace ofsim_math_and_physics;
+
 Smoke::Smoke()
 {
 	for (int i = 0; i < SMOKE_SIZE; i++)

@@ -1,8 +1,9 @@
 #include "SolarSystem.h"
 #include "Planet.h"
 #include "Moon.h"
-#include "Sun.h"
 #include "SolarSystemConstants.h"
+
+using namespace ofsim_world;
 
 SolarSystem::SolarSystem()
 {	

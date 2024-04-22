@@ -7,18 +7,20 @@
 #include "../renderer/ObjectRenderer.h"
 #include "../math_and_physics/Sphere.h"
 
-using namespace ofsim_math_and_physics;	
 
-// TODO: use instancing
-class Smoke
+namespace ofsim_world
 {
-public:
-	Smoke();
-	void puff(glm::dmat4& projection, glm::dmat4& view, glm::dvec3& _lightPos, glm::dvec3 position);
-	~Smoke() {}
+    // TODO: use instancing
+    class Smoke
+    {
+    public:
+        Smoke();
+        void puff(glm::dmat4& projection, glm::dmat4& view, glm::dvec3& _lightPos, glm::dvec3 position);
+        ~Smoke() {}
 
-private:
-	int puffIndex{ 0 };
-	std::vector<std::unique_ptr<Sphere>> puffClouds;
-	std::unique_ptr<ObjectRenderer> renderer;
-};
+    private:
+        int puffIndex{ 0 };
+        std::vector<std::unique_ptr<ofsim_math_and_physics::Sphere>> puffClouds;
+        std::unique_ptr<ObjectRenderer> renderer;
+    };
+}

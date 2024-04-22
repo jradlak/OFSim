@@ -1,6 +1,8 @@
 #include "Simulation.h"
 
 using namespace ofsim_events;
+using namespace ofsim_world;
+using namespace ofsim_math_and_physics;
 
 Simulation::Simulation()
 {
@@ -25,11 +27,6 @@ void Simulation::init()
 	previous = currentTime();
 	projection = glm::perspective((double)glm::radians(camera->Zoom),
 		(double)SCR_WIDTH / (double)SCR_HEIGHT, 0.001, 150000000.0);		
-}
-
-void Simulation::initialSolarSystemInformation()
-{	
-    solarSystem->provideRocketInformationAndInit(theta, phi, rocket.get());
 }
 
 void Simulation::physicsRocketInitialOrientation()

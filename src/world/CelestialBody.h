@@ -15,29 +15,33 @@
 
 enum CelestialBodyType { star, planet, moon };
 
-class CelestialBody 
+namespace ofsim_world
 {
-public:
-	CelestialBody(CelestialBodyType _bodyType, std::string shaderName, double _size, glm::dvec3 _position, bool _textured = false);
-	
-	void init();
-	void init(glm::dvec3 _objectColor, double _gravity, std::string textureFile);
-	void init(glm::dvec3 _objectColor, double _gravity);
+    class CelestialBody
+    {
+    public:
+        CelestialBody(CelestialBodyType _bodyType, std::string shaderName, double _size, glm::dvec3 _position, bool _textured = false);
 
-	void render(glm::dmat4& projection, glm::dmat4& view, const glm::dvec3& _lightPos);
+        void init() { objectRenderer->init(sphere->getVertices(), sphere->getIndices()); }
+        void init(glm::dvec3 _objectColor, double _gravity, std::string textureFile);
+        void init(glm::dvec3 _objectColor, double _gravity);
 
-	glm::dvec3 pointAboveTheSurface(double theta, double fi, double distance);
+        void render(glm::dmat4& projection, glm::dmat4& view, const glm::dvec3& _lightPos);
 
-private:
-	CelestialBodyType bodyType;
-    std::unique_ptr<ofsim_math_and_physics::Sphere> sphere;
-    std::unique_ptr<ObjectRenderer> objectRenderer;
+        glm::dvec3 pointAboveTheSurface(double theta, double fi, double distance);
 
-	glm::dvec3 position;
-	double diameter;
-	
-	glm::dvec3 objectColor;
-	
-	double gravity;
-	bool textured;
-};
+    private:
+        CelestialBodyType bodyType;
+        std::unique_ptr<ofsim_math_and_physics::Sphere> sphere;
+        std::unique_ptr<ObjectRenderer> objectRenderer;
+
+        glm::dvec3 position;
+        double diameter;
+
+        glm::dvec3 objectColor;
+
+        double gravity;
+        bool textured;
+    };
+
+}

@@ -70,6 +70,7 @@ ASAP:
 Less urgent:
 1. Saving files in the source code editor. Currently, the editor only displays the loaded program text.
 2. Correcting the position of the sun and moon. Currently, they are located polar to the planet, despite maintaining the correct distances.
+3. Error handling in vm's assembly programs. Simple error handling in the Python programs is already here.
 
 **=====Plans for the future:=====**
 

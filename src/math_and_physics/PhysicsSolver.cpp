@@ -6,6 +6,7 @@
 #include <iostream>
 
 using namespace ofsim_math_and_physics;
+using namespace ofsim_world;
 
 // the class and the method descriptions are in the header file
 

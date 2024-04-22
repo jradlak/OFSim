@@ -1,5 +1,7 @@
 #include "Launchpad.h"
 
+using namespace ofsim_world;
+
 Launchpad::Launchpad(
 	std::string shaderName,
 	std::string modelName,

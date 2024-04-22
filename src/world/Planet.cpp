@@ -1,5 +1,7 @@
 #include "Planet.h"
 
+using namespace ofsim_world;
+
 Planet::Planet(f64 _size, const dvec3& _position)
 {
 	celestialBody = std::make_unique<CelestialBody>(CelestialBodyType::planet, "planet_textured_shader", _size, _position, true);

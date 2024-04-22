@@ -1,5 +1,7 @@
 #include "CloudsAndTrees.h"
 
+using namespace ofsim_world;
+
 CloudsAndTrees::CloudsAndTrees(const int _numberOfClouds, CelestialBody& _earth, double _angle, double _dangle)
     : numberOfClouds(_numberOfClouds), earth(_earth), angle(_angle), dangle(_dangle)
 {

@@ -2,6 +2,8 @@
 
 #include "SolarSystemConstants.h"
 
+using namespace ofsim_world;
+
 Rocket::Rocket(std::string shaderName, glm::dvec3 _position, double _size)
 {	
 	rocketProperties.position = _position;

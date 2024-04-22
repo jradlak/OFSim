@@ -56,8 +56,8 @@ private:
 	dmat4 projection;	
 
 	// world objects:
-	std::unique_ptr<SolarSystem> solarSystem;
-	std::unique_ptr<Rocket> rocket;	
+    std::unique_ptr<ofsim_world::SolarSystem> solarSystem;
+    std::unique_ptr<ofsim_world::Rocket> rocket;
 	
 	// skybox:
 	std::unique_ptr<SkyBoxRenderer> skyboxRenderer;
@@ -104,10 +104,10 @@ private:
 	std::string orbitalProgramName { "" };
 
 	dvec3 rocketInitialPosition() { return solarSystem
-        ->pointAboveEarthSurface(theta, phi, SolarSystemConstants::earthSize - 0.2); }
+        ->pointAboveEarthSurface(ofsim_math_and_physics::theta, ofsim_math_and_physics::phi, SolarSystemConstants::earthSize - 0.2); }
 
 	void physicsRocketInitialOrientation();
-	void initialSolarSystemInformation();
+    void initialSolarSystemInformation() { solarSystem->provideRocketInformationAndInit(ofsim_math_and_physics::theta, ofsim_math_and_physics::phi, rocket.get()); }
 	void initialOrbitalInformation();
 
 	void initWindowContext();
@@ -121,7 +121,7 @@ private:
     void userInteractionLogic(dvec3 &toTheMoon, f64 &radius, f64 &step);
 
     void switchGLStateForWorldRendering(float r, float g, float b);
-	void renderTelemetry(ofsim_gui::Gui* gui, Rocket* rocket, double altitude, double apogeum, double perygeum, double atmosphereDragForceMagnitude);
+    void renderTelemetry(ofsim_gui::Gui* gui, ofsim_world::Rocket* rocket, double altitude, double apogeum, double perygeum, double atmosphereDragForceMagnitude);
 	void calcApogeumAndPerygeum();
 
 	void syncFramerate(u64 startTime, i32 ms_per_update);

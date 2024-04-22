@@ -3,6 +3,7 @@
 #include "../src/math_and_physics/PhysicsSolver.h"
 
 using namespace ofsim_math_and_physics;
+using namespace ofsim_world;
 
 TEST(PhysicsSolverTests, primitiveTest1)
 {   

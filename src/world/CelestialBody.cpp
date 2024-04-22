@@ -1,6 +1,8 @@
 #include <cmath>
 #include "CelestialBody.h"
 
+using namespace ofsim_world;
+
 CelestialBody::CelestialBody(CelestialBodyType _bodyType, std::string shaderName, double _size, glm::dvec3 _position, bool _textured)
 	: position(_position), textured(_textured)
 {	
@@ -16,11 +18,6 @@ CelestialBody::CelestialBody(CelestialBodyType _bodyType, std::string shaderName
 	{
         sphere = std::make_unique<ofsim_math_and_physics::Sphere>(1.0f, 32, 16);
 	}	
-}
-
-void CelestialBody::init()
-{
-	objectRenderer->init(sphere->getVertices(), sphere->getIndices());
 }
 
 void CelestialBody::init(glm::dvec3 _objectColor, double _gravity)
