@@ -4,9 +4,6 @@
 
 #define GLM_ENABLE_EXPERIMENTAL 
 
-#include <glm/gtc/quaternion.hpp>
-#include <glm/gtx/quaternion.hpp>
-
 using dvec3 = glm::dvec3;
 using vec3 = glm::vec3;
 using vec2 = glm::vec2;
