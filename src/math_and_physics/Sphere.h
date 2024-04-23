@@ -6,7 +6,7 @@
 
 namespace ofsim_math_and_physics
 {   
-    constexpr f32 M_PI{ 3.14159265358979323 };
+    constexpr f32 pi_const = 3.14159265358979323f;
 
     //TODO: extract PuffCloud classB
     class Sphere
