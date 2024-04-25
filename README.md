@@ -51,6 +51,7 @@ If you use Visual Studio 2022 on Windows, you can import the project into the ID
 **=====Screenshots:=====**
 
 ![Excentric orbit](https://github.com/jradlak/OFSim/blob/master/doc/Images/excentricOrbit.png)
+![Python exmaple](https://github.com/jradlak/OFSim/blob/master/doc/Images/pythonExample.png)
 ![Trajectory prediction mode](https://github.com/jradlak/OFSim/blob/master/doc/Images/trajectoryPrediction.jpg)
 
 
