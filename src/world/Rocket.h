@@ -42,8 +42,6 @@ namespace ofsim_world
         glm::dvec3& getPosition() { return rocketProperties.position; }
         glm::dvec3& getRotation() {	return rocketProperties.rotation; }
 
-        ~Rocket() {}
-
     private:
         // rendering:
         std::unique_ptr<ofsim_renderer::ModelRenderer> modelRenderer;

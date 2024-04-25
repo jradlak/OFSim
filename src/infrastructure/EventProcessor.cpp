@@ -43,7 +43,7 @@ void ofsim_events::EventProcessor::processVMCommand(RocketCommand command)
     // simulate command processing time (innertia effect):
     std::this_thread::sleep_for(std::chrono::milliseconds(50));
 
-    command_history.insert(std::pair<u64, RocketCommand>(currentTime(), command));
+    command_history.insert(std::pair<u64, RocketCommand>(runningTime, command));
 }
 
 EventProcessor *EventProcessor::getInstance()
@@ -75,7 +75,7 @@ void EventProcessor::createEvent(UserAction action, std::string data)
 {
     if (userEvent == nullptr)
     {
-        userEvent = new SimulationEvent(eventCounter++, currentTime(), action, data);
+        userEvent = new SimulationEvent(eventCounter++, runningTime, action, data);
     }
 }
 
@@ -83,7 +83,7 @@ void ofsim_events::EventProcessor::setThrustMagnitude(f64 thrust)
 {
     physics->updateThrustMagnitude(thrust);
     RocketCommand command { RocketCommandCode::THRUST_MAGNITUDE_CHANGE, thrust };
-    command_history.insert(std::pair<u64, RocketCommand>(currentTime(), command));
+    command_history.insert(std::pair<u64, RocketCommand>(runningTime, command));
 }
 
 void ofsim_events::EventProcessor::changeThrustRotatation(dvec3 deltaRotation)
@@ -91,20 +91,12 @@ void ofsim_events::EventProcessor::changeThrustRotatation(dvec3 deltaRotation)
     physics->rotateRocket(deltaRotation);
     
     RocketCommand command1 { RocketCommandCode::THRUST_ROTATION_CHANGE_X, deltaRotation.x };
-    command_history.insert(std::pair<u64, RocketCommand>(currentTime(), command1));
+    command_history.insert(std::pair<u64, RocketCommand>(runningTime, command1));
     
     RocketCommand command2 = RocketCommand(RocketCommandCode::THRUST_ROTATION_CHANGE_Y, deltaRotation.y);
-    command_history.insert(std::pair<u64, RocketCommand>(currentTime() + 1, command2));
+    command_history.insert(std::pair<u64, RocketCommand>(runningTime + 1, command2));
     
     RocketCommand command3 = RocketCommand(RocketCommandCode::THRUST_ROTATION_CHANGE_Z, deltaRotation.z);
-    command_history.insert(std::pair<u64, RocketCommand>(currentTime() + 2, command3));
+    command_history.insert(std::pair<u64, RocketCommand>(runningTime + 2, command3));
 }
-
-u64 EventProcessor::currentTime()
-{
-    return std::chrono::duration_cast<std::chrono::milliseconds>(
-        std::chrono::system_clock::now().time_since_epoch()
-    ).count();  
-}
-
 

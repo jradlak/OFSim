@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <tuple>
+#include <string>
 
 namespace ofsim_vm
 {

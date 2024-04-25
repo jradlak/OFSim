@@ -79,7 +79,7 @@ namespace ofsim_events
 
 			// Rocket commands:
 			void setThrustMagnitude(f64 thrust);
-			void changeThrustRotatation(dvec3 deltaRotation);
+            void changeThrustRotatation(dvec3 deltaRotation);
 			std::map<u64, RocketCommand> &getCommandHistory() { return command_history; }
 			void clearCommandHistory() { command_history.clear(); }
 
