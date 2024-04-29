@@ -16,7 +16,7 @@ public:
 		std::vector<double> px,
 		std::vector<double> py,
 		std::vector<double> pz,
-		std::vector<TelemetryData> telemetryHistory);
+        std::vector<ofsim_simulation::TelemetryData> telemetryHistory);
 
 	void render(glm::dmat4 projection, glm::dmat4 view, const glm::dvec3 lightPos);
 	

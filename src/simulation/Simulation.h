@@ -21,114 +21,118 @@
 #include "../python_integration/PythonMachine.h"
 #include "../vmachine/VMachine.h"
 
-enum class SimulationMode
+namespace ofsim_simulation
 {
-	WAITING_FOR_BEGIN,
-	STANDARD_SIMULATION,
-	TRAJECTORY_PREDICTION,
-	PRESENTATION_MODE,
-	FINISHED
-};
+    enum class SimulationMode
+    {
+        WAITING_FOR_BEGIN,
+        STANDARD_SIMULATION,
+        TRAJECTORY_PREDICTION,
+        PRESENTATION_MODE,
+        DIAGNOSTICS_MODE,
+        FINISHED
+    };
 
-class Simulation
-{
-public:
-	Simulation();
+    class Simulation
+    {
+    public:
+        Simulation();
 
-	void init();
+        void init();
 
-	void start();
+        void start();
 
-	void stop();
+        void stop();
 
-	~Simulation() {};
+        ~Simulation() {};
 
-private:
-	const i32 MS_PER_UPDATE{ 12 };
-	
-	const u32 SCR_WIDTH{ 1800 };
-	const u32 SCR_HEIGHT{ 950 };
+    private:
+        const i32 MS_PER_UPDATE{ 12 };
 
-	//std::string SOURCE_CODE_FILE_NAME = "orbital_programs/ballisticProgram.oasm";
-	std::string SOURCE_CODE_FILE_NAME{ "" };
-	
-	// render matrices:
-	dmat4 projection;	
+        const u32 SCR_WIDTH{ 1800 };
+        const u32 SCR_HEIGHT{ 950 };
 
-	// world objects:
-    std::unique_ptr<ofsim_world::SolarSystem> solarSystem;
-    std::unique_ptr<ofsim_world::Rocket> rocket;
-	
-	// skybox:
-	std::unique_ptr<SkyBoxRenderer> skyboxRenderer;
+        //std::string SOURCE_CODE_FILE_NAME = "orbital_programs/ballisticProgram.oasm";
+        std::string SOURCE_CODE_FILE_NAME{ "" };
 
-	// physics and trajectory prediction:
-	std::unique_ptr<ofsim_math_and_physics::PhysicsSolver> physics;
-	std::unique_ptr<TrajectoryPrediction> trajectoryPrediction;
-		
-	// camera, window and gui (user interaction objects):
-	std::unique_ptr<ofsim_renderer::Camera> camera;
-	std::unique_ptr<Window> mainWindow;
-	std::unique_ptr<ofsim_gui::Gui> gui;
+        // render matrices:
+        dmat4 projection;
 
-	// telemetry:	
-	std::unique_ptr<TelemetryCollector> telemetryCollector;
+        // world objects:
+        std::unique_ptr<ofsim_world::SolarSystem> solarSystem;
+        std::unique_ptr<ofsim_world::Rocket> rocket;
 
-	// frame times:
-	u64 lag;
-	u64 previous;
-	
-	// simulation time variables:
-	u64 startTime;
-	u64 runningTime;
-	u64 timePaused;
-	
-	// orbital orientation variables:	
-	f64 lastAltitude{ 0 };
-	f64 apogeum{ 0 };
-	f64 perygeum{ 0 };
-	i32 lastAltitudeDirection{ 1 };
-	i32 altitudeDirection{ 1 };
+        // skybox:
+        std::unique_ptr<SkyBoxRenderer> skyboxRenderer;
 
-	// Python integration:
-	std::unique_ptr<ofsim_python_integration::PythonMachine> pythonMachine { nullptr };
-	std::unique_ptr<std::thread> pythonThread { nullptr };
+        // physics and trajectory prediction:
+        std::unique_ptr<ofsim_math_and_physics::PhysicsSolver> physics;
+        std::unique_ptr<TrajectoryPrediction> trajectoryPrediction;
 
-	// VM integration:
-	std::unique_ptr<ofsim_vm::VMachine> vmachine { nullptr };
-	std::unique_ptr<std::thread> vmThread { nullptr };
+        // camera, window and gui (user interaction objects):
+        std::unique_ptr<ofsim_renderer::Camera> camera;
+        std::unique_ptr<Window> mainWindow;
+        std::unique_ptr<ofsim_gui::Gui> gui;
 
-	SimulationMode simulationMode{ SimulationMode::WAITING_FOR_BEGIN };
+        // telemetry:
+        std::unique_ptr<TelemetryCollector> telemetryCollector;
 
-	std::string orbitalProgramSourceCode { "" };
-	std::string orbitalProgramName { "" };
+        // frame times:
+        u64 lag;
+        u64 previous;
 
-	dvec3 rocketInitialPosition() { return solarSystem
-        ->pointAboveEarthSurface(ofsim_math_and_physics::theta, ofsim_math_and_physics::phi, SolarSystemConstants::earthSize - 0.2); }
+        // simulation time variables:
+        u64 startTime;
+        u64 runningTime;
+        u64 timePaused;
 
-	void physicsRocketInitialOrientation();
-    void initialSolarSystemInformation() { solarSystem->provideRocketInformationAndInit(ofsim_math_and_physics::theta, ofsim_math_and_physics::phi, rocket.get()); }
-	void initialOrbitalInformation();
+        // orbital orientation variables:
+        f64 lastAltitude{ 0 };
+        f64 apogeum{ 0 };
+        f64 perygeum{ 0 };
+        i32 lastAltitudeDirection{ 1 };
+        i32 altitudeDirection{ 1 };
 
-	void initWindowContext();
-    void mainLoop();
+        // Python integration:
+        std::unique_ptr<ofsim_python_integration::PythonMachine> pythonMachine { nullptr };
+        std::unique_ptr<std::thread> pythonThread { nullptr };
 
-	void terminatePythonMachine();	
-	void terminateVMachine();
+        // VM integration:
+        std::unique_ptr<ofsim_vm::VMachine> vmachine { nullptr };
+        std::unique_ptr<std::thread> vmThread { nullptr };
 
-    void renderHUD();
+        SimulationMode simulationMode{ SimulationMode::WAITING_FOR_BEGIN };
 
-    void userInteractionLogic(dvec3 &toTheMoon, f64 &radius, f64 &step);
+        std::string orbitalProgramSourceCode { "" };
+        std::string orbitalProgramName { "" };
 
-    void switchGLStateForWorldRendering(float r, float g, float b);
-    void renderTelemetry(ofsim_gui::Gui* gui, ofsim_world::Rocket* rocket, double altitude, double apogeum, double perygeum, double atmosphereDragForceMagnitude);
-	void calcApogeumAndPerygeum();
+        dvec3 rocketInitialPosition() { return solarSystem
+            ->pointAboveEarthSurface(ofsim_math_and_physics::theta, ofsim_math_and_physics::phi, SolarSystemConstants::earthSize - 0.2); }
 
-	void syncFramerate(u64 startTime, i32 ms_per_update);
+        void physicsRocketInitialOrientation();
+        void initialSolarSystemInformation() { solarSystem->provideRocketInformationAndInit(ofsim_math_and_physics::theta, ofsim_math_and_physics::phi, rocket.get()); }
+        void initialOrbitalInformation();
 
-	void createGui();
-		
-	void collectTelemetry();
+        void initWindowContext();
+        void mainLoop();
 
-	u64 currentTime();	
-};
+        void terminatePythonMachine();
+        void terminateVMachine();
+
+        void renderHUD();
+
+        void userInteractionLogic(dvec3 &toTheMoon, f64 &radius, f64 &step);
+
+        void switchGLStateForWorldRendering(float r, float g, float b);
+        void renderTelemetry(ofsim_gui::Gui* gui, ofsim_world::Rocket* rocket, double altitude, double apogeum, double perygeum, double atmosphereDragForceMagnitude);
+        void calcApogeumAndPerygeum();
+
+        void syncFramerate(u64 startTime, i32 ms_per_update);
+
+        void createGui();
+
+        void collectTelemetry();
+
+        u64 currentTime();
+    };
+}

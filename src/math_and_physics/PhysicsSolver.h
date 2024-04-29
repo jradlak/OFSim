@@ -73,6 +73,7 @@ namespace ofsim_math_and_physics
 		//  simple properties getters:
 		f64 getAltitude() { return altitude; }
 		f64 getThrustMagnitude() { return thrustMagnitude; }	
+        dvec3 getThrustVector() { return thrustVector; }
 		std::vector<f32> atmosphereRgb() { return { r, g, b }; }
 		f64 getAtmosphereDragForceMagnitude() { return altitude > max_altitude ? 0.0 : atmosphereDragForceMagnitude; }
 		dvec3 getDeltaPosition() { return deltaP; }

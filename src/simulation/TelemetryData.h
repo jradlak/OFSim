@@ -2,17 +2,20 @@
 
 #include <glm/glm.hpp>
 
-class TelemetryData
+namespace ofsim_simulation
 {
-public:
-	unsigned long long time;
+    class TelemetryData
+    {
+    public:
+        unsigned long long time;
 
-	double altitude;
-	double mass;
-	double velocity;
-	double acceleration;
-	double atmPressure;
-	double apogeum = 0;
-	double perygeum = 0;
-	glm::dvec3 position;	
-};
+        double altitude;
+        double mass;
+        double velocity;
+        double acceleration;
+        double atmPressure;
+        double apogeum = 0;
+        double perygeum = 0;
+        glm::dvec3 position;
+    };
+}

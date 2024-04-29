@@ -1,5 +1,7 @@
 #include "TrajectoryPrediction.h"
 
+using namespace ofsim_simulation;
+
 void TrajectoryPrediction::initWithPositions(
 	std::vector<double> px,
 	std::vector<double> py,

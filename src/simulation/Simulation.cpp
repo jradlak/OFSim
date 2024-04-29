@@ -1,8 +1,11 @@
 #include "Simulation.h"
 
+#include "../infrastructure/FileService.h"
+
 using namespace ofsim_events;
 using namespace ofsim_world;
 using namespace ofsim_math_and_physics;
+using namespace ofsim_simulation;
 
 Simulation::Simulation()
 {
@@ -271,6 +274,17 @@ void Simulation::renderHUD()
 
 	gui->renderTranslationErrors(EventProcessor::getInstance()->getPythonError());
 
+    if (simulationMode == SimulationMode::DIAGNOSTICS_MODE)
+    {
+        auto properties = rocket->projectProperties();
+        DiagnosticsData diagnostics;
+        diagnostics.rocketPosition = properties.position;
+        diagnostics.rocketRotation = properties.rotation;
+        diagnostics.thrustVectorDirection = physics->getThrustVector();
+
+        gui->renderDiagnostics(diagnostics);
+    }
+
 	gui->endRendering();
 }
 
@@ -348,6 +362,21 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 	{
 		glfwSetWindowShouldClose(mainWindow->getWindow(), true);
 	}
+
+    if (event.action == UserAction::CHANGE_MODE_TO_FROM_DIAGNOSTICS) // o
+    {
+        if (simulationMode == SimulationMode::WAITING_FOR_BEGIN)
+        {
+            std::cout << "Diagnostics_mode! \n";
+            simulationMode = SimulationMode::DIAGNOSTICS_MODE;
+        }
+
+        if (simulationMode == SimulationMode::DIAGNOSTICS_MODE)
+        {
+            std::cout << "Waiting for begin mode! \n";
+            simulationMode = SimulationMode::WAITING_FOR_BEGIN;
+        }
+    }
 
 	if (event.action == UserAction::CHANGE_MODE_TO_FORM_PRESENTATION 
 		 || event.action == UserAction::CHANGE_MODE_TO_FROM_PREDICTION) // m, k

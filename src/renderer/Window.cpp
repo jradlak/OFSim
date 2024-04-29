@@ -96,6 +96,11 @@ void Window::key_callback(GLFWwindow *window, int key, int scancode, int action,
 		EventProcessor::getInstance()->createEvent(UserAction::CHANGE_MODE_TO_FORM_PRESENTATION, "");
 	}
 
+    if (key == GLFW_KEY_O && action == GLFW_PRESS)
+    {
+        EventProcessor::getInstance()->createEvent(UserAction::CHANGE_MODE_TO_FROM_DIAGNOSTICS, "");
+    }
+
 	Camera_Movement direction = NONE;
 	if (key == GLFW_KEY_W && action == GLFW_PRESS)
 	{

@@ -6,8 +6,16 @@
 #include <string>
 #include <string_view>
 
+#include "../../external_libraries/imgui/imgui.h"
+#include "../../external_libraries/imgui/imgui_impl_glfw.h"
+#include "../../external_libraries/imgui/imgui_impl_opengl3.h"
+#include "../../external_libraries/imgui/imgui_stdlib.h"
+
+#include "../infrastructure/EventProcessor.h"
+
 using namespace ofsim_gui;
 using namespace ofsim_events;
+using namespace ofsim_simulation;
 
 void Gui::initialization(Window* mainWindow)
 {
@@ -524,32 +532,34 @@ void Gui::renderCommandHistory(std::map<u64, RocketCommand>& commandHistory)
     ImGui::End();
 }
 
-void Gui::endRendering()
-{
-    ImGui::Render();
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-}
-
-void Gui::renderDiagnostics(glm::dvec3 position, glm::dvec3 rotation)
+void Gui::renderDiagnostics(const DiagnosticsData& diagnostics)
 {
     ImGui::SetNextWindowSize(ImVec2(450, 240), ImGuiCond_Once);
     ImGui::SetNextWindowPos(ImVec2(1050, 330), ImGuiCond_Once);
 
-    ImGui::Begin("Diagnostyka obiektów:");
-    std::string positionTxt = "Position (x, y, z): "
-        + std::to_string(position.x) + ", "
-        + std::to_string(position.y) + ", "
-        + std::to_string(position.z);
-    
-    std::string rotationTxt = "Rotation (x, y, z): "
-        + std::to_string(rotation.x) + ", "
-        + std::to_string(rotation.y) + ", "
-        + std::to_string(rotation.z);
+    ImGui::Begin("Object's diagnostics: ");
+
+    std::string positionTxt = "Rocket's position (x, y, z): "
+        + std::to_string(diagnostics.rocketPosition.x) + ", "
+        + std::to_string(diagnostics.rocketPosition.y) + ", "
+        + std::to_string(diagnostics.rocketPosition.z);
 
     ImGui::Text("%s", positionTxt.c_str());
+
+    std::string rotationTxt = "Rocket's rotation (x, y, z): "
+        + std::to_string(diagnostics.rocketRotation.x) + ", "
+        + std::to_string(diagnostics.rocketRotation.y) + ", "
+        + std::to_string(diagnostics.rocketRotation.z);
+
     ImGui::Text("%s", rotationTxt.c_str());
 
     ImGui::End();
+}
+
+void Gui::endRendering()
+{
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
 void Gui::loadTextures()

@@ -6,21 +6,15 @@
 #include <filesystem>
 namespace fs = std::filesystem;
 
-#include "../../external_libraries/imgui/imgui.h"
-#include "../../external_libraries/imgui/imgui_impl_glfw.h"
-#include "../../external_libraries/imgui/imgui_impl_opengl3.h"
-#include "../../external_libraries/imgui/imgui_stdlib.h"
-
 #include "i18n.h"
 
 #include "../renderer/Window.h"
 #include "../simulation/TelemetryData.h"
 
 #include "../infrastructure/RocketCommand.h"
-#include "../infrastructure/FileService.h"
-#include "../infrastructure/EventProcessor.h"
-
 #include "../python_integration/PythonError.h"
+
+#include "../simulation/DiagnosticsData.h"
 
 namespace ofsim_gui 
 {
@@ -47,12 +41,12 @@ namespace ofsim_gui
 
 		void renderCodeEditor(std::string& text);
 
-		void renderTelemetry(TelemetryData& telemetryData);
+        void renderTelemetry(ofsim_simulation::TelemetryData& telemetryData);
 		
 		void renderPresentationModeInfo(double distance);
 
-		void renderTranslationErrors(ofsim_python_integration::PythonError &error);
-	
+        void renderTranslationErrors(ofsim_python_integration::PythonError &error);
+
 		void restoreWindows();
 
 		void endRendering();
@@ -65,7 +59,7 @@ namespace ofsim_gui
 
 		void renderCommandHistory(std::map<u64, RocketCommand> &commandHistory);
 
-		void renderDiagnostics(glm::dvec3 position, glm::dvec3 rotation = glm::dvec3(0.0, 0.0, 0.0));
+        void renderDiagnostics(const ofsim_simulation::DiagnosticsData &diagnostics);
 
 		void loadTextures();
 

@@ -3,46 +3,49 @@
 #include <vector>
 #include "TelemetryData.h"
 
-class TelemetryCollector
+namespace ofsim_simulation
 {
-public:
-	TelemetryCollector() {}
+    class TelemetryCollector
+    {
+    public:
+        TelemetryCollector() {}
 
-	void registerTelemetry(TelemetryData data);
-	void clear();
+        void registerTelemetry(TelemetryData data);
+        void clear();
 
-	std::vector<double> getVelicityHistory() { return velocityHistory; }
-	std::vector<double> getAltitudeHistory() { return altitideHistory; }
-	std::vector<double> getAccelarationHistory() { return acceletationHistory; }
-	std::vector<double> getAtmPressureHistory() { return atmPressureHistory; }
-	std::vector<TelemetryData> getTelemetryHistory() { return telemetryHistory; }
+        std::vector<double> getVelicityHistory() { return velocityHistory; }
+        std::vector<double> getAltitudeHistory() { return altitideHistory; }
+        std::vector<double> getAccelarationHistory() { return acceletationHistory; }
+        std::vector<double> getAtmPressureHistory() { return atmPressureHistory; }
+        std::vector<TelemetryData> getTelemetryHistory() { return telemetryHistory; }
 
-	double getMaxVelocity() { return maxVelocity; }
-	double getMaxAltitude() { return maxAltitude; }
-	double getMaxAtmPressure() { return maxAtmPressure; }
-	double getMaxAcceleration() { return maxAcceleration; }
-	double getMinAcceleration() { return minAcceleration; }
+        double getMaxVelocity() { return maxVelocity; }
+        double getMaxAltitude() { return maxAltitude; }
+        double getMaxAtmPressure() { return maxAtmPressure; }
+        double getMaxAcceleration() { return maxAcceleration; }
+        double getMinAcceleration() { return minAcceleration; }
 
-	~TelemetryCollector() {}
+        ~TelemetryCollector() {}
 
-private:
-    const unsigned int history_size { 2048 };
+    private:
+        const unsigned int history_size { 2048 };
 
-    std::vector<TelemetryData> telemetryHistory;
-	std::vector<double> velocityHistory;
-	std::vector<double> altitideHistory;
-	std::vector<double> acceletationHistory;
-	std::vector<double> atmPressureHistory;
+        std::vector<TelemetryData> telemetryHistory;
+        std::vector<double> velocityHistory;
+        std::vector<double> altitideHistory;
+        std::vector<double> acceletationHistory;
+        std::vector<double> atmPressureHistory;
 
-	double maxVelocity = 0;
-	double lastVelocity = 0;
-	
-	double maxAltitude = 0;	
-	
-	double maxAcceleration = 0;
-	double minAcceleration = 0;
+        double maxVelocity = 0;
+        double lastVelocity = 0;
 
-	double maxAtmPressure = 0;
+        double maxAltitude = 0;
 
-	unsigned long long lastTick = 0;
-};
+        double maxAcceleration = 0;
+        double minAcceleration = 0;
+
+        double maxAtmPressure = 0;
+
+        unsigned long long lastTick = 0;
+    };
+}

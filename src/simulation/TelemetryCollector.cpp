@@ -1,5 +1,7 @@
 #include "TelemetryCollector.h"
 
+using namespace ofsim_simulation;
+
 void TelemetryCollector::registerTelemetry(TelemetryData data)
 {	
 	if (data.time > lastTick) {
