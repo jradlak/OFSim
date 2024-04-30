@@ -259,20 +259,7 @@ void Simulation::renderHUD()
 	gui->renderMenuBar();
 	gui->renderSplashScreen();
 	gui->renderFileSaveAsDialog();
-	gui->renderFileOpenDialog();
-	gui->renderSimulationControlWindow(runningTime);
-	gui->renderCodeEditor(orbitalProgramSourceCode);	
-
-	gui->renderCommandHistory(ofsim_events::EventProcessor::getInstance()->getCommandHistory());
-
-	gui->plotTelemetry(
-		telemetryCollector->getVelicityHistory(), telemetryCollector->getMaxVelocity(),
-		telemetryCollector->getAltitudeHistory(), telemetryCollector->getMaxAltitude(),
-		telemetryCollector->getAtmPressureHistory(), telemetryCollector->getMaxAtmPressure(),
-		telemetryCollector->getAccelarationHistory(), telemetryCollector->getMaxAcceleration(), telemetryCollector->getMinAcceleration());
-	renderTelemetry(gui.get(), rocket.get(), physics->getAltitude(), apogeum, perygeum, physics->getAtmosphereDragForceMagnitude());
-
-	gui->renderTranslationErrors(EventProcessor::getInstance()->getPythonError());
+	gui->renderFileOpenDialog();	
 
     if (simulationMode == SimulationMode::DIAGNOSTICS_MODE)
     {
@@ -282,8 +269,24 @@ void Simulation::renderHUD()
         diagnostics.rocketRotation = properties.rotation;
         diagnostics.thrustVectorDirection = physics->getThrustVector();
 
-        gui->renderDiagnostics(diagnostics);
+        gui->renderDiagnostics(diagnostics);		
     }
+	else
+	{
+		gui->renderSimulationControlWindow(runningTime);
+		gui->renderCodeEditor(orbitalProgramSourceCode);	
+
+		gui->renderCommandHistory(ofsim_events::EventProcessor::getInstance()->getCommandHistory());
+
+		gui->plotTelemetry(
+			telemetryCollector->getVelicityHistory(), telemetryCollector->getMaxVelocity(),
+			telemetryCollector->getAltitudeHistory(), telemetryCollector->getMaxAltitude(),
+			telemetryCollector->getAtmPressureHistory(), telemetryCollector->getMaxAtmPressure(),
+			telemetryCollector->getAccelarationHistory(), telemetryCollector->getMaxAcceleration(), telemetryCollector->getMinAcceleration());
+		renderTelemetry(gui.get(), rocket.get(), physics->getAltitude(), apogeum, perygeum, physics->getAtmosphereDragForceMagnitude());
+
+		gui->renderTranslationErrors(EventProcessor::getInstance()->getPythonError());
+	}
 
 	gui->endRendering();
 }
@@ -363,20 +366,19 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 		glfwSetWindowShouldClose(mainWindow->getWindow(), true);
 	}
 
-    if (event.action == UserAction::CHANGE_MODE_TO_FROM_DIAGNOSTICS) // o
-    {
-        if (simulationMode == SimulationMode::WAITING_FOR_BEGIN)
-        {
-            std::cout << "Diagnostics_mode! \n";
-            simulationMode = SimulationMode::DIAGNOSTICS_MODE;
-        }
-
-        if (simulationMode == SimulationMode::DIAGNOSTICS_MODE)
-        {
-            std::cout << "Waiting for begin mode! \n";
-            simulationMode = SimulationMode::WAITING_FOR_BEGIN;
-        }
-    }
+	if (event.action == UserAction::CHANGE_MODE_TO_FROM_DIAGNOSTICS) // o
+	{
+		if (simulationMode == SimulationMode::WAITING_FOR_BEGIN)
+		{
+			std::cout << "Diagnostics_mode! \n";
+			simulationMode = SimulationMode::DIAGNOSTICS_MODE;
+		}
+		else if (simulationMode == SimulationMode::DIAGNOSTICS_MODE)
+		{
+			std::cout << "Waiting for begin mode! \n";
+			simulationMode = SimulationMode::WAITING_FOR_BEGIN;
+		}
+	}
 
 	if (event.action == UserAction::CHANGE_MODE_TO_FORM_PRESENTATION 
 		 || event.action == UserAction::CHANGE_MODE_TO_FROM_PREDICTION) // m, k

@@ -539,16 +539,16 @@ void Gui::renderDiagnostics(const DiagnosticsData& diagnostics)
 
     ImGui::Begin("Object's diagnostics: ");
 
-    std::string positionTxt = "Rocket's position (x, y, z): "
-        + std::to_string(diagnostics.rocketPosition.x) + ", "
-        + std::to_string(diagnostics.rocketPosition.y) + ", "
-        + std::to_string(diagnostics.rocketPosition.z);
+    std::string positionTxt = "Rocket's position (x, y, z): \n"
+        + std::to_string(diagnostics.rocketPosition.x) + ", \n"
+        + std::to_string(diagnostics.rocketPosition.y) + ", \n"
+        + std::to_string(diagnostics.rocketPosition.z) + ", \n";
 
     ImGui::Text("%s", positionTxt.c_str());
 
-    std::string rotationTxt = "Rocket's rotation (x, y, z): "
-        + std::to_string(diagnostics.rocketRotation.x) + ", "
-        + std::to_string(diagnostics.rocketRotation.y) + ", "
+    std::string rotationTxt = "Rocket's rotation (x, y, z): \n"
+        + std::to_string(diagnostics.rocketRotation.x) + ", \n"
+        + std::to_string(diagnostics.rocketRotation.y) + ", \n"
         + std::to_string(diagnostics.rocketRotation.z);
 
     ImGui::Text("%s", rotationTxt.c_str());
