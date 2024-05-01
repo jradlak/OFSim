@@ -273,6 +273,7 @@ void Simulation::renderHUD()
         diagnostics.rocketPosition = properties.position;
         diagnostics.rocketRotation = properties.rotation;
         diagnostics.thrustVectorDirection = physics->getThrustVector();
+        diagnostics.cameraPosition = camera->position;
 
         gui->renderDiagnostics(diagnostics);		
     }
@@ -382,7 +383,7 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
             physics->establishInitialOrientation(rocketInitialPosition());
             RocketPhysicalProperties &rocketProperties = rocket->projectProperties();
             rocketProperties.size *= 300000;
-            camera->updatePosition(solarSystem->pointAboveEarthSurface(phi+10, theta+10, 22521.0), rocket->getRotation());
+            camera->updatePosition(solarSystem->pointAboveEarthSurface(phi, theta - 10, 22521.0), rocket->getRotation());
             camera->setAutomaticRotation(false);
 		}
 		else if (simulationMode == SimulationMode::DIAGNOSTICS_MODE)

@@ -534,24 +534,34 @@ void Gui::renderCommandHistory(std::map<u64, RocketCommand>& commandHistory)
 
 void Gui::renderDiagnostics(const DiagnosticsData& diagnostics)
 {
-    ImGui::SetNextWindowSize(ImVec2(450, 240), ImGuiCond_Once);
+    ImGui::SetNextWindowSize(ImVec2(450, 440), ImGuiCond_Once);
     ImGui::SetNextWindowPos(ImVec2(1050, 330), ImGuiCond_Once);
 
-    ImGui::Begin("Object's diagnostics: ");
+    ImGui::Begin("Simulation diagnostics: ");
 
     std::string positionTxt = "Rocket's position (x, y, z): \n"
         + std::to_string(diagnostics.rocketPosition.x) + ", \n"
         + std::to_string(diagnostics.rocketPosition.y) + ", \n"
         + std::to_string(diagnostics.rocketPosition.z) + ", \n";
-
     ImGui::Text("%s", positionTxt.c_str());
 
     std::string rotationTxt = "Rocket's rotation (x, y, z): \n"
         + std::to_string(diagnostics.rocketRotation.x) + ", \n"
         + std::to_string(diagnostics.rocketRotation.y) + ", \n"
         + std::to_string(diagnostics.rocketRotation.z);
-
     ImGui::Text("%s", rotationTxt.c_str());
+
+    std::string thrustTxt = "Rocket's thrust vector direction (x, y, z): \n"
+        + std::to_string(diagnostics.thrustVectorDirection.x) + ", \n"
+        + std::to_string(diagnostics.thrustVectorDirection.y) + ", \n"
+        + std::to_string(diagnostics.thrustVectorDirection.z);
+    ImGui::Text("%s", thrustTxt.c_str());
+
+    std::string cameraTxt = "Camera's position (x, y, x): \n"
+            + std::to_string(diagnostics.cameraPosition.x) + ", \n"
+            + std::to_string(diagnostics.cameraPosition.y) + ", \n"
+            + std::to_string(diagnostics.cameraPosition.z);
+    ImGui::Text("%s", cameraTxt.c_str());
 
     ImGui::End();
 }

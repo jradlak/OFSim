@@ -9,6 +9,8 @@ namespace ofsim_simulation
         dvec3 rocketRotation;
         dvec3 rocketPosition;
 
+        dvec3 cameraPosition;
+
         dvec3 thrustVectorDirection;
     };
 }

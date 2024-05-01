@@ -23,7 +23,7 @@ namespace ofsim_renderer
     // Initial camera values
     constexpr f64 YAW         { 30.0 };
     constexpr f64 PITCH       { -70.0 };
-    constexpr f64 SPEED       { 800 };
+    constexpr f64 SPEED       { 1200 };
     constexpr f64 SENSITIVITY { 0.1 };
     constexpr f64 ZOOM        { 80.0 };
 
