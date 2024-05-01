@@ -152,9 +152,9 @@ void Simulation::mainLoop()
 	while (!mainWindow->shouldClose())
 	{	
 		EventProcessor::getInstance()->provideRunnigTume(runningTime);		
-		int factor = gui->getTimeFactor();
+        int factor = gui->getTimeFactor();
 				
-		// calculate lag:       
+        // calculate lag:
 		if (factor == 0) // simulation paused
 		{
 			timePaused = currentTime() - previous;			
@@ -175,9 +175,9 @@ void Simulation::mainLoop()
 		{	
 			lag = physics->calculateForces(lag);					
 		}
-		
-		std::vector<float> rgb = physics->atmosphereRgb();
-		switchGLStateForWorldRendering(rgb[0], rgb[1], rgb[2]);
+
+        std::vector<float> rgb = physics->atmosphereRgb();
+        switchGLStateForWorldRendering(rgb[0], rgb[1], rgb[2]);
 
 		gui->newFrame();
 		
@@ -190,8 +190,8 @@ void Simulation::mainLoop()
 			camera->processCameraRotation(3.0, 0);
 		}
 		else 
-		{			
-			if (simulationMode == SimulationMode::PRESENTATION_MODE)
+        {
+            if (simulationMode == SimulationMode::PRESENTATION_MODE)
 			{
 				camera->setAutomaticRotation(true);				
 				toTheMoon = SolarSystemConstants::moonPos - rocket->getPosition();
@@ -211,7 +211,7 @@ void Simulation::mainLoop()
 			}
 		}
 
-		glm::dmat4 view = camera->getViewMatrix();
+        glm::dmat4 view = camera->getViewMatrix();
 
 		// render world:
 		solarSystem->render(projection, view, SolarSystemConstants::lightPos);
@@ -229,9 +229,14 @@ void Simulation::mainLoop()
 		}
 
         if (physics->getAltitude() > skybox_rendering_boundary)
-		{
-			skyboxRenderer->render(projection, view, camera.get());
-		}
+        {
+            skyboxRenderer->render(projection, view, camera.get());
+        }
+
+        if (simulationMode == SimulationMode::DIAGNOSTICS_MODE)
+        {
+            skyboxRenderer->render(projection, view, camera.get());
+        }
 
 		collectTelemetry();
 		
@@ -378,13 +383,14 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
             RocketPhysicalProperties &rocketProperties = rocket->projectProperties();
             rocketProperties.size *= 300000;
             camera->updatePosition(solarSystem->pointAboveEarthSurface(phi+10, theta+10, 22521.0), rocket->getRotation());
-
+            camera->setAutomaticRotation(false);
 		}
 		else if (simulationMode == SimulationMode::DIAGNOSTICS_MODE)
 		{
             std::cout << "Waiting for begin mode! \n" << std::flush;
             stop(); // reseting the rocket, physics and vm states;
 			simulationMode = SimulationMode::WAITING_FOR_BEGIN;
+            camera->setAutomaticRotation(true);
 		}
 	}
 
