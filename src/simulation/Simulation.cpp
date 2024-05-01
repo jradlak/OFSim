@@ -17,7 +17,7 @@ Simulation::Simulation()
 	
 	// rocket:
 	glm::dvec3 rocketPos = rocketInitialPosition();
-	rocket = std::make_unique<Rocket>("model3d_shader", rocketPos, 0.000013);
+    rocket = std::make_unique<Rocket>("model3d_shader", rocketPos, rocket_initial_size);
 	
 	camera->position = rocket->getPosition() + glm::dvec3(0.0, 0.024, 0.0);	
 }
@@ -95,7 +95,7 @@ void Simulation::stop()
 	rocket.reset();
 	rocket = nullptr;
     glm::dvec3 rocketPos = solarSystem->pointAboveEarthSurface(theta, phi, 6371 - 0.2);
-	rocket = std::make_unique<Rocket>("model3d_shader", rocketPos, 0.000013);
+    rocket = std::make_unique<Rocket>("model3d_shader", rocketPos, rocket_initial_size);
 	
 	physics.reset();
 	physics = nullptr;
@@ -228,7 +228,7 @@ void Simulation::mainLoop()
 			}
 		}
 
-		if (physics->getAltitude() > 27.0)
+        if (physics->getAltitude() > skybox_rendering_boundary)
 		{
 			skyboxRenderer->render(projection, view, camera.get());
 		}
@@ -370,15 +370,43 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 	{
 		if (simulationMode == SimulationMode::WAITING_FOR_BEGIN)
 		{
-			std::cout << "Diagnostics_mode! \n";
-			simulationMode = SimulationMode::DIAGNOSTICS_MODE;
+            // entering diagnostics mode!
+            std::cout << "Diagnostics_mode! \n" << std::flush;
+            simulationMode = SimulationMode::DIAGNOSTICS_MODE;
+
+            physics->establishInitialOrientation(rocketInitialPosition());
+            RocketPhysicalProperties &rocketProperties = rocket->projectProperties();
+            rocketProperties.size *= 300000;
+            camera->updatePosition(solarSystem->pointAboveEarthSurface(phi+10, theta+10, 22521.0), rocket->getRotation());
+
 		}
 		else if (simulationMode == SimulationMode::DIAGNOSTICS_MODE)
 		{
-			std::cout << "Waiting for begin mode! \n";
+            std::cout << "Waiting for begin mode! \n" << std::flush;
+            stop(); // reseting the rocket, physics and vm states;
 			simulationMode = SimulationMode::WAITING_FOR_BEGIN;
 		}
 	}
+
+    if (simulationMode == SimulationMode::DIAGNOSTICS_MODE)
+    {
+        switch (event.action)
+        {
+            case (UserAction::ROTATION_LATITUDE_UP):
+                std::cout << "rotation latitude UP \n" << std::flush;
+            break;
+            case (UserAction::ROTATION_LATITUDE_DOWN):
+                std::cout << "rotation latitude DOWN \n" << std::flush;
+            break;
+            case (UserAction::ROTATION_LONGITUDE_UP):
+                std::cout << "rotation longitude UP \n" << std::flush;
+            break;
+            case (UserAction::ROTATION_LONGITUDE_DOWN):
+                std::cout << "rotation longitude DOWN \n" << std::flush;
+            break;
+            default: ; // do nthng!
+        }
+    }
 
 	if (event.action == UserAction::CHANGE_MODE_TO_FORM_PRESENTATION 
 		 || event.action == UserAction::CHANGE_MODE_TO_FROM_PREDICTION) // m, k

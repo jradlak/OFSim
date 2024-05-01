@@ -101,7 +101,27 @@ void Window::key_callback(GLFWwindow *window, int key, int scancode, int action,
         EventProcessor::getInstance()->createEvent(UserAction::CHANGE_MODE_TO_FROM_DIAGNOSTICS, "");
     }
 
-	Camera_Movement direction = NONE;
+    if (key == GLFW_KEY_UP && action == GLFW_PRESS)
+    {
+        EventProcessor::getInstance()->createEvent(UserAction::ROTATION_LONGITUDE_UP, "");
+    }
+
+    if (key == GLFW_KEY_DOWN && action == GLFW_PRESS)
+    {
+        EventProcessor::getInstance()->createEvent(UserAction::ROTATION_LONGITUDE_DOWN, "");
+    }
+
+    if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS)
+    {
+        EventProcessor::getInstance()->createEvent(UserAction::ROTATION_LATITUDE_UP, "");
+    }
+
+    if (key == GLFW_KEY_LEFT && action == GLFW_PRESS)
+    {
+        EventProcessor::getInstance()->createEvent(UserAction::ROTATION_LATITUDE_DOWN, "");
+    }
+
+    Camera_Movement direction = Camera_Movement::NONE;
 	if (key == GLFW_KEY_W && action == GLFW_PRESS)
 	{
 		direction = FORWARD;
@@ -122,7 +142,7 @@ void Window::key_callback(GLFWwindow *window, int key, int scancode, int action,
 		direction = RIGHT;
 	}
 
-	if (direction != NONE) 
+    if (direction != Camera_Movement::NONE)
 	{
 		Window* theWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));
 		theWindow->camera.processKeyboard(direction, 0.4);

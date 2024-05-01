@@ -15,6 +15,9 @@
 
 namespace ofsim_world
 {
+    constexpr f32 rocket_initial_size { 0.000013 };
+    constexpr f32 rocket_initial_mass { 10.0 };
+
     struct RocketPhysicalProperties
     {
         dvec3 position;

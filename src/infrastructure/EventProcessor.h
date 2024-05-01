@@ -15,7 +15,7 @@
 
 namespace ofsim_events 
 {
-    enum class UserAction 
+    enum class UserAction
 	{
 		FILE_NEW,
 		FILE_OPEN,
@@ -46,6 +46,11 @@ namespace ofsim_events
 		CHANGE_MODE_TO_FORM_PRESENTATION,
 
         CHANGE_MODE_TO_FROM_DIAGNOSTICS,
+
+        ROTATION_LONGITUDE_UP,
+        ROTATION_LONGITUDE_DOWN,
+        ROTATION_LATITUDE_UP,
+        ROTATION_LATITUDE_DOWN,
 
 		NONE
 	};

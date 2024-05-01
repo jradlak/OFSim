@@ -16,7 +16,7 @@ Rocket::Rocket(std::string shaderName, glm::dvec3 _position, double _size)
 	smoke = std::make_unique<Smoke>();
 
 	rocketProperties.size = _size;
-	rocketProperties.mass = 10.0;
+    rocketProperties.mass = rocket_initial_mass;
 }
 
 void Rocket::reset(glm::dvec3 _position)
