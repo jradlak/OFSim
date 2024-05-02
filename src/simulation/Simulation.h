@@ -93,6 +93,9 @@ namespace ofsim_simulation
         i32 lastAltitudeDirection{ 1 };
         i32 altitudeDirection{ 1 };
 
+        f64 dTheta {ofsim_math_and_physics::theta};
+        f64 dPhi {ofsim_math_and_physics::phi};
+
         // Python integration:
         std::unique_ptr<ofsim_python_integration::PythonMachine> pythonMachine { nullptr };
         std::unique_ptr<std::thread> pythonThread { nullptr };
@@ -106,8 +109,8 @@ namespace ofsim_simulation
         std::string orbitalProgramSourceCode { "" };
         std::string orbitalProgramName { "" };
 
-        dvec3 rocketInitialPosition() { return solarSystem
-            ->pointAboveEarthSurface(ofsim_math_and_physics::theta, ofsim_math_and_physics::phi, SolarSystemConstants::earthSize - 0.2); }
+        dvec3 rocketInitialPosition(const f64 theta, const f64 phi) { return solarSystem
+            ->pointAboveEarthSurface(theta, phi, SolarSystemConstants::earthSize - 0.2); }
 
         void physicsRocketInitialOrientation();
         void initialSolarSystemInformation() { solarSystem->provideRocketInformationAndInit(ofsim_math_and_physics::theta, ofsim_math_and_physics::phi, rocket.get()); }

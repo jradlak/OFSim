@@ -16,7 +16,7 @@ Simulation::Simulation()
 	solarSystem = std::make_unique<SolarSystem>();
 	
 	// rocket:
-	glm::dvec3 rocketPos = rocketInitialPosition();
+    glm::dvec3 rocketPos = rocketInitialPosition(theta, phi);
     rocket = std::make_unique<Rocket>("model3d_shader", rocketPos, rocket_initial_size);
 	
 	camera->position = rocket->getPosition() + glm::dvec3(0.0, 0.024, 0.0);	
@@ -40,7 +40,7 @@ void Simulation::physicsRocketInitialOrientation()
 		CelestialBodyType::planet,
 		SolarSystemConstants::earthSize,
 		MS_PER_UPDATE);
-    physics->establishInitialOrientation(rocketInitialPosition());
+    physics->establishInitialOrientation(rocketInitialPosition(theta, phi), theta, phi);
 }
 
 void Simulation::initialOrbitalInformation()
@@ -380,7 +380,7 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
             std::cout << "Diagnostics_mode! \n" << std::flush;
             simulationMode = SimulationMode::DIAGNOSTICS_MODE;
 
-            physics->establishInitialOrientation(rocketInitialPosition());
+            physics->establishInitialOrientation(rocketInitialPosition(theta, phi), theta, phi);
             RocketPhysicalProperties &rocketProperties = rocket->projectProperties();
             rocketProperties.size *= 300000;
             camera->updatePosition(solarSystem->pointAboveEarthSurface(phi, theta - 10, 22521.0), rocket->getRotation());
@@ -392,6 +392,8 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
             stop(); // reseting the rocket, physics and vm states;
 			simulationMode = SimulationMode::WAITING_FOR_BEGIN;
             camera->setAutomaticRotation(true);
+            dTheta = theta;
+            dPhi = phi;
 		}
 	}
 
@@ -401,17 +403,32 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
         {
             case (UserAction::ROTATION_LATITUDE_UP):
                 std::cout << "rotation latitude UP \n" << std::flush;
+                dTheta += 10;
             break;
             case (UserAction::ROTATION_LATITUDE_DOWN):
                 std::cout << "rotation latitude DOWN \n" << std::flush;
+                dTheta -= 10;
             break;
             case (UserAction::ROTATION_LONGITUDE_UP):
                 std::cout << "rotation longitude UP \n" << std::flush;
+                dPhi += 10;
             break;
             case (UserAction::ROTATION_LONGITUDE_DOWN):
                 std::cout << "rotation longitude DOWN \n" << std::flush;
+                dPhi -= 10;
             break;
             default: ; // do nthng!
+        }
+
+        bool diagAction = event.action == UserAction::ROTATION_LATITUDE_UP
+                || event.action == UserAction::ROTATION_LATITUDE_DOWN
+                || event.action == UserAction::ROTATION_LONGITUDE_UP
+                || event.action == UserAction::ROTATION_LONGITUDE_DOWN;
+        if (diagAction)
+        {
+            dvec3 rocketPosition = rocketInitialPosition(dTheta, dPhi);
+            physics->establishInitialOrientation(rocketPosition, dTheta, dPhi);
+            rocket->updatePosition(rocketPosition);
         }
     }
 

@@ -35,10 +35,11 @@ namespace ofsim_world
         Rocket(std::string shaderName, glm::dvec3 _position, double _size);
 
         void render(glm::dmat4 projection, glm::dmat4 view, glm::dvec3 _lightPos);
+        void reset(glm::dvec3 _position);
+
+        void updatePosition(glm::dvec3 _position) { rocketProperties.position = _position; }
 
         RocketPhysicalProperties& projectProperties() { return rocketProperties; }
-
-        void reset(glm::dvec3 _position);
 
         f64 getMass() { return rocketProperties.mass; }
         glm::dvec3& getVelocity() { return rocketProperties.velocity; }

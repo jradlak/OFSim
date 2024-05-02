@@ -33,7 +33,7 @@ TEST(PhysicsSolverTests, primitiveTest1)
         CelestialBodyType::planet,
         1.0,  12) };
 
-    physicsSolver.establishInitialOrientation(dvec3(0.0, 0.0, 0.0));
+    physicsSolver.establishInitialOrientation(dvec3(0.0, 0.0, 0.0), 0.0, 0.0);
 
     u64 timeInterval{ 12 };
 

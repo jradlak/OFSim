@@ -54,7 +54,7 @@ namespace ofsim_math_and_physics
 		// change state methods:
 
 		// change the initial orientation of the rocket to face towards the planet 
-        void establishInitialOrientation(dvec3 rocketInitialPosition);
+        void establishInitialOrientation(dvec3 rocketInitialPosition, const f64 _theta, const f64 phi);
 
 		u64 calculateForces(u64 timeInterval);
 
@@ -104,6 +104,7 @@ namespace ofsim_math_and_physics
 		f64 altitude;
 		f64 celestialBodySize;
 		f64 atmosphereDragForceMagnitude { 0.0 };
+
 
 		int ms_per_update;
 

@@ -18,12 +18,12 @@ PhysicsSolver::PhysicsSolver(
 	: rocketProperties(_rocketProperties), celestialBodyType(_celestialBodyType), celestialBodySize(_celestialBodySize),
     ms_per_update(_MS_PER_UPDATE), thrustMagnitude(0.01) {}
 
-void PhysicsSolver::establishInitialOrientation(dvec3 rocketInitialPosition)
+void PhysicsSolver::establishInitialOrientation(dvec3 rocketInitialPosition, const f64 _theta, const f64 _phi)
 {	    
     dvec3 direction = normalize(rocketInitialPosition - celestialBodyCenter(celestialBodySize));
 
     thrustVector = direction * thrustMagnitude;
-    rocketProperties.rotation = dvec3(theta, 0 ,phi) - dvec3(0.0, 0, 12.0);
+    rocketProperties.rotation = dvec3(_theta, 0 ,_phi) - dvec3(0.0, 0, 12.0);
 }
 
 u64 PhysicsSolver::calculateForces(u64 timeInterval)
