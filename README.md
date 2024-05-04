@@ -84,6 +84,8 @@ Less urgent:
 
 **=====Changelog:=====**
 
+0.25.0 - Diagnostics mode.
+
 0.24.1 - Fully working VM integration.
 
 0.24.0 - Restore a previously removed virtual machine.

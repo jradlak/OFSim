@@ -517,7 +517,7 @@ void Simulation::initWindowContext()
 	if (result != 0)
 	{
 		std::cout << "Main window creation failed. Status code = " << result << "\n";
-	}		                                               
+    }
 }
 
 void Simulation::switchGLStateForWorldRendering(float r, float g, float b)
