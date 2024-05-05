@@ -33,9 +33,8 @@ namespace ofsim_simulation
         FINISHED
     };
 
-    class Simulation
-    {
-    public:
+    struct Simulation
+    {    
         Simulation();
 
         void init();
@@ -43,8 +42,6 @@ namespace ofsim_simulation
         void start();
 
         void stop();
-
-        ~Simulation() {};
 
     private:
         const i32 MS_PER_UPDATE{ 12 };

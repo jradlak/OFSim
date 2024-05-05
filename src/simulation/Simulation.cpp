@@ -285,10 +285,10 @@ void Simulation::renderHUD()
 		gui->renderCommandHistory(ofsim_events::EventProcessor::getInstance()->getCommandHistory());
 
 		gui->plotTelemetry(
-			telemetryCollector->getVelicityHistory(), telemetryCollector->getMaxVelocity(),
-			telemetryCollector->getAltitudeHistory(), telemetryCollector->getMaxAltitude(),
-			telemetryCollector->getAtmPressureHistory(), telemetryCollector->getMaxAtmPressure(),
-			telemetryCollector->getAccelarationHistory(), telemetryCollector->getMaxAcceleration(), telemetryCollector->getMinAcceleration());
+            telemetryCollector->velocityHistory, telemetryCollector->maxVelocity,
+            telemetryCollector->altitudeHistory, telemetryCollector->maxAltitude,
+            telemetryCollector->atmPressureHistory, telemetryCollector->maxAtmPressure,
+            telemetryCollector->accelerationHistory, telemetryCollector->maxAcceleration, telemetryCollector->minAcceleration);
 		renderTelemetry(gui.get(), rocket.get(), physics->getAltitude(), apogeum, perygeum, physics->getAtmosphereDragForceMagnitude());
 
 		gui->renderTranslationErrors(EventProcessor::getInstance()->getPythonError());
@@ -444,7 +444,7 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 				physics->getTrajectoryPredictionX(),
 				physics->getTrajectoryPredictionY(),
 				physics->getTrajectoryPredictionZ(),
-				telemetryCollector->getTelemetryHistory());
+                telemetryCollector->telemetryHistory);
 
 			if (event.action == UserAction::CHANGE_MODE_TO_FROM_PREDICTION) // m
             {

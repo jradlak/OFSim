@@ -9,13 +9,13 @@ void TelemetryCollector::registerTelemetry(TelemetryData data)
 		lastTick = data.time;
 
 		velocityHistory.push_back(data.velocity);
-		altitideHistory.push_back(data.altitude);
+        altitudeHistory.push_back(data.altitude);
 		atmPressureHistory.push_back(data.atmPressure);
 
         if (velocityHistory.size() > history_size)
 		{
 			velocityHistory.erase(velocityHistory.begin());
-			altitideHistory.erase(altitideHistory.begin());
+            altitudeHistory.erase(altitudeHistory.begin());
 			atmPressureHistory.erase(atmPressureHistory.begin());
 		}
 
@@ -35,7 +35,7 @@ void TelemetryCollector::registerTelemetry(TelemetryData data)
 		}
 
 		double dVelocity = data.velocity - lastVelocity;
-		acceletationHistory.push_back(dVelocity);
+        accelerationHistory.push_back(dVelocity);
 		if (dVelocity > maxAcceleration)
 		{
 			maxAcceleration = dVelocity;
@@ -54,8 +54,8 @@ void TelemetryCollector::clear()
 {	
 	telemetryHistory.clear();
 	velocityHistory.clear();
-	altitideHistory.clear();
-	acceletationHistory.clear();
+    altitudeHistory.clear();
+    accelerationHistory.clear();
 	atmPressureHistory.clear();
 
 	maxVelocity = 0;

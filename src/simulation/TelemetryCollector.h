@@ -2,50 +2,30 @@
 
 #include <vector>
 #include "TelemetryData.h"
+#include "../math_and_physics/MathTypes.h"
 
 namespace ofsim_simulation
 {
-    class TelemetryCollector
-    {
-    public:
-        TelemetryCollector() {}
-
+    struct TelemetryCollector
+    {   
         void registerTelemetry(TelemetryData data);
         void clear();
 
-        std::vector<double> getVelicityHistory() { return velocityHistory; }
-        std::vector<double> getAltitudeHistory() { return altitideHistory; }
-        std::vector<double> getAccelarationHistory() { return acceletationHistory; }
-        std::vector<double> getAtmPressureHistory() { return atmPressureHistory; }
-        std::vector<TelemetryData> getTelemetryHistory() { return telemetryHistory; }
+        std::vector<TelemetryData> telemetryHistory;
+        std::vector<f64> velocityHistory;
+        std::vector<f64> altitudeHistory;
+        std::vector<f64> accelerationHistory;
+        std::vector<f64> atmPressureHistory;
 
-        double getMaxVelocity() { return maxVelocity; }
-        double getMaxAltitude() { return maxAltitude; }
-        double getMaxAtmPressure() { return maxAtmPressure; }
-        double getMaxAcceleration() { return maxAcceleration; }
-        double getMinAcceleration() { return minAcceleration; }
-
-        ~TelemetryCollector() {}
+        f64 maxVelocity = 0;
+        f64 lastVelocity = 0;
+        f64 maxAltitude = 0;
+        f64 maxAcceleration = 0;
+        f64 minAcceleration = 0;
+        f64 maxAtmPressure = 0;
 
     private:
-        const unsigned int history_size { 2048 };
-
-        std::vector<TelemetryData> telemetryHistory;
-        std::vector<double> velocityHistory;
-        std::vector<double> altitideHistory;
-        std::vector<double> acceletationHistory;
-        std::vector<double> atmPressureHistory;
-
-        double maxVelocity = 0;
-        double lastVelocity = 0;
-
-        double maxAltitude = 0;
-
-        double maxAcceleration = 0;
-        double minAcceleration = 0;
-
-        double maxAtmPressure = 0;
-
-        unsigned long long lastTick = 0;
+        const u32 history_size { 2048 };
+        u64 lastTick = 0;
     };
 }
