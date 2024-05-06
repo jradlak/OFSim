@@ -8,9 +8,8 @@
 
 namespace ofsim_world
 {
-    class Launchpad
+    struct Launchpad
     {
-    public:
         Launchpad(
             std::string shaderName,
             std::string modelName,
@@ -21,17 +20,11 @@ namespace ofsim_world
 
         void updateColor(float _r, float _g, float _b);
 
-        void updateRotation(glm::dvec3 newRotation) { rotation = newRotation; }
-
-        void updatePosition(glm::dvec3 newPosiotion) { position = newPosiotion; }
-
-        ~Launchpad() {}
+        glm::dvec3 position;
+        glm::dvec3 rotation;
 
     private:
         std::unique_ptr<ofsim_renderer::ModelRenderer> modelRenderer;
-
-        glm::dvec3 position;
-        glm::dvec3 rotation;
 
         //model color;
         float r, g, b;

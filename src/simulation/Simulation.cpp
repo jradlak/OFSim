@@ -19,7 +19,7 @@ Simulation::Simulation()
     glm::dvec3 rocketPos = rocketInitialPosition(theta, phi);
     rocket = std::make_unique<Rocket>("model3d_shader", rocketPos, rocket_initial_size);
 	
-	camera->position = rocket->getPosition() + glm::dvec3(0.0, 0.024, 0.0);	
+    camera->position = rocket->properties().position + glm::dvec3(0.0, 0.024, 0.0);
 }
 
 // ----- simulation initialization methods
@@ -34,7 +34,7 @@ void Simulation::init()
 
 void Simulation::physicsRocketInitialOrientation()
 {    
-    RocketPhysicalProperties& rocketProperties = rocket->projectProperties();
+    RocketPhysicalProperties& rocketProperties = rocket->properties();
     physics = std::make_unique<ofsim_math_and_physics::PhysicsSolver>(
 		rocketProperties,
 		CelestialBodyType::planet,
@@ -186,7 +186,7 @@ void Simulation::mainLoop()
 			|| simulationMode == SimulationMode::WAITING_FOR_BEGIN)
 		{
 			camera->setAutomaticRotation(true);
-			camera->updatePosition(rocket->getPosition(), rocket->getRotation());
+            camera->updatePosition(rocket->properties().position, rocket->properties().rotation);
 			camera->processCameraRotation(3.0, 0);
 		}
 		else 
@@ -194,9 +194,9 @@ void Simulation::mainLoop()
             if (simulationMode == SimulationMode::PRESENTATION_MODE)
 			{
 				camera->setAutomaticRotation(true);				
-				toTheMoon = SolarSystemConstants::moonPos - rocket->getPosition();
+                toTheMoon = SolarSystemConstants::moonPos - rocket->properties().position;
 				
-				camera->updatePosition(rocket->getPosition() + (toTheMoon * radius), rocket->getRotation());
+                camera->updatePosition(rocket->properties().position + (toTheMoon * radius), rocket->properties().rotation);
 				
 				if (radius < 0.52)
 				{ 
@@ -223,7 +223,7 @@ void Simulation::mainLoop()
 			
 			if (simulationMode == SimulationMode::PRESENTATION_MODE)
 			{
-				double distance = glm::length(camera->position - rocket->getPosition());
+                double distance = glm::length(camera->position - rocket->properties().position);
 				gui->renderPresentationModeInfo(distance);
 			}
 		}
@@ -268,7 +268,7 @@ void Simulation::renderHUD()
 
     if (simulationMode == SimulationMode::DIAGNOSTICS_MODE)
     {
-        auto properties = rocket->projectProperties();
+        auto properties = rocket->properties();
         DiagnosticsData diagnostics;
         diagnostics.rocketPosition = properties.position;
         diagnostics.rocketRotation = properties.rotation;
@@ -381,9 +381,9 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
             simulationMode = SimulationMode::DIAGNOSTICS_MODE;
 
             physics->establishInitialOrientation(rocketInitialPosition(theta, phi), theta, phi);
-            RocketPhysicalProperties &rocketProperties = rocket->projectProperties();
+            RocketPhysicalProperties &rocketProperties = rocket->properties();
             rocketProperties.size *= 300000;
-            camera->updatePosition(solarSystem->pointAboveEarthSurface(phi, theta - 10, 22521.0), rocket->getRotation());
+            camera->updatePosition(solarSystem->pointAboveEarthSurface(phi, theta - 10, 22521.0), rocket->properties().rotation);
             camera->setAutomaticRotation(false);
 		}
 		else if (simulationMode == SimulationMode::DIAGNOSTICS_MODE)
@@ -428,7 +428,7 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
         {
             dvec3 rocketPosition = rocketInitialPosition(dTheta, dPhi);
             physics->establishInitialOrientation(rocketPosition, dTheta, dPhi);
-            rocket->updatePosition(rocketPosition);
+            rocket->properties().position = rocketPosition;
         }
     }
 
@@ -450,7 +450,7 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
             {
 				if (simulationMode != SimulationMode::TRAJECTORY_PREDICTION)
 				{
-					camera->updatePosition(solarSystem->pointAboveEarthSurface(35, 35, 7521.0), rocket->getRotation());
+                    camera->updatePosition(solarSystem->pointAboveEarthSurface(35, 35, 7521.0), rocket->properties().rotation);
 					simulationMode = SimulationMode::TRAJECTORY_PREDICTION;
 				}
 				else
@@ -463,7 +463,7 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 			{
 				if (simulationMode != SimulationMode::PRESENTATION_MODE)
 				{
-					toTheMoon = rocket->getPosition() - SolarSystemConstants::moonPos;
+                    toTheMoon = rocket->properties().position - SolarSystemConstants::moonPos;
 					radius = 0.000000001;
 					step = 0.000000001;
 					simulationMode = SimulationMode::PRESENTATION_MODE;
@@ -503,9 +503,9 @@ void Simulation::collectTelemetry()
 		data.apogeum = apogeum;
 		data.perygeum = perygeum;
 		data.atmPressure = physics->getAtmosphereDragForceMagnitude();
-		data.mass = rocket->getMass();
-		data.velocity = glm::length(rocket->getVelocity());		
-		data.position = rocket->getPosition();
+        data.mass = rocket->properties().mass;
+        data.velocity = glm::length(rocket->properties().velocity);
+        data.position = rocket->properties().position;
 
 		telemetryCollector->registerTelemetry(data);
 	}
@@ -561,12 +561,12 @@ void Simulation::renderTelemetry(ofsim_gui::Gui* gui, Rocket* rocket,
 	TelemetryData data;
 	
 	data.altitude = altitude;
-	data.mass = rocket->getMass();
+    data.mass = rocket->properties().mass;
 	data.atmPressure = atmosphereDragForceMagnitude;
-	glm::dvec3 velocity = rocket->getVelocity();
+    glm::dvec3 velocity = rocket->properties().velocity;
 	data.velocity = glm::length(velocity);
 
-	data.position = rocket->getPosition();
+    data.position = rocket->properties().position;
 
 	data.apogeum = apogeum;
 	data.perygeum = perygeum;

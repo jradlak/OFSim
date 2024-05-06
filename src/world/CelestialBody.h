@@ -13,13 +13,12 @@
 #include "../math_and_physics/Sphere.h"
 #include "../renderer/ObjectRenderer.h"
 
-enum CelestialBodyType { star, planet, moon };
-
 namespace ofsim_world
 {
-    class CelestialBody
-    {
-    public:
+    enum CelestialBodyType { star, planet, moon };
+
+    struct CelestialBody
+    {   
         CelestialBody(CelestialBodyType _bodyType, std::string shaderName, double _size, glm::dvec3 _position, bool _textured = false);
 
         void init() { objectRenderer->init(sphere->getVertices(), sphere->getIndices()); }

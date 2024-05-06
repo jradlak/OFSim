@@ -7,16 +7,13 @@
 #include "../renderer/ObjectRenderer.h"
 #include "../math_and_physics/Sphere.h"
 
-
 namespace ofsim_world
 {
     // TODO: use instancing
-    class Smoke
-    {
-    public:
+    struct Smoke
+    {    
         Smoke();
-        void puff(glm::dmat4& projection, glm::dmat4& view, glm::dvec3& _lightPos, glm::dvec3 position);
-        ~Smoke() {}
+        void puff(glm::dmat4& projection, glm::dmat4& view, glm::dvec3& _lightPos, glm::dvec3 position);        
 
     private:
         int puffIndex{ 0 };

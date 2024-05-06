@@ -47,7 +47,7 @@ namespace ofsim_math_and_physics
 	public:
 		PhysicsSolver(
             ofsim_world::RocketPhysicalProperties& _rocketProperties,
-			CelestialBodyType _celestialBodyType,
+            ofsim_world::CelestialBodyType _celestialBodyType,
 			f64 _celestialBodySize,
 			i32 _MS_PER_UPDATE);
 
@@ -98,7 +98,7 @@ namespace ofsim_math_and_physics
 
 		std::vector<dvec3> forces;
 
-		CelestialBodyType celestialBodyType;
+        ofsim_world::CelestialBodyType celestialBodyType;
         ofsim_world::RocketPhysicalProperties& rocketProperties;
 		
 		f64 altitude;

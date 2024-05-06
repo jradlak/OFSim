@@ -7,9 +7,8 @@
 
 namespace ofsim_world
 {
-    class CloudsAndTrees
-    {
-    public:
+    struct CloudsAndTrees
+    {    
         CloudsAndTrees(const int _numberOfClouds, CelestialBody& _earth,
             double _angle, double _dangle);
 
@@ -18,10 +17,10 @@ namespace ofsim_world
         void render(glm::dmat4 projection, glm::dmat4 view, const glm::dvec3 lightPos);
 
     private:
+        const int numberOfClouds;
+
         std::unique_ptr<ofsim_renderer::ModelRenderer> cloudRenderer;
         std::unique_ptr<ofsim_renderer::ModelRenderer> treeRenderer;
-
-        const int numberOfClouds;
 
         std::vector<glm::dvec3> cloudsPositions;
         std::vector<glm::dvec3> treesPositions;

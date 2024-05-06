@@ -75,14 +75,14 @@ namespace ofsim_events
 			// UI events:
             SimulationEvent getEvent();
             void createEvent(UserAction action, std::string data);
-		
+
 			// Rocket status:
-			dvec3 getRocketPosition() { return rocket->getPosition(); }
-			dvec3 getRocketRotation() { return rocket->getRotation(); }
-			dvec3 getRocketVelocity() { return rocket->getVelocity(); }
+            dvec3 getRocketPosition() { return rocket->properties().position; }
+            dvec3 getRocketRotation() { return rocket->properties().rotation; }
+            dvec3 getRocketVelocity() { return rocket->properties().velocity; }
 			f64 getAltitude() { return physics->getAltitude(); }
 			f64 getThrustMagnitude() { return physics->getThrustMagnitude(); }
-			f64 getRocketMass() { return rocket->getMass(); }
+            f64 getRocketMass() { return rocket->properties().mass; }
 
 			// Rocket commands:
 			void setThrustMagnitude(f64 thrust);

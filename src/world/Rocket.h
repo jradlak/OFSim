@@ -29,22 +29,14 @@ namespace ofsim_world
         f64 size, mass, thrustMagnitude;
     };
 
-    class Rocket
-    {
-    public:
+    struct Rocket
+    {    
         Rocket(std::string shaderName, glm::dvec3 _position, double _size);
 
         void render(glm::dmat4 projection, glm::dmat4 view, glm::dvec3 _lightPos);
         void reset(glm::dvec3 _position);
 
-        void updatePosition(glm::dvec3 _position) { rocketProperties.position = _position; }
-
-        RocketPhysicalProperties& projectProperties() { return rocketProperties; }
-
-        f64 getMass() { return rocketProperties.mass; }
-        glm::dvec3& getVelocity() { return rocketProperties.velocity; }
-        glm::dvec3& getPosition() { return rocketProperties.position; }
-        glm::dvec3& getRotation() {	return rocketProperties.rotation; }
+        RocketPhysicalProperties& properties() { return rocketProperties; }
 
     private:
         // rendering:

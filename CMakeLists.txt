@@ -128,17 +128,11 @@ add_executable("${CMAKE_PROJECT_NAME}"
     src/world/Smoke.cpp        
 
     src/world/CelestialBody.h
-    src/world/CloudsAndTrees.h
-    src/world/Moon.h
-    src/world/Planet.h
-    src/world/SolarSystem.h
-    src/world/Sun.h
+    src/world/CloudsAndTrees.h        
+    src/world/SolarSystem.h    
     src/world/CelestialBody.cpp
-    src/world/CloudsAndTrees.cpp
-    src/world/Moon.cpp
-    src/world/Planet.cpp
-    src/world/SolarSystem.cpp
-    src/world/Sun.cpp
+    src/world/CloudsAndTrees.cpp        
+    src/world/SolarSystem.cpp    
   
     src/vmachine/Instructions.cpp
     src/vmachine/Instructions.h
@@ -236,17 +230,11 @@ add_executable(
     src/world/Smoke.cpp        
 
     src/world/CelestialBody.h
-    src/world/CloudsAndTrees.h
-    src/world/Moon.h
-    src/world/Planet.h
-    src/world/SolarSystem.h
-    src/world/Sun.h
+    src/world/CloudsAndTrees.h        
+    src/world/SolarSystem.h    
     src/world/CelestialBody.cpp
     src/world/CloudsAndTrees.cpp
-    src/world/Moon.cpp
-    src/world/Planet.cpp
-    src/world/SolarSystem.cpp
-    src/world/Sun.cpp
+    src/world/SolarSystem.cpp    
 
     src/math_and_physics/MathTypes.h
     
