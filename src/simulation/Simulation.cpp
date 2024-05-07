@@ -228,7 +228,7 @@ void Simulation::mainLoop()
 			}
 		}
 
-        if (physics->getAltitude() > skybox_rendering_boundary)
+        if (physics->altitude > skybox_rendering_boundary)
         {
             skyboxRenderer->render(projection, view, camera.get());
         }
@@ -245,7 +245,7 @@ void Simulation::mainLoop()
 		calcApogeumAndPerygeum();
 
 		lastAltitudeDirection = altitudeDirection;
-		lastAltitude = physics->getAltitude();
+        lastAltitude = physics->altitude;
 	
 		// sync and swap:
 		syncFramerate(currentTime(), MS_PER_UPDATE);
@@ -272,7 +272,7 @@ void Simulation::renderHUD()
         DiagnosticsData diagnostics;
         diagnostics.rocketPosition = properties.position;
         diagnostics.rocketRotation = properties.rotation;
-        diagnostics.thrustVectorDirection = physics->getThrustVector();
+        diagnostics.thrustVectorDirection = physics->thrustVector;
         diagnostics.cameraPosition = camera->position;
 
         gui->renderDiagnostics(diagnostics);		
@@ -289,7 +289,7 @@ void Simulation::renderHUD()
             telemetryCollector->altitudeHistory, telemetryCollector->maxAltitude,
             telemetryCollector->atmPressureHistory, telemetryCollector->maxAtmPressure,
             telemetryCollector->accelerationHistory, telemetryCollector->maxAcceleration, telemetryCollector->minAcceleration);
-		renderTelemetry(gui.get(), rocket.get(), physics->getAltitude(), apogeum, perygeum, physics->getAtmosphereDragForceMagnitude());
+        renderTelemetry(gui.get(), rocket.get(), physics->altitude, apogeum, perygeum, physics->getAtmosphereDragForceMagnitude());
 
 		gui->renderTranslationErrors(EventProcessor::getInstance()->getPythonError());
 	}
@@ -441,9 +441,9 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 			camera->setAutomaticRotation(false);
 			physics->predictTrajectory(runningTime);
 			trajectoryPrediction->initWithPositions(
-				physics->getTrajectoryPredictionX(),
-				physics->getTrajectoryPredictionY(),
-				physics->getTrajectoryPredictionZ(),
+                physics->trajectoryPredictionX,
+                physics->trajectoryPredictionY,
+                physics->trajectoryPredictionZ,
                 telemetryCollector->telemetryHistory);
 
 			if (event.action == UserAction::CHANGE_MODE_TO_FROM_PREDICTION) // m
@@ -499,7 +499,7 @@ void Simulation::collectTelemetry()
 	{
 		TelemetryData data;
 		data.time = tickTock;
-		data.altitude = physics->getAltitude();
+        data.altitude = physics->altitude;
 		data.apogeum = apogeum;
 		data.perygeum = perygeum;
 		data.atmPressure = physics->getAtmosphereDragForceMagnitude();
@@ -534,12 +534,12 @@ void Simulation::switchGLStateForWorldRendering(float r, float g, float b)
 
 void Simulation::calcApogeumAndPerygeum()
 {
-	if (lastAltitude < physics->getAltitude() && lastAltitude > 4)
+    if (lastAltitude < physics->altitude && lastAltitude > 4)
 	{
 		altitudeDirection = 1;
 	}
 
-	if (lastAltitude > physics->getAltitude() && lastAltitude > 4)
+    if (lastAltitude > physics->altitude && lastAltitude > 4)
 	{
 		altitudeDirection = -1;
 	}

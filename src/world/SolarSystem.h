@@ -28,8 +28,8 @@ namespace ofsim_world
 
     struct Moon
     {
-        Moon(double _size, const glm::dvec3 _position);
-        void render(glm::dmat4 projection, glm::dmat4 view, const glm::dvec3 lightPos) { celestialBody->render(projection, view, lightPos); }
+        Moon(f64 _size, const dvec3 _position);
+        void render(dmat4 projection, dmat4 view, const dvec3 lightPos) { celestialBody->render(projection, view, lightPos); }
 
     private:
         std::unique_ptr<CelestialBody> celestialBody;
@@ -37,9 +37,9 @@ namespace ofsim_world
 
     struct Sun
     {
-        Sun(double _size, const glm::dvec3 _position);
+        Sun(f64 _size, const dvec3 _position);
 
-        void render(glm::dmat4 projection, glm::dmat4 view, glm::dvec3 lightPos) { celestialBody->render(projection, view, lightPos); }
+        void render(dmat4 projection, dmat4 view, dvec3 lightPos) { celestialBody->render(projection, view, lightPos); }
 
     private:
         std::unique_ptr<CelestialBody> celestialBody;
@@ -49,12 +49,12 @@ namespace ofsim_world
     {
         SolarSystem();
 
-        void render(glm::dmat4 projection, glm::dmat4 view, glm::dvec3 _lightPos);
+        void render(dmat4 projection, dmat4 view, dvec3 _lightPos);
 
         void provideRocket(Rocket* _rocket) { rocket = _rocket; }
-        void provideRocketInformationAndInit(double _angle, double _dangle, Rocket* _rocket);
+        void provideRocketInformationAndInit(f64 _angle, f64 _dangle, Rocket* _rocket);
 
-        glm::dvec3 pointAboveEarthSurface(double theta, double phi, double distance) { return this->earth->pointAboveTheSurface(theta, phi, distance); }
+        glm::dvec3 pointAboveEarthSurface(f64 theta, f64 phi, f64 distance) { return this->earth->pointAboveTheSurface(theta, phi, distance); }
         ~SolarSystem() {}
 
     private:
@@ -64,6 +64,6 @@ namespace ofsim_world
 
         Rocket* rocket;
 
-        void initCloudsAndTreesForEarth(double _angle, double _dangle, glm::dvec3 _rotation) { earth->init(12, _angle, _dangle, _rotation); }
+        void initCloudsAndTreesForEarth(f64 _angle, f64 _dangle, dvec3 _rotation) { earth->init(12, _angle, _dangle, _rotation); }
     };    
 }

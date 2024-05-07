@@ -42,9 +42,8 @@ namespace ofsim_math_and_physics
 	The class uses the GLM (OpenGL Mathematics) library for vector and matrix math operations, 
 	which are essential in 3D physics calculations.
 	*/
-	class PhysicsSolver
-	{
-	public:
+    struct PhysicsSolver
+    {
 		PhysicsSolver(
             ofsim_world::RocketPhysicalProperties& _rocketProperties,
             ofsim_world::CelestialBodyType _celestialBodyType,
@@ -71,16 +70,18 @@ namespace ofsim_math_and_physics
 		void resetForces() { forces.clear(); }
 		void reset();
 
-		//  simple properties getters:
-		f64 getAltitude() { return altitude; }
-		f64 getThrustMagnitude() { return thrustMagnitude; }	
-        dvec3 getThrustVector() { return thrustVector; }
-		std::vector<f32> atmosphereRgb() { return { r, g, b }; }
-		f64 getAtmosphereDragForceMagnitude() { return altitude > max_altitude ? 0.0 : atmosphereDragForceMagnitude; }
-		dvec3 getDeltaPosition() { return deltaP; }
-		std::vector<f64> getTrajectoryPredictionX() { return trajectoryPredictionX; }
-		std::vector<f64> getTrajectoryPredictionY() { return trajectoryPredictionY; }
-        std::vector<f64> getTrajectoryPredictionZ() { return trajectoryPredictionZ; }
+        std::vector<f32> atmosphereRgb() { return { r, g, b }; }
+        f64 getAtmosphereDragForceMagnitude() { return altitude > max_altitude ? 0.0 : atmosphereDragForceMagnitude; }
+
+        f64 altitude;
+        dvec3 thrustVector;
+        f64 thrustMagnitude;
+        dvec3 deltaP; // delta position
+
+        // trajectory prediction:
+        std::vector<f64> trajectoryPredictionX;
+        std::vector<f64> trajectoryPredictionY;
+        std::vector<f64> trajectoryPredictionZ;
 
 	private:
 		// constants:		
@@ -100,25 +101,16 @@ namespace ofsim_math_and_physics
 
         ofsim_world::CelestialBodyType celestialBodyType;
         ofsim_world::RocketPhysicalProperties& rocketProperties;
-		
-		f64 altitude;
+				
 		f64 celestialBodySize;
 		f64 atmosphereDragForceMagnitude { 0.0 };
 
+        int ms_per_update;
 
-		int ms_per_update;
-
-		dvec3 thrustVector;
-		f64 thrustMagnitude;
 		bool thrustCutOff;	
 		
 		dvec3 lastPos;	
-		dvec3 deltaP;
 
-		// trajectory prediction:
-		std::vector<f64> trajectoryPredictionX;
-		std::vector<f64> trajectoryPredictionY;
-		std::vector<f64> trajectoryPredictionZ;
 		std::vector<f64> velocityMagnitude;
 
 		// PRIVATE METHODS:

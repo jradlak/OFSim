@@ -80,8 +80,8 @@ namespace ofsim_events
             dvec3 getRocketPosition() { return rocket->properties().position; }
             dvec3 getRocketRotation() { return rocket->properties().rotation; }
             dvec3 getRocketVelocity() { return rocket->properties().velocity; }
-			f64 getAltitude() { return physics->getAltitude(); }
-			f64 getThrustMagnitude() { return physics->getThrustMagnitude(); }
+            f64 getAltitude() { return physics->altitude; }
+            f64 getThrustMagnitude() { return physics->thrustMagnitude; }
             f64 getRocketMass() { return rocket->properties().mass; }
 
 			// Rocket commands:

@@ -36,16 +36,16 @@ void Planet::render(dmat4 projection, dmat4 view, const dvec3 lightPos)
     }
 }
 
-Sun::Sun(double _size, const glm::dvec3 _position)
+Sun::Sun(f64 _size, const dvec3 _position)
 {
     celestialBody = std::make_unique<CelestialBody>(CelestialBodyType::star, "light_source", _size, _position);
     celestialBody->init(glm::dvec3(0.25f, 0.75f, 0.55f), 9.81);
 }
 
-Moon::Moon(double _size, const glm::dvec3 _position)
+Moon::Moon(f64 _size, const dvec3 _position)
 {
     celestialBody = std::make_unique<CelestialBody>(CelestialBodyType::moon, "moon_shader", _size, _position);
-    celestialBody->init(glm::dvec3(0.55f, 0.55f, 0.55f), 1.6);
+    celestialBody->init(dvec3(0.55f, 0.55f, 0.55f), 1.6);
 }
 
 SolarSystem::SolarSystem()
@@ -55,14 +55,14 @@ SolarSystem::SolarSystem()
 	sun = std::make_unique<Sun>(1392700.0, SolarSystemConstants::lightPos);	
 }
 
-void SolarSystem::render(glm::dmat4 projection, glm::dmat4 view, glm::dvec3 _lightPos)
+void SolarSystem::render(dmat4 projection, dmat4 view, dvec3 _lightPos)
 {
 	earth->render(projection, view, _lightPos);
 	moon->render(projection, view, _lightPos);
 	sun->render(projection, view, _lightPos);
 }
 
-void SolarSystem::provideRocketInformationAndInit(double _angle, double _dangle, Rocket* _rocket)
+void SolarSystem::provideRocketInformationAndInit(f64 _angle, f64 _dangle, Rocket* _rocket)
 {
 	rocket = _rocket;
     initCloudsAndTreesForEarth(_angle, _dangle, rocket->properties().rotation);

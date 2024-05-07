@@ -14,21 +14,21 @@ void TrajectoryPrediction::initWithPositions(
 	for (int i = 0; i < px.size(); i++)
 	{
 		auto sphere = std::make_unique<ofsim_math_and_physics::Sphere>(3, 32, 16);
-		sphere->updatePosition(glm::dvec3(px[i], py[i], pz[i]));
+        sphere->position = dvec3(px[i], py[i], pz[i]);
 		spheresPrediction.push_back(std::move(sphere));
 	}
 
 	for (int i = 0; i < telemetryHistory.size(); i += 8)
 	{
 		auto sphere = std::make_unique<ofsim_math_and_physics::Sphere>(3, 32, 16);
-		sphere->updatePosition(telemetryHistory[i].position);
+        sphere->position = telemetryHistory[i].position;
 		spheresHistory.push_back(std::move(sphere));
 	}
 
 	if (spheresPrediction.size() > 0)
 	{
 		ofsim_math_and_physics::Sphere* sphere = spheresPrediction[0].get();
-		renderer->init(sphere->getVertices(), sphere->getIndices());
+        renderer->init(sphere->verticesAndNormals, sphere->indices);
 	}
 }
 
@@ -48,7 +48,7 @@ void TrajectoryPrediction::renderHistory(glm::dmat4 projection, glm::dmat4 view,
 
 	for (int i = 0; i < spheresHistory.size() - 1; i++)
 	{
-		renderer->render(projection, view, spheresHistory[i]->getSize(), spheresHistory[i]->getPosition());
+        renderer->render(projection, view, spheresHistory[i]->size, spheresHistory[i]->position);
 	}
 }
 
@@ -62,6 +62,6 @@ void TrajectoryPrediction::renderPrediction(glm::dmat4 projection, glm::dmat4 vi
 
 	for (int i = 2; i < spheresPrediction.size(); i++)
 	{
-		renderer->render(projection, view, spheresPrediction[i]->getSize(), spheresPrediction[i]->getPosition());
+        renderer->render(projection, view, spheresPrediction[i]->size, spheresPrediction[i]->position);
 	}
 }

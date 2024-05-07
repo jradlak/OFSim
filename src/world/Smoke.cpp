@@ -10,38 +10,38 @@ Smoke::Smoke()
 	for (int i = 0; i < SMOKE_SIZE; i++)
 	{
 		std::unique_ptr<Sphere> sphere = std::make_unique<Sphere>();
-		sphere->updatePosition(glm::dvec3(0.0));
+        sphere->position = dvec3(0.0);
 		puffClouds.push_back(std::move(sphere));
 	}
 
 	Sphere* sphere = puffClouds[0].get();
 	renderer = std::make_unique<ObjectRenderer>("moon_shader");
-	renderer->init(sphere->getVertices(), sphere->getIndices());
+    renderer->init(sphere->verticesAndNormals, sphere->indices);
 }
 
-void Smoke::puff(glm::dmat4& projection, glm::dmat4& view, glm::dvec3& _lightPos, glm::dvec3 position)
+void Smoke::puff(dmat4& projection, dmat4& view, dvec3& _lightPos, dvec3 position)
 {
-	int _position = rand() % 16 + 8;
+    i32 _position = rand() % 16 + 8;
 	double dPosition = _position / 10000.0;
 	position = position + dPosition;
 
 	for (int puffIndex = 0; puffIndex < SMOKE_SIZE; puffIndex++)
 	{
 		Sphere* cloud = puffClouds[puffIndex].get();
-		float cSize = cloud->getSize();
+        float cSize = cloud->size;
 		if (cSize > 0.0f)
 		{
 			cSize -= 0.00078125f;
-			position = cloud->getPosition();
+            position = cloud->position;
 		}
 		else
 		{
 			int _size = rand() % 18 + 12;
 			cSize = _size / 10000.0f;
-			cloud->updatePosition(position);
+            cloud->position = position;
 		}
 
-		cloud->updateSize(cSize);
+        cloud->size = cSize;
 				
 		Shader* shader = renderer->getShader();
 		shader->use();

@@ -21,7 +21,7 @@ namespace ofsim_world
     {   
         CelestialBody(CelestialBodyType _bodyType, std::string shaderName, double _size, glm::dvec3 _position, bool _textured = false);
 
-        void init() { objectRenderer->init(sphere->getVertices(), sphere->getIndices()); }
+        void init() { objectRenderer->init(sphere->verticesAndNormals, sphere->indices); }
         void init(glm::dvec3 _objectColor, double _gravity, std::string textureFile);
         void init(glm::dvec3 _objectColor, double _gravity);
 
