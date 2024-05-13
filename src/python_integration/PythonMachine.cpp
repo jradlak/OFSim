@@ -1,5 +1,7 @@
 #include "PythonMachine.h"
 
+#include "../infrastructure/EventProcessor.h"
+
 PyObject *ofsim_python_integration::PythonMachine::orbital_thrust_magnitude_change(PyObject *self, PyObject *args)
 {
     PyObject *a;

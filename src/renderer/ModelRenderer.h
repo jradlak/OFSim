@@ -16,9 +16,8 @@
 
 namespace ofsim_renderer
 {
-	class ModelRenderer
-	{
-	public:
+    struct ModelRenderer
+	{	
 		ModelRenderer(std::string shaderName, std::string modelPath);
 
 		void renderWithRotation(dmat4& projection,
@@ -28,8 +27,6 @@ namespace ofsim_renderer
 						dvec3 rotation = dvec3(0.0, 0.0, 0.0));
 
 		Shader* getShader() { return shader.get(); }
-
-		~ModelRenderer() {}
 
 	private:
 		std::unique_ptr<Shader> shader;

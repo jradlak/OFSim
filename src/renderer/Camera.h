@@ -27,9 +27,8 @@ namespace ofsim_renderer
     constexpr f64 SENSITIVITY { 0.1 };
     constexpr f64 ZOOM        { 80.0 };
 
-    class Camera
-    {
-    public:
+    struct Camera
+    {    
         // camera attributes
         dvec3 position,rotationPosition,
             front, up, right, worldUp;
@@ -55,7 +54,7 @@ namespace ofsim_renderer
 
         void processCameraRotation(f64 xoffset, f64 yoffset, bool constrainPitch = true);
         
-        void updatePosition(dvec3 newPosition, dvec3 rocketRotation, f64 radius = 0.020);
+        void updatePosition(dvec3 newPosition, f64 radius = 0.020);
 
         void processKeyboard(Camera_Movement direction, f64 deltaTime);
         void processMouseRotation(f64 xoffset, f64 yoffset, bool constrainPitch = true);

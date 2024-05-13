@@ -186,7 +186,7 @@ void Simulation::mainLoop()
 			|| simulationMode == SimulationMode::WAITING_FOR_BEGIN)
 		{
 			camera->setAutomaticRotation(true);
-            camera->updatePosition(rocket->properties().position, rocket->properties().rotation);
+            camera->updatePosition(rocket->properties().position);
 			camera->processCameraRotation(3.0, 0);
 		}
 		else 
@@ -196,7 +196,7 @@ void Simulation::mainLoop()
 				camera->setAutomaticRotation(true);				
                 toTheMoon = SolarSystemConstants::moonPos - rocket->properties().position;
 				
-                camera->updatePosition(rocket->properties().position + (toTheMoon * radius), rocket->properties().rotation);
+                camera->updatePosition(rocket->properties().position + (toTheMoon * radius));
 				
 				if (radius < 0.52)
 				{ 
@@ -383,7 +383,7 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
             physics->establishInitialOrientation(rocketInitialPosition(theta, phi), theta, phi);
             RocketPhysicalProperties &rocketProperties = rocket->properties();
             rocketProperties.size *= 300000;
-            camera->updatePosition(solarSystem->pointAboveEarthSurface(phi, theta - 10, 22521.0), rocket->properties().rotation);
+            camera->updatePosition(solarSystem->pointAboveEarthSurface(phi, theta - 20, 14421.0));
             camera->setAutomaticRotation(false);
 		}
 		else if (simulationMode == SimulationMode::DIAGNOSTICS_MODE)
@@ -450,7 +450,7 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
             {
 				if (simulationMode != SimulationMode::TRAJECTORY_PREDICTION)
 				{
-                    camera->updatePosition(solarSystem->pointAboveEarthSurface(35, 35, 7521.0), rocket->properties().rotation);
+                    camera->updatePosition(solarSystem->pointAboveEarthSurface(35, 35, 7521.0));
 					simulationMode = SimulationMode::TRAJECTORY_PREDICTION;
 				}
 				else
@@ -470,7 +470,7 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 				}
 				else
 				{
-					simulationMode = SimulationMode::STANDARD_SIMULATION;
+                    simulationMode = SimulationMode::STANDARD_SIMULATION;
 					gui->restoreWindows();
 				}
 			}

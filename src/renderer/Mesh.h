@@ -17,9 +17,8 @@ namespace ofsim_renderer
         glm::vec3 normal;
     };
 
-    class Mesh
-    {
-    public:
+    struct Mesh
+    {    
         // mesh data
         std::vector<Vertex>       vertices;
         std::vector<unsigned int> indices;

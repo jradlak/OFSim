@@ -3,8 +3,6 @@
 #include <Python.h>
 #include <string>
 #include <iostream>
-#include "../world/Rocket.h"
-#include "../infrastructure/EventProcessor.h"
 
 namespace ofsim_python_integration
 {

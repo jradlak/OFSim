@@ -18,9 +18,8 @@
 
 namespace ofsim_renderer
 {
-    class Model
-    {
-    public:
+    struct Model
+    {    
         Model(std::string path) { loadModel(path); }
         void draw(Shader& shader);
 

@@ -13,15 +13,12 @@
 
 #include "Shader.h"
 
-class ObjectRenderer
+struct ObjectRenderer
 {
-public:
 	ObjectRenderer(std::string shaderName, bool _textured = false);
 
 	void init(std::vector<float> vertices, std::vector<int> indices);
 
-    // TODO: think about how to solve it better!
-    Shader* getShader() { return shader.get(); }
 
 	void render(glm::dmat4& projection, 
 		glm::dmat4& view,
@@ -37,6 +34,9 @@ public:
 		glm::dvec3 rotation = glm::dvec3(0.0, 0.0, 0.0));
 
 	void loadTexture(std::string fileName);
+
+    // TODO: think about how to solve it better!
+    Shader* getShader() { return shader.get(); }
 
     ~ObjectRenderer();
 
