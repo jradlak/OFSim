@@ -274,6 +274,8 @@ void Simulation::renderHUD()
         diagnostics.rocketRotation = properties.rotation;
         diagnostics.thrustVectorDirection = physics->thrustVector;
         diagnostics.cameraPosition = camera->position;
+        diagnostics.dTheta = dTheta;
+        diagnostics.dPhi = dPhi;
 
         gui->renderDiagnostics(diagnostics);		
     }
@@ -425,7 +427,7 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
                 || event.action == UserAction::ROTATION_LONGITUDE_UP
                 || event.action == UserAction::ROTATION_LONGITUDE_DOWN;
         if (diagAction)
-        {
+        {            
             dvec3 rocketPosition = rocketInitialPosition(dTheta, dPhi);
             physics->establishInitialOrientation(rocketPosition, dTheta, dPhi);
             rocket->properties().position = rocketPosition;

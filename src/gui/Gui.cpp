@@ -551,6 +551,11 @@ void Gui::renderDiagnostics(const DiagnosticsData& diagnostics)
         + std::to_string(diagnostics.rocketRotation.z);
     ImGui::Text("%s", rotationTxt.c_str());
 
+    std::string anglesTxt = "Angles (dTheta, dPhi): \n"
+        + std::to_string(diagnostics.dTheta) + ", \n"
+        + std::to_string(diagnostics.dPhi) + ", \n";
+    ImGui::Text("%s", anglesTxt.c_str());
+
     std::string thrustTxt = "Rocket's thrust vector direction (x, y, z): \n"
         + std::to_string(diagnostics.thrustVectorDirection.x) + ", \n"
         + std::to_string(diagnostics.thrustVectorDirection.y) + ", \n"
