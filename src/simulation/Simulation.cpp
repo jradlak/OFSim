@@ -94,7 +94,8 @@ void Simulation::stop()
 	// dispose rocket and physics:
 	rocket.reset();
 	rocket = nullptr;
-    glm::dvec3 rocketPos = solarSystem->pointAboveEarthSurface(theta, phi, 6371 - 0.2);
+    glm::dvec3 rocketPos = rocketInitialPosition(theta, phi);
+
     rocket = std::make_unique<Rocket>("model3d_shader", rocketPos, rocket_initial_size);
 	
 	physics.reset();

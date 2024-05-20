@@ -4,7 +4,6 @@
 #include <iostream>
 
 #include <string>
-#include <string_view>
 
 #include "../../external_libraries/imgui/imgui.h"
 #include "../../external_libraries/imgui/imgui_impl_glfw.h"
@@ -461,7 +460,7 @@ void Gui::renderTranslationErrors(ofsim_python_integration::PythonError &error)
 
     if (ImGui::Button("OK", ImVec2(120, 0)))
     {
-        error.active = false;        
+        error.active = false;
     }
 
     ImGui::End();

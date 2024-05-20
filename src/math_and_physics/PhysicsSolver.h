@@ -16,8 +16,8 @@ namespace ofsim_math_and_physics
     constexpr f32 skybox_rendering_boundary { 30.0f };
 
     // initial rocket and camera rotation angles:
-    constexpr f64 theta{ 30.0 };
-    constexpr f64 phi{ 60.0 };
+    constexpr f64 theta{ 0.00 };
+    constexpr f64 phi{ 0.00 };
 
 	/*
 	The PhysicsSolver class is a part of a simulation engine, specifically designed to handle the physics 

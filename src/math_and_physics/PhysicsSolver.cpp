@@ -23,7 +23,7 @@ void PhysicsSolver::establishInitialOrientation(dvec3 rocketInitialPosition, con
     dvec3 direction = normalize(rocketInitialPosition - celestialBodyCenter(celestialBodySize));
 
     thrustVector = direction * thrustMagnitude;
-    rocketProperties.rotation = dvec3(_theta, 0 ,_phi) - dvec3(0.0, 0, 12.0);
+    rocketProperties.rotation = dvec3(_theta, 0, _phi); // -dvec3(0.0, 0, 12.0);
 }
 
 u64 PhysicsSolver::calculateForces(u64 timeInterval)

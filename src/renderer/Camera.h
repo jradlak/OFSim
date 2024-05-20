@@ -30,7 +30,7 @@ namespace ofsim_renderer
     struct Camera
     {    
         // camera attributes
-        dvec3 position,rotationPosition,
+        dvec3 position, rotationPosition,
             front, up, right, worldUp;
             
         f64 yaw, pitch, roll;           
@@ -46,8 +46,8 @@ namespace ofsim_renderer
 
         Camera(f64 posX, f64 posY, f64 posZ, f64 upX, f64 upY, f64 upZ, f64 _yaw, f64 _pitch, f64 _roll); 
 
-        dmat4 getViewMatrix() { return automaticRotation ? 
-            glm::lookAt(rotationPosition + glm::dvec3(0.016, 0.0, 0.012), position, up) 
+        dmat4 getViewMatrix() { return automaticRotation ?  
+            glm::lookAt(rotationPosition, position + front, up)
             : glm::lookAt(position, position + front, up); }
 
         void setAutomaticRotation(bool autorotation) { automaticRotation = autorotation; }

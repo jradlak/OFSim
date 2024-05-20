@@ -84,10 +84,10 @@ void Camera::processMouseRotation(f64 xoffset, f64 yoffset, bool constrainPitch)
 
 void Camera::updatePosition(dvec3 newPosition, f64 radius)
 {    
-    f64 camX = cos(glm::radians(rotationAngle)) * radius;
-    f64 camZ = sin(glm::radians(rotationAngle)) * radius;
+    f64 camX = sin(glm::radians(rotationAngle)) * radius;
+    f64 camZ = cos(glm::radians(rotationAngle)) * radius;
 
-    rotationPosition = dvec3(-camZ / 2.0, camX, camZ) + newPosition;
+    rotationPosition = dvec3(camX, 0, camZ) + newPosition;
     
     position = newPosition;
 }
