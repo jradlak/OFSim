@@ -36,7 +36,7 @@ void CelestialBody::init(glm::dvec3 _objectColor, double _gravity, std::string t
 	}
 }
 
-void CelestialBody::render(glm::dmat4& projection, glm::dmat4& view, const glm::dvec3& _lightPos)
+void CelestialBody::render(dmat4& projection, dmat4& view, const dvec3& _lightPos, const dvec3& rotation)
 {
 	Shader* shader = objectRenderer->getShader();
 	shader->use();
@@ -48,7 +48,7 @@ void CelestialBody::render(glm::dmat4& projection, glm::dmat4& view, const glm::
 		shader->setVec3("lightPos", _lightPos);
 	}
 
-	objectRenderer->render(projection, view, diameter, position);
+    objectRenderer->renderWithRotation(projection, view, diameter, position, rotation);
 }
 
 glm::dvec3 CelestialBody::pointAboveTheSurface(double theta, double phi, double distance)

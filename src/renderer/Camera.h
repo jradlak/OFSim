@@ -41,11 +41,11 @@ namespace ofsim_renderer
         Camera(dvec3 _position = dvec3(0.0, 0.0, 0.0), dvec3 _up = dvec3(0.0, 1.0, 0.0),
             f64 _yaw = YAW, f64 _pitch = PITCH, f64 _roll = 0.0);
 
-        Camera(f64 posX, f64 posY, f64 posZ, f64 upX, f64 upY, f64 upZ, f64 _yaw, f64 _pitch, f64 _roll); 
+        Camera(f64 posX, f64 posY, f64 posZ, f64 upX, f64 upY, f64 upZ, f64 _yaw, f64 _pitch, f64 _roll);
 
-        dmat4 getViewMatrix() { return automaticRotation ?  
-            glm::lookAt(rotationPosition, position + front, up)
-            : glm::lookAt(position, position + front, up); }
+        dmat4 getViewMatrix() { return automaticRotation ?
+                                           glm::lookAt(rotationPosition + dvec3(0, 0.021, 0), position + dvec3(0, 0.007, 0), dvec3(0.0, 1.0, 0.0))
+                                            : glm::lookAt(position, position + front, up); }
 
         void setAutomaticRotation(bool autorotation) { automaticRotation = autorotation; }
 

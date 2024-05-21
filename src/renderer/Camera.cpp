@@ -89,7 +89,7 @@ void Camera::updatePosition(dvec3 newPosition, f64 radius)
 
     rotationPosition = dvec3(camX, 0, camZ) + newPosition;
     
-    position = newPosition;
+    position = newPosition;    
 }
 
 void Camera::updateCameraVectors()

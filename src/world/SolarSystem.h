@@ -1,6 +1,5 @@
 #pragma once
 
-#include <vector>
 #include <memory>
 #include "Rocket.h"
 #include "CelestialBody.h"
@@ -9,7 +8,10 @@
 #include "../math_and_physics/MathTypes.h"
 
 namespace ofsim_world
-{   
+{
+    constexpr f64 earth_rot_theta { -30 };
+    constexpr f64 earth_rot_phi { -60 };
+
     struct Planet
     {
         Planet(f64 _size, const glm::dvec3& _position);
@@ -29,7 +31,7 @@ namespace ofsim_world
     struct Moon
     {
         Moon(f64 _size, const dvec3 _position);
-        void render(dmat4 projection, dmat4 view, const dvec3 lightPos) { celestialBody->render(projection, view, lightPos); }
+        void render(dmat4 projection, dmat4 view, const dvec3 lightPos) { celestialBody->render(projection, view, lightPos, {earth_rot_theta, 0, earth_rot_theta}); }
 
     private:
         std::unique_ptr<CelestialBody> celestialBody;
@@ -39,7 +41,7 @@ namespace ofsim_world
     {
         Sun(f64 _size, const dvec3 _position);
 
-        void render(dmat4 projection, dmat4 view, dvec3 lightPos) { celestialBody->render(projection, view, lightPos); }
+        void render(dmat4 projection, dmat4 view, dvec3 lightPos) { celestialBody->render(projection, view, lightPos, {earth_rot_theta, 0, earth_rot_theta}); }
 
     private:
         std::unique_ptr<CelestialBody> celestialBody;

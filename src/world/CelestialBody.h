@@ -25,7 +25,7 @@ namespace ofsim_world
         void init(glm::dvec3 _objectColor, double _gravity, std::string textureFile);
         void init(glm::dvec3 _objectColor, double _gravity);
 
-        void render(glm::dmat4& projection, glm::dmat4& view, const glm::dvec3& _lightPos);
+        void render(glm::dmat4& projection, dmat4& view, const dvec3& _lightPos, const dvec3& rotation);
 
         glm::dvec3 pointAboveTheSurface(double theta, double fi, double distance);
 

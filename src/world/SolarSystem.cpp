@@ -15,7 +15,7 @@ void Planet::init(i32 number, f64 _angle, f64 _dangle, dvec3 _rotation)
     cloudsAndTrees = std::make_unique<CloudsAndTrees>(12, *this->celestialBody, _angle, _dangle);
     cloudsAndTrees->provideInitialRotation(_rotation);
 
-    dvec3 launchpadPos = pointAboveTheSurface(_angle, _dangle, 6371);
+    dvec3 launchpadPos = pointAboveTheSurface(_angle, _dangle, SolarSystemConstants::earthSize + 0.021);
 
     launchpad = std::make_unique<Launchpad>("model3d_shader", "assets/models/launchpad2.obj", launchpadPos, 0.05);
     launchpad->rotation = _rotation;
@@ -23,7 +23,8 @@ void Planet::init(i32 number, f64 _angle, f64 _dangle, dvec3 _rotation)
 
 void Planet::render(dmat4 projection, dmat4 view, const dvec3 lightPos)
 {
-    celestialBody->render(projection, view, lightPos);
+    dvec3 rotation {earth_rot_theta, earth_rot_theta, 0};
+    celestialBody->render(projection, view, lightPos, rotation);
 
     if (cloudsAndTrees != nullptr)
     {
