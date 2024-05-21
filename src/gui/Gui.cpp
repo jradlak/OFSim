@@ -5,6 +5,9 @@
 
 #include <string>
 
+#include <filesystem>
+namespace fs = std::filesystem;
+
 #include "../../external_libraries/imgui/imgui.h"
 #include "../../external_libraries/imgui/imgui_impl_glfw.h"
 #include "../../external_libraries/imgui/imgui_impl_opengl3.h"

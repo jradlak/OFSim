@@ -2,9 +2,7 @@
 
 #include <string>
 #include <map>
-
-#include <filesystem>
-namespace fs = std::filesystem;
+#include <vector>
 
 #include "i18n.h"
 
@@ -52,7 +50,7 @@ namespace ofsim_gui
 		void endRendering();
 
 		void plotTelemetry(
-			std::vector<double> velocityHistory, double maxVelo,
+            std::vector<double> velocityHistory, double maxVelo,
 			std::vector<double> altitudeHistory, double maxAlt,
 			std::vector<double> atmPressureHistory, double maxAtm,
 			std::vector<double> accelerationHistory, double maxAcc, double minAcc);

@@ -1,10 +1,7 @@
 #pragma once
 
-#include <vector>
-#include <iostream>
 #include <string>
 #include <memory>
-#include <chrono>
 #include <thread>
 
 #include "../world/SolarSystemConstants.h"
