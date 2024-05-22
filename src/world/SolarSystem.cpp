@@ -13,9 +13,9 @@ Planet::Planet(f64 _size, const dvec3& _position)
 void Planet::init(i32 number, f64 _angle, f64 _dangle, dvec3 _rotation)
 {
     cloudsAndTrees = std::make_unique<CloudsAndTrees>(12, *this->celestialBody, _angle, _dangle);
-    cloudsAndTrees->provideInitialRotation(_rotation);
+    //cloudsAndTrees->provideInitialRotation(_rotation);
 
-    dvec3 launchpadPos = pointAboveTheSurface(_angle, _dangle, SolarSystemConstants::earthSize + 0.021);
+    dvec3 launchpadPos = pointAboveTheSurface(_angle, _dangle, SolarSystemConstants::earthSize - 0.45 + 0.021);
 
     launchpad = std::make_unique<Launchpad>("model3d_shader", "assets/models/launchpad2.obj", launchpadPos, 0.05);
     launchpad->rotation = _rotation;

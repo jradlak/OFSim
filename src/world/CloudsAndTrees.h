@@ -12,7 +12,7 @@ namespace ofsim_world
         CloudsAndTrees(const int _numberOfClouds, CelestialBody& _earth,
             double _angle, double _dangle);
 
-        void provideInitialRotation(glm::dvec3 _initialRotation) { initialRotation = _initialRotation; }
+        //void provideInitialRotation(glm::dvec3 _initialRotation) { initialRotation = _initialRotation; }
 
         void render(glm::dmat4 projection, glm::dmat4 view, const glm::dvec3 lightPos);
 
@@ -29,7 +29,7 @@ namespace ofsim_world
 
         double angle;
         double dangle;
-        glm::dvec3 initialRotation;
+        glm::dvec3 initialRotation {0, 0, 0};
 
         CelestialBody& earth;
 
