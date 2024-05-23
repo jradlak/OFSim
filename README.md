@@ -65,8 +65,7 @@ If you use Visual Studio 2022 on Windows, you can import the project into the ID
 **=====Things To Do:=====**
 
 ASAP:
-1. Fix initial rocket orientation code. Rocket should be parallel to the normal vector at a point on the sphere. Additional correction shlouldn't be needed.
-2. The rotation of the rocket does not completely coincide with the rotation of the thrust vector.
+1. The rotation of the rocket does not completely coincide with the rotation of the thrust vector.
 
 Less urgent:
 1. Saving files in the source code editor. Currently, the editor only displays the loaded program text.
@@ -83,6 +82,10 @@ Less urgent:
 6. Better graphics. Shadows, tesselation of the terrain. 
 
 **=====Changelog:=====**
+
+0.25.1 - Rocket's initial orientation fixes. Now the rockt is fully perpendicular to the planet's surface at point (0, y, 0). The appropriate rotation of the planet ensures the correct geographical coordinates.
+
+
 
 0.25.0 - Diagnostics mode.
 
