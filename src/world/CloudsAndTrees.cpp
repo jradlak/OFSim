@@ -2,7 +2,7 @@
 
 using namespace ofsim_world;
 
-CloudsAndTrees::CloudsAndTrees(const int _numberOfClouds, CelestialBody& _earth, double _angle, double _dangle)
+CloudsAndTrees::CloudsAndTrees(const i32 _numberOfClouds, CelestialBody& _earth, f64 _angle, f64 _dangle)
     : numberOfClouds(_numberOfClouds), earth(_earth), angle(_angle), dangle(_dangle)
 {
     cloudRenderer = std::make_unique<ofsim_renderer::ModelRenderer>("model3d_shader", "assets/models/Cloud.obj");
@@ -11,7 +11,7 @@ CloudsAndTrees::CloudsAndTrees(const int _numberOfClouds, CelestialBody& _earth,
     calculatePositionsAndSizes();
 }
 
-void CloudsAndTrees::render(glm::dmat4 projection, glm::dmat4 view, const glm::dvec3 lightPos)
+void CloudsAndTrees::render(dmat4 projection, dmat4 view, const dvec3 lightPos)
 {
     Shader* cloudShader = cloudRenderer->getShader();
     cloudShader->use();
@@ -36,19 +36,19 @@ void CloudsAndTrees::calculatePositionsAndSizes()
 {
     for (int i = 0; i < numberOfClouds; i++)
     {
-        float rangle = (rand() % 46 + 4) / 30.0;
-        float rdangle = (rand() % 46 + 4) / 30.0;
-        int min1 = rand() % 2;
+        f32 rangle = (rand() % 46 + 4) / 30.0;
+        f32 rdangle = (rand() % 46 + 4) / 30.0;
+        i32 min1 = rand() % 2;
         if (min1 == 0) rangle *= -1;
-        int min2 = rand() % 2;
+        i32 min2 = rand() % 2;
         if (min2 == 0) rdangle *= -1;
 
         dvec3 cloudPoint = earth.pointAboveTheSurface(angle, dangle, 6371 + 0.1);
 
-        dvec3 cloudPos = dvec3(rangle, cloudPoint.y + 1.5, rdangle); //earth.pointAboveTheSurface(angle + rangle, dangle + rdangle, 6371 + 0.1);
-        glm::dvec3 treePos = dvec3(-rangle, cloudPoint.y, -rdangle); //earth.pointAboveTheSurface(angle - rangle, dangle - rdangle, 6371);
+        dvec3 cloudPos = dvec3(rangle, cloudPoint.y + 1.5, rdangle);
+        dvec3 treePos = dvec3(-rangle, cloudPoint.y - 0.55, -rdangle);
 
-        float size = (rand() % 100 + 7) / 100000.0;
+        f32 size = (rand() % 100 + 7) / 100000.0;
 
         cloudsPositions.push_back(cloudPos);
         treesPositions.push_back(treePos);

@@ -8,13 +8,11 @@
 namespace ofsim_world
 {
     struct CloudsAndTrees
-    {    
-        CloudsAndTrees(const int _numberOfClouds, CelestialBody& _earth,
-            double _angle, double _dangle);
+    {
+        CloudsAndTrees(const i32 _numberOfClouds, CelestialBody& _earth,
+            f64 _angle, f64 _dangle);
 
-        //void provideInitialRotation(glm::dvec3 _initialRotation) { initialRotation = _initialRotation; }
-
-        void render(glm::dmat4 projection, glm::dmat4 view, const glm::dvec3 lightPos);
+        void render(dmat4 projection, dmat4 view, const dvec3 lightPos);
 
     private:
         const int numberOfClouds;
@@ -22,14 +20,14 @@ namespace ofsim_world
         std::unique_ptr<ofsim_renderer::ModelRenderer> cloudRenderer;
         std::unique_ptr<ofsim_renderer::ModelRenderer> treeRenderer;
 
-        std::vector<glm::dvec3> cloudsPositions;
-        std::vector<glm::dvec3> treesPositions;
+        std::vector<dvec3> cloudsPositions;
+        std::vector<dvec3> treesPositions;
 
-        std::vector<double> cloudsSizes;
+        std::vector<f64> cloudsSizes;
 
-        double angle;
-        double dangle;
-        glm::dvec3 initialRotation {0, 0, 0};
+        f64 angle;
+        f64 dangle;
+        dvec3 initialRotation {0, 0, 0};
 
         CelestialBody& earth;
 

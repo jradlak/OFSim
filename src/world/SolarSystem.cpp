@@ -13,7 +13,6 @@ Planet::Planet(f64 _size, const dvec3& _position)
 void Planet::init(i32 number, f64 _angle, f64 _dangle, dvec3 _rotation)
 {
     cloudsAndTrees = std::make_unique<CloudsAndTrees>(24, *this->celestialBody, _angle, _dangle);
-    //cloudsAndTrees->provideInitialRotation(_rotation);
 
     dvec3 launchpadPos = pointAboveTheSurface(_angle, _dangle, SolarSystemConstants::earthSize - 0.45 + 0.021);
 
