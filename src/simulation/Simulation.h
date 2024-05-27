@@ -106,6 +106,10 @@ namespace ofsim_simulation
         dvec3 rocketInitialPosition(const f64 theta, const f64 phi) { return solarSystem
             ->pointAboveEarthSurface(theta, phi, SolarSystemConstants::earthSize - 0.45); }
 
+        DiagnosticsData prepareDiagnosticsData();
+
+        bool showDiagnosticsInSimulation {false};
+
         void physicsRocketInitialOrientation();
         void initialSolarSystemInformation() { solarSystem->provideRocketInformationAndInit(ofsim_math_and_physics::theta, ofsim_math_and_physics::phi, rocket.get()); }
         void initialOrbitalInformation();

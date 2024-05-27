@@ -269,16 +269,8 @@ void Simulation::renderHUD()
 
     if (simulationMode == SimulationMode::DIAGNOSTICS_MODE)
     {
-        auto properties = rocket->properties();
-        DiagnosticsData diagnostics;
-        diagnostics.rocketPosition = properties.position;
-        diagnostics.rocketRotation = properties.rotation;
-        diagnostics.thrustVectorDirection = physics->thrustVector;
-        diagnostics.cameraPosition = camera->position;
-        diagnostics.dTheta = dTheta;
-        diagnostics.dPhi = dPhi;
-
-        gui->renderDiagnostics(diagnostics);		
+        auto diagnostics = prepareDiagnosticsData();
+        gui->renderDiagnostics(diagnostics);
     }
 	else
 	{
@@ -295,9 +287,29 @@ void Simulation::renderHUD()
         renderTelemetry(gui.get(), rocket.get(), physics->altitude, apogeum, perygeum, physics->getAtmosphereDragForceMagnitude());
 
 		gui->renderTranslationErrors(EventProcessor::getInstance()->getPythonError());
+
+        if (showDiagnosticsInSimulation)
+        {
+            auto diagnostics = prepareDiagnosticsData();
+            gui->renderDiagnostics(diagnostics);
+        }
 	}
 
 	gui->endRendering();
+}
+
+DiagnosticsData Simulation::prepareDiagnosticsData()
+{
+    auto properties = rocket->properties();
+    DiagnosticsData diagnostics;
+    diagnostics.rocketPosition = properties.position;
+    diagnostics.rocketRotation = properties.rotation;
+    diagnostics.thrustVectorDirection = physics->thrustVector;
+    diagnostics.cameraPosition = camera->position;
+    diagnostics.dTheta = dTheta;
+    diagnostics.dPhi = dPhi;
+
+    return diagnostics;
 }
 
 /**
@@ -479,6 +491,11 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 			}
 		}
 	}
+
+    if (event.action == UserAction::SHOW_DIAGNOSTICS_IN_SIMULATION)
+    {
+        showDiagnosticsInSimulation = !showDiagnosticsInSimulation;
+    }
 }
 
 unsigned long long Simulation::currentTime()

@@ -142,6 +142,11 @@ void Window::key_callback(GLFWwindow *window, int key, int scancode, int action,
 		direction = RIGHT;
 	}
 
+    if (key == GLFW_KEY_I && action == GLFW_PRESS)
+    {
+        EventProcessor::getInstance()->createEvent(UserAction::SHOW_DIAGNOSTICS_IN_SIMULATION, "");
+    }
+
     if (direction != Camera_Movement::NONE)
 	{
 		Window* theWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));
