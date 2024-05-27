@@ -21,8 +21,8 @@ Smoke::Smoke()
 
 void Smoke::puff(dmat4& projection, dmat4& view, dvec3& _lightPos, dvec3 position)
 {
-    i32 _position = rand() % 16 + 8;
-	double dPosition = _position / 10000.0;
+    i32 _position = rand() % 16 - 8;
+	double dPosition = _position / 10000.0;    
 	position = position + dPosition;
 
 	for (int puffIndex = 0; puffIndex < SMOKE_SIZE; puffIndex++)
