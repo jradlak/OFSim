@@ -5,15 +5,13 @@
 
 #include <string>
 
-#include <filesystem>
-namespace fs = std::filesystem;
-
 #include "../../external_libraries/imgui/imgui.h"
 #include "../../external_libraries/imgui/imgui_impl_glfw.h"
 #include "../../external_libraries/imgui/imgui_impl_opengl3.h"
 #include "../../external_libraries/imgui/imgui_stdlib.h"
 
 #include "../infrastructure/EventProcessor.h"
+#include "../infrastructure/FileService.h"
 
 using namespace ofsim_gui;
 using namespace ofsim_events;
@@ -614,14 +612,6 @@ int Gui::getTimeFactor()
 }
 
 void Gui::loadFilesInDirectory(std::string &directory)
-{
-    filesInDirectory.clear();
-    if (fs::is_directory(directory)) 
-    {
-        for (const auto& entry : fs::directory_iterator(directory))
-        {
-            std::string fileName = entry.path().u8string();                
-                filesInDirectory.push_back(fileName);
-        }
-    }
+{    
+    filesInDirectory = ofsim_infrastructure::loadfilesInDirectory(directory);
 }

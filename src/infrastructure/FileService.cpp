@@ -1,8 +1,11 @@
 #include "FileService.h"
 
+#include <filesystem>
+namespace fs = std::filesystem;
+
 namespace ofsim_infrastructure
 {
-	void saveSourceCode(std::string sourcePath, std::string orbitalProgramSrc)
+	void saveSourceCode(std::string &sourcePath, std::string &orbitalProgramSrc)
 	{
 		if (orbitalProgramSrc != "")
 		{
@@ -18,7 +21,7 @@ namespace ofsim_infrastructure
 		}
 	}
 
-	std::string loadSourceCode(std::string sourcePath)
+	std::string loadSourceCode(std::string &sourcePath)
 	{
 		std::string orbitalResult = "";
 		
@@ -38,5 +41,20 @@ namespace ofsim_infrastructure
 		}
 
 		return orbitalResult;
+	}
+
+	std::vector<std::string> loadfilesInDirectory(std::string &dirName)
+	{
+		std::vector<std::string> filesInDirectory;
+		if (fs::is_directory(dirName))
+		{
+			for (const auto& entry : fs::directory_iterator(dirName))
+			{
+				std::string fileName = entry.path().u8string();
+				filesInDirectory.push_back(fileName);
+			}
+		}
+
+		return filesInDirectory;
 	}
 }
