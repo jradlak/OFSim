@@ -82,6 +82,9 @@ add_executable("${CMAKE_PROJECT_NAME}"
     src/infrastructure/ImageLoader.h    
     src/infrastructure/EventProcessor.h
     src/infrastructure/EventProcessor.cpp
+    src/infrastructure/EventDispatcher.h
+    src/infrastructure/StateMachine.h
+    src/infrastructure/StateMachine.cpp
 
     src/python_integration/PythonMachine.h
     src/python_integration/PythonMachine.cpp
@@ -252,6 +255,9 @@ add_executable(
     src/infrastructure/ImageLoader.h    
     src/infrastructure/EventProcessor.h
     src/infrastructure/EventProcessor.cpp
+    src/infrastructure/EventDispatcher.h
+    src/infrastructure/StateMachine.h
+    src/infrastructure/StateMachine.cpp
 
     src/vmachine/Instructions.cpp
     src/vmachine/Instructions.h
