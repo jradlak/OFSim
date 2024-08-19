@@ -151,7 +151,7 @@ add_executable("${CMAKE_PROJECT_NAME}"
     
     external_libraries/stb_image.h
     external_libraries/stb_image.cpp   
-  )
+    "src/infrastructure/SMEventsListener.h")
 
 #copy shaders to binary directory:
 if(MSVC)
@@ -278,7 +278,8 @@ add_executable(
     "tests/PhysicsSolverTests.cpp"
     "tests/MemoryTests.cpp"
     "tests/TranslatorTests.cpp"
-    "tests/VMTests.cpp")
+    "tests/VMTests.cpp" "tests/StateMachineTests.cpp"
+    "tests/StateMachineTests.cpp" "src/infrastructure/SMEventsListener.h")
 target_link_libraries(
     ofsim_tests
     ${OPENGL_LIBRARIES}

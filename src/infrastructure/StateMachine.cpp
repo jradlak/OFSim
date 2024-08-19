@@ -22,17 +22,16 @@ namespace ofsim_infrastructure
     }
 
     void StateMachine::processEvent(StateEvent event)
-    {
-        if (!stateTriggering.count(event))
-        {
-            return;
-        }
-
-        auto stateName = stateTriggering[event];
-        if (stateGraph[currentState].tranistions.count(stateName))
-        {
-            currentState = stateName;
+    {              
+        if (stateGraph[currentState].tranistions.count(event) != 0)
+        {            
+            currentState = stateGraph[currentState].tranistions[event];
             sendEvent(stateGraph[currentState].triggeredEvent);
+            if (stateGraph[currentState].immediateState)
+            {
+                currentState = (*stateGraph[currentState].tranistions.begin()).second;
+                sendEvent(stateGraph[currentState].triggeredEvent);
+            }
         }
     }
 
@@ -44,35 +43,44 @@ namespace ofsim_infrastructure
     void StateMachine::buildGraph()
     {  
         stateGraph[StateName::WAITING_FOR_BEGIN] = SimulationState {
-            StateName::WAITING_FOR_BEGIN,
+            StateName::WAITING_FOR_BEGIN,            
             StateEvent::NONE,
             false,
             {
-                {StateName::SIMULATION_RUNNIG},
-                {StateName::SHOW_FILE_LOAD_DIALOG}                
+                {StateEvent::START_SIMULATION, StateName::SIMULATION_RUNNIG},
+                {StateEvent::OPEN_FILE_DIALOG, StateName::SHOW_FILE_LOAD_DIALOG}
             }
         };
 
         stateGraph[StateName::SIMULATION_RUNNIG] = SimulationState{
-            StateName::SIMULATION_RUNNIG,
+            StateName::SIMULATION_RUNNIG,                        
             StateEvent::SIMULATION_STARTED,
             false,            
             {
-                {StateName::TRAJECTORY_PREDICTION},
-                {StateName::DIAGNOSTICS},
-                {StateName::PRESENTATION}
+                {StateEvent::SWITCH_TO_TRAJECTORY_PREDICTION, StateName::TRAJECTORY_PREDICTION},
+                {StateEvent::SWITCH_TO_DIAGNOSTICS, StateName::DIAGNOSTICS},
+                {StateEvent::SWITCH_TO_PRESENTATION, StateName::PRESENTATION},
+                {StateEvent::SHOW_HELP_DIALOG,StateName::SHOW_HELP}
             }
         };
 
-        stateGraph[StateName::SIMULATION_RUNNIG] = SimulationState{
-            StateName::SIMULATION_RUNNIG,
-            StateEvent::SIMULATION_STARTED,
+        stateGraph[StateName::TRAJECTORY_PREDICTION] = SimulationState{
+            StateName::TRAJECTORY_PREDICTION,            
+            StateEvent::SHOW_TRAJECTORY_PREDICTION,
             false,            
             {
-                {StateName::TRAJECTORY_PREDICTION},
-                {StateName::DIAGNOSTICS},
-                {StateName::PRESENTATION}
+                {StateEvent::CONTINUE_SIMULATION, StateName::SIMULATION_RUNNIG}                
             }
         };
+
+        stateGraph[StateName::SHOW_FILE_LOAD_DIALOG] = SimulationState{
+            StateName::SHOW_FILE_LOAD_DIALOG,            
+            StateEvent::SHOW_FILE_OPEN_DIALOG,
+            false,
+            {                
+                {StateEvent::LOAD_SELECTED_FILE, StateName::WAITING_FOR_BEGIN},
+                {StateEvent::LOAD_DIRECTORY_FILES, StateName::SHOW_FILE_LOAD_DIALOG}
+            }
+        };        
     }
 }

@@ -20,15 +20,16 @@ namespace ofsim_infrastructure
         FINISH,
 
         SHOW_HELP,
-        SHOW_FILE_LOAD_DIALOG
+        SHOW_FILE_LOAD_DIALOG,
+        LOAD_FILE_FROM_DIALOG
     };
 
     struct SimulationState
     {
-        StateName stateName;
+        StateName stateName;        
         StateEvent triggeredEvent;
         bool immediateState = false;
-        std::set<StateName> tranistions;       
+        std::unordered_map<StateEvent, StateName> tranistions;       
     };
 
     class StateMachine

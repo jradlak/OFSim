@@ -1,3 +1,5 @@
+#pragma once
+
 #include <queue>
 
 #include <mutex>
@@ -24,11 +26,17 @@ namespace ofsim_infrastructure
 
         SWITCH_TO_TRAJECTORY_PREDICTION,
         SWITCH_TO_DIAGNOSTICS,
+        SWITCH_TO_PRESENTATION,
+
+        SHOW_INITIAL_CONFIGURATION,
+        SHOW_HELP_DIALOG,
+        SHOW_FILE_OPEN_DIALOG,
+        SHOW_TRAJECTORY_PREDICTION
     };
 
     class EventDispatcher
     {
-    public:
+    public:        
         void sendGUIEvent(StateEvent event)
         {
             {
@@ -52,17 +60,29 @@ namespace ofsim_infrastructure
         StateEvent recieveGUIEvent()
         {
             std::unique_lock<std::mutex> lock(_mutex);
-            _cond_var.wait(lock, [this]() { return !inbox.empty(); });
+            _cond_var
+                .wait(lock, [this]() { return !inbox.empty(); });
         
             auto event = inbox.front();
             inbox.pop();
             return event;
         }
 
+        StateEvent recieveSMEvent()
+        {
+            std::unique_lock<std::mutex> lock(_mutex);
+            _cond_var
+                .wait(lock, [this]() { return !outbox.empty(); });
+
+            auto event = outbox.front();
+            outbox.pop();
+            return event;
+        }
+
     private:
         std::queue<StateEvent> inbox;
         std::queue<StateEvent> outbox;
-        
+
         std::mutex _mutex;
         std::condition_variable _cond_var;
     };
