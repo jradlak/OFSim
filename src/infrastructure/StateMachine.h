@@ -36,6 +36,7 @@ namespace ofsim_infrastructure
     {
     public:
         StateMachine(EventDispatcher &_eventDispatcher);
+        void stop() { shouldListen = false; }
         ~StateMachine() { shouldListen = false; }
 
     private:

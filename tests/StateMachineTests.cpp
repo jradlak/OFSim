@@ -13,18 +13,21 @@ namespace state_machine_tests
 
 	TEST(StateMachineTest, basicTest)
 	{
-		EventDispatcher ed;
-		StateMachine sm(ed);
-		SMEventsListener listener(ed);
+		std::unique_ptr<EventDispatcher> ed = std::make_unique<EventDispatcher>();
+		std::unique_ptr<StateMachine> sm = std::make_unique<StateMachine>(*ed);
+		std::unique_ptr<SMEventsListener> listener = std::make_unique<SMEventsListener>(*ed);
 
-		ed.sendGUIEvent(StateEvent::START_SIMULATION);
+		ed->sendGUIEvent(StateEvent::START_SIMULATION);
 
-		std::this_thread::sleep_for(std::chrono::milliseconds(200));
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
-		auto event = listener.lastEvent();
-		int numberOfEvents = listener.numberOfEventsRecieved();
+		auto event = listener->lastEvent();
+		int numberOfEvents = listener->numberOfEventsRecieved();
 
-		EXPECT_EQ(event, StateEvent::SIMULATION_STARTED);		
+		sm->stop();
+		listener->stop();
+
+		EXPECT_EQ(event, StateEvent::SIMULATION_STARTED);
 		EXPECT_EQ(numberOfEvents, 2);
 	}
 }

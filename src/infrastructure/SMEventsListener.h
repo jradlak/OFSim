@@ -15,6 +15,7 @@ namespace ofsim_infrastructure
 			smeThread = std::make_unique<std::thread>(&SMEventsListener::recieveEvents, this);
 		}
 
+		void stop() { shouldListen = false; }
 		StateEvent lastEvent() { return _lastEvent; }
 		int numberOfEventsRecieved() { return _numberOfEventsRecieved; }
 
