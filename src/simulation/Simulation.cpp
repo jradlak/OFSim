@@ -19,7 +19,12 @@ Simulation::Simulation()
     glm::dvec3 rocketPos = rocketInitialPosition(theta, phi);
     rocket = std::make_unique<Rocket>("model3d_shader", rocketPos, rocket_initial_size);
 	
-    camera->position = rocket->properties().position + glm::dvec3(0.0, 0.024, 0.0);
+	// state machine:
+	eventDispatcher = std::make_unique<EventDispatcher>();
+	stateMachine = std::make_unique<StateMachine>(*eventDispatcher);
+	smEventListener = std::make_unique<SMEventsListener>(*eventDispatcher);
+
+    camera->position = rocket->properties().position + glm::dvec3(0.0, 0.024, 0.0);	
 }
 
 // ----- simulation initialization methods
@@ -257,7 +262,7 @@ void Simulation::mainLoop()
 	simulationMode = SimulationMode::FINISHED;
 
 	terminatePythonMachine();	
-	terminateVMachine();
+	terminateVMachine();	
 }
 
 void Simulation::renderHUD()

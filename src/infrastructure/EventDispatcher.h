@@ -1,7 +1,7 @@
 #pragma once
 
 #include <queue>
-
+#include <chrono>
 #include <mutex>
 #include <condition_variable>
 
@@ -36,7 +36,8 @@ namespace ofsim_infrastructure
 
     class EventDispatcher
     {
-    public:        
+    public:  
+        
         void sendGUIEvent(StateEvent event)
         {
             {
@@ -58,19 +59,38 @@ namespace ofsim_infrastructure
         }
 
         StateEvent recieveGUIEvent()
-        {
+        {            
+            auto endTime = std::chrono::system_clock::now() + std::chrono::milliseconds(200);
+
             std::unique_lock<std::mutex> lock(_mutex);
+
             _cond_var
-                .wait(lock, [this]() { return !inbox.empty(); });
-        
+                .wait_until(lock, endTime, [this]() { return !inbox.empty(); });
+            
+            if (inbox.empty())
+            {
+                return StateEvent::NONE;
+            }
+
             auto event = inbox.front();
             inbox.pop();
             return event;
         }
 
         StateEvent recieveSMEvent()
-        {
-            std::unique_lock<std::mutex> lock(_mutex);
+        {   
+            auto endTime = std::chrono::system_clock::now() + std::chrono::milliseconds(200);
+
+            std::unique_lock<std::mutex> lock(_mutex);           
+
+            _cond_var
+                .wait_until(lock, endTime, [this]() { return !outbox.empty(); });
+
+            if (outbox.empty())
+            {
+                return StateEvent::NONE;
+            }
+
             auto event = outbox.front();
             outbox.pop();
             return event;

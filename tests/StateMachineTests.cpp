@@ -24,9 +24,6 @@ namespace state_machine_tests
 		auto event = listener->lastEvent();
 		int numberOfEvents = listener->numberOfEventsRecieved();
 
-		sm->stop();
-		listener->stop();
-
 		EXPECT_EQ(event, StateEvent::SIMULATION_STARTED);
 		EXPECT_EQ(numberOfEvents, 2);
 	}

@@ -17,7 +17,7 @@ namespace ofsim_infrastructure
             if (event != StateEvent::NONE) 
             {
                 processEvent(event);
-            }
+            }            
         }
     }
 
