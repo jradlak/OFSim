@@ -5,6 +5,8 @@
 #include <mutex>
 #include <condition_variable>
 
+#include "SimulationEvent.h"
+
 namespace ofsim_infrastructure
 {
     enum class StateEvent
@@ -46,6 +48,12 @@ namespace ofsim_infrastructure
             }
 
             _cond_var.notify_one();
+        }
+
+        void sendSimulationEvent(ofsim_events::SimulationEvent* simulationEvent)
+        {
+            StateEvent event = unpackSimulationEvent(simulationEvent);
+            sendGUIEvent(event);
         }
 
         void sendSMEvent(StateEvent event)
@@ -102,5 +110,10 @@ namespace ofsim_infrastructure
 
         std::mutex _mutex;
         std::condition_variable _cond_var;
+
+        StateEvent unpackSimulationEvent(ofsim_events::SimulationEvent* simulationEvent)
+        {
+            return StateEvent::NONE;
+        }
     };
 }

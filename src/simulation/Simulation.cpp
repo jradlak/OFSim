@@ -9,6 +9,7 @@ using namespace ofsim_simulation;
 
 Simulation::Simulation()
 {
+	// 
 	camera = std::make_unique<ofsim_renderer::Camera>(glm::vec3(-100.0, -160.0, 1000.0));
 	mainWindow = std::make_unique<Window>(*camera, SCR_WIDTH, SCR_HEIGHT);
 	initWindowContext();
@@ -24,6 +25,7 @@ Simulation::Simulation()
 	stateMachine = std::make_unique<StateMachine>(*eventDispatcher);
 	smEventListener = std::make_unique<SMEventsListener>(*eventDispatcher);
 
+	// update camera position according to rocket:
     camera->position = rocket->properties().position + glm::dvec3(0.0, 0.024, 0.0);	
 }
 
@@ -150,7 +152,7 @@ void Simulation::mainLoop()
 	f64 step{ 0.000000001 };
 	
 	EventProcessor::getInstance()->povideRocketAndPhysics(rocket.get(), physics.get());
-
+	EventProcessor::getInstance()->provideEventDispatcher(eventDispatcher.get());
 	// <----- end of initialization section ----->
 
 	dvec3 toTheMoon = SolarSystemConstants::moonPos;

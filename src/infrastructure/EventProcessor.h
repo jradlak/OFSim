@@ -8,6 +8,9 @@
 
 #include "RocketCommand.h"
 
+#include "EventDispatcher.h"
+#include "SimulationEvent.h"
+
 #include "../math_and_physics/MathTypes.h"
 #include "../world/Rocket.h"
 #include "../math_and_physics/PhysicsSolver.h"
@@ -15,61 +18,7 @@
 
 namespace ofsim_events 
 {
-    enum class UserAction
-	{
-		FILE_NEW,
-		FILE_OPEN,
-
-		PROGRAM_FILE_OPEN,
-		PROGRAM_TRANSLATE,		
-		PYTHON_PROGRAM_RAISED_ERROR,
-		PYTHON_PROGRAM_EXECUTION_STOP,
-
-		VM_PROGRAM_FILE_OPEN,
-		VM_PROGRAM_TRANSLATE,
-		VM_PROGRAM_RAISED_ERROR,
-		VM_PROGRAM_EXECUTION_STOP,
-
-		FILE_SAVE,	
-		FILE_SAVED_AS,
-		FILE_EXIT,
-
-		VIEW_TELEMETRY,
-		VIEW_TELEMETRY_PLOT,
-		VIEW_COMMANDS,
-		VIEW_PROGRAM,
-
-		HELP_ABOUT,
-		HELP_HELP,
-
-		CHANGE_MODE_TO_FROM_PREDICTION,
-		CHANGE_MODE_TO_FORM_PRESENTATION,
-
-        CHANGE_MODE_TO_FROM_DIAGNOSTICS,
-
-        ROTATION_LONGITUDE_UP,
-        ROTATION_LONGITUDE_DOWN,
-        ROTATION_LATITUDE_UP,
-        ROTATION_LATITUDE_DOWN,
-
-        SHOW_DIAGNOSTICS_IN_SIMULATION,
-
-		NONE
-	};
-
-	// This kind of event is producend by the user interface or by te Ptyhon machine when scriupt error occurs.
-	struct SimulationEvent
-	{		
-		u32 id { 0 };
-		u64 timestamp { 0 };
-		UserAction action;
-		std::string data;
-
-		SimulationEvent() : action(UserAction::NONE) {}
-		SimulationEvent(u32 _id, u64 _timestamp, UserAction _action, std::string _data)
-			: id(_id), timestamp(_timestamp), action(_action), data(_data) {}
-	};
-
+   
 	// Central singleton responsible for creating nad passing events and data between different parts of the application.	
     class EventProcessor
     {
@@ -106,9 +55,11 @@ namespace ofsim_events
 			u64 currentTime();
 
 			static EventProcessor* getInstance();
-					
+							
 			// utility methods:
             void povideRocketAndPhysics(ofsim_world::Rocket* _rocket, ofsim_math_and_physics::PhysicsSolver* _physics) { rocket = _rocket; physics = _physics; }
+			void provideEventDispatcher(ofsim_infrastructure::EventDispatcher* _eventDispatcher) { eventDispatcher = _eventDispatcher; }
+
             EventProcessor(EventProcessor const&) = delete;
             void operator=(EventProcessor const&) = delete;
             			
@@ -122,6 +73,7 @@ namespace ofsim_events
 			// because references should be intilized immediately
             ofsim_world::Rocket* rocket;
 			ofsim_math_and_physics::PhysicsSolver* physics;
+			ofsim_infrastructure::EventDispatcher* eventDispatcher;
 
             SimulationEvent* userEvent = nullptr;
             u32 eventCounter {0};
@@ -132,7 +84,7 @@ namespace ofsim_events
            			
             static EventProcessor* instance;
             static std::mutex mutex;
-
+	
 			u64 runningTime { 0 };
     };
 }

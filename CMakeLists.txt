@@ -86,6 +86,8 @@ add_executable("${CMAKE_PROJECT_NAME}"
     src/infrastructure/EventDispatcher.h
     src/infrastructure/StateMachine.h
     src/infrastructure/StateMachine.cpp
+    src/infrastructure/SMEventsListener.h
+    src/infrastructure/SimulationEvent.h
 
     src/python_integration/PythonMachine.h
     src/python_integration/PythonMachine.cpp
@@ -151,8 +153,7 @@ add_executable("${CMAKE_PROJECT_NAME}"
     src/vmachine/VMachine.h
     
     external_libraries/stb_image.h
-    external_libraries/stb_image.cpp   
-    "src/infrastructure/SMEventsListener.h")
+    external_libraries/stb_image.cpp       )
 
 #copy shaders to binary directory:
 if(MSVC)
@@ -259,6 +260,8 @@ add_executable(
     src/infrastructure/EventDispatcher.h
     src/infrastructure/StateMachine.h
     src/infrastructure/StateMachine.cpp
+    src/infrastructure/SMEventsListener.h
+    src/infrastructure/SimulationEvent.h
 
     src/vmachine/Instructions.cpp
     src/vmachine/Instructions.h
@@ -280,7 +283,7 @@ add_executable(
     "tests/MemoryTests.cpp"
     "tests/TranslatorTests.cpp"
     "tests/VMTests.cpp" "tests/StateMachineTests.cpp"
-    "tests/StateMachineTests.cpp" "src/infrastructure/SMEventsListener.h")
+    "tests/StateMachineTests.cpp" "src/infrastructure/SMEventsListener.h" "src/infrastructure/SimulationEvent.h")
 target_link_libraries(
     ofsim_tests
     ${OPENGL_LIBRARIES}
