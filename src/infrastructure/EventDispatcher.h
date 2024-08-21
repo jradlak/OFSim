@@ -71,9 +71,6 @@ namespace ofsim_infrastructure
         StateEvent recieveSMEvent()
         {
             std::unique_lock<std::mutex> lock(_mutex);
-            _cond_var
-                .wait(lock, [this]() { return !outbox.empty(); });
-
             auto event = outbox.front();
             outbox.pop();
             return event;
