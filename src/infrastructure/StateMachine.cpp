@@ -1,6 +1,6 @@
 #include "StateMachine.h"
 
-namespace ofsim_infrastructure
+namespace ofsim_events
 {
     StateMachine::StateMachine(EventDispatcher &_eventDispatcher) 
         : eventDispatcher(_eventDispatcher)
@@ -60,7 +60,7 @@ namespace ofsim_infrastructure
                 {StateEvent::SWITCH_TO_TRAJECTORY_PREDICTION, StateName::TRAJECTORY_PREDICTION},
                 {StateEvent::SWITCH_TO_DIAGNOSTICS, StateName::DIAGNOSTICS},
                 {StateEvent::SWITCH_TO_PRESENTATION, StateName::PRESENTATION},
-                {StateEvent::SHOW_HELP_DIALOG,StateName::SHOW_HELP}
+                {StateEvent::OPEN_HELP_DIALOG, StateName::SHOW_HELP}
             }
         };
 

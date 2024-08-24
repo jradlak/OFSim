@@ -23,8 +23,8 @@
 #include "../infrastructure//EventDispatcher.h"
 
 namespace ofsim_simulation
-{
-    using namespace ofsim_infrastructure;
+{    
+    using namespace ofsim_events;
 
     enum class SimulationMode
     {

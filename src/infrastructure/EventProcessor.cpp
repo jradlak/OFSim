@@ -71,7 +71,7 @@ SimulationEvent EventProcessor::getEvent()
     return event;
 }
 
-void EventProcessor::createEvent(UserAction action, std::string data)
+void EventProcessor::createEvent(StateEvent action, std::string data)
 {
     if (userEvent == nullptr)
     {

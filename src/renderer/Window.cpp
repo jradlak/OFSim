@@ -88,37 +88,37 @@ void Window::key_callback(GLFWwindow *window, int key, int scancode, int action,
 
 	if (key == GLFW_KEY_M && action == GLFW_PRESS)
 	{
-		EventProcessor::getInstance()->createEvent(UserAction::CHANGE_MODE_TO_FROM_PREDICTION, "");
+		EventProcessor::getInstance()->createEvent(StateEvent::CHANGE_MODE_TO_FROM_PREDICTION, "");
 	}
 
 	if (key == GLFW_KEY_K && action == GLFW_PRESS)
 	{
-		EventProcessor::getInstance()->createEvent(UserAction::CHANGE_MODE_TO_FORM_PRESENTATION, "");
+		EventProcessor::getInstance()->createEvent(StateEvent::CHANGE_MODE_TO_FORM_PRESENTATION, "");
 	}
 
     if (key == GLFW_KEY_O && action == GLFW_PRESS)
     {
-        EventProcessor::getInstance()->createEvent(UserAction::CHANGE_MODE_TO_FROM_DIAGNOSTICS, "");
+        EventProcessor::getInstance()->createEvent(StateEvent::CHANGE_MODE_TO_FROM_DIAGNOSTICS, "");
     }
 
     if (key == GLFW_KEY_UP && action == GLFW_PRESS)
     {
-        EventProcessor::getInstance()->createEvent(UserAction::ROTATION_LONGITUDE_UP, "");
+        EventProcessor::getInstance()->createEvent(StateEvent::ROTATION_LONGITUDE_UP, "");
     }
 
     if (key == GLFW_KEY_DOWN && action == GLFW_PRESS)
     {
-        EventProcessor::getInstance()->createEvent(UserAction::ROTATION_LONGITUDE_DOWN, "");
+        EventProcessor::getInstance()->createEvent(StateEvent::ROTATION_LONGITUDE_DOWN, "");
     }
 
     if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS)
     {
-        EventProcessor::getInstance()->createEvent(UserAction::ROTATION_LATITUDE_UP, "");
+        EventProcessor::getInstance()->createEvent(StateEvent::ROTATION_LATITUDE_UP, "");
     }
 
     if (key == GLFW_KEY_LEFT && action == GLFW_PRESS)
     {
-        EventProcessor::getInstance()->createEvent(UserAction::ROTATION_LATITUDE_DOWN, "");
+        EventProcessor::getInstance()->createEvent(StateEvent::ROTATION_LATITUDE_DOWN, "");
     }
 
     Camera_Movement direction = Camera_Movement::NONE;
@@ -144,7 +144,7 @@ void Window::key_callback(GLFWwindow *window, int key, int scancode, int action,
 
     if (key == GLFW_KEY_I && action == GLFW_PRESS)
     {
-        EventProcessor::getInstance()->createEvent(UserAction::SHOW_DIAGNOSTICS_IN_SIMULATION, "");
+        EventProcessor::getInstance()->createEvent(StateEvent::SHOW_DIAGNOSTICS_IN_SIMULATION, "");
     }
 
     if (direction != Camera_Movement::NONE)

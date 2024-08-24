@@ -6,7 +6,7 @@
 
 #include "EventDispatcher.h"
 
-namespace ofsim_infrastructure 
+namespace ofsim_events 
 {   
     enum class StateName
     {    

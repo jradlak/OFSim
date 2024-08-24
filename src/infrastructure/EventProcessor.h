@@ -17,15 +17,14 @@
 #include "../python_integration/PythonError.h"
 
 namespace ofsim_events 
-{
-   
+{   
 	// Central singleton responsible for creating nad passing events and data between different parts of the application.	
     class EventProcessor
     {
         public:
 			// UI events:
             SimulationEvent getEvent();
-            void createEvent(UserAction action, std::string data);
+            void createEvent(StateEvent action, std::string data);
 
 			// Rocket status:
             dvec3 getRocketPosition() { return rocket->properties().position; }
@@ -58,7 +57,7 @@ namespace ofsim_events
 							
 			// utility methods:
             void povideRocketAndPhysics(ofsim_world::Rocket* _rocket, ofsim_math_and_physics::PhysicsSolver* _physics) { rocket = _rocket; physics = _physics; }
-			void provideEventDispatcher(ofsim_infrastructure::EventDispatcher* _eventDispatcher) { eventDispatcher = _eventDispatcher; }
+			void provideEventDispatcher(EventDispatcher* _eventDispatcher) { eventDispatcher = _eventDispatcher; }
 
             EventProcessor(EventProcessor const&) = delete;
             void operator=(EventProcessor const&) = delete;
@@ -73,7 +72,7 @@ namespace ofsim_events
 			// because references should be intilized immediately
             ofsim_world::Rocket* rocket;
 			ofsim_math_and_physics::PhysicsSolver* physics;
-			ofsim_infrastructure::EventDispatcher* eventDispatcher;
+			EventDispatcher* eventDispatcher;
 
             SimulationEvent* userEvent = nullptr;
             u32 eventCounter {0};

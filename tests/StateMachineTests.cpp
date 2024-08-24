@@ -9,7 +9,7 @@
 
 namespace state_machine_tests
 {
-	using namespace ofsim_infrastructure;
+	using namespace ofsim_events;
 
 	TEST(StateMachineTest, basicTest)
 	{

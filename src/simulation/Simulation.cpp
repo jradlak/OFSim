@@ -328,7 +328,7 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 	// recieve and interpret user events:
 	SimulationEvent event = EventProcessor::getInstance()->getEvent();
 
-	if (event.action == UserAction::PYTHON_PROGRAM_EXECUTION_STOP)
+	if (event.action == StateEvent::PYTHON_PROGRAM_EXECUTION_STOP)
 	{
 		if (simulationMode == SimulationMode::STANDARD_SIMULATION)
 		{				
@@ -336,14 +336,14 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 		}
 	}
 
-	if (event.action == UserAction::PROGRAM_FILE_OPEN)
+	if (event.action == StateEvent::PROGRAM_FILE_OPEN)
 	{		
 		// load program source code from file (Python or VM):
 		orbitalProgramName = event.data;
 		orbitalProgramSourceCode = ofsim_infrastructure::loadSourceCode(event.data);
 	}
 
-	if (event.action == UserAction::PROGRAM_TRANSLATE)
+	if (event.action == StateEvent::PROGRAM_TRANSLATE)
 	{
 		if (this->orbitalProgramSourceCode.empty())
 		{
@@ -372,29 +372,29 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 		simulationMode = SimulationMode::STANDARD_SIMULATION;
 	}
 
-	if (event.action == UserAction::PYTHON_PROGRAM_RAISED_ERROR)
+	if (event.action == StateEvent::PYTHON_PROGRAM_RAISED_ERROR)
 	{
 		gui->setTimeFactor(-1);
 		stop();
 	}
 
-	if (event.action == UserAction::FILE_SAVE)
+	if (event.action == StateEvent::FILE_SAVE)
 	{
 		ofsim_infrastructure::saveSourceCode(SOURCE_CODE_FILE_NAME, orbitalProgramSourceCode);		
 	}
 
-	if (event.action == UserAction::FILE_SAVED_AS)
+	if (event.action == StateEvent::FILE_SAVED_AS)
 	{
 		std::string fileSaved = gui->getSavedFile();
 		ofsim_infrastructure::saveSourceCode(fileSaved, orbitalProgramSourceCode);
 	}
 
-	if (event.action == UserAction::FILE_EXIT)
+	if (event.action == StateEvent::FILE_EXIT)
 	{
 		glfwSetWindowShouldClose(mainWindow->getWindow(), true);
 	}
 
-	if (event.action == UserAction::CHANGE_MODE_TO_FROM_DIAGNOSTICS) // o
+	if (event.action == StateEvent::CHANGE_MODE_TO_FROM_DIAGNOSTICS) // o
 	{
 		if (simulationMode == SimulationMode::WAITING_FOR_BEGIN)
 		{
@@ -423,29 +423,29 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
     {
         switch (event.action)
         {
-            case (UserAction::ROTATION_LATITUDE_UP):
+            case (StateEvent::ROTATION_LATITUDE_UP):
                 std::cout << "rotation latitude UP \n" << std::flush;
                 dTheta += 10;
             break;
-            case (UserAction::ROTATION_LATITUDE_DOWN):
+            case (StateEvent::ROTATION_LATITUDE_DOWN):
                 std::cout << "rotation latitude DOWN \n" << std::flush;
                 dTheta -= 10;
             break;
-            case (UserAction::ROTATION_LONGITUDE_UP):
+            case (StateEvent::ROTATION_LONGITUDE_UP):
                 std::cout << "rotation longitude UP \n" << std::flush;
                 dPhi += 10;
             break;
-            case (UserAction::ROTATION_LONGITUDE_DOWN):
+            case (StateEvent::ROTATION_LONGITUDE_DOWN):
                 std::cout << "rotation longitude DOWN \n" << std::flush;
                 dPhi -= 10;
             break;
             default: ; // do nthng!
         }
 
-        bool diagAction = event.action == UserAction::ROTATION_LATITUDE_UP
-                || event.action == UserAction::ROTATION_LATITUDE_DOWN
-                || event.action == UserAction::ROTATION_LONGITUDE_UP
-                || event.action == UserAction::ROTATION_LONGITUDE_DOWN;
+        bool diagAction = event.action == StateEvent::ROTATION_LATITUDE_UP
+                || event.action == StateEvent::ROTATION_LATITUDE_DOWN
+                || event.action == StateEvent::ROTATION_LONGITUDE_UP
+                || event.action == StateEvent::ROTATION_LONGITUDE_DOWN;
         if (diagAction)
         {            
             dvec3 rocketPosition = rocketInitialPosition(dTheta, dPhi);
@@ -454,8 +454,8 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
         }
     }
 
-	if (event.action == UserAction::CHANGE_MODE_TO_FORM_PRESENTATION 
-		 || event.action == UserAction::CHANGE_MODE_TO_FROM_PREDICTION) // m, k
+	if (event.action == StateEvent::CHANGE_MODE_TO_FORM_PRESENTATION 
+		 || event.action == StateEvent::CHANGE_MODE_TO_FROM_PREDICTION) // m, k
 	{		
 		// change to presention or prediction mode is possible only when simulation is not waiting for begin:
 		if (simulationMode != SimulationMode::WAITING_FOR_BEGIN)
@@ -468,7 +468,7 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
                 physics->trajectoryPredictionZ,
                 telemetryCollector->telemetryHistory);
 
-			if (event.action == UserAction::CHANGE_MODE_TO_FROM_PREDICTION) // m
+			if (event.action == StateEvent::CHANGE_MODE_TO_FROM_PREDICTION) // m
             {
 				if (simulationMode != SimulationMode::TRAJECTORY_PREDICTION)
 				{
@@ -481,7 +481,7 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 				}
 			}
 
-			if (event.action == UserAction::CHANGE_MODE_TO_FORM_PRESENTATION) // k
+			if (event.action == StateEvent::CHANGE_MODE_TO_FORM_PRESENTATION) // k
 			{
 				if (simulationMode != SimulationMode::PRESENTATION_MODE)
 				{
@@ -499,7 +499,7 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 		}
 	}
 
-    if (event.action == UserAction::SHOW_DIAGNOSTICS_IN_SIMULATION)
+    if (event.action == StateEvent::SHOW_DIAGNOSTICS_IN_SIMULATION)
     {
         showDiagnosticsInSimulation = !showDiagnosticsInSimulation;
     }

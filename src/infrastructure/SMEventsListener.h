@@ -4,7 +4,7 @@
 
 #include <thread>
 
-namespace ofsim_infrastructure
+namespace ofsim_events
 {
 	class SMEventsListener
 	{

@@ -7,35 +7,8 @@
 
 #include "SimulationEvent.h"
 
-namespace ofsim_infrastructure
-{
-    enum class StateEvent
-    {
-        NONE,
-
-        // file dialog:
-        OPEN_FILE_DIALOG,
-        CLOSE_FILE_DIALOG,
-        LOAD_DIRECTORY_FILES,
-        LOAD_SELECTED_FILE,
-
-        // simulation:
-        START_SIMULATION,
-        SIMULATION_STARTED,
-        STOP_SIMULATION,
-        PAUSE_SIMULATION,
-        CONTINUE_SIMULATION,
-
-        SWITCH_TO_TRAJECTORY_PREDICTION,
-        SWITCH_TO_DIAGNOSTICS,
-        SWITCH_TO_PRESENTATION,
-
-        SHOW_INITIAL_CONFIGURATION,
-        SHOW_HELP_DIALOG,
-        SHOW_FILE_OPEN_DIALOG,
-        SHOW_TRAJECTORY_PREDICTION
-    };
-
+namespace ofsim_events
+{    
     class EventDispatcher
     {
     public:  
@@ -111,9 +84,6 @@ namespace ofsim_infrastructure
         std::mutex _mutex;
         std::condition_variable _cond_var;
 
-        StateEvent unpackSimulationEvent(ofsim_events::SimulationEvent* simulationEvent)
-        {
-            return StateEvent::NONE;
-        }
+        StateEvent unpackSimulationEvent(SimulationEvent* simulationEvent) { return simulationEvent->action; } 
     };
 }

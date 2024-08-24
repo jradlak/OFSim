@@ -4,7 +4,7 @@
 
 namespace ofsim_events
 {
-	enum class UserAction
+	enum class StateEvent
 	{
 		FILE_NEW,
 		FILE_OPEN,
@@ -33,6 +33,7 @@ namespace ofsim_events
 
 		CHANGE_MODE_TO_FROM_PREDICTION,
 		CHANGE_MODE_TO_FORM_PRESENTATION,
+		
 
 		CHANGE_MODE_TO_FROM_DIAGNOSTICS,
 
@@ -40,8 +41,26 @@ namespace ofsim_events
 		ROTATION_LONGITUDE_DOWN,
 		ROTATION_LATITUDE_UP,
 		ROTATION_LATITUDE_DOWN,
-
+		
 		SHOW_DIAGNOSTICS_IN_SIMULATION,
+
+		// new events:
+
+		START_SIMULATION,
+		SIMULATION_STARTED,
+		OPEN_FILE_DIALOG,
+		SHOW_FILE_OPEN_DIALOG,
+		OPEN_HELP_DIALOG,
+		CONTINUE_SIMULATION,
+
+		LOAD_SELECTED_FILE,
+		LOAD_DIRECTORY_FILES,
+
+		SWITCH_TO_TRAJECTORY_PREDICTION,
+		SHOW_TRAJECTORY_PREDICTION,
+		SWITCH_TO_DIAGNOSTICS,
+		SWITCH_TO_PRESENTATION,
+
 
 		NONE
 	};
@@ -51,11 +70,11 @@ namespace ofsim_events
 	{
 		u32 id{ 0 };
 		u64 timestamp{ 0 };
-		UserAction action;
+		StateEvent action;
 		std::string data;
 
-		SimulationEvent() : action(UserAction::NONE) {}
-		SimulationEvent(u32 _id, u64 _timestamp, UserAction _action, std::string _data)
+		SimulationEvent() : action(StateEvent::NONE) {}
+		SimulationEvent(u32 _id, u64 _timestamp, StateEvent _action, std::string _data)
 			: id(_id), timestamp(_timestamp), action(_action), data(_data) {}
 	};
 }
