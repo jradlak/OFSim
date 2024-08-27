@@ -18,10 +18,6 @@
 #include "../python_integration/PythonMachine.h"
 #include "../vmachine/VMachine.h"
 
-#include "../infrastructure/StateMachine.h"
-#include "../infrastructure/SMEventsListener.h"
-#include "../infrastructure//EventDispatcher.h"
-
 namespace ofsim_simulation
 {    
     using namespace ofsim_events;
@@ -103,11 +99,6 @@ namespace ofsim_simulation
         // VM integration:
         std::unique_ptr<ofsim_vm::VMachine> vmachine { nullptr };
         std::unique_ptr<std::thread> vmThread { nullptr };
-
-        // State machine:
-        std::unique_ptr<EventDispatcher> eventDispatcher{ nullptr };
-        std::unique_ptr<StateMachine> stateMachine{ nullptr };
-        std::unique_ptr<SMEventsListener> smEventListener{ nullptr };
 
         SimulationMode simulationMode{ SimulationMode::WAITING_FOR_BEGIN };
 

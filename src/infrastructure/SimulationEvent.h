@@ -6,8 +6,7 @@ namespace ofsim_events
 {
 	enum class StateEvent
 	{
-		FILE_NEW,
-		FILE_OPEN,
+		FILE_NEW,		
 
 		PROGRAM_FILE_OPEN,
 		PROGRAM_TRANSLATE,
@@ -60,7 +59,6 @@ namespace ofsim_events
 		SHOW_TRAJECTORY_PREDICTION,
 		SWITCH_TO_DIAGNOSTICS,
 		SWITCH_TO_PRESENTATION,
-
 
 		NONE
 	};

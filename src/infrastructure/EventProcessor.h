@@ -8,7 +8,6 @@
 
 #include "RocketCommand.h"
 
-#include "EventDispatcher.h"
 #include "SimulationEvent.h"
 
 #include "../math_and_physics/MathTypes.h"
@@ -57,8 +56,7 @@ namespace ofsim_events
 							
 			// utility methods:
             void povideRocketAndPhysics(ofsim_world::Rocket* _rocket, ofsim_math_and_physics::PhysicsSolver* _physics) { rocket = _rocket; physics = _physics; }
-			void provideEventDispatcher(EventDispatcher* _eventDispatcher) { eventDispatcher = _eventDispatcher; }
-
+			
             EventProcessor(EventProcessor const&) = delete;
             void operator=(EventProcessor const&) = delete;
             			
@@ -72,8 +70,7 @@ namespace ofsim_events
 			// because references should be intilized immediately
             ofsim_world::Rocket* rocket;
 			ofsim_math_and_physics::PhysicsSolver* physics;
-			EventDispatcher* eventDispatcher;
-
+		
             SimulationEvent* userEvent = nullptr;
             u32 eventCounter {0};
 			bool shouldTerminatePythonMachine { false };	

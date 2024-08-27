@@ -20,11 +20,6 @@ Simulation::Simulation()
     glm::dvec3 rocketPos = rocketInitialPosition(theta, phi);
     rocket = std::make_unique<Rocket>("model3d_shader", rocketPos, rocket_initial_size);
 	
-	// state machine:
-	eventDispatcher = std::make_unique<EventDispatcher>();
-	stateMachine = std::make_unique<StateMachine>(*eventDispatcher);
-	smEventListener = std::make_unique<SMEventsListener>(*eventDispatcher);
-
 	// update camera position according to rocket:
     camera->position = rocket->properties().position + glm::dvec3(0.0, 0.024, 0.0);	
 }
@@ -151,8 +146,7 @@ void Simulation::mainLoop()
 	f64 radius{ 0.000000001 };
 	f64 step{ 0.000000001 };
 	
-	EventProcessor::getInstance()->povideRocketAndPhysics(rocket.get(), physics.get());
-	EventProcessor::getInstance()->provideEventDispatcher(eventDispatcher.get());
+	EventProcessor::getInstance()->povideRocketAndPhysics(rocket.get(), physics.get());	
 	// <----- end of initialization section ----->
 
 	dvec3 toTheMoon = SolarSystemConstants::moonPos;

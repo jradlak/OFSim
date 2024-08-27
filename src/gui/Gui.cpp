@@ -50,7 +50,7 @@ void Gui::renderMenuBar()
             if (ImGui::MenuItem(i18n->t(menu_open))) 
             {                 
                 viewFileOpen = true;
-                eventProcessor->createEvent(StateEvent::FILE_OPEN, "");                
+                eventProcessor->createEvent(StateEvent::SHOW_FILE_OPEN_DIALOG, "");                
             }
 
             if (ImGui::MenuItem(i18n->t(menu_save))) 

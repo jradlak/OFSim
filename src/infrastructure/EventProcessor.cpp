@@ -75,8 +75,7 @@ void EventProcessor::createEvent(StateEvent action, std::string data)
 {
     if (userEvent == nullptr)
     {
-        userEvent = new SimulationEvent(eventCounter++, runningTime, action, data);
-        eventDispatcher->sendSimulationEvent(userEvent);
+        userEvent = new SimulationEvent(eventCounter++, runningTime, action, data);        
     }
 }
 

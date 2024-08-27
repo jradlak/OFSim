@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
 project(OFSim)
-
 find_package( OpenGL REQUIRED )
 find_package( Python REQUIRED Development)
 
@@ -83,10 +82,7 @@ add_executable("${CMAKE_PROJECT_NAME}"
     src/infrastructure/ImageLoader.h    
     src/infrastructure/EventProcessor.h
     src/infrastructure/EventProcessor.cpp
-    src/infrastructure/EventDispatcher.h
-    src/infrastructure/StateMachine.h
-    src/infrastructure/StateMachine.cpp
-    src/infrastructure/SMEventsListener.h
+            
     src/infrastructure/SimulationEvent.h
 
     src/python_integration/PythonMachine.h
@@ -257,10 +253,9 @@ add_executable(
     src/infrastructure/ImageLoader.h    
     src/infrastructure/EventProcessor.h
     src/infrastructure/EventProcessor.cpp
-    src/infrastructure/EventDispatcher.h
-    src/infrastructure/StateMachine.h
-    src/infrastructure/StateMachine.cpp
-    src/infrastructure/SMEventsListener.h
+    
+    
+ 
     src/infrastructure/SimulationEvent.h
 
     src/vmachine/Instructions.cpp
@@ -282,8 +277,8 @@ add_executable(
     "tests/PhysicsSolverTests.cpp"
     "tests/MemoryTests.cpp"
     "tests/TranslatorTests.cpp"
-    "tests/VMTests.cpp" "tests/StateMachineTests.cpp"
-    "tests/StateMachineTests.cpp" "src/infrastructure/SMEventsListener.h" "src/infrastructure/SimulationEvent.h")
+    "tests/VMTests.cpp")
+
 target_link_libraries(
     ofsim_tests
     ${OPENGL_LIBRARIES}
