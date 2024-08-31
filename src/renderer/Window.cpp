@@ -126,6 +126,46 @@ void Window::key_callback(GLFWwindow *window, int key, int scancode, int action,
         EventProcessor::getInstance()->createEvent(StateEvent::ROTATION_LATITUDE_DOWN, "");
     }
 
+	if (key == GLFW_KEY_Z && action == GLFW_PRESS)
+    {
+        EventProcessor::getInstance()->createEvent(StateEvent::THRUST_MAG_UP, "");
+    }
+
+	if (key == GLFW_KEY_X && action == GLFW_PRESS)
+    {
+        EventProcessor::getInstance()->createEvent(StateEvent::THRUST_MAG_DOWN, "");
+    }
+
+	if (key == GLFW_KEY_C && action == GLFW_PRESS)
+    {
+        EventProcessor::getInstance()->createEvent(StateEvent::ROTATE_X_UP, "");
+    }
+
+	if (key == GLFW_KEY_V && action == GLFW_PRESS)
+    {
+        EventProcessor::getInstance()->createEvent(StateEvent::ROTATE_X_DOWN, "");
+    }
+
+	if (key == GLFW_KEY_B && action == GLFW_PRESS)
+    {
+        EventProcessor::getInstance()->createEvent(StateEvent::ROTATE_Y_UP, "");
+    }
+
+	if (key == GLFW_KEY_N && action == GLFW_PRESS)
+    {
+        EventProcessor::getInstance()->createEvent(StateEvent::ROTATE_Y_DOWN, "");
+    }
+
+	if (key == GLFW_KEY_COMMA && action == GLFW_PRESS)
+    {
+        EventProcessor::getInstance()->createEvent(StateEvent::ROTATE_Z_UP, "");
+    }
+
+	if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
+    {
+        EventProcessor::getInstance()->createEvent(StateEvent::ROTATE_Z_DOWN, "");
+    }
+
     Camera_Movement direction = Camera_Movement::NONE;
 	if (key == GLFW_KEY_W && action == GLFW_PRESS)
 	{

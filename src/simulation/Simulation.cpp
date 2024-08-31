@@ -173,7 +173,8 @@ void Simulation::mainLoop()
 		// input processing:		
 		userInteractionLogic(toTheMoon, radius, step);
 
-		if (simulationMode == SimulationMode::STANDARD_SIMULATION) 
+		if (simulationMode == SimulationMode::STANDARD_SIMULATION 
+			|| simulationMode == SimulationMode::MANUAL_CONTROL) 
 		{	
 			lag = physics->calculateForces(lag);					
 		}
@@ -186,7 +187,8 @@ void Simulation::mainLoop()
 		// camera/view transformation:
 		if (simulationMode == SimulationMode::STANDARD_SIMULATION 
 			|| simulationMode == SimulationMode::WAITING_FOR_BEGIN 
-			|| simulationMode == SimulationMode::MANUAL_CONTROL)
+			|| simulationMode == SimulationMode::MANUAL_CONTROL
+			|| simulationMode == SimulationMode::WAITING_FOR_BEGIN_MANUAL_CONTROL)
 		{
 			camera->setAutomaticRotation(true);
             camera->updatePosition(rocket->properties().position);
@@ -274,12 +276,15 @@ void Simulation::renderHUD()
         auto diagnostics = prepareDiagnosticsData();
         gui->renderDiagnostics(diagnostics);
     }
-	else if (simulationMode == SimulationMode::MANUAL_CONTROL)
+	else if (simulationMode == SimulationMode::MANUAL_CONTROL
+				|| simulationMode == SimulationMode::WAITING_FOR_BEGIN_MANUAL_CONTROL)
 	{
 		gui->renderSimulationControlWindow(runningTime);
 
 		auto manualControlData = prepareManualControlData();
 		gui->renderManualControlData(manualControlData);
+
+		gui->renderCommandHistory(ofsim_events::EventProcessor::getInstance()->getCommandHistory());
 
 		gui->plotTelemetry(
 			telemetryCollector->velocityHistory, telemetryCollector->maxVelocity,
@@ -365,9 +370,9 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 		orbitalProgramSourceCode = ofsim_infrastructure::loadSourceCode(event.data);
 	}
 
-	if (event.action == StateEvent::PROGRAM_TRANSLATE)
+	if (event.action == StateEvent::START_SIMULATION)
 	{
-		if (simulationMode != SimulationMode::MANUAL_CONTROL)
+		if (simulationMode == SimulationMode::WAITING_FOR_BEGIN)
 		{
 			if (this->orbitalProgramSourceCode.empty())
 			{
@@ -394,7 +399,63 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 			}
 
 			simulationMode = SimulationMode::STANDARD_SIMULATION;
-		}						
+		}	
+		
+		if (simulationMode == SimulationMode::WAITING_FOR_BEGIN_MANUAL_CONTROL)
+		{
+			simulationMode = SimulationMode::MANUAL_CONTROL;
+			std::cout << "MANUAL CONTROL MODE!!! \n";
+		}
+	}
+
+	// manual mode steering events:
+
+	if (event.action == StateEvent::THRUST_MAG_UP)
+	{
+		f64 thrust = EventProcessor::getInstance()->getThrustMagnitude();
+		EventProcessor::getInstance()->setThrustMagnitude(thrust + 0.1);
+	}
+
+	if (event.action == StateEvent::THRUST_MAG_DOWN)
+	{
+		f64 thrust = EventProcessor::getInstance()->getThrustMagnitude();
+		EventProcessor::getInstance()->setThrustMagnitude(thrust - 0.1);
+	}
+
+	if (event.action == StateEvent::ROTATE_X_UP)
+	{
+		dvec3 dRotation = dvec3(0.2, 0, 0);
+		EventProcessor::getInstance()->changeThrustRotatation(dRotation);
+	}
+
+	if (event.action == StateEvent::ROTATE_X_DOWN)
+	{
+		dvec3 dRotation = dvec3(-0.2, 0, 0);
+		EventProcessor::getInstance()->changeThrustRotatation(dRotation);
+	}
+
+	if (event.action == StateEvent::ROTATE_Y_UP)
+	{
+		dvec3 dRotation = dvec3(0.0, 0.2, 0);
+		EventProcessor::getInstance()->changeThrustRotatation(dRotation);
+	}
+
+	if (event.action == StateEvent::ROTATE_Y_DOWN)
+	{
+		dvec3 dRotation = dvec3(0.0, -0.2, 0);
+		EventProcessor::getInstance()->changeThrustRotatation(dRotation);
+	}
+
+	if (event.action == StateEvent::ROTATE_Z_UP)
+	{
+		dvec3 dRotation = dvec3(0.0, 0, 0.2);
+		EventProcessor::getInstance()->changeThrustRotatation(dRotation);
+	}
+
+	if (event.action == StateEvent::ROTATE_Z_DOWN)
+	{
+		dvec3 dRotation = dvec3(0.0, 0, -0.2);
+		EventProcessor::getInstance()->changeThrustRotatation(dRotation);
 	}
 
 	if (event.action == StateEvent::PYTHON_PROGRAM_RAISED_ERROR)
@@ -528,7 +589,7 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 	{
 		if (simulationMode == SimulationMode::WAITING_FOR_BEGIN)
 		{
-			simulationMode = SimulationMode::MANUAL_CONTROL;
+			simulationMode = SimulationMode::WAITING_FOR_BEGIN_MANUAL_CONTROL;
 		}
 		else
 		{

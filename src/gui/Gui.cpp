@@ -275,7 +275,7 @@ void Gui::renderSimulationControlWindow(unsigned long long time)
             plaing = true;
             timeFactor = 1;
 
-            eventProcessor->createEvent(StateEvent::PROGRAM_TRANSLATE, "");
+            eventProcessor->createEvent(StateEvent::START_SIMULATION, "");
         }
     }
     

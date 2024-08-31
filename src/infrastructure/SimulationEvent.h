@@ -59,6 +59,16 @@ namespace ofsim_events
 		SWITCH_TO_DIAGNOSTICS,
 		SWITCH_TO_PRESENTATION,
 
+		// Manual control events:
+		THRUST_MAG_UP,
+		THRUST_MAG_DOWN,
+		ROTATE_X_UP,
+		ROTATE_X_DOWN,
+		ROTATE_Y_UP,
+		ROTATE_Y_DOWN,
+		ROTATE_Z_UP,
+		ROTATE_Z_DOWN,
+		
 		NONE
 	};
 
