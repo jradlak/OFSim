@@ -259,7 +259,8 @@ void Gui::renderSimulationControlWindow(unsigned long long time)
     std::string strTimeFactor = i18n->t(sim_panel_time_compression) + std::to_string(timeFactor) + "x";
     ImGui::Text("%s", strTimeFactor.c_str());
 
-    if (ImGui::ImageButton((void*)(intptr_t)pp_texture, ImVec2(32, 32))) {
+    if (ImGui::ImageButton((void*)(intptr_t)pp_texture, ImVec2(32, 32))) 
+    {
         if (plaing)
         {
             std::cout << "Kliknieto pause!! \n";
@@ -567,6 +568,26 @@ void Gui::renderDiagnostics(const DiagnosticsData& diagnostics)
             + std::to_string(diagnostics.cameraPosition.y) + ", \n"
             + std::to_string(diagnostics.cameraPosition.z);
     ImGui::Text("%s", cameraTxt.c_str());
+
+    ImGui::End();
+}
+
+void ofsim_gui::Gui::renderManualControlData(const ofsim_simulation::ManualControlData& manualControl)
+{
+    ImGui::SetNextWindowSize(ImVec2(450, 780), ImGuiCond_Once);
+    ImGui::SetNextWindowPos(ImVec2(60, 140), ImGuiCond_Once);
+
+    ImGui::Begin("Manual mode: ");
+
+    std::string rotationTxt = "Rocket's rotation (x, y, z): \n"
+        + std::to_string(manualControl.rocketRotation.x) + ", \n"
+        + std::to_string(manualControl.rocketRotation.y) + ", \n"
+        + std::to_string(manualControl.rocketRotation.z);
+    ImGui::Text("%s", rotationTxt.c_str());
+
+    std::string thrustTxt = "Rocket's thrust vector magnitude: \n"
+        + std::to_string(manualControl.thrustVectorMagnitude);
+    ImGui::Text("%s", thrustTxt.c_str());
 
     ImGui::End();
 }

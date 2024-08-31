@@ -149,7 +149,7 @@ add_executable("${CMAKE_PROJECT_NAME}"
     src/vmachine/VMachine.h
     
     external_libraries/stb_image.h
-    external_libraries/stb_image.cpp       )
+    external_libraries/stb_image.cpp        "src/simulation/ManualControlData.h")
 
 #copy shaders to binary directory:
 if(MSVC)
@@ -254,8 +254,6 @@ add_executable(
     src/infrastructure/EventProcessor.h
     src/infrastructure/EventProcessor.cpp
     
-    
- 
     src/infrastructure/SimulationEvent.h
 
     src/vmachine/Instructions.cpp

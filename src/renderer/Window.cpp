@@ -101,6 +101,11 @@ void Window::key_callback(GLFWwindow *window, int key, int scancode, int action,
         EventProcessor::getInstance()->createEvent(StateEvent::CHANGE_MODE_TO_FROM_DIAGNOSTICS, "");
     }
 
+	if (key == GLFW_KEY_R && action == GLFW_PRESS)
+	{
+		EventProcessor::getInstance()->createEvent(StateEvent::CHANGE_MODE_TO_FROM_MANUAL_CONTROL, "");
+	}
+
     if (key == GLFW_KEY_UP && action == GLFW_PRESS)
     {
         EventProcessor::getInstance()->createEvent(StateEvent::ROTATION_LONGITUDE_UP, "");

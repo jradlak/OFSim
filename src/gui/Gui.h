@@ -13,6 +13,7 @@
 #include "../python_integration/PythonError.h"
 
 #include "../simulation/DiagnosticsData.h"
+#include "../simulation/ManualControlData.h"
 
 namespace ofsim_gui 
 {
@@ -58,6 +59,8 @@ namespace ofsim_gui
 		void renderCommandHistory(std::map<u64, RocketCommand> &commandHistory);
 
         void renderDiagnostics(const ofsim_simulation::DiagnosticsData &diagnostics);
+
+		void renderManualControlData(const ofsim_simulation::ManualControlData& manulaControl);
 
 		void loadTextures();
 

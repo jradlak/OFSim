@@ -17,6 +17,7 @@
 #include "../math_and_physics/MathTypes.h"
 #include "../python_integration/PythonMachine.h"
 #include "../vmachine/VMachine.h"
+#include "ManualControlData.h"
 
 namespace ofsim_simulation
 {    
@@ -25,7 +26,9 @@ namespace ofsim_simulation
     enum class SimulationMode
     {
         WAITING_FOR_BEGIN,
+        WAITING_FOR_BEGIN_MANUAL_CONTROL,
         STANDARD_SIMULATION,
+        MANUAL_CONTROL,
         TRAJECTORY_PREDICTION,
         PRESENTATION_MODE,
         DIAGNOSTICS_MODE,
@@ -109,6 +112,7 @@ namespace ofsim_simulation
             ->pointAboveEarthSurface(theta, phi, SolarSystemConstants::earthSize - 0.45); }
 
         DiagnosticsData prepareDiagnosticsData();
+        ManualControlData prepareManualControlData();
 
         bool showDiagnosticsInSimulation {false};
 

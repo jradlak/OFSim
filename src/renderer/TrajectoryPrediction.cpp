@@ -46,7 +46,7 @@ void TrajectoryPrediction::renderHistory(glm::dmat4 projection, glm::dmat4 view,
 	shader->setVec3("lightColor", 1.0f, 1.0f, 1.0f);
 	shader->setVec3("lightPos", lightPos);
 
-	for (int i = 0; i < spheresHistory.size() - 1; i++)
+	for (int i = 0; i < spheresHistory.size(); i++)
 	{
         renderer->render(projection, view, spheresHistory[i]->size, spheresHistory[i]->position);
 	}

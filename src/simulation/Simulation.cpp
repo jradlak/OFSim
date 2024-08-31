@@ -185,7 +185,8 @@ void Simulation::mainLoop()
 		
 		// camera/view transformation:
 		if (simulationMode == SimulationMode::STANDARD_SIMULATION 
-			|| simulationMode == SimulationMode::WAITING_FOR_BEGIN)
+			|| simulationMode == SimulationMode::WAITING_FOR_BEGIN 
+			|| simulationMode == SimulationMode::MANUAL_CONTROL)
 		{
 			camera->setAutomaticRotation(true);
             camera->updatePosition(rocket->properties().position);
@@ -273,8 +274,24 @@ void Simulation::renderHUD()
         auto diagnostics = prepareDiagnosticsData();
         gui->renderDiagnostics(diagnostics);
     }
+	else if (simulationMode == SimulationMode::MANUAL_CONTROL)
+	{
+		gui->renderSimulationControlWindow(runningTime);
+
+		auto manualControlData = prepareManualControlData();
+		gui->renderManualControlData(manualControlData);
+
+		gui->plotTelemetry(
+			telemetryCollector->velocityHistory, telemetryCollector->maxVelocity,
+			telemetryCollector->altitudeHistory, telemetryCollector->maxAltitude,
+			telemetryCollector->atmPressureHistory, telemetryCollector->maxAtmPressure,
+			telemetryCollector->accelerationHistory, telemetryCollector->maxAcceleration, telemetryCollector->minAcceleration);
+		renderTelemetry(gui.get(), rocket.get(), physics->altitude, apogeum, perygeum, physics->getAtmosphereDragForceMagnitude());
+	}
 	else
 	{
+		// STANDARD SIMUATION:
+
 		gui->renderSimulationControlWindow(runningTime);
 		gui->renderCodeEditor(orbitalProgramSourceCode);	
 
@@ -313,6 +330,17 @@ DiagnosticsData Simulation::prepareDiagnosticsData()
     return diagnostics;
 }
 
+ManualControlData ofsim_simulation::Simulation::prepareManualControlData()
+{
+	auto properties = rocket->properties();
+	
+	ManualControlData data;
+	data.rocketRotation = properties.rotation;
+	data.thrustVectorMagnitude = physics->thrustMagnitude;
+
+	return data;
+}
+
 /**
  * @brief User interaction with the simulation
  * @details Interprets user events recieved from the GUI
@@ -339,31 +367,34 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 
 	if (event.action == StateEvent::PROGRAM_TRANSLATE)
 	{
-		if (this->orbitalProgramSourceCode.empty())
+		if (simulationMode != SimulationMode::MANUAL_CONTROL)
 		{
-			std::cout << "No source code to execute!\n";
-			return;
-		}
-		
-		if (this->orbitalProgramName.find(".py") != std::string::npos)
-		{
-			pythonMachine = std::make_unique<ofsim_python_integration::PythonMachine>();
-			pythonThread = std::make_unique<std::thread>(&ofsim_python_integration::PythonMachine::runPythonOrbitalProgram,
-				pythonMachine.get(), this->orbitalProgramSourceCode);
-		}
-		else if (this->orbitalProgramName.find(".oasm") != std::string::npos)
-		{
-			vmachine = std::make_unique<ofsim_vm::VMachine>(*EventProcessor::getInstance());
-			vmachine->translateSourceCode(this->orbitalProgramSourceCode);
-			vmThread = std::make_unique<std::thread>(&ofsim_vm::VMachine::start, vmachine.get());
-		} 
-		else 
-		{
-			std::cout << "Unknown file extension!\n";
-			return;
-		}
-				
-		simulationMode = SimulationMode::STANDARD_SIMULATION;
+			if (this->orbitalProgramSourceCode.empty())
+			{
+				std::cout << "No source code to execute!\n";
+				return;
+			}
+
+			if (this->orbitalProgramName.find(".py") != std::string::npos)
+			{
+				pythonMachine = std::make_unique<ofsim_python_integration::PythonMachine>();
+				pythonThread = std::make_unique<std::thread>(&ofsim_python_integration::PythonMachine::runPythonOrbitalProgram,
+					pythonMachine.get(), this->orbitalProgramSourceCode);
+			}
+			else if (this->orbitalProgramName.find(".oasm") != std::string::npos)
+			{
+				vmachine = std::make_unique<ofsim_vm::VMachine>(*EventProcessor::getInstance());
+				vmachine->translateSourceCode(this->orbitalProgramSourceCode);
+				vmThread = std::make_unique<std::thread>(&ofsim_vm::VMachine::start, vmachine.get());
+			}
+			else
+			{
+				std::cout << "Unknown file extension!\n";
+				return;
+			}
+
+			simulationMode = SimulationMode::STANDARD_SIMULATION;
+		}						
 	}
 
 	if (event.action == StateEvent::PYTHON_PROGRAM_RAISED_ERROR)
@@ -452,7 +483,7 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 		 || event.action == StateEvent::CHANGE_MODE_TO_FROM_PREDICTION) // m, k
 	{		
 		// change to presention or prediction mode is possible only when simulation is not waiting for begin:
-		if (simulationMode != SimulationMode::WAITING_FOR_BEGIN)
+		if (simulationMode == SimulationMode::STANDARD_SIMULATION)
 		{			
 			camera->setAutomaticRotation(false);
 			physics->predictTrajectory(runningTime);
@@ -490,6 +521,18 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 					gui->restoreWindows();
 				}
 			}
+		}		
+	}
+
+	if (event.action == StateEvent::CHANGE_MODE_TO_FROM_MANUAL_CONTROL) // r
+	{
+		if (simulationMode == SimulationMode::WAITING_FOR_BEGIN)
+		{
+			simulationMode = SimulationMode::MANUAL_CONTROL;
+		}
+		else
+		{
+			simulationMode = SimulationMode::WAITING_FOR_BEGIN;
 		}
 	}
 
