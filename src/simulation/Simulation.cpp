@@ -422,39 +422,40 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 		EventProcessor::getInstance()->setThrustMagnitude(thrust - 0.1);
 	}
 
+	const f64 ROT_FCTR = 0.5;
 	if (event.action == StateEvent::ROTATE_X_UP)
 	{
-		dvec3 dRotation = dvec3(0.2, 0, 0);
+		dvec3 dRotation = dvec3(ROT_FCTR, 0, 0);
 		EventProcessor::getInstance()->changeThrustRotatation(dRotation);
 	}
 
 	if (event.action == StateEvent::ROTATE_X_DOWN)
 	{
-		dvec3 dRotation = dvec3(-0.2, 0, 0);
+		dvec3 dRotation = dvec3(-ROT_FCTR, 0, 0);
 		EventProcessor::getInstance()->changeThrustRotatation(dRotation);
 	}
 
 	if (event.action == StateEvent::ROTATE_Y_UP)
 	{
-		dvec3 dRotation = dvec3(0.0, 0.2, 0);
+		dvec3 dRotation = dvec3(0.0, ROT_FCTR, 0);
 		EventProcessor::getInstance()->changeThrustRotatation(dRotation);
 	}
 
 	if (event.action == StateEvent::ROTATE_Y_DOWN)
 	{
-		dvec3 dRotation = dvec3(0.0, -0.2, 0);
+		dvec3 dRotation = dvec3(0.0, -ROT_FCTR, 0);
 		EventProcessor::getInstance()->changeThrustRotatation(dRotation);
 	}
 
 	if (event.action == StateEvent::ROTATE_Z_UP)
 	{
-		dvec3 dRotation = dvec3(0.0, 0, 0.2);
+		dvec3 dRotation = dvec3(0.0, 0, ROT_FCTR);
 		EventProcessor::getInstance()->changeThrustRotatation(dRotation);
 	}
 
 	if (event.action == StateEvent::ROTATE_Z_DOWN)
 	{
-		dvec3 dRotation = dvec3(0.0, 0, -0.2);
+		dvec3 dRotation = dvec3(0.0, 0, -ROT_FCTR);
 		EventProcessor::getInstance()->changeThrustRotatation(dRotation);
 	}
 
@@ -543,8 +544,10 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 	if (event.action == StateEvent::CHANGE_MODE_TO_FORM_PRESENTATION 
 		 || event.action == StateEvent::CHANGE_MODE_TO_FROM_PREDICTION) // m, k
 	{		
+		
 		// change to presention or prediction mode is possible only when simulation is not waiting for begin:
-		if (simulationMode == SimulationMode::STANDARD_SIMULATION)
+		if (simulationMode == SimulationMode::STANDARD_SIMULATION 
+			|| simulationMode == SimulationMode::MANUAL_CONTROL)
 		{			
 			camera->setAutomaticRotation(false);
 			physics->predictTrajectory(runningTime);
@@ -559,11 +562,12 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 				if (simulationMode != SimulationMode::TRAJECTORY_PREDICTION)
 				{
                     camera->updatePosition(solarSystem->pointAboveEarthSurface(35, 35, 7521.0));
+					returnMode = simulationMode;
 					simulationMode = SimulationMode::TRAJECTORY_PREDICTION;
 				}
 				else
 				{
-					simulationMode = SimulationMode::STANDARD_SIMULATION;
+					simulationMode = returnMode;
 				}
 			}
 
@@ -574,15 +578,20 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
                     toTheMoon = rocket->properties().position - SolarSystemConstants::moonPos;
 					radius = 0.000000001;
 					step = 0.000000001;
-					simulationMode = SimulationMode::PRESENTATION_MODE;
+					returnMode = simulationMode;
+					simulationMode = SimulationMode::PRESENTATION_MODE;				
 				}
 				else
 				{
-                    simulationMode = SimulationMode::STANDARD_SIMULATION;
+                    simulationMode = returnMode;
 					gui->restoreWindows();
 				}
 			}
-		}		
+		}
+		else 
+		{
+			simulationMode = returnMode;
+		}
 	}
 
 	if (event.action == StateEvent::CHANGE_MODE_TO_FROM_MANUAL_CONTROL) // r

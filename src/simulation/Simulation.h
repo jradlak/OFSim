@@ -104,6 +104,7 @@ namespace ofsim_simulation
         std::unique_ptr<std::thread> vmThread { nullptr };
 
         SimulationMode simulationMode{ SimulationMode::WAITING_FOR_BEGIN };
+        SimulationMode returnMode{ SimulationMode::WAITING_FOR_BEGIN };
 
         std::string orbitalProgramSourceCode { "" };
         std::string orbitalProgramName { "" };
