@@ -87,7 +87,8 @@ void Gui::renderMenuBar()
         {
             if (ImGui::MenuItem(i18n->t(menu_manual))) 
             { 
-                eventProcessor->createEvent(StateEvent::HELP_HELP, "");               
+                eventProcessor->createEvent(StateEvent::HELP_HELP, "");
+                viewHelpScreen = true;          
             }
             
             ImGui::Separator();
@@ -95,6 +96,7 @@ void Gui::renderMenuBar()
             if (ImGui::MenuItem(i18n->t(menu_about))) 
             { 
                 eventProcessor->createEvent(StateEvent::HELP_ABOUT, "");
+                viewSplashScreen = true;
             }
 
             ImGui::EndMenu();
@@ -148,6 +150,28 @@ void Gui::renderSplashScreen()
         selcted_language_item = item_current;
         if (item_current == 0) i18n->switchLanguage(PL);
         if (item_current == 1) i18n->switchLanguage(EN);
+    }
+
+    ImGui::End();
+}
+
+void ofsim_gui::Gui::renderHelpScreen()
+{
+    if (!viewHelpScreen) return;
+
+    ImGui::SetNextWindowSize(ImVec2(772, 590), ImGuiCond_Once);
+    ImGui::SetNextWindowPos(ImVec2(580, 200), ImGuiCond_Once);
+    
+    ImGui::Begin(i18n->t(help_title));
+
+    ImGui::Separator();
+    ImGui::NewLine();
+    
+    ImGui::TextWrapped("%s", "To be continued...");
+
+    if (ImGui::Button("OK", ImVec2(120, 0)))
+    {        
+        viewHelpScreen = false;
     }
 
     ImGui::End();

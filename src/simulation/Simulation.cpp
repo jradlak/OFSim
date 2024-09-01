@@ -268,6 +268,7 @@ void Simulation::renderHUD()
 {
 	gui->renderMenuBar();
 	gui->renderSplashScreen();
+	gui->renderHelpScreen();
 	gui->renderFileSaveAsDialog();
 	gui->renderFileOpenDialog();	
 

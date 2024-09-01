@@ -30,6 +30,8 @@ namespace ofsim_gui
 		splash_version,
 		splash_author,
 
+		help_title,
+
 		dialog_title,
 		dialog_directory,
 		dialog_load,

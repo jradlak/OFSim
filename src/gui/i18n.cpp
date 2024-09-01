@@ -158,6 +158,9 @@ void I18n::initLabels()
 		"The assembly program has access to the computer's memory, where telemetry data of the rocket's flight is stored.Based on this data,"
 		" the program can issue commands to the rocket, such as changing the direction and length of the thrust vector, controlling a set of rotating gyroscopes in orbit, etc.";	
 
+	plLabels[help_title] = "Instrukcja obslugi.";
+	enLabels[help_title] = "Operation manual.";
+
 	plLabels[translate_error] = "Blad translacji w linii @lineNumber, nierozpoznana instrukcja: @lineTxt";
 	enLabels[translate_error] = "Translation error in line: @lineNumber, unrecognized instruction: @lineTxt";
 

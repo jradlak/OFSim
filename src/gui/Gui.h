@@ -32,6 +32,8 @@ namespace ofsim_gui
 
 		void renderSplashScreen();
 
+		void renderHelpScreen();
+
 		void renderFileSaveAsDialog();
 
 		void renderFileOpenDialog();
@@ -101,6 +103,7 @@ namespace ofsim_gui
 		bool viewFileOpen { false };
 		bool viewFileSaveAs { false };
 		bool viewSplashScreen { true };
+		bool viewHelpScreen { false };
 
 		bool clearTranslationErrors { false };
 
@@ -110,6 +113,8 @@ namespace ofsim_gui
 
 		std::string directory { "/home/jakub/orb_progs" };
 		std::string savedFile { "" };
+
+		std::string help_text { "To be continued..." };
 
 		int selcted_language_item { 0 };
 
