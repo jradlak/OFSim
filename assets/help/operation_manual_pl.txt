@@ -1,0 +1,37 @@
+Czy możesz przetłumaczyć na angielski poniższy tekst:
+Program posiada 3 podstawowe tryby:
+
+1. Manualnej kontroli nad lotem
+2. Kontroli automatycznej.
+3. Predykcji trajektorii lotu.
+
+Oraz dodatkowy, trzeci tryb diagnostyczny, który nie jest jest bezpośrednio dostępny dla użytkownika.
+Tryb predykcji trajektorii jest osiągalny w dowolnym momencie z dwóch pierwszych trybów po rozpoczęciu symulacji.
+W czasie lotu rakiety nie jest możliwe przełączanie pomiędzy trybami 1 i 2. 
+
+Tryb manualnej kontrola lotu:
+==============================
+
+W tym trybie lot rakiety kontrolowany jest za pomocą klawiatury.
+
+Dostępne klawisze:
+
+1. r - uruchomienie trybu manualnej kontroli / powrót do trybu kontroli automatycznej.
+2. z - zwiększenie siły ciągu silnika
+3. x - zmniejszenie siły ciągu silnika
+4. c - dodatnia rotacja kierunku wektora ciągu w osi x
+5. v - ujemna rotacja kierunku wektora ciągu w osi x
+6. b - dodatnia rotacja kierunku wektora ciągu w osi y
+7. n - ujemna rotacja kierunku wektora ciągu w osi y
+8. , - dodatnia rotacja kierunku wektora ciągu w osi z
+9. space - ujemna rotacja kierunku wektora ciągu w osi z
+
+Tryb automatycznej kontroli lotu:
+=================================
+
+Jest to domyślny tryb symulatora.
+W tym trybie sterowanie lotem rakiety odbywa się dzieki wykonywaniu przez zapisanych instrukcji lotu (program lotu).
+Oznacza to de-facto możliwość programowania lotu rakiety w wybranym języku programowania. Dostępne są dwa języki: niskopoziomowy asembler oraz Python.
+Opisy asemblera oraz API języka PYTHON dołączone są w oddzielnych dokumentach.
+
+W celu rozpoczęcia symulacji w tym trybie należy najpierw załadować program kontroli lotu z dysku lub napisać go od podstaw w osadzonym w symulatorze edytorze.

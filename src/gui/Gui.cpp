@@ -27,9 +27,11 @@ void Gui::initialization(Window* mainWindow)
     ImGui_ImplGlfw_InitForOpenGL(mainWindow->getWindow(), true);
     ImGui_ImplOpenGL3_Init("#version 330");
 
-    std::string manualPath = "assets/help/operation_manual.txt";
-    helpText = ofsim_infrastructure::loadTextFile(manualPath);
-    int a = 0;
+    std::string manualPath = i18n->currentLanguage == Language::PL 
+        ? "assets/help/operation_manual_pl.txt"
+        : "assets/help/operation_manual_en.txt";
+
+    helpText = ofsim_infrastructure::loadTextFile(manualPath);    
 }
 
 void Gui::newFrame()

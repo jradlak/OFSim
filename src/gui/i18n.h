@@ -88,6 +88,8 @@ namespace ofsim_gui
 		const char* translate(Label label, Language lang);
 		void switchLanguage(Language newLanguage) { currentLanguage = newLanguage; }
 
+		Language currentLanguage;
+
 		~I18n() {}
 
 	private:
@@ -101,9 +103,7 @@ namespace ofsim_gui
 
 		std::map<Label, std::string> plLabels;
 		std::map<Label, std::string> enLabels;
-
-		Language currentLanguage;
-
+	
 		void initLabels();
 	};
 }

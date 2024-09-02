@@ -1,0 +1,34 @@
+The program has three basic modes:
+
+    1. Manual control of the flight
+    2. Automatic control
+    3. Flight trajectory prediction
+
+Additionally, there is a third diagnostic mode that is not directly accessible to the user.
+The trajectory prediction mode can be accessed at any time from the first two modes once the simulation has started.
+During the rocket flight, it is not possible to switch between modes 1 and 2.
+
+Manual Flight Control Mode:
+
+In this mode, the rocket flight is controlled using the keyboard.
+
+Available keys:
+
+    1. r - activate manual control mode / return to automatic control mode.
+    2. z - increase engine thrust
+    3. x - decrease engine thrust
+    4. c - positive rotation of the thrust vector direction on the x-axis
+    5. v - negative rotation of the thrust vector direction on the x-axis
+    6. b - positive rotation of the thrust vector direction on the y-axis
+    7. n - negative rotation of the thrust vector direction on the y-axis
+    8. , - positive rotation of the thrust vector direction on the z-axis
+    9. space - negative rotation of the thrust vector direction on the z-axis
+
+Automatic Flight Control Mode:
+
+This is the default mode of the simulator.
+In this mode, the rocket flight is controlled by executing pre-recorded flight instructions (flight program).
+This effectively allows for the programming of the rocket flight in a chosen programming language. Two languages are available: low-level assembler and Python.
+Descriptions of the assembler and the PYTHON language API are included in separate documents.
+
+To start the simulation in this mode, you must first load the flight control program from the disk or write it from scratch in the embedded editor within the simulator.
