@@ -1,4 +1,3 @@
-Czy możesz przetłumaczyć na angielski poniższy tekst:
 Program posiada 3 podstawowe tryby:
 
 1. Manualnej kontroli nad lotem
