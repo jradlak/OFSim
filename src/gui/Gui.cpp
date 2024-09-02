@@ -26,6 +26,10 @@ void Gui::initialization(Window* mainWindow)
     ImGui::StyleColorsDark();
     ImGui_ImplGlfw_InitForOpenGL(mainWindow->getWindow(), true);
     ImGui_ImplOpenGL3_Init("#version 330");
+
+    std::string manualPath = "assets/help/operation_manual.txt";
+    helpText = ofsim_infrastructure::loadTextFile(manualPath);
+    int a = 0;
 }
 
 void Gui::newFrame()
@@ -167,7 +171,7 @@ void ofsim_gui::Gui::renderHelpScreen()
     ImGui::Separator();
     ImGui::NewLine();
     
-    ImGui::TextWrapped("%s", "To be continued...");
+    ImGui::TextWrapped("%s", helpText.c_str());
 
     if (ImGui::Button("OK", ImVec2(120, 0)))
     {        

@@ -114,7 +114,7 @@ namespace ofsim_gui
 		std::string directory { "/home/jakub/orb_progs" };
 		std::string savedFile { "" };
 
-		std::string help_text { "To be continued..." };
+		std::string helpText { "To be continued..." };
 
 		int selcted_language_item { 0 };
 

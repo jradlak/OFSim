@@ -368,7 +368,7 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 	{		
 		// load program source code from file (Python or VM):
 		orbitalProgramName = event.data;
-		orbitalProgramSourceCode = ofsim_infrastructure::loadSourceCode(event.data);
+		orbitalProgramSourceCode = ofsim_infrastructure::loadTextFile(event.data);
 	}
 
 	if (event.action == StateEvent::START_SIMULATION)

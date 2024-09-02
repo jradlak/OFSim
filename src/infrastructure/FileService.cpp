@@ -21,7 +21,7 @@ namespace ofsim_infrastructure
 		}
 	}
 
-	std::string loadSourceCode(std::string &sourcePath)
+	std::string loadTextFile(std::string &sourcePath)
 	{
 		std::string orbitalResult = "";
 		
