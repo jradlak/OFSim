@@ -9,7 +9,7 @@ Rocket control involves writing programs in the assembly language of the virtual
 The assembly program has access to the computer's memory, where telemetry data of the rocket's flight is stored. Based on this data,
 the program can issue commands to the rocket, such as changing the direction and length of the thrust vector, controlling a set of rotating gyroscopes in orbit, etc.
 
-In addition to the built-in assembly language, it is possible to write flight programs in Python.
+In addition to the built-in assembly language, it is possible to write flight programs in Python or control rocked manually using comuputer's keyboard.
 
 The program includes a special mode that displays a graph of the rocket's predicted trajectory. 
 The simulation is performed in real time and on a real scale.
@@ -57,7 +57,7 @@ If you use Visual Studio 2022 on Windows, you can import the project into the ID
 
 **=====Quick start guide:=====**
 
-1. To start the simulation, you must load the flight control program. In menu (Program->Open...) Manual control is not supported.
+1. To start the simulation, you must load the flight control program. In menu (Program->Open...) Manual control is supported in the special simulation mode. See operation manual.
 2. Sample flight programs are available in the folder: src/orb_progs. Python and oasm (virtual machine) source codes are supported. The simulator will automatically recognize the program type and launch the appropriate interpreter.
 3. The program allows you to pause and reset the simulation. Time acceleration is also available. 
 4. Additional instructions on how to use the program can be found in the doc directory.
@@ -83,7 +83,7 @@ Less urgent:
 
 **=====Changelog:=====**
 
-0.26.0 - Manual control mode. Since now there is possible to manually steering the rocket using user's computer keyboard.
+0.26.0 - Manual control mode. It is now possible to manually control the rocket using user's computer keyboard.
 
 0.25.1 - Rocket's initial orientation fixes. Now the rockt is fully perpendicular to the planet's surface at point (0, y, 0). The appropriate rotation of the planet ensures the correct geographical coordinates.
 

@@ -29,7 +29,7 @@ Tryb automatycznej kontroli lotu:
 =================================
 
 Jest to domyślny tryb symulatora.
-W tym trybie sterowanie lotem rakiety odbywa się dzieki wykonywaniu przez zapisanych instrukcji lotu (program lotu).
+W tym trybie sterowanie lotem rakiety odbywa się dzieki wykonywaniu przez komputer zapisanych instrukcji lotu (program lotu).
 Oznacza to de-facto możliwość programowania lotu rakiety w wybranym języku programowania. Dostępne są dwa języki: niskopoziomowy asembler oraz Python.
 Opisy asemblera oraz API języka PYTHON dołączone są w oddzielnych dokumentach.
 
