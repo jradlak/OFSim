@@ -7,7 +7,6 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <string>
-#include <vector>
 #include <memory>
 
 #include "Shader.h"
@@ -22,7 +21,7 @@ namespace ofsim_renderer
 
 		void renderWithRotation(dmat4& projection,
 						dmat4& view,
-						f64 size,
+						dvec3 size,
 						dvec3 position,
 						dvec3 rotation = dvec3(0.0, 0.0, 0.0));
 

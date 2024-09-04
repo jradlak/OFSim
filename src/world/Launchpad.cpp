@@ -21,7 +21,7 @@ void Launchpad::render(glm::dmat4 projection, glm::dmat4 view, glm::dvec3 _light
 	shader->setVec3("lightColor", 1.0f, 1.0f, 1.0f);
 	shader->setVec3("lightPos", _lightPos);
 
-	modelRenderer->renderWithRotation(projection, view, size, position, rotation);
+	modelRenderer->renderWithRotation(projection, view, dvec3(size), position, rotation);
 }
 
 void Launchpad::updateColor(float _r, float _g, float _b)

@@ -153,7 +153,8 @@ add_executable("${CMAKE_PROJECT_NAME}"
 
 #copy shaders to binary directory:
 if(MSVC)
-    add_custom_target(copy_shaders ALL
+    add_custom_target(copy_shaders
+        src/world/VectorIndicator.cpp ALL
                 COMMAND ${CMAKE_COMMAND} -E copy_directory
                 ${PROJECT_SOURCE_DIR}/src/shaders
                 ${PROJECT_BINARY_DIR}/shaders
@@ -228,7 +229,9 @@ add_executable(
     src/world/SolarSystemConstants.h    
     src/world/Launchpad.cpp
     src/world/Rocket.cpp
-    src/world/Smoke.cpp        
+    src/world/Smoke.cpp
+    src/world/VectorIndicator.h
+    src/world/VectorIndicator.cpp
 
     src/world/CelestialBody.h
     src/world/CloudsAndTrees.h        

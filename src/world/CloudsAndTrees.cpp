@@ -27,8 +27,8 @@ void CloudsAndTrees::render(dmat4 projection, dmat4 view, const dvec3 lightPos)
 
     for (int i = 0; i < numberOfClouds; i++) 
     {                
-        cloudRenderer->renderWithRotation(projection, view, cloudsSizes[i], cloudsPositions[i], initialRotation);
-        treeRenderer->renderWithRotation(projection, view, 0.00007, treesPositions[i], initialRotation);
+        cloudRenderer->renderWithRotation(projection, view, dvec3(cloudsSizes[i]), cloudsPositions[i], initialRotation);
+        treeRenderer->renderWithRotation(projection, view, dvec3(0.00007), treesPositions[i], initialRotation);
     }
 }
 

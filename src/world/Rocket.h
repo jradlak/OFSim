@@ -4,7 +4,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include <vector>
 #include <memory>
 
 #include "../renderer/ModelRenderer.h"
@@ -33,7 +32,10 @@ namespace ofsim_world
     {    
         Rocket(std::string shaderName, glm::dvec3 _position, double _size);
 
-        void render(glm::dmat4 projection, glm::dmat4 view, glm::dvec3 _lightPos);
+        void render(glm::dmat4 projection, dmat4 view, dvec3 _lightPos);        
+        void renderWithColorAndStretch(dmat4 projection, dmat4 view, dvec3 _lightPos, 
+            vec3 color, dvec3 stretch);
+
         void reset(glm::dvec3 _position);
 
         RocketPhysicalProperties& properties() { return rocketProperties; }

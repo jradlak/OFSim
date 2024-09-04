@@ -9,7 +9,7 @@ ModelRenderer::ModelRenderer(std::string shaderName, std::string modelPath)
 	logDepthBufFC = 2.0 / log(150000000000000000.0 + 1.0) / 0.69315;
 }
 
-void ModelRenderer::renderWithRotation(dmat4& projection, dmat4& view, f64 size, dvec3 position, dvec3 rotation)
+void ModelRenderer::renderWithRotation(dmat4& projection, dmat4& view, dvec3 size, dvec3 position, dvec3 rotation)
 {
 	shader->use();
 

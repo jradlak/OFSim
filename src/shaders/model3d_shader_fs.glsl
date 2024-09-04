@@ -3,14 +3,13 @@ out vec4 FragColor;
 
 in vec3 Normal;  
 in vec3 FragPos;  
-  
+
 in float vFragDepth;
 uniform float logDepthBufFC;
 
 uniform vec3 lightPos; 
 uniform vec3 lightColor;
 uniform vec3 objectColor;
-
 
 void main()
 {
