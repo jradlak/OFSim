@@ -19,6 +19,8 @@ Simulation::Simulation()
 	// rocket:
     glm::dvec3 rocketPos = rocketInitialPosition(theta, phi);
     rocket = std::make_unique<Rocket>("model3d_shader", rocketPos, rocket_initial_size);
+	velocityIndicator = std::make_unique<VectorIndicator>("model3d_shader", rocketPos, IndicatorType::VELOCITY);
+	thrustIndicator = std::make_unique<VectorIndicator>("model3d_shader", rocketPos, IndicatorType::THRUST_DIRECTION);
 	
 	// update camera position according to rocket:
     camera->position = rocket->properties().position + glm::dvec3(0.0, 0.024, 0.0);	
@@ -221,6 +223,15 @@ void Simulation::mainLoop()
 		// render world:
 		solarSystem->render(projection, view, SolarSystemConstants::lightPos);
 		rocket->render(projection, view, SolarSystemConstants::lightPos);
+		if (simulationMode == SimulationMode::MANUAL_CONTROL || simulationMode == SimulationMode::WAITING_FOR_BEGIN_MANUAL_CONTROL)
+		{
+			dvec3 thrustDirection = physics->thrustVector;
+			dvec3 velocityDirection = rocket->properties().velocity;
+			velocityIndicator
+				->renderWithMagnitudeAndDirection(projection, view, SolarSystemConstants::lightPos, 1.0, velocityDirection);
+			thrustIndicator
+				->renderWithMagnitudeAndDirection(projection, view, SolarSystemConstants::lightPos, physics->thrustMagnitude, thrustDirection);
+		}
 
 		if (simulationMode == SimulationMode::TRAJECTORY_PREDICTION || simulationMode == SimulationMode::PRESENTATION_MODE)
 		{

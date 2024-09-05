@@ -19,7 +19,7 @@ void ModelRenderer::renderWithRotation(dmat4& projection, dmat4& view, dvec3 siz
 	
 	// calculate rotations:			
 	model = glm::translate(model, position);
-	model = glm::scale(model, dvec3(size));
+	model = glm::scale(model, size);
 
 	if (rotation.x != 0.0)
 	{

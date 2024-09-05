@@ -10,13 +10,23 @@
 #include "Rocket.h"
 
 namespace ofsim_world
-{
+{   
+    enum class IndicatorType
+    {
+        VELOCITY,
+        THRUST_DIRECTION
+    };
+
     class VectorIndicator
     {
     public:  
-        VectorIndicator(std::string shaderName, glm::dvec3 _position, double _size);
+        VectorIndicator(std::string shaderName, glm::dvec3 _position, IndicatorType type);
+
+        void renderWithMagnitudeAndDirection(dmat4 projection, dmat4 view, dvec3 _lightPos, 
+            f64 maginitude, dvec3 direction);
 
     private:
+        dvec3 indicatorColor;
         std::unique_ptr<Rocket> indicator;
     };
 }

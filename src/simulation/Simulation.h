@@ -5,6 +5,7 @@
 #include <thread>
 
 #include "../world/SolarSystemConstants.h"
+#include "../world/VectorIndicator.h"
 #include "TelemetryCollector.h"
 #include "../renderer/Camera.h"
 #include "../renderer/Window.h"
@@ -60,6 +61,8 @@ namespace ofsim_simulation
         // world objects:
         std::unique_ptr<ofsim_world::SolarSystem> solarSystem;
         std::unique_ptr<ofsim_world::Rocket> rocket;
+        std::unique_ptr<ofsim_world::VectorIndicator> velocityIndicator;
+        std::unique_ptr<ofsim_world::VectorIndicator> thrustIndicator;
 
         // skybox:
         std::unique_ptr<SkyBoxRenderer> skyboxRenderer;

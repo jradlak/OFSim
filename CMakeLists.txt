@@ -127,7 +127,10 @@ add_executable("${CMAKE_PROJECT_NAME}"
     src/world/SolarSystemConstants.h    
     src/world/Launchpad.cpp
     src/world/Rocket.cpp
-    src/world/Smoke.cpp        
+    src/world/Smoke.cpp    
+    
+    src/world/VectorIndicator.h
+    src/world/VectorIndicator.cpp
 
     src/world/CelestialBody.h
     src/world/CloudsAndTrees.h        
