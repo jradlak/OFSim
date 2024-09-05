@@ -7,6 +7,9 @@ namespace ofsim_simulation
     struct ManualControlData
     {
         dvec3 rocketRotation;       
-        f64 thrustVectorMagnitude;        
+        f64 thrustVectorMagnitude;
+
+        dvec3 velocityVector;
+        dvec3 thrustVector;
     };
 }

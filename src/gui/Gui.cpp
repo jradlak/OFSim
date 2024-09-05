@@ -615,9 +615,21 @@ void ofsim_gui::Gui::renderManualControlData(const ofsim_simulation::ManualContr
         + std::to_string(manualControl.rocketRotation.z);
     ImGui::Text("%s", rotationTxt.c_str());
 
-    std::string thrustTxt = "Rocket's thrust vector magnitude: \n"
-        + std::to_string(manualControl.thrustVectorMagnitude);
+    std::string velocityTxt = "Rocket's velocity (x, y, z): \n"
+        + std::to_string(manualControl.velocityVector.x) + ", \n"
+        + std::to_string(manualControl.velocityVector.y) + ", \n"
+        + std::to_string(manualControl.velocityVector.z);
+    ImGui::Text("%s", velocityTxt.c_str());
+
+    std::string thrustTxt = "Rocket's thrust (x, y, z): \n"
+        + std::to_string(manualControl.thrustVector.x) + ", \n"
+        + std::to_string(manualControl.thrustVector.y) + ", \n"
+        + std::to_string(manualControl.thrustVector.z);
     ImGui::Text("%s", thrustTxt.c_str());
+
+    std::string thrustMagTxt = "Rocket's thrust vector magnitude: \n"
+        + std::to_string(manualControl.thrustVectorMagnitude);
+    ImGui::Text("%s", thrustMagTxt.c_str());
 
     ImGui::End();
 }

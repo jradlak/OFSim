@@ -10,9 +10,10 @@ VectorIndicator::VectorIndicator(std::string shaderName, glm::dvec3 _position, I
 
 void VectorIndicator::renderWithMagnitudeAndDirection(dmat4& projection, dmat4& view, const dvec3& _lightPos, 
     dvec3& position, f64 magnitude, dvec3 direction)
-{
+{    
+    dvec3 stretch = glm::dvec3(0.15, magnitude, 0.15);
+
     indicator->properties().rotation = direction;
-    dvec3 stretch = glm::dvec3(0.15, magnitude, 0.15);    
     indicator->properties().position = position;
     indicator->renderWithColorAndStretch(projection, view, _lightPos, indicatorColor, stretch);
 }

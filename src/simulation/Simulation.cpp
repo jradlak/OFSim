@@ -357,6 +357,9 @@ ManualControlData ofsim_simulation::Simulation::prepareManualControlData()
 	data.rocketRotation = properties.rotation;
 	data.thrustVectorMagnitude = physics->thrustMagnitude;
 
+	data.velocityVector = properties.velocity;
+	data.thrustVector = physics->thrustVector;
+
 	return data;
 }
 
