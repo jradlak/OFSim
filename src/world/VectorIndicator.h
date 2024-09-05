@@ -22,8 +22,8 @@ namespace ofsim_world
     public:  
         VectorIndicator(std::string shaderName, glm::dvec3 _position, IndicatorType type);
 
-        void renderWithMagnitudeAndDirection(dmat4 projection, dmat4 view, dvec3 _lightPos, 
-            f64 maginitude, dvec3 direction);
+        void renderWithMagnitudeAndDirection(dmat4& projection, dmat4& view, const dvec3& _lightPos, 
+            dvec3& position, f64 maginitude, dvec3 direction);
 
     private:
         dvec3 indicatorColor;
