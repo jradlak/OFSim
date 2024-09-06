@@ -4,7 +4,7 @@
 
 using namespace ofsim_world;
 
-Rocket::Rocket(std::string shaderName, glm::dvec3 _position, double _size)
+Rocket::Rocket(std::string shaderName, glm::dvec3 _position, double _size, bool withSmoke)
 {	
 	rocketProperties.position = _position;
 	rocketProperties.initialPosition = _position;
@@ -13,7 +13,10 @@ Rocket::Rocket(std::string shaderName, glm::dvec3 _position, double _size)
 
 	modelRenderer = std::make_unique<ofsim_renderer::ModelRenderer>(shaderName, "assets/models/large_rocket.obj");
 	
-	smoke = std::make_unique<Smoke>();
+	if (withSmoke)
+	{
+		smoke = std::make_unique<Smoke>();
+	}
 
 	rocketProperties.size = _size;
     rocketProperties.mass = rocket_initial_mass;
@@ -42,11 +45,26 @@ void ofsim_world::Rocket::renderWithColorAndStretch(dmat4 projection, dmat4 view
 	modelRenderer->renderWithRotation(projection, view, 
 		rocketProperties.size * stretch, rocketProperties.position, rocketProperties.rotation);
 	 
-	glm::dvec3 direction = glm::normalize(rocketProperties.position - SolarSystemConstants::earthPos);
-    glm::dvec3 smokePosition = rocketProperties.position + glm::dvec3(0.0, -0.004, 0.0);  // - (direction / 65.0); //+ glm::dvec3(0.0, -0.001, 0.0);
-	 
-	if (rocketProperties.thrustMagnitude > 0.01 && rocketProperties.mass > 3.0)
-	{
-		smoke->puff(projection, view, _lightPos, smokePosition);
+    if (smoke != nullptr)
+	{		
+		glm::dvec3 smokePosition = rocketProperties.position + glm::dvec3(0.0, -0.004, 0.0);  // - (direction / 65.0); //+ glm::dvec3(0.0, -0.001, 0.0);
+		
+		if (rocketProperties.thrustMagnitude > 0.01 && rocketProperties.mass > 3.0)
+		{
+			smoke->puff(projection, view, _lightPos, smokePosition);
+		}
 	}
+}
+
+void ofsim_world::Rocket::renderParallelToVectorWithColorAndStretch(dmat4 projection, dmat4 view, dvec3 _lightPos,
+	const dvec3 &direction, vec3 color, dvec3 stretch)
+{
+	Shader* shader = modelRenderer->getShader();
+	shader->use();
+	shader->setVec3("objectColor", color);	
+	shader->setVec3("lightColor", 1.0f, 1.0f, 1.0f);
+	shader->setVec3("lightPos", _lightPos);
+
+	modelRenderer->renderParallelToVector(projection, view, 
+		rocketProperties.size * stretch, rocketProperties.position, direction);		
 }

@@ -225,8 +225,8 @@ void Simulation::mainLoop()
 		rocket->render(projection, view, SolarSystemConstants::lightPos);
 		if (simulationMode == SimulationMode::MANUAL_CONTROL || simulationMode == SimulationMode::WAITING_FOR_BEGIN_MANUAL_CONTROL)
 		{
-			dvec3 thrustDirection = physics->thrustVector;
-			dvec3 velocityDirection = rocket->properties().velocity;
+			const dvec3& thrustDirection = physics->thrustVector;
+			const dvec3& velocityDirection = rocket->properties().velocity;
 			velocityIndicator
 				->renderWithMagnitudeAndDirection(projection, view, SolarSystemConstants::lightPos, 
 					rocket->properties().position, 1.0, velocityDirection);

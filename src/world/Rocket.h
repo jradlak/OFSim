@@ -30,11 +30,13 @@ namespace ofsim_world
 
     struct Rocket
     {    
-        Rocket(std::string shaderName, glm::dvec3 _position, double _size);
+        Rocket(std::string shaderName, glm::dvec3 _position, double _size, bool withSmoke = true);
 
         void render(glm::dmat4 projection, dmat4 view, dvec3 _lightPos);        
         void renderWithColorAndStretch(dmat4 projection, dmat4 view, dvec3 _lightPos, 
             vec3 color, dvec3 stretch);
+        void renderParallelToVectorWithColorAndStretch(dmat4 projection, dmat4 view, dvec3 _lightPos,        
+            const dvec3& direction, vec3 color, dvec3 stretch);
 
         void reset(glm::dvec3 _position);
 
