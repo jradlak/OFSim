@@ -4,7 +4,7 @@
 #include "Rocket.h"
 #include "CelestialBody.h"
 #include "CloudsAndTrees.h"
-#include "Launchpad.h"
+#include "GroundObject.h"
 #include "../math_and_physics/MathTypes.h"
 
 namespace ofsim_world
@@ -25,7 +25,8 @@ namespace ofsim_world
     private:
         std::unique_ptr<CelestialBody> celestialBody = nullptr;
         std::unique_ptr<CloudsAndTrees> cloudsAndTrees = nullptr;
-        std::unique_ptr<Launchpad> launchpad = nullptr;
+        std::unique_ptr<GroundObject> launchpad = nullptr;
+        std::unique_ptr<GroundObject> platform = nullptr;
     };
 
     struct Moon

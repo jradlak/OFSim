@@ -121,11 +121,11 @@ add_executable("${CMAKE_PROJECT_NAME}"
     src/renderer/TrajectoryPrediction.cpp
     src/renderer/Window.cpp
     
-    src/world/Launchpad.h
+    src/world/GroundObject.h
     src/world/Rocket.h
     src/world/Smoke.h
     src/world/SolarSystemConstants.h    
-    src/world/Launchpad.cpp
+    src/world/GroundObject.cpp
     src/world/Rocket.cpp
     src/world/Smoke.cpp    
     
@@ -226,11 +226,11 @@ add_executable(
     src/renderer/TrajectoryPrediction.cpp
     src/renderer/Window.cpp
 
-    src/world/Launchpad.h
+    src/world/GroundObject.h
     src/world/Rocket.h
     src/world/Smoke.h
     src/world/SolarSystemConstants.h    
-    src/world/Launchpad.cpp
+    src/world/GroundObject.cpp
     src/world/Rocket.cpp
     src/world/Smoke.cpp
     src/world/VectorIndicator.h

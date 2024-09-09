@@ -8,13 +8,20 @@
 
 namespace ofsim_world
 {
-    struct Launchpad
+    enum class GroundObjectType
     {
-        Launchpad(
+        LAUNCHPAD,
+        PLATFORM        
+    };
+
+    struct GroundObject
+    {
+        GroundObject(
             std::string shaderName,
             std::string modelName,
             glm::dvec3 _position,
-            double _size);
+            double _size,
+            GroundObjectType type = GroundObjectType::LAUNCHPAD);
 
         void render(glm::dmat4 projection, glm::dmat4 view, glm::dvec3 _lightPos);
 
@@ -28,6 +35,7 @@ namespace ofsim_world
 
         //model color;
         float r, g, b;
+
 
         double size;
     };

@@ -16,8 +16,14 @@ void Planet::init(i32 number, f64 _angle, f64 _dangle, dvec3 _rotation)
 
     dvec3 launchpadPos = pointAboveTheSurface(_angle, _dangle, SolarSystemConstants::earthSize - 0.45 + 0.021);
 
-    launchpad = std::make_unique<Launchpad>("model3d_shader", "assets/models/launchpad2.obj", launchpadPos, 0.05);
+    launchpad = std::make_unique<GroundObject>("model3d_shader", "assets/models/launchpad2.obj", launchpadPos, 0.05);
     launchpad->rotation = _rotation;
+
+    dvec3 platformRotation = _rotation + dvec3(0, 0, 90);
+
+    platform = std::make_unique<GroundObject>("model3d_shader", "assets/models/platform.obj", launchpadPos + dvec3(0, -0.0235, 0), 0.0006, 
+        GroundObjectType::PLATFORM);
+    platform->rotation = platformRotation;
 }
 
 void Planet::render(dmat4 projection, dmat4 view, const dvec3 lightPos)
@@ -33,6 +39,11 @@ void Planet::render(dmat4 projection, dmat4 view, const dvec3 lightPos)
     if (launchpad != nullptr)
     {
         launchpad->render(projection, view, lightPos);
+    }
+
+    if (platform != nullptr)
+    {
+        platform->render(projection, view, lightPos);
     }
 }
 

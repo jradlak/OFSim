@@ -1,19 +1,27 @@
-#include "Launchpad.h"
+#include "GroundObject.h"
 
 using namespace ofsim_world;
 
-Launchpad::Launchpad(
+GroundObject::GroundObject(
 	std::string shaderName,
 	std::string modelName,
 	glm::dvec3 _position, 
-	double _size)
-	: position(_position), size(_size)
+	double _size,
+	GroundObjectType type)
+		: position(_position), size(_size)
 {
 	modelRenderer = std::make_unique<ofsim_renderer::ModelRenderer>(shaderName, modelName);
-	r = 0.25f; g = 0.25f, b = 0.75f;
+	if (type == GroundObjectType::LAUNCHPAD) 
+	{	
+		r = 0.15f; g = 0.15f, b = 0.45f;
+	}
+	else
+	{
+		r = 0.5f; g = 0.5f; b = 0.5f;		
+	}	
 }
 
-void Launchpad::render(glm::dmat4 projection, glm::dmat4 view, glm::dvec3 _lightPos)
+void GroundObject::render(glm::dmat4 projection, glm::dmat4 view, glm::dvec3 _lightPos)
 {
 	Shader* shader = modelRenderer->getShader();
 	shader->use();
@@ -24,7 +32,7 @@ void Launchpad::render(glm::dmat4 projection, glm::dmat4 view, glm::dvec3 _light
 	modelRenderer->renderWithRotation(projection, view, dvec3(size), position, rotation);
 }
 
-void Launchpad::updateColor(float _r, float _g, float _b)
+void GroundObject::updateColor(float _r, float _g, float _b)
 {
 	r = _r;
 	g = _g;
