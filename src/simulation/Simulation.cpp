@@ -222,7 +222,10 @@ void Simulation::mainLoop()
 
 		// render world:
 		solarSystem->render(projection, view, SolarSystemConstants::lightPos);
-		rocket->render(projection, view, SolarSystemConstants::lightPos);
+		// rocket->render(projection, view, SolarSystemConstants::lightPos);
+		rocket->renderParallelToVectorWithColorAndStretch(projection, view, SolarSystemConstants::lightPos, 
+			physics->thrustVector, vec3(0.55f), dvec3(1.0));
+
 		if (simulationMode == SimulationMode::MANUAL_CONTROL || simulationMode == SimulationMode::WAITING_FOR_BEGIN_MANUAL_CONTROL)
 		{
 			const dvec3& thrustDirection = physics->thrustVector;

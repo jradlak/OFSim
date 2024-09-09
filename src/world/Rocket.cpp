@@ -29,31 +29,9 @@ void Rocket::reset(glm::dvec3 _position)
 	rocketProperties.position = _position;
 }
 
-void Rocket::render(glm::dmat4 projection, glm::dmat4 view, glm::dvec3 _lightPos)
-{	
-	renderWithColorAndStretch(projection, view, _lightPos, glm::vec3(0.55f, 0.55f, 0.55f), glm::vec3(1.0f, 1.0f, 1.0f));
-}
-
-void ofsim_world::Rocket::renderWithColorAndStretch(dmat4 projection, dmat4 view, dvec3 _lightPos, vec3 color, dvec3 stretch)
-{
-	Shader* shader = modelRenderer->getShader();
-	shader->use();
-	shader->setVec3("objectColor", color);	
-	shader->setVec3("lightColor", 1.0f, 1.0f, 1.0f);
-	shader->setVec3("lightPos", _lightPos);
-
-	modelRenderer->renderWithRotation(projection, view, 
-		rocketProperties.size * stretch, rocketProperties.position, rocketProperties.rotation);
-	 
-    if (smoke != nullptr)
-	{		
-		glm::dvec3 smokePosition = rocketProperties.position + glm::dvec3(0.0, -0.004, 0.0);  // - (direction / 65.0); //+ glm::dvec3(0.0, -0.001, 0.0);
-		
-		if (rocketProperties.thrustMagnitude > 0.01 && rocketProperties.mass > 3.0)
-		{
-			smoke->puff(projection, view, _lightPos, smokePosition);
-		}
-	}
+void Rocket::render(glm::dmat4 projection, glm::dmat4 view, glm::dvec3 _lightPos, const dvec3 &direction)
+{		
+	renderParallelToVectorWithColorAndStretch(projection, view, _lightPos, direction, glm::vec3(0.55f), glm::dvec3(1.0));
 }
 
 void ofsim_world::Rocket::renderParallelToVectorWithColorAndStretch(dmat4 projection, dmat4 view, dvec3 _lightPos,
@@ -67,4 +45,14 @@ void ofsim_world::Rocket::renderParallelToVectorWithColorAndStretch(dmat4 projec
 
 	modelRenderer->renderParallelToVector(projection, view, 
 		rocketProperties.size * stretch, rocketProperties.position, direction);		
+
+	if (smoke != nullptr)
+	{		
+		glm::dvec3 smokePosition = rocketProperties.position + glm::dvec3(0.0, -0.004, 0.0);  
+		
+		if (rocketProperties.thrustMagnitude > 0.01 && rocketProperties.mass > 3.0)
+		{
+			smoke->puff(projection, view, _lightPos, smokePosition);
+		}
+	}
 }

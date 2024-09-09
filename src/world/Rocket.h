@@ -24,7 +24,6 @@ namespace ofsim_world
         dvec3 towards;
         dvec3 rotation;
         dvec3 velocity;
-
         f64 size, mass, thrustMagnitude;
     };
 
@@ -32,9 +31,7 @@ namespace ofsim_world
     {    
         Rocket(std::string shaderName, glm::dvec3 _position, double _size, bool withSmoke = true);
 
-        void render(glm::dmat4 projection, dmat4 view, dvec3 _lightPos);        
-        void renderWithColorAndStretch(dmat4 projection, dmat4 view, dvec3 _lightPos, 
-            vec3 color, dvec3 stretch);
+        void render(glm::dmat4 projection, dmat4 view, dvec3 _lightPos, const dvec3 &direction);        
         void renderParallelToVectorWithColorAndStretch(dmat4 projection, dmat4 view, dvec3 _lightPos,        
             const dvec3& direction, vec3 color, dvec3 stretch);
 
