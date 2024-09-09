@@ -9,6 +9,7 @@ The trajectory prediction mode can be accessed at any time from the first two mo
 During the rocket flight, it is not possible to switch between modes 1 and 2.
 
 Manual Flight Control Mode:
+===========================
 
 In this mode, the rocket flight is controlled using the keyboard.
 
@@ -24,7 +25,13 @@ Available keys:
     8. , - positive rotation of the thrust vector direction on the z-axis
     9. space - negative rotation of the thrust vector direction on the z-axis
 
+
+In the manual control mode, additional indicator vectors are drawn showing the direction of the velocity and thrust vector.
+These vectors are colored red and blue, respectively.
+
+
 Automatic Flight Control Mode:
+==============================
 
 This is the default mode of the simulator.
 In this mode, the rocket flight is controlled by executing pre-recorded flight instructions (flight program).
@@ -32,3 +39,13 @@ This effectively allows for the programming of the rocket flight in a chosen pro
 Descriptions of the assembler and the PYTHON language API are included in separate documents.
 
 To start the simulation in this mode, you must first load the flight control program from the disk or write it from scratch in the embedded editor within the simulator.
+
+In both modes, to start the simulation, click the green "play" button on the control panel. It is possible to speed up time and pause the simulation. The red "stop" button resets the simulation.
+
+Flight Control During Simulation:
+=================================
+
+During the simulation, you can view the predicted flight trajectory by pressing the 'm' key. In this mode, the camera changes its position, 
+and a curve is drawn in green and red colors. The green color indicates the traveled path, while the red color shows the predicted trajectory of the rocket. 
+In this mode, the camera can be freely rotated using the mouse. 
+Movement in space is possible with the 'wsad' keys. Pressing 'm' again will return to the simulation mode (automatic or manual).

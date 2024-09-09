@@ -25,6 +25,9 @@ Dostępne klawisze:
 8. , - dodatnia rotacja kierunku wektora ciągu w osi z
 9. space - ujemna rotacja kierunku wektora ciągu w osi z
 
+W trybie manulanej kontroli rysowane są dodatkowe wskaźnikowe wektory ukazujące kierunek działania wektora prędkości i siły ciągu silnika.
+Wektory te mają kolor odpowiednio: czerwony i niebieski.
+
 Tryb automatycznej kontroli lotu:
 =================================
 
@@ -34,3 +37,15 @@ Oznacza to de-facto możliwość programowania lotu rakiety w wybranym języku p
 Opisy asemblera oraz API języka PYTHON dołączone są w oddzielnych dokumentach.
 
 W celu rozpoczęcia symulacji w tym trybie należy najpierw załadować program kontroli lotu z dysku lub napisać go od podstaw w osadzonym w symulatorze edytorze.
+
+Kontrola lotu w czasie symulacji
+================================
+
+W obydwu trybach w celu rozpoczęcia symulacji należy kliknąć zielony przycisk "play" na panelu sterowania.
+Możliwe jest przyspieszenie czasu oraz zapauzowanie symulacji. Czerwony przycisk "stop" resetuje symulację.
+
+Podczas trwania symulacji możliwy jest podgląd przewidywanej trajektorii lotu - klawisz 'm'.
+W tym trybie kamera zmienia swoje położenie i rysowana jest krzywa w kolorze zielonym i czerwonym. Kolor zielony oznacza przebytą drogę, 
+a czerwony przewidywaną trajektorię lotu rakiety. W tym trybie można swobodnie obracać kamerą przy użyciu myszy. 
+Ruch w przestrzeni możliwy jest za pomocą klawiszy 'wsad'.
+Ponowne naciśnięcie 'm' spowoduje powrót do trybu symulacji (automatycznej lub manualnej);
