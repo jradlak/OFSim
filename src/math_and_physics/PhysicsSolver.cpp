@@ -47,7 +47,7 @@ u64 PhysicsSolver::calculateForces(u64 timeInterval)
             
             if (!thrustCutOff)
             {
-                rocketProperties.mass = (mass -= 0.0004);
+                rocketProperties.mass = (mass -= 0.002 * thrustMagnitude);
             }
 
             updatePhysics(ms_per_update / 1000.0f);
