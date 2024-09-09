@@ -46,7 +46,7 @@ void CloudsAndTrees::calculatePositionsAndSizes()
         dvec3 cloudPoint = earth.pointAboveTheSurface(angle, dangle, 6371 + 0.1);
 
         dvec3 cloudPos = dvec3(rangle, cloudPoint.y + 1.5, rdangle);
-        dvec3 treePos = dvec3(-rangle, cloudPoint.y - 0.55, -rdangle);
+        dvec3 treePos = dvec3(-rangle / 3.0, cloudPoint.y - 0.55, -rdangle / 3.0);
 
         f32 size = (rand() % 100 + 7) / 100000.0;
 
