@@ -83,6 +83,8 @@ Less urgent:
 
 **=====Changelog:=====**
 
+0.26.1 - In manual control mode, displaying velocity and thrust vector indicators.
+
 0.26.0 - Manual control mode. It is now possible to manually control the rocket using user's computer keyboard.
 
 0.25.1 - Rocket's initial orientation fixes. Now the rockt is fully perpendicular to the planet's surface at point (0, y, 0). The appropriate rotation of the planet ensures the correct geographical coordinates.
