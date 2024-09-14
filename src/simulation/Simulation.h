@@ -52,6 +52,8 @@ namespace ofsim_simulation
         const u32 SCR_WIDTH{ 1800 };
         const u32 SCR_HEIGHT{ 950 };
 
+        const dvec3 prediction_camera_init_pos{ 8, -5, 8521.0 };
+
         //std::string SOURCE_CODE_FILE_NAME = "orbital_programs/ballisticProgram.oasm";
         std::string SOURCE_CODE_FILE_NAME{ "" };
 

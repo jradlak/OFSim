@@ -581,7 +581,8 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
             {
 				if (simulationMode != SimulationMode::TRAJECTORY_PREDICTION)
 				{
-                    camera->updatePosition(solarSystem->pointAboveEarthSurface(8, -5, 8521.0));
+					const dvec3& pos = prediction_camera_init_pos;
+                    camera->updatePosition(solarSystem->pointAboveEarthSurface(pos[0], pos[1], pos[2]));
 					returnMode = simulationMode;
 					simulationMode = SimulationMode::TRAJECTORY_PREDICTION;
 				}
