@@ -83,7 +83,7 @@ Less urgent:
 
 **=====Changelog:=====**
 
-0.26.1 - Corrections of the initial camera position in the trajectory prediction mode.
+0.26.2 - Corrections of the initial camera position in the trajectory prediction mode.
 
 0.26.1 - In manual control mode, displaying velocity and thrust vector indicators.
 
