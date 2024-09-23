@@ -100,6 +100,8 @@ add_executable("${CMAKE_PROJECT_NAME}"
     src/gui/Gui.cpp
     src/gui/i18n.h
     src/gui/i18n.cpp
+    src/gui/FileDialog.h
+    src/gui/FileDialog.cpp
     
     src/renderer/Camera.h
     src/renderer/Mesh.h

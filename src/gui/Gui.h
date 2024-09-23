@@ -15,6 +15,8 @@
 #include "../simulation/DiagnosticsData.h"
 #include "../simulation/ManualControlData.h"
 
+#include "FileDialog.h"
+
 namespace ofsim_gui 
 {
 	// Class description in the header file
@@ -107,9 +109,9 @@ namespace ofsim_gui
 
 		bool clearTranslationErrors { false };
 
-		std::vector<std::string> filesInDirectory;
-		
 		I18n* i18n;
+
+		FileDialog fileDialog;
 
 		std::string directory { "/home/jakub/orb_progs" };
 		std::string savedFile { "" };
@@ -117,8 +119,6 @@ namespace ofsim_gui
 		std::string helpText { "To be continued..." };
 
 		int selcted_language_item { 0 };
-
-		void loadFilesInDirectory(std::string &directory);	
 
 		u64 currentTime();
 	};

@@ -44,6 +44,7 @@ void Gui::newFrame()
 void Gui::renderMenuBar()
 {
     EventProcessor* eventProcessor = EventProcessor::getInstance();
+    
     if (ImGui::BeginMainMenuBar())
     {
         if (ImGui::BeginMenu("Program"))
@@ -215,57 +216,9 @@ void Gui::renderFileOpenDialog()
 {   
     if (!viewFileOpen) return;
 
-    EventProcessor* eventProcessor = EventProcessor::getInstance();
+    fileDialog.renderFileOpenDialog();    
 
-    ImGui::SetNextWindowSize(ImVec2(450, 210), ImGuiCond_Once);
-    ImGui::SetNextWindowPos(ImVec2(600, 200), ImGuiCond_Once);
-
-    ImGui::Begin(i18n->t(dialog_title));
-    
-    ImGui::Text("%s", i18n->t(dialog_directory));
-    ImGui::InputText(" ", &directory);
-    ImGui::SameLine();
-    if (ImGui::Button(i18n->t(dialog_load), ImVec2(60, 0)))
-    { 
-        if (directory != "")
-        { 
-            loadFilesInDirectory(directory); 
-        }
-    }
-    else 
-    {
-        if (directory != "")
-        {
-            loadFilesInDirectory(directory);
-        }
-    }
-
-    ImGui::Separator();
-
-    ImGui::Text("%s", i18n->t(dialog_file_list));
-    const char* items[10];
-    for (int i = 0; i < filesInDirectory.size(); i++)
-    {
-        items[i] = filesInDirectory[i].c_str();
-    }
-
-    static int item_current = 0;
-    ImGui::ListBox(" ", &item_current, items, filesInDirectory.size(), 4);
-    
-    ImGui::Separator();
-
-    if (ImGui::Button("OK", ImVec2(120, 0))) 
-    {         
-        std::string selectedFile = filesInDirectory[item_current];
-        viewFileOpen = false; 
-        eventProcessor->createEvent(StateEvent::PROGRAM_FILE_OPEN, selectedFile);               
-    }
-
-    ImGui::SetItemDefaultFocus();
-    ImGui::SameLine();
-    if (ImGui::Button(i18n->t(dialog_cancel), ImVec2(120, 0))) { viewFileOpen = false; }
-
-    ImGui::End();
+    viewFileOpen = fileDialog.viewFileOpen;
 }
 
 void Gui::renderSimulationControlWindow(unsigned long long time)
@@ -672,9 +625,4 @@ int Gui::getTimeFactor()
     }
 
     return timeFactor;
-}
-
-void Gui::loadFilesInDirectory(std::string &directory)
-{    
-    filesInDirectory = ofsim_infrastructure::loadfilesInDirectory(directory);
 }
