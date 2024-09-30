@@ -62,17 +62,19 @@ void I18n::initLabels()
 
 	plLabels[splash_info] = "Symulator Lotow Orbitalnych";
 	enLabels[splash_info] = "Orbital Flight Simulator";
-    plLabels[splash_version] = "Wersja: 0.26.2 alpha";
-    enLabels[splash_version] = "Version: 0.26.2 alpha";
+    plLabels[splash_version] = "Wersja: 0.26.3 alpha";
+    enLabels[splash_version] = "Version: 0.26.3 alpha";
 
 	plLabels[dialog_title] = "Wczytaj kod zrodlowy programu lotu";
 	enLabels[dialog_title] = "Load the source code of the flight program";
 	plLabels[dialog_directory] = "Katalog: ";
 	enLabels[dialog_directory] = "Directory: ";
-	plLabels[dialog_load] = "Wczytaj";
-	enLabels[dialog_load] = "Load";
+	plLabels[dialog_load] = "Wczytaj katalog";
+	enLabels[dialog_load] = "Load directory";
 	plLabels[dialog_file_list] = "Lista plikow: ";
 	enLabels[dialog_file_list] = "List of files: ";
+	plLabels[dialog_load_file_directory] = "Wczytaj plik/katalog";
+	enLabels[dialog_load_file_directory] = "Load file/directory";
 	plLabels[dialog_cancel] = "Anuluj";
 	enLabels[dialog_cancel] = "Cancel";
 

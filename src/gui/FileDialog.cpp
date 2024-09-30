@@ -1,6 +1,7 @@
 #include "FileDialog.h"
 
 #include <iostream>
+#include <filesystem>
 
 #include "../../external_libraries/imgui/imgui.h"
 #include "../../external_libraries/imgui/imgui_impl_glfw.h"
@@ -37,14 +38,14 @@ void FileDialog::renderFileOpenDialog()
     viewFileOpen = true;
 
     ImGui::SetNextWindowSize(ImVec2(450, 410), ImGuiCond_Once);
-    ImGui::SetNextWindowPos(ImVec2(600, 200), ImGuiCond_Once);
+    ImGui::SetNextWindowPos(ImVec2(600, 220), ImGuiCond_Once);
 
     ImGui::Begin(i18n->t(dialog_title));
     
     ImGui::Text("%s", i18n->t(dialog_directory));
     ImGui::InputText(" ", &directory);
     ImGui::SameLine();
-    if (ImGui::Button(i18n->t(dialog_load), ImVec2(60, 0)))
+    if (ImGui::Button(i18n->t(dialog_load), ImVec2(120, 0)))
     { 
         if (directory != "")
         { 
@@ -74,11 +75,31 @@ void FileDialog::renderFileOpenDialog()
     
     ImGui::Separator();
 
-    if (ImGui::Button("OK", ImVec2(120, 0))) 
-    {         
-        std::string selectedFile = filesInDirectory[item_current].path + "/" + filesInDirectory[item_current].name;
-        viewFileOpen = false; 
-        eventProcessor->createEvent(StateEvent::PROGRAM_FILE_OPEN, selectedFile);               
+    if (ImGui::Button((i18n->t(dialog_load_file_directory)), ImVec2(160, 0))) 
+    {  
+        const auto& selectedItem = filesInDirectory[item_current];
+
+        if (selectedItem.type == ofsim_infrastructure::FileType::DIRECTORY)
+        {
+            directory = selectedItem.path + "/" + selectedItem.name;
+            loadFilesInDirectory(directory);
+        }
+        else if (selectedItem.type == ofsim_infrastructure::FileType::FILE)
+        {
+            std::string selectedFile = selectedItem.path + "/" + selectedItem.name;
+            viewFileOpen = false; 
+            eventProcessor->createEvent(StateEvent::PROGRAM_FILE_OPEN, selectedFile);                       
+        } 
+        else if (selectedItem.type == ofsim_infrastructure::FileType::HOME_DIRECTORY)
+        {
+            directory = getenv("HOME");
+            loadFilesInDirectory(directory);
+        } 
+        else if (selectedItem.type == ofsim_infrastructure::FileType::PARENT_DIRECTORY)
+        {
+            directory = std::filesystem::path(directory).parent_path().u8string();
+            loadFilesInDirectory(directory);
+        }
     }
 
     ImGui::SetItemDefaultFocus();
