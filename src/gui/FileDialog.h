@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include "i18n.h"
+#include "../infrastructure/FileService.h"
 
 namespace ofsim_gui
 {
@@ -17,7 +18,7 @@ namespace ofsim_gui
 
     private:
         std::string directory { "/home/jakub/orb_progs" };    
-        std::vector<std::string> filesInDirectory;
+        std::vector<ofsim_infrastructure::FileDescriptor> filesInDirectory;
 		
         I18n* i18n;
 

@@ -43,15 +43,18 @@ namespace ofsim_infrastructure
 		return orbitalResult;
 	}
 
-	std::vector<std::string> loadfilesInDirectory(std::string &dirName)
+	std::vector<FileDescriptor> loadfilesInDirectory(std::string &dirName)
 	{
-		std::vector<std::string> filesInDirectory;
+		std::vector<FileDescriptor> filesInDirectory;
 		if (fs::is_directory(dirName))
 		{
 			for (const auto& entry : fs::directory_iterator(dirName))
 			{
-				std::string fileName = entry.path().u8string();
-				filesInDirectory.push_back(fileName);
+				std::string filePath = entry.path().u8string();
+				FileDescriptor fileDescriptor;
+				fileDescriptor.name = entry.path().filename().u8string();
+				fileDescriptor.path = entry.path().parent_path().u8string();
+				filesInDirectory.push_back(fileDescriptor);
 			}
 		}
 

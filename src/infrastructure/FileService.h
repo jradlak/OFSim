@@ -7,7 +7,13 @@
 
 namespace ofsim_infrastructure
 {
+	struct FileDescriptor
+	{
+		std::string name;
+		std::string path;
+	};
+
 	void saveSourceCode(std::string &sourcePath, std::string &orbitalProgramSrc);
 	std::string loadTextFile(std::string &sourcePath);
-	std::vector<std::string> loadfilesInDirectory(std::string& dirName);
+	std::vector<FileDescriptor> loadfilesInDirectory(std::string& dirName);
 }

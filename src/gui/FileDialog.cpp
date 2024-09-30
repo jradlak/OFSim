@@ -65,7 +65,7 @@ void FileDialog::renderFileOpenDialog()
     const char* items[10];
     for (int i = 0; i < filesInDirectory.size(); i++)
     {
-        items[i] = filesInDirectory[i].c_str();
+        items[i] = filesInDirectory[i].name.c_str();
     }
 
     static int item_current = 0;
@@ -75,7 +75,7 @@ void FileDialog::renderFileOpenDialog()
 
     if (ImGui::Button("OK", ImVec2(120, 0))) 
     {         
-        std::string selectedFile = filesInDirectory[item_current];
+        std::string selectedFile = filesInDirectory[item_current].path + "/" + filesInDirectory[item_current].name;
         viewFileOpen = false; 
         eventProcessor->createEvent(StateEvent::PROGRAM_FILE_OPEN, selectedFile);               
     }
