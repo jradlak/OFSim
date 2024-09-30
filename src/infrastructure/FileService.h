@@ -7,8 +7,17 @@
 
 namespace ofsim_infrastructure
 {
+	enum class FileType
+	{
+		HOME_DIRECTORY,
+		PARENT_DIRECTORY,
+		DIRECTORY,
+		FILE
+	};
+
 	struct FileDescriptor
 	{
+		FileType type;
 		std::string name;
 		std::string path;
 	};

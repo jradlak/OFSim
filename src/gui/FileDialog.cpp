@@ -36,7 +36,7 @@ void FileDialog::renderFileOpenDialog()
 
     viewFileOpen = true;
 
-    ImGui::SetNextWindowSize(ImVec2(450, 210), ImGuiCond_Once);
+    ImGui::SetNextWindowSize(ImVec2(450, 410), ImGuiCond_Once);
     ImGui::SetNextWindowPos(ImVec2(600, 200), ImGuiCond_Once);
 
     ImGui::Begin(i18n->t(dialog_title));
@@ -62,14 +62,15 @@ void FileDialog::renderFileOpenDialog()
     ImGui::Separator();
 
     ImGui::Text("%s", i18n->t(dialog_file_list));
-    const char* items[10];
-    for (int i = 0; i < filesInDirectory.size(); i++)
+    const int items_count = filesInDirectory.size();
+    const char* items[items_count];
+    for (int i = 0; i < items_count; i++)
     {
         items[i] = filesInDirectory[i].name.c_str();
     }
 
     static int item_current = 0;
-    ImGui::ListBox(" ", &item_current, items, filesInDirectory.size(), 4);
+    ImGui::ListBox(" ", &item_current, items, items_count, 16);
     
     ImGui::Separator();
 

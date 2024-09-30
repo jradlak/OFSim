@@ -1,6 +1,8 @@
 #include "FileService.h"
 
 #include <filesystem>
+#include <algorithm>
+
 namespace fs = std::filesystem;
 
 namespace ofsim_infrastructure
@@ -46,16 +48,51 @@ namespace ofsim_infrastructure
 	std::vector<FileDescriptor> loadfilesInDirectory(std::string &dirName)
 	{
 		std::vector<FileDescriptor> filesInDirectory;
+		
+		FileDescriptor homeDir { FileType::HOME_DIRECTORY, ".", "." };
+		filesInDirectory.push_back(homeDir);
+		FileDescriptor parentDir { FileType::PARENT_DIRECTORY, "..", ".." };
+		filesInDirectory.push_back(parentDir);
+
 		if (fs::is_directory(dirName))
 		{
+			// at first, add directories:
+			std::vector<FileDescriptor> directories;
+			for (const auto& entry : fs::directory_iterator(dirName))
+			{
+				if (fs::is_directory(entry.path()))
+				{
+					FileDescriptor fileDescriptor;
+					fileDescriptor.type = FileType::DIRECTORY;
+					fileDescriptor.name = entry.path().filename().u8string() + "/";
+					fileDescriptor.path = entry.path().parent_path().u8string();
+					directories.push_back(fileDescriptor);
+				}
+			}
+			// sort directories:
+			std::sort(directories.begin(), directories.end(), [](const FileDescriptor& a, const FileDescriptor& b) {
+				return a.name < b.name;
+			});
+			
+			// then, add files:
+			std::vector<FileDescriptor> files;
 			for (const auto& entry : fs::directory_iterator(dirName))
 			{
 				std::string filePath = entry.path().u8string();
 				FileDescriptor fileDescriptor;
+				fileDescriptor.type = FileType::FILE;
 				fileDescriptor.name = entry.path().filename().u8string();
 				fileDescriptor.path = entry.path().parent_path().u8string();
-				filesInDirectory.push_back(fileDescriptor);
+				files.push_back(fileDescriptor);
 			}
+
+			// sort files:
+			std::sort(files.begin(), files.end(), [](const FileDescriptor& a, const FileDescriptor& b) {
+				return a.name < b.name;
+			});
+
+			filesInDirectory.insert(filesInDirectory.end(), directories.begin(), directories.end());
+			filesInDirectory.insert(filesInDirectory.end(), files.begin(), files.end());
 		}
 
 		return filesInDirectory;
