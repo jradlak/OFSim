@@ -78,10 +78,12 @@ void I18n::initLabels()
 	plLabels[dialog_cancel] = "Anuluj";
 	enLabels[dialog_cancel] = "Cancel";
 
-	plLabels[dialog_save_title] = "Zapisz plik jako";
-	enLabels[dialog_save_title] = "Save file as";
+	plLabels[dialog_save_title] = "Zapisz plik jako...";
+	enLabels[dialog_save_title] = "Save file as...";
 	plLabels[dialog_save_file_name] = "Pelna nazwa pliku: ";
 	enLabels[dialog_save_file_name] = "Full file name: ";
+	plLabels[dialog_save_file] = "Zapisz plik";
+	enLabels[dialog_save_file] = "Save file";
 
 	plLabels[sim_panel_title] = "Kontrola symulacji";
 	enLabels[sim_panel_title] = "Simulation control panel";

@@ -7,19 +7,26 @@
 
 namespace ofsim_gui
 {
+    enum class DialogMode
+    {
+        FILE_OPEN,
+        FILE_SAVE
+    }; 
+
     class FileDialog
     {
     public:
-        FileDialog();
+        FileDialog(DialogMode mode);
 
-        void renderFileOpenDialog();
+        void renderFileDialog();
 
         bool viewFileOpen { false };
 
     private:
-        std::string directory { "/home/jakub/orb_progs" };    
+        std::string directory { "" };    
         std::vector<ofsim_infrastructure::FileDescriptor> filesInDirectory;
-		
+		DialogMode mode;
+
         I18n* i18n;
 
         void loadFilesInDirectory(std::string &directory);	

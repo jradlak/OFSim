@@ -188,37 +188,18 @@ void Gui::renderFileSaveAsDialog()
 {
     if (!viewFileSaveAs) return;
 
-    EventProcessor* eventProcessor = EventProcessor::getInstance();
+    fileSaveDialog.renderFileDialog();
 
-    ImGui::SetNextWindowSize(ImVec2(380, 110), ImGuiCond_Once);
-    ImGui::SetNextWindowPos(ImVec2(600, 200), ImGuiCond_Once);
-
-    ImGui::Begin(i18n->t(dialog_save_title));
-
-    ImGui::Text("%s", i18n->t(dialog_save_file_name));
-    ImGui::InputText(" ", &savedFile);
-
-    if (ImGui::Button("OK", ImVec2(120, 0)))
-    {        
-        viewFileSaveAs = false;
-        eventProcessor->createEvent(StateEvent::FILE_SAVED_AS, "");
-    }
-
-    ImGui::SetItemDefaultFocus();
-    ImGui::SameLine();
-
-    if (ImGui::Button(i18n->t(dialog_cancel), ImVec2(120, 0))) { viewFileSaveAs = false; }
-
-    ImGui::End();
+    viewFileOpen = fileOpenDialog.viewFileOpen;
 }
 
 void Gui::renderFileOpenDialog()
 {   
     if (!viewFileOpen) return;
 
-    fileDialog.renderFileOpenDialog();    
+    fileOpenDialog.renderFileDialog();    
 
-    viewFileOpen = fileDialog.viewFileOpen;
+    viewFileOpen = fileOpenDialog.viewFileOpen;
 }
 
 void Gui::renderSimulationControlWindow(unsigned long long time)

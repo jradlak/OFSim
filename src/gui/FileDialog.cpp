@@ -16,12 +16,12 @@
 using namespace ofsim_gui;
 using namespace ofsim_events;
 
-FileDialog::FileDialog() : i18n(I18n::getInstance())
+FileDialog::FileDialog(DialogMode dialogMode) : i18n(I18n::getInstance()), mode(dialogMode)
 {
     const char* homeDir = getenv("HOME");
     if (homeDir != nullptr)
     {
-        directory = std::string(homeDir) + "/orb_progs";
+        directory = std::string(homeDir);
     }
     else
     {
@@ -31,7 +31,7 @@ FileDialog::FileDialog() : i18n(I18n::getInstance())
     std::cout << "Home directory: " << directory << std::endl;
 }
 
-void FileDialog::renderFileOpenDialog()
+void FileDialog::renderFileDialog()
 {
     EventProcessor* eventProcessor = EventProcessor::getInstance();
 
@@ -75,10 +75,12 @@ void FileDialog::renderFileOpenDialog()
     
     ImGui::Separator();
 
-    if (ImGui::Button((i18n->t(dialog_load_file_directory)), ImVec2(160, 0))) 
+    const auto& selectedItem = filesInDirectory[item_current];
+    const char* fileBtnName = mode == DialogMode::FILE_OPEN ? i18n->t(dialog_load_file_directory)
+                                : i18n->t(dialog_load_directory);
+                                
+    if (ImGui::Button((fileBtnName), ImVec2(160, 0))) 
     {  
-        const auto& selectedItem = filesInDirectory[item_current];
-
         if (selectedItem.type == ofsim_infrastructure::FileType::DIRECTORY)
         {
             directory = selectedItem.path + "/" + selectedItem.name;
@@ -86,9 +88,12 @@ void FileDialog::renderFileOpenDialog()
         }
         else if (selectedItem.type == ofsim_infrastructure::FileType::FILE)
         {
-            std::string selectedFile = selectedItem.path + "/" + selectedItem.name;
-            viewFileOpen = false; 
-            eventProcessor->createEvent(StateEvent::PROGRAM_FILE_OPEN, selectedFile);                       
+            if (mode == DialogMode::FILE_OPEN)
+            {
+                std::string selectedFile = selectedItem.path + "/" + selectedItem.name;
+                viewFileOpen = false; 
+                eventProcessor->createEvent(StateEvent::PROGRAM_FILE_OPEN, selectedFile);    
+            }                   
         } 
         else if (selectedItem.type == ofsim_infrastructure::FileType::HOME_DIRECTORY)
         {
@@ -101,10 +106,24 @@ void FileDialog::renderFileOpenDialog()
             loadFilesInDirectory(directory);
         }
     }
-
+    
     ImGui::SetItemDefaultFocus();
     ImGui::SameLine();
-    if (ImGui::Button(i18n->t(dialog_cancel), ImVec2(120, 0))) { viewFileOpen = false; }
+    if (mode == DialogMode::FILE_SAVE)
+    {
+        if (ImGui::Button((i18n->t(dialog_save_file)), ImVec2(160, 0))) 
+        { 
+            viewFileOpen = false; 
+            eventProcessor->createEvent(StateEvent::FILE_SAVED_AS, ""); 
+        }
+
+        ImGui::SameLine();
+    }
+
+    if (ImGui::Button(i18n->t(dialog_cancel), ImVec2(120, 0))) 
+    { 
+        viewFileOpen = false; 
+    }
 
     ImGui::End();
 }

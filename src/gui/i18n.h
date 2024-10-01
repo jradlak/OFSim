@@ -37,6 +37,8 @@ namespace ofsim_gui
 		dialog_load,
 		dialog_file_list,
 		dialog_load_file_directory,
+		dialog_load_directory,
+		dialog_save_file,
 		dialog_cancel,
 
 		dialog_save_title,

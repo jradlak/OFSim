@@ -113,7 +113,8 @@ namespace ofsim_gui
 
 		I18n* i18n;
 
-		FileDialog fileDialog;
+		FileDialog fileOpenDialog { DialogMode::FILE_OPEN };
+		FileDialog fileSaveDialog { DialogMode::FILE_SAVE };
 
 		std::string directory { "/home/jakub/orb_progs" };
 		std::string savedFile { "" };
