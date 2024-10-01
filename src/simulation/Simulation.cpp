@@ -375,6 +375,12 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 	// recieve and interpret user events:
 	SimulationEvent event = EventProcessor::getInstance()->getEvent();
 
+	if (gui->isCurrentlyEdit()) 
+	{
+		// if code is editing - do nthng
+		return;
+	}
+
 	if (event.action == StateEvent::PYTHON_PROGRAM_EXECUTION_STOP)
 	{
 		if (simulationMode == SimulationMode::STANDARD_SIMULATION)
@@ -633,7 +639,7 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
     }
 }
 
-unsigned long long Simulation::currentTime()
+u64 Simulation::currentTime()
 {
 	return std::chrono::duration_cast<std::chrono::milliseconds>(
 		std::chrono::system_clock::now().time_since_epoch()

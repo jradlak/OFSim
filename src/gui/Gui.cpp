@@ -313,13 +313,15 @@ void Gui::renderCodeEditor(std::string& text)
     for (int i = 1; i <= numLines; i++) {
         ImGui::Text("%d.", i);
     }
+
     ImGui::EndChild();
 
     ImGui::SameLine();
     
     static ImGuiInputTextFlags flags = ImGuiInputTextFlags_AllowTabInput;   
     ImGui::InputTextMultiline("##source", &text, ImVec2(-FLT_MIN, ImGui::GetTextLineHeight() * 257), flags);
-
+    currentlyEdit = ImGui::IsItemFocused();
+    
     ImGui::EndChild();
 
     ImGui::End();

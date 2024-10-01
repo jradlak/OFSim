@@ -79,6 +79,8 @@ namespace ofsim_gui
 				
 		bool getClearTranslationErrors() { return clearTranslationErrors; }
 		void setClearTranslationErrors() { clearTranslationErrors = false; }
+		
+		bool isCurrentlyEdit() { return currentlyEdit; }
 
 	private:
 		GLuint play_texture { 0 };
@@ -120,6 +122,6 @@ namespace ofsim_gui
 
 		int selcted_language_item { 0 };
 
-		u64 currentTime();
+		bool currentlyEdit { false };
 	};
 }
