@@ -184,15 +184,6 @@ void ofsim_gui::Gui::renderHelpScreen()
     ImGui::End();
 }
 
-void Gui::renderFileSaveAsDialog()
-{
-    if (!viewFileSaveAs) return;
-
-    fileSaveDialog.renderFileDialog();
-
-    viewFileOpen = fileOpenDialog.viewFileOpen;
-}
-
 void Gui::renderFileOpenDialog()
 {   
     if (!viewFileOpen) return;
@@ -200,6 +191,15 @@ void Gui::renderFileOpenDialog()
     fileOpenDialog.renderFileDialog();    
 
     viewFileOpen = fileOpenDialog.viewFileOpen;
+}
+
+void Gui::renderFileSaveAsDialog()
+{
+    if (!viewFileSaveAs) return;
+
+    fileSaveDialog.renderFileDialog();
+
+    viewFileSaveAs = fileSaveDialog.viewFileOpen;    
 }
 
 void Gui::renderSimulationControlWindow(unsigned long long time)

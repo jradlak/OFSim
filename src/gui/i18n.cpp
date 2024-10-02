@@ -71,6 +71,8 @@ void I18n::initLabels()
 	enLabels[dialog_directory] = "Directory: ";
 	plLabels[dialog_load] = "Wczytaj katalog";
 	enLabels[dialog_load] = "Load directory";
+	plLabels[dialog_load_directory] = "Wczytaj katalog";
+	enLabels[dialog_load_directory] = "Load directory";
 	plLabels[dialog_file_list] = "Lista plikow: ";
 	enLabels[dialog_file_list] = "List of files: ";
 	plLabels[dialog_load_file_directory] = "Wczytaj plik/katalog";

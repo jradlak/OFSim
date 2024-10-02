@@ -37,7 +37,7 @@ void FileDialog::renderFileDialog()
 
     viewFileOpen = true;
 
-    ImGui::SetNextWindowSize(ImVec2(450, 410), ImGuiCond_Once);
+    ImGui::SetNextWindowSize(ImVec2(480, 410), ImGuiCond_Once);
     ImGui::SetNextWindowPos(ImVec2(600, 220), ImGuiCond_Once);
 
     ImGui::Begin(i18n->t(dialog_title));
