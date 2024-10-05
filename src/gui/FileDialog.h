@@ -23,8 +23,10 @@ namespace ofsim_gui
         bool viewFileOpen { false };
 
     private:
-        std::string directory { "" };    
+        std::string selectedFileToSave { "" };
+        std::string directory { "" };            
         std::vector<ofsim_infrastructure::FileDescriptor> filesInDirectory;
+        ofsim_infrastructure::FileDescriptor selectedItem;
 		DialogMode mode;
 
         I18n* i18n;

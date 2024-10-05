@@ -37,7 +37,7 @@ void FileDialog::renderFileDialog()
 
     viewFileOpen = true;
 
-    ImGui::SetNextWindowSize(ImVec2(480, 410), ImGuiCond_Once);
+    ImGui::SetNextWindowSize(ImVec2(480, 430), ImGuiCond_Once);
     ImGui::SetNextWindowPos(ImVec2(600, 220), ImGuiCond_Once);
 
     ImGui::Begin(i18n->t(dialog_title));
@@ -71,42 +71,59 @@ void FileDialog::renderFileDialog()
     }
 
     static int item_current = 0;
-    ImGui::ListBox(" ", &item_current, items, items_count, 16);
-    
+    if (ImGui::ListBox(" ", &item_current, items, items_count, 16))
+    {
+        selectedItem = filesInDirectory[item_current];    
+        selectedFileToSave = selectedItem.path + "/" + selectedItem.name; 
+    }
+           
+    // current file path + name preview:
+    if (mode == DialogMode::FILE_SAVE)
+    {
+        ImGui::InputText(" ", &selectedFileToSave);
+    }
+
     ImGui::Separator();
 
-    const auto& selectedItem = filesInDirectory[item_current];
-    const char* fileBtnName = mode == DialogMode::FILE_OPEN ? i18n->t(dialog_load_file_directory)
-                                : i18n->t(dialog_load_directory);
-                                
-    if (ImGui::Button((fileBtnName), ImVec2(160, 0))) 
-    {  
-        if (selectedItem.type == ofsim_infrastructure::FileType::DIRECTORY)
+    bool isFile = selectedItem.type == ofsim_infrastructure::FileType::FILE;
+
+    if (isFile) 
+    {
+        if (mode == DialogMode::FILE_OPEN)
         {
-            directory = selectedItem.path + "/" + selectedItem.name;
-            loadFilesInDirectory(directory);
-        }
-        else if (selectedItem.type == ofsim_infrastructure::FileType::FILE)
-        {
-            if (mode == DialogMode::FILE_OPEN)
-            {
-                std::string selectedFile = selectedItem.path + "/" + selectedItem.name;
-                viewFileOpen = false; 
-                eventProcessor->createEvent(StateEvent::PROGRAM_FILE_OPEN, selectedFile);    
-            }                   
-        } 
-        else if (selectedItem.type == ofsim_infrastructure::FileType::HOME_DIRECTORY)
-        {
-            directory = getenv("HOME");
-            loadFilesInDirectory(directory);
-        } 
-        else if (selectedItem.type == ofsim_infrastructure::FileType::PARENT_DIRECTORY)
-        {
-            directory = std::filesystem::path(directory).parent_path().u8string();
-            loadFilesInDirectory(directory);
+            if (ImGui::Button(i18n->t(dialog_load_file), ImVec2(160, 0))) 
+            {  
+                if (mode == DialogMode::FILE_OPEN)
+                {
+                    std::string selectedFile = selectedItem.path + "/" + selectedItem.name;
+                    viewFileOpen = false; 
+                    eventProcessor->createEvent(StateEvent::PROGRAM_FILE_OPEN, selectedFile);    
+                }  
+            }
         }
     }
-    
+    else 
+    {
+        if (ImGui::Button(i18n->t(dialog_load_directory), ImVec2(160, 0))) 
+        { 
+            if (selectedItem.type == ofsim_infrastructure::FileType::DIRECTORY)
+            {
+                directory = selectedItem.path + "/" + selectedItem.name;
+                loadFilesInDirectory(directory);
+            }
+            else if (selectedItem.type == ofsim_infrastructure::FileType::HOME_DIRECTORY)
+            {
+                directory = getenv("HOME");
+                loadFilesInDirectory(directory);
+            }
+            else if (selectedItem.type == ofsim_infrastructure::FileType::PARENT_DIRECTORY)
+            {
+                directory = std::filesystem::path(directory).parent_path().u8string();
+                loadFilesInDirectory(directory);
+            }
+        }
+    }   
+     
     ImGui::SetItemDefaultFocus();
     ImGui::SameLine();
     if (mode == DialogMode::FILE_SAVE)
