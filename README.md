@@ -68,9 +68,8 @@ ASAP:
 1. The rotation of the rocket does not completely coincide with the rotation of the thrust vector.
 
 Less urgent:
-1. Saving files in the source code editor. Currently, the editor only displays the loaded program text.
-2. Correcting the position of the sun and moon. Currently, they are located polar to the planet, despite maintaining the correct distances.
-3. Error handling in vm's assembly programs. Simple error handling in the Python programs is already here.
+1. Correcting the position of the sun and moon. Currently, they are located polar to the planet, despite maintaining the correct distances.
+2. Error handling in vm's assembly programs. Simple error handling in the Python programs is already here.
 
 **=====Plans for the future:=====**
 
@@ -82,6 +81,8 @@ Less urgent:
 6. Better graphics. Shadows, tesselation of the terrain. 
 
 **=====Changelog:=====**
+
+0.27.0 - Savig source code files in File Save Dialog.
 
 0.26.3 - Filesystem navigation in the File Dialog.
 

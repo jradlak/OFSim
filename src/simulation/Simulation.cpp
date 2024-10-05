@@ -498,8 +498,8 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 
 	if (event.action == StateEvent::FILE_SAVED_AS)
 	{
-		std::string fileSaved = gui->getSavedFile();
-		ofsim_infrastructure::saveSourceCode(fileSaved, orbitalProgramSourceCode);
+		std::string fileToSave = event.data;
+		ofsim_infrastructure::saveSourceCode(fileToSave, orbitalProgramSourceCode);
 	}
 
 	if (event.action == StateEvent::FILE_EXIT)

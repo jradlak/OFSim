@@ -43,7 +43,7 @@ void FileDialog::renderFileDialog()
     ImGui::Begin(i18n->t(dialog_title));
     
     ImGui::Text("%s", i18n->t(dialog_directory));
-    ImGui::InputText(" ", &directory);
+    ImGui::InputText("Dir", &directory);
     ImGui::SameLine();
     if (ImGui::Button(i18n->t(dialog_load), ImVec2(120, 0)))
     { 
@@ -70,17 +70,18 @@ void FileDialog::renderFileDialog()
         items[i] = filesInDirectory[i].name.c_str();
     }
 
-    static int item_current = 0;
+    static int item_current = 0;        
     if (ImGui::ListBox(" ", &item_current, items, items_count, 16))
-    {
-        selectedItem = filesInDirectory[item_current];    
+    {           
+        selectedItem = filesInDirectory[item_current]; 
         selectedFileToSave = selectedItem.path + "/" + selectedItem.name; 
     }
-           
+
+    //selectedItem = filesInDirectory[item_current]; 
     // current file path + name preview:
     if (mode == DialogMode::FILE_SAVE)
     {
-        ImGui::InputText(" ", &selectedFileToSave);
+        ImGui::InputText("File", &selectedFileToSave);
     }
 
     ImGui::Separator();
@@ -98,7 +99,7 @@ void FileDialog::renderFileDialog()
                     std::string selectedFile = selectedItem.path + "/" + selectedItem.name;
                     viewFileOpen = false; 
                     eventProcessor->createEvent(StateEvent::PROGRAM_FILE_OPEN, selectedFile);    
-                }  
+                }
             }
         }
     }
@@ -131,7 +132,7 @@ void FileDialog::renderFileDialog()
         if (ImGui::Button((i18n->t(dialog_save_file)), ImVec2(160, 0))) 
         { 
             viewFileOpen = false; 
-            eventProcessor->createEvent(StateEvent::FILE_SAVED_AS, ""); 
+            eventProcessor->createEvent(StateEvent::FILE_SAVED_AS, selectedFileToSave); 
         }
 
         ImGui::SameLine();

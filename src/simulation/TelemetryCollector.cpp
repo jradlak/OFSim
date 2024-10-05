@@ -34,7 +34,7 @@ void TelemetryCollector::registerTelemetry(TelemetryData data)
 			maxAtmPressure = data.atmPressure;
 		}
 
-		double dVelocity = data.velocity - lastVelocity;
+		f64 dVelocity = data.velocity - lastVelocity;
         accelerationHistory.push_back(dVelocity);
 		if (dVelocity > maxAcceleration)
 		{

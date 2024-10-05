@@ -60,6 +60,11 @@ namespace ofsim_infrastructure
 			std::vector<FileDescriptor> directories;
 			for (const auto& entry : fs::directory_iterator(dirName))
 			{
+				if (entry.path().filename().u8string()[0] == '.')
+				{
+					continue;
+				}
+
 				if (fs::is_directory(entry.path()))
 				{
 					FileDescriptor fileDescriptor;
@@ -78,7 +83,8 @@ namespace ofsim_infrastructure
 			std::vector<FileDescriptor> files;
 			for (const auto& entry : fs::directory_iterator(dirName))
 			{
-				if (fs::is_directory(entry.path()))
+			
+				if (fs::is_directory(entry.path()) || entry.path().filename().u8string()[0] == '.')
 				{
 					continue;
 				}
