@@ -166,8 +166,8 @@ void ofsim_gui::Gui::renderHelpScreen()
 {
     if (!viewHelpScreen) return;
 
-    ImGui::SetNextWindowSize(ImVec2(772, 590), ImGuiCond_Once);
-    ImGui::SetNextWindowPos(ImVec2(580, 200), ImGuiCond_Once);
+    ImGui::SetNextWindowSize(ImVec2(772, 890), ImGuiCond_Once);
+    ImGui::SetNextWindowPos(ImVec2(580, 50), ImGuiCond_Once);
     
     ImGui::Begin(i18n->t(help_title));
 

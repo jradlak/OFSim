@@ -82,6 +82,8 @@ Less urgent:
 
 **=====Changelog:=====**
 
+0.27.1 - Fix in displaing operation manual.
+
 0.27.0 - Savig source code files in File Save Dialog.
 
 0.26.3 - Filesystem navigation in the File Dialog.

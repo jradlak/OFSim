@@ -154,7 +154,8 @@ add_executable("${CMAKE_PROJECT_NAME}"
     src/vmachine/VMachine.h
     
     external_libraries/stb_image.h
-    external_libraries/stb_image.cpp        "src/simulation/ManualControlData.h")
+    external_libraries/stb_image.cpp        
+    "src/simulation/ManualControlData.h")
 
 #copy shaders to binary directory:
 if(MSVC)
@@ -176,7 +177,7 @@ else()
     add_dependencies("${CMAKE_PROJECT_NAME}" copy_shaders)
 endif()
 
-#copy assets to binary directory:
+#copy assets and docs to binary directory:
 if(MSVC)
     add_custom_target(copy_assets ALL
                 COMMAND ${CMAKE_COMMAND} -E copy_directory
@@ -193,6 +194,24 @@ else()
     COMMENT "Copying assets into binary directory")
 
     add_dependencies("${CMAKE_PROJECT_NAME}" copy_assets)
+endif()
+
+if(MSVC)
+    add_custom_target(copy_docs ALL
+                COMMAND ${CMAKE_COMMAND} -E copy_directory
+                ${PROJECT_SOURCE_DIR}/doc
+                ${PROJECT_BINARY_DIR}/doc
+                COMMENT "Copying docs into binary directory")
+
+    add_dependencies("${CMAKE_PROJECT_NAME}" copy_docs)
+else()
+    add_custom_target(copy_docs ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${PROJECT_SOURCE_DIR}/doc
+    ${PROJECT_BINARY_DIR}/doc
+    COMMENT "Copying docs into binary directory")
+
+    add_dependencies("${CMAKE_PROJECT_NAME}" copy_docs)
 endif()
 
 target_link_libraries("${CMAKE_PROJECT_NAME}" ${OPENGL_LIBRARIES} glad glfw glm imgui assimp Python::Python)
