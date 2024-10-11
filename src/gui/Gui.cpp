@@ -570,6 +570,20 @@ void ofsim_gui::Gui::renderManualControlData(const ofsim_simulation::ManualContr
     ImGui::End();
 }
 
+void ofsim_gui::Gui::renderLoadingScreen()
+{
+    ImGui::SetNextWindowSize(ImVec2(380, 230), ImGuiCond_Once);
+    ImGui::SetNextWindowPos(ImVec2(650, 220), ImGuiCond_Once);
+
+    ImGui::Begin("Loading...");
+
+    ImGui::SetWindowFontScale(1.8);
+    ImGui::NewLine;
+    ImGui::Text("%s", "Loading. Please wait...");
+
+    ImGui::End();
+}
+
 void Gui::endRendering()
 {
     ImGui::Render();

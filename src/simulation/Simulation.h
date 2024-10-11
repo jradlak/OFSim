@@ -147,5 +147,9 @@ namespace ofsim_simulation
         void collectTelemetry();
 
         u64 currentTime();
+
+        void initializationSequence();
+
+        bool initializationProcess { true };
     };
 }

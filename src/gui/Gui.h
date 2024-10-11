@@ -66,6 +66,8 @@ namespace ofsim_gui
 
 		void renderManualControlData(const ofsim_simulation::ManualControlData& manulaControl);
 
+		void renderLoadingScreen();
+
 		void loadTextures();
 
 		void cleanUp();

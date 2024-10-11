@@ -13,7 +13,13 @@ Simulation::Simulation()
 	camera = std::make_unique<ofsim_renderer::Camera>(glm::vec3(-100.0, -160.0, 1000.0));
 	mainWindow = std::make_unique<Window>(*camera, SCR_WIDTH, SCR_HEIGHT);
 	initWindowContext();
+}
 
+// ----- simulation initialization methods
+
+void Simulation::init()	
+{
+	// solar system:
 	solarSystem = std::make_unique<SolarSystem>();
 	
 	// rocket:
@@ -24,12 +30,7 @@ Simulation::Simulation()
 	
 	// update camera position according to rocket:
     camera->position = rocket->properties().position + glm::dvec3(0.0, 0.024, 0.0);	
-}
 
-// ----- simulation initialization methods
-
-void Simulation::init()	
-{
 	lag = 0;
 	previous = currentTime();
 	projection = glm::perspective((double)glm::radians(camera->Zoom),
@@ -120,39 +121,47 @@ void Simulation::stop()
 }
 
 void Simulation::mainLoop()
-{		
-	// <---- initialization section; ----->
+{
+	// initialize GUI:
+	createGui();
 
-	// initialize physics solver:
-    physicsRocketInitialOrientation();
+	// <---- initialization section; ----->
 
     // initialize communication Bus and telemetry collector:	
 	telemetryCollector = std::make_unique<TelemetryCollector>();
-
 	trajectoryPrediction = std::make_unique<TrajectoryPrediction>();
-
-	// initialize GUI:
-	createGui();	
 
 	// init time variables:
 	startTime = currentTime();
 	runningTime = 0;
 	timePaused = 0;
 
-	initialSolarSystemInformation();
-	initialOrbitalInformation();
-
-	skyboxRenderer = std::make_unique<SkyBoxRenderer>();
-	skyboxRenderer->init();
-
 	f64 radius{ 0.000000001 };
 	f64 step{ 0.000000001 };
-	
-	EventProcessor::getInstance()->povideRocketAndPhysics(rocket.get(), physics.get());	
+
 	// <----- end of initialization section ----->
 
 	dvec3 toTheMoon = SolarSystemConstants::moonPos;
 	bool frwd = true;
+		
+	while (!mainWindow->shouldClose() && initializationProcess)
+	{
+		switchGLStateForWorldRendering(0, 0, 0);
+
+		gui->newFrame();
+		gui->renderLoadingScreen();	
+		gui->endRendering();
+		
+		// sync and swap:	
+		syncFramerate(currentTime(), MS_PER_UPDATE);
+		mainWindow->swapBuffers();
+		glfwPollEvents();
+			
+		initializationSequence();
+		initializationProcess = false;
+	}
+
+	//initializationSequence();
 	while (!mainWindow->shouldClose())
 	{	
 		EventProcessor::getInstance()->provideRunnigTume(runningTime);		
@@ -352,7 +361,7 @@ DiagnosticsData Simulation::prepareDiagnosticsData()
     return diagnostics;
 }
 
-ManualControlData ofsim_simulation::Simulation::prepareManualControlData()
+ManualControlData Simulation::prepareManualControlData()
 {
 	auto properties = rocket->properties();
 	
@@ -646,11 +655,28 @@ u64 Simulation::currentTime()
 		).count();
 }
 
+void ofsim_simulation::Simulation::initializationSequence()
+{
+	init();
+	gui->loadTextures();
+
+	// initialize physics solver:
+    physicsRocketInitialOrientation();
+
+	// skybox:
+	skyboxRenderer = std::make_unique<SkyBoxRenderer>();
+	skyboxRenderer->init();
+
+	initialSolarSystemInformation();
+	initialOrbitalInformation();
+
+	EventProcessor::getInstance()->povideRocketAndPhysics(rocket.get(), physics.get());	
+}
+
 void Simulation::createGui()
 {
 	gui = std::make_unique<ofsim_gui::Gui>();
 	gui->initialization(mainWindow.get());
-	gui->loadTextures();
 }
 
 void Simulation::collectTelemetry()
