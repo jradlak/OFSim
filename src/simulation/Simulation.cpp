@@ -201,9 +201,11 @@ void Simulation::mainLoop()
 			|| simulationMode == SimulationMode::MANUAL_CONTROL
 			|| simulationMode == SimulationMode::WAITING_FOR_BEGIN_MANUAL_CONTROL)
 		{
-			camera->setAutomaticRotation(true);
-            camera->updatePosition(rocket->properties().position);
-			camera->processCameraRotation(3.0, 0);
+			if (camera->automaticRotation) 
+			{
+	            camera->updateAutomaticRotationPosition(rocket->properties().position);
+				camera->processCameraRotation(3.0, 0);
+			}
 		}
 		else 
         {
@@ -516,6 +518,12 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 		glfwSetWindowShouldClose(mainWindow->getWindow(), true);
 	}
 
+	if (event.action == StateEvent::CAMERA_AUTOROTATION)
+	{
+		camera->setAutomaticRotation(event.data == "1" ? true : false);
+		camera->manualRotation = event.data == "0" ? true : false;
+	}
+
 	if (event.action == StateEvent::CHANGE_MODE_TO_FROM_DIAGNOSTICS) // o
 	{
 		if (simulationMode == SimulationMode::WAITING_FOR_BEGIN)
@@ -655,7 +663,7 @@ u64 Simulation::currentTime()
 		).count();
 }
 
-void ofsim_simulation::Simulation::initializationSequence()
+void Simulation::initializationSequence()
 {
 	init();
 	gui->loadTextures();

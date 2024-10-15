@@ -40,6 +40,8 @@ namespace ofsim_events
 		ROTATION_LATITUDE_UP,
 		ROTATION_LATITUDE_DOWN,
 		
+		CAMERA_AUTOROTATION,
+
 		SHOW_DIAGNOSTICS_IN_SIMULATION,
 
 		// new events:

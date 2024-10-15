@@ -94,7 +94,7 @@ namespace ofsim_gui
 
 		GLuint splashTexture { 0 };
 
-		bool plaing { false };
+		bool playing { false };
 
 		int out_width { 0 };
 		int out_height { 0 };
@@ -126,5 +126,7 @@ namespace ofsim_gui
 		int selcted_language_item { 0 };
 
 		bool currentlyEdit { false };
+
+		bool cameraAutorotation { true };
 	};
 }

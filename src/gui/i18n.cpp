@@ -135,6 +135,9 @@ void I18n::initLabels()
 	plLabels[commands_title] = "Wykonane komendy";
 	enLabels[commands_title] = "Executed commands";
 
+	plLabels[camera_autorotation] = "Autorotacja kamery";
+	enLabels[camera_autorotation] = "Camera autorotation";
+	
 	plLabels[commands_thrust_change] = "zmiana wartosci ciagu: ";
 	enLabels[commands_thrust_change] = "thrust magnitude change: ";
 	plLabels[commands_thrust_direction_x] = "zmiana kierunku ciagu w osi X: ";

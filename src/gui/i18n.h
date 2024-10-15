@@ -79,7 +79,9 @@ namespace ofsim_gui
 		commands_thrust_rotation_z,
 
 		translation_errors_title,
-		translate_error
+		translate_error,
+
+		camera_autorotation
 	};
 
 	class I18n

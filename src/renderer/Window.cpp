@@ -77,6 +77,7 @@ void Window::mouse_callback(GLFWwindow* window, double xpos, double ypos)
 	theWindow->lastY = ypos;
 
 	theWindow->camera.processMouseRotation(xoffset, yoffset);
+	theWindow->camera.updateManualRotationPosition(xoffset, yoffset, 0.02);
 }
 
 void Window::key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)

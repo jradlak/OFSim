@@ -225,18 +225,16 @@ void Gui::renderSimulationControlWindow(unsigned long long time)
 
     if (ImGui::ImageButton((void*)(intptr_t)pp_texture, ImVec2(32, 32))) 
     {
-        if (plaing)
+        if (playing)
         {
-            std::cout << "Kliknieto pause!! \n";
             pp_texture = play_texture;
-            plaing = false;
+            playing = false;
             timeFactor = 0;
         }
         else
         {
-            std::cout << "Kliknieto play!! \n";
             pp_texture = pause_texture;
-            plaing = true;
+            playing = true;
             timeFactor = 1;
 
             eventProcessor->createEvent(StateEvent::START_SIMULATION, "");
@@ -246,9 +244,8 @@ void Gui::renderSimulationControlWindow(unsigned long long time)
     ImGui::SameLine();
 
     if (ImGui::ImageButton((void*)(intptr_t)stop_texture, ImVec2(32, 32))) {
-        std::cout << "Kliknieto stop!! \n";
         pp_texture = play_texture;
-        plaing = false;
+        playing = false;
         timeFactor = -1;
         eventProcessor->createEvent(StateEvent::PYTHON_PROGRAM_EXECUTION_STOP, "");
     }
@@ -266,6 +263,13 @@ void Gui::renderSimulationControlWindow(unsigned long long time)
         {
             timeFactor *= 2;
         }
+    }
+
+    ImGui::SameLine();
+    if (ImGui::Checkbox(i18n->t(camera_autorotation), &cameraAutorotation)) 
+    {
+        eventProcessor->createEvent(StateEvent::CAMERA_AUTOROTATION, 
+         cameraAutorotation ? "1" : "0");
     }   
 
     ImGui::End();

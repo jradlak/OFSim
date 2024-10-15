@@ -65,7 +65,7 @@ void Camera::processKeyboard(Camera_Movement direction, f64 deltaTime)
 
 void Camera::processMouseRotation(f64 xoffset, f64 yoffset, bool constrainPitch)
 {
-    if (automaticRotation) return;
+    if (automaticRotation || manualRotation) return;
 
     xoffset *= movementSensitivity;
     yoffset *= movementSensitivity;
@@ -82,14 +82,36 @@ void Camera::processMouseRotation(f64 xoffset, f64 yoffset, bool constrainPitch)
     updateCameraVectors();
 }
 
-void Camera::updatePosition(dvec3 newPosition, f64 radius)
+void Camera::updateAutomaticRotationPosition(dvec3 newPosition, f64 radius)
 {    
     f64 camX = sin(glm::radians(rotationAngle)) * radius;
     f64 camZ = cos(glm::radians(rotationAngle)) * radius;
 
-    rotationPosition = dvec3(camX, 0, camZ) + newPosition;
-    
+    rotationPosition = dvec3(camX, 0, camZ) + newPosition; 
     position = newPosition;    
+}
+
+void Camera::updateManualRotationPosition(f64 xOffset, f64 yOffset, f64 radius)
+{
+    if (automaticRotation || !manualRotation) return;
+
+    f64 camX = 0, camY = 0, camZ = 0;
+
+    if (xOffset != 0)
+    {
+        rotationAngle += xOffset * movementSensitivity;
+        camX = sin(glm::radians(rotationAngle)) * radius;
+        camZ = cos(glm::radians(rotationAngle)) * radius;
+    }
+
+    if (yOffset != 0)
+    {
+        rotationAngle += yOffset * movementSensitivity;
+        camY = sin(glm::radians(rotationAngle)) * radius;
+        camZ = cos(glm::radians(rotationAngle)) * radius;
+    }
+
+    rotationPosition = dvec3(camX, camY, camZ) + position;
 }
 
 void Camera::updateCameraVectors()
