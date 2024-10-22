@@ -82,6 +82,8 @@ Less urgent:
 
 **=====Changelog:=====**
 
+0.27.3 - Enable/disable autorotation switch (new element in GUI)
+
 0.27.2 - Loading screen.
 
 0.27.1 - Fix in displaing operation manual.

@@ -27,12 +27,12 @@ Camera::Camera(f64 posX, f64 posY, f64 posZ, f64 upX, f64 upY, f64 upZ, f64 _yaw
 
 void Camera::processCameraRotation(f64 xoffset, f64 yoffset, bool constrainPitch)
 {
-    automaticRotation = true;
-
+    if (manualRotation) return;
+    
     xoffset *= movementSensitivity;
     yoffset *= movementSensitivity;
 
-    rotationAngle += xoffset;            
+    rotationAngle += xoffset;
 }
 
 void Camera::processKeyboard(Camera_Movement direction, f64 deltaTime)

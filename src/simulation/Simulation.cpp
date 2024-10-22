@@ -200,18 +200,15 @@ void Simulation::mainLoop()
 			|| simulationMode == SimulationMode::WAITING_FOR_BEGIN 
 			|| simulationMode == SimulationMode::MANUAL_CONTROL
 			|| simulationMode == SimulationMode::WAITING_FOR_BEGIN_MANUAL_CONTROL)
-		{
-			if (camera->automaticRotation) 
-			{
-	            camera->updateAutomaticRotationPosition(rocket->properties().position);
-				camera->processCameraRotation(3.0, 0);
-			}
+		{			
+	        camera->updateAutomaticRotationPosition(rocket->properties().position);
+			camera->processCameraRotation(3.0, 0);			
 		}
 		else 
         {
             if (simulationMode == SimulationMode::PRESENTATION_MODE)
 			{
-				camera->setAutomaticRotation(true);				
+				camera->automaticRotation = true;
                 toTheMoon = SolarSystemConstants::moonPos - rocket->properties().position;
 				
                 camera->updatePosition(rocket->properties().position + (toTheMoon * radius));
@@ -520,7 +517,7 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 
 	if (event.action == StateEvent::CAMERA_AUTOROTATION)
 	{
-		camera->setAutomaticRotation(event.data == "1" ? true : false);
+		//camera->automaticRotation = event.data == "1" ? true : false;
 		camera->manualRotation = event.data == "0" ? true : false;
 	}
 
@@ -536,14 +533,14 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
             RocketPhysicalProperties &rocketProperties = rocket->properties();
             rocketProperties.size *= 300000;
             camera->updatePosition(solarSystem->pointAboveEarthSurface(phi, theta - 20, 14421.0));
-            camera->setAutomaticRotation(false);
+            camera->automaticRotation = false;
 		}
 		else if (simulationMode == SimulationMode::DIAGNOSTICS_MODE)
 		{
             std::cout << "Waiting for begin mode! \n" << std::flush;
             stop(); // reseting the rocket, physics and vm states;
 			simulationMode = SimulationMode::WAITING_FOR_BEGIN;
-            camera->setAutomaticRotation(true);
+            camera->automaticRotation = true;
             dTheta = theta;
             dPhi = phi;
 		}
@@ -592,7 +589,7 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 		if (simulationMode == SimulationMode::STANDARD_SIMULATION 
 			|| simulationMode == SimulationMode::MANUAL_CONTROL)
 		{			
-			camera->setAutomaticRotation(false);
+			camera->automaticRotation = false;
 			physics->predictTrajectory(runningTime);
 			trajectoryPrediction->initWithPositions(
                 physics->trajectoryPredictionX,

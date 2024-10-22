@@ -49,8 +49,6 @@ namespace ofsim_renderer
                                             position + dvec3(0, 0.007, 0), dvec3(0.0, 1.0, 0.0))
                                             : glm::lookAt(position, position + front, up); }
 
-        void setAutomaticRotation(bool autorotation) { automaticRotation = autorotation; }
-
         void processCameraRotation(f64 xoffset, f64 yoffset, bool constrainPitch = true);
         
         void updatePosition(dvec3 newPosition) { position = newPosition; }
