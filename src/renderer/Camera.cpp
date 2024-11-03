@@ -35,55 +35,10 @@ void Camera::processCameraRotation(f64 xoffset, f64 yoffset, bool constrainPitch
     rotationAngle += xoffset;
 }
 
-void Camera::processKeyboard(Camera_Movement direction, f64 deltaTime)
-{
-    if (automaticRotation) return;
-
-    f64 velocity = MovementSpeed * deltaTime;
-    if (direction == FORWARD)
-    {
-        position += front * velocity;
-    }
-
-    if (direction == BACKWARD)
-    {
-        position -= front * velocity;
-    }
-
-    if (direction == LEFT)
-    {
-        position -= right * velocity;
-    }
-
-    if (direction == RIGHT)
-    {
-        position += right * velocity;
-    }
-
-    updateCameraVectors();
-}
-
-void Camera::processMouseRotation(f64 xoffset, f64 yoffset, bool constrainPitch)
-{
-    if (automaticRotation || manualRotation) return;
-
-    xoffset *= movementSensitivity;
-    yoffset *= movementSensitivity;
-
-    yaw += xoffset;
-    pitch += yoffset;
-
-    if (constrainPitch)
-    {
-        pitch = pitch > 89.0 ? 89.0 : pitch;
-        pitch = pitch < -89.0 ? -89.0 : pitch;        
-    }
-    
-    updateCameraVectors();
-}
-
 void Camera::updateAutomaticRotationPosition(dvec3 newPosition, f64 radius)
-{    
+{
+    if (manualRotation) return;
+
     f64 camX = sin(glm::radians(rotationAngle)) * radius;
     f64 camZ = cos(glm::radians(rotationAngle)) * radius;
 
@@ -93,7 +48,7 @@ void Camera::updateAutomaticRotationPosition(dvec3 newPosition, f64 radius)
 
 void Camera::updateManualRotationPosition(f64 xOffset, f64 yOffset, f64 radius)
 {
-    if (automaticRotation || !manualRotation) return;
+    if (!manualRotation) return;
 
     f64 camX = 0, camY = 0, camZ = 0;
 
@@ -108,7 +63,7 @@ void Camera::updateManualRotationPosition(f64 xOffset, f64 yOffset, f64 radius)
     {
         rotationAngle += yOffset * movementSensitivity;
         camY = sin(glm::radians(rotationAngle)) * radius;
-        camZ = cos(glm::radians(rotationAngle)) * radius;
+        camX = cos(glm::radians(rotationAngle)) * radius;
     }
 
     rotationPosition = dvec3(camX, camY, camZ) + position;

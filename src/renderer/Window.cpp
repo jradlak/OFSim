@@ -74,10 +74,7 @@ void Window::mouse_callback(GLFWwindow* window, double xpos, double ypos)
 	float yoffset = theWindow->lastY - ypos; // reversed since y-coordinates go from bottom to top
 
 	theWindow->lastX = xpos;
-	theWindow->lastY = ypos;
-
-	theWindow->camera.processMouseRotation(xoffset, yoffset);
-	theWindow->camera.updateManualRotationPosition(xoffset, yoffset, 0.02);
+	theWindow->lastY = ypos;	
 }
 
 void Window::key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
@@ -167,37 +164,38 @@ void Window::key_callback(GLFWwindow *window, int key, int scancode, int action,
         EventProcessor::getInstance()->createEvent(StateEvent::ROTATE_Z_DOWN, "");
     }
 
-    Camera_Movement direction = Camera_Movement::NONE;
+
+    f64 xoffset = 0, yoffset = 0;
 	if (key == GLFW_KEY_W && action == GLFW_PRESS)
 	{
-		direction = FORWARD;
+        yoffset -= 10;
 	}
 
 	if (key == GLFW_KEY_S && action == GLFW_PRESS)
 	{
-		direction = BACKWARD;
+        yoffset += 10;
 	}
 
 	if (key == GLFW_KEY_A && action == GLFW_PRESS)
 	{
-		direction = LEFT;
+        xoffset -= 10;
 	}
 
 	if (key == GLFW_KEY_D && action == GLFW_PRESS)
 	{
-		direction = RIGHT;
+        xoffset += 10;
 	}
+
+    if (xoffset != 0 || yoffset != 0)
+	{
+		Window* theWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));		        
+        theWindow->camera.updateManualRotationPosition(xoffset, yoffset, 0.02);
+    }
 
     if (key == GLFW_KEY_I && action == GLFW_PRESS)
     {
         EventProcessor::getInstance()->createEvent(StateEvent::SHOW_DIAGNOSTICS_IN_SIMULATION, "");
     }
-
-    if (direction != Camera_Movement::NONE)
-	{
-		Window* theWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));
-		theWindow->camera.processKeyboard(direction, 0.4);
-	}	
 }
 
 Window::~Window()

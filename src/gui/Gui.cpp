@@ -577,7 +577,7 @@ void ofsim_gui::Gui::renderManualControlData(const ofsim_simulation::ManualContr
 void ofsim_gui::Gui::renderLoadingScreen()
 {
     ImGui::SetNextWindowSize(ImVec2(380, 230), ImGuiCond_Once);
-    ImGui::SetNextWindowPos(ImVec2(650, 220), ImGuiCond_Once);
+    ImGui::SetNextWindowPos(ImVec2(700, 270), ImGuiCond_Once);
 
     ImGui::Begin("Loading...");
 

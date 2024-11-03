@@ -161,7 +161,6 @@ void Simulation::mainLoop()
 		initializationProcess = false;
 	}
 
-	//initializationSequence();
 	while (!mainWindow->shouldClose())
 	{	
 		EventProcessor::getInstance()->provideRunnigTume(runningTime);		
