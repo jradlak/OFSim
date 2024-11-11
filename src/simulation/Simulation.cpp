@@ -515,8 +515,7 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 	}
 
 	if (event.action == StateEvent::CAMERA_AUTOROTATION)
-	{
-		//camera->automaticRotation = event.data == "1" ? true : false;
+	{		
 		camera->manualRotation = event.data == "0" ? true : false;
 	}
 
@@ -587,8 +586,8 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 		// change to presention or prediction mode is possible only when simulation is not waiting for begin:
 		if (simulationMode == SimulationMode::STANDARD_SIMULATION 
 			|| simulationMode == SimulationMode::MANUAL_CONTROL)
-		{			
-			camera->automaticRotation = false;
+        {
+            camera->manualRotation = true;
 			physics->predictTrajectory(runningTime);
 			trajectoryPrediction->initWithPositions(
                 physics->trajectoryPredictionX,
@@ -602,6 +601,7 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 				{
 					const dvec3& pos = prediction_camera_init_pos;
                     camera->updatePosition(solarSystem->pointAboveEarthSurface(pos[0], pos[1], pos[2]));
+                    camera->updateManualRotationPosition(0.1, 0, 0.02);
 					returnMode = simulationMode;
 					simulationMode = SimulationMode::TRAJECTORY_PREDICTION;
 				}
@@ -631,6 +631,7 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 		else 
 		{
 			simulationMode = returnMode;
+            camera->manualRotation = false;
 		}
 	}
 
