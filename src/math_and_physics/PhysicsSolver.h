@@ -11,9 +11,7 @@
 
 namespace ofsim_math_and_physics
 {
-    constexpr f32 upper_atmosphere_boundary { 98.0f };
-    constexpr f32 dense_atmosphere_boundary { 20.0f };
-    constexpr f32 skybox_rendering_boundary { 30.0f };
+    constexpr f32 SKYBOX_RENDERING_BOUNDARY { 30.0f };
 
     // initial rocket and camera rotation angles:
     constexpr f64 theta{ 0.00 };

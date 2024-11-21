@@ -11,7 +11,8 @@ namespace ofsim_gui
     {
         FILE_OPEN,
         FILE_SAVE
-    }; 
+    };
+
 
     class FileDialog
     {

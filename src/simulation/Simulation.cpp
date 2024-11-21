@@ -256,7 +256,7 @@ void Simulation::mainLoop()
 			}
 		}
 
-        if (physics->altitude > skybox_rendering_boundary)
+        if (physics->altitude > SKYBOX_RENDERING_BOUNDARY)
         {
             skyboxRenderer->render(projection, view, camera.get());
         }
