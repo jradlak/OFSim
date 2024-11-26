@@ -24,6 +24,8 @@ namespace ofsim_renderer
     constexpr f64 SENSITIVITY { 0.1 };
     constexpr f64 ZOOM        { 80.0 };
 
+    constexpr f64 initialRotationAngle {210.0};
+
     struct Camera
     {    
         // camera attributes
@@ -31,7 +33,7 @@ namespace ofsim_renderer
             front, up, right, worldUp;
             
         f64 yaw, pitch, roll;           
-        f64 rotationAngle { 0 };
+        f64 rotationAngle { initialRotationAngle };
 
         // camera options:
         f64 MovementSpeed, movementSensitivity, Zoom;

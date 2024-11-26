@@ -82,6 +82,8 @@ Less urgent:
 
 **=====Changelog:=====**
 
+0.27.4 - Improvents in the Camera behaviour in the Trajecotry Prediction Mode, enabling physics in trajectory prediction
+
 0.27.3 - Enable/disable autorotation switch (new element in GUI)
 
 0.27.2 - Loading screen.

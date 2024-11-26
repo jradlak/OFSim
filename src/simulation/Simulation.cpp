@@ -222,7 +222,7 @@ void Simulation::mainLoop()
 					step /= 1.005;
 				}
 
-				radius += step;							
+                radius += step;
 			}
 		}
 
@@ -257,7 +257,7 @@ void Simulation::mainLoop()
 			}
 		}
 
-        if (physics->altitude > SKYBOX_RENDERING_BOUNDARY)
+        if (physics->altitude > SKYBOX_RENDERING_BOUNDARY || simulationMode == SimulationMode::TRAJECTORY_PREDICTION)
         {
             skyboxRenderer->render(projection, view, camera.get());
         }
@@ -607,8 +607,9 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 
 			if (event.action == StateEvent::CHANGE_MODE_TO_FROM_PREDICTION) // m
             {
-				if (simulationMode != SimulationMode::TRAJECTORY_PREDICTION)
-				{
+				if (simulationMode != SimulationMode::TRAJECTORY_PREDICTION)                    
+                {
+                    camera->rotationAngle = initialRotationAngle;
 					const dvec3& pos = prediction_camera_init_pos;
                     camera->updatePosition(solarSystem->pointAboveEarthSurface(pos[0], pos[1], pos[2]));
                     camera->updateManualRotationPosition(0.1, 0, 0.02);
