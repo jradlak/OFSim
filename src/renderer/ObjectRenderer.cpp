@@ -1,5 +1,7 @@
 #include "ObjectRenderer.h"
 
+#include <iostream>
+
 ObjectRenderer::ObjectRenderer(std::string shaderName, bool _textured) : textured(_textured)
 {
     shader = std::make_unique<Shader>(("shaders/" + shaderName + "_vs.glsl").c_str(), ("shaders/" + shaderName + "_fs.glsl").c_str());

@@ -2,6 +2,7 @@
 
 #include <thread>
 #include <chrono>
+#include <iostream>
 
 using namespace ofsim_events;
 
@@ -99,4 +100,3 @@ void ofsim_events::EventProcessor::changeThrustRotatation(dvec3 deltaRotation)
     RocketCommand command3 = RocketCommand(RocketCommandCode::THRUST_ROTATION_CHANGE_Z, deltaRotation.z);
     command_history.insert(std::pair<u64, RocketCommand>(runningTime + 2, command3));
 }
-

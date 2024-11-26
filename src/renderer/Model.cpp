@@ -1,5 +1,7 @@
 #include "Model.h"
 
+#include <iostream>
+
 using namespace ofsim_renderer;
 
 void Model::draw(Shader& shader)

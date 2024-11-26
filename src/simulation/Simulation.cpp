@@ -183,8 +183,9 @@ void Simulation::mainLoop()
 		// input processing:		
 		userInteractionLogic(toTheMoon, radius, step);
 
-		if (simulationMode == SimulationMode::STANDARD_SIMULATION 
-			|| simulationMode == SimulationMode::MANUAL_CONTROL) 
+        if (simulationMode == SimulationMode::STANDARD_SIMULATION
+            || simulationMode == SimulationMode::MANUAL_CONTROL
+            || simulationMode == SimulationMode::TRAJECTORY_PREDICTION)
 		{	
 			lag = physics->calculateForces(lag);					
 		}
@@ -246,7 +247,7 @@ void Simulation::mainLoop()
 		}
 
 		if (simulationMode == SimulationMode::TRAJECTORY_PREDICTION || simulationMode == SimulationMode::PRESENTATION_MODE)
-		{
+        {
 			trajectoryPrediction->render(projection, view, SolarSystemConstants::lightPos);
 			
 			if (simulationMode == SimulationMode::PRESENTATION_MODE)
@@ -317,9 +318,18 @@ void Simulation::renderHUD()
 			telemetryCollector->accelerationHistory, telemetryCollector->maxAcceleration, telemetryCollector->minAcceleration);
 		renderTelemetry(gui.get(), rocket.get(), physics->altitude, apogeum, perygeum, physics->getAtmosphereDragForceMagnitude());
 	}
+    else if (simulationMode == SimulationMode::TRAJECTORY_PREDICTION)
+    {
+        gui->plotTelemetry(
+            telemetryCollector->velocityHistory, telemetryCollector->maxVelocity,
+            telemetryCollector->altitudeHistory, telemetryCollector->maxAltitude,
+            telemetryCollector->atmPressureHistory, telemetryCollector->maxAtmPressure,
+            telemetryCollector->accelerationHistory, telemetryCollector->maxAcceleration, telemetryCollector->minAcceleration);
+        renderTelemetry(gui.get(), rocket.get(), physics->altitude, apogeum, perygeum, physics->getAtmosphereDragForceMagnitude());
+    }
 	else
 	{
-		// STANDARD SIMUATION:
+        // STANDARD SIMUATION (manual or automatic):
 
 		gui->renderSimulationControlWindow(runningTime);
 		gui->renderCodeEditor(orbitalProgramSourceCode);	

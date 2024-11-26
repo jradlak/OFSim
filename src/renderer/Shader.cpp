@@ -2,6 +2,10 @@
 
 //based on: https://learnopengl.com/code_viewer_gh.php?code=includes/learnopengl/shader_s.h
 
+#include <fstream>
+#include <sstream>
+#include <iostream>
+
 Shader::Shader(const char* vertexPath, const char* fragmentPath)
 {
     std::string vertexCode;

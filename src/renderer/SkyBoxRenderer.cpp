@@ -1,5 +1,7 @@
 #include "SkyBoxRenderer.h"
 
+#include <iostream>
+
 void SkyBoxRenderer::init()
 {
     float skyboxVertices[] = {
