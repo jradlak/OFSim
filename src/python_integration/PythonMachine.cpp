@@ -19,7 +19,7 @@ PyObject *ofsim_python_integration::PythonMachine::orbital_rocket_rotation_chang
 {
     PyObject* listObj;
 
-    if (! PyArg_ParseTuple( args, "O", &listObj ))
+    if (!PyArg_ParseTuple( args, "O", &listObj))
     {
         return NULL;
     }
