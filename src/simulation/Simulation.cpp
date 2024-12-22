@@ -703,8 +703,8 @@ void Simulation::collectTelemetry()
 		TelemetryData data;
 		data.time = tickTock;
         data.altitude = physics->altitude;
-		data.apogeum = apogeum;
-		data.perygeum = perygeum;
+		data.apogee = apogeum;
+		data.perigee = perygeum;
 		data.atmPressure = physics->getAtmosphereDragForceMagnitude();
         data.mass = rocket->properties().mass;
         data.velocity = glm::length(rocket->properties().velocity);
@@ -759,7 +759,7 @@ void Simulation::calcApogeumAndPerygeum()
 }
 
 void Simulation::renderTelemetry(ofsim_gui::Gui* gui, Rocket* rocket, 
-	double altitude, double apogeum, double perygeum, double atmosphereDragForceMagnitude)
+	double altitude, double apogee, double perigee, double atmosphereDragForceMagnitude)
 {
 	TelemetryData data;
 	
@@ -771,8 +771,8 @@ void Simulation::renderTelemetry(ofsim_gui::Gui* gui, Rocket* rocket,
 
     data.position = rocket->properties().position;
 
-	data.apogeum = apogeum;
-	data.perygeum = perygeum;
+	data.apogee = apogee;
+	data.perigee = perigee;
 
 	gui->renderTelemetry(data);
 }

@@ -10,8 +10,8 @@ struct RocketRigidBody
 {
     f64         fTotalMass;         // total mass
     f64         fFuelMass;          // fuel mass
-    Matrix      mIneria;            // moment of inertia
-    Matrix      mIneriaInverse;     // inverted moment of inertia
+    Matrix      mInertia;           // moment of inertia
+    Matrix      mInertiaInverse;    // inverted moment of inertia
 
     Vector      vPosition;          // rocket's position in the external coordination system (ECS)
 
@@ -25,5 +25,5 @@ struct RocketRigidBody
     Vector      vEulerAngles;       // euler angles in the LCS
 
     Vector      vForces;            // sum of all forces acting on the rocket's body
-    Vector      vMoments;           // resultant forces momennt acting on the rocket's body
+    Vector      vMoments;           // resultant forces moment acting on the rocket's body
 };

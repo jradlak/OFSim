@@ -86,6 +86,7 @@ void ofsim_python_integration::PythonMachine::runPythonOrbitalProgram(std::strin
         
         PyObject *str_exc = PyObject_Str(value);
         
+        
         std::string error_message = PyUnicode_AsUTF8(str_exc);
         std::cout << "Error: " << error_message << std::endl; 
         ofsim_events::EventProcessor::getInstance()->publishPythonError({true, "Python Script Error", error_message});

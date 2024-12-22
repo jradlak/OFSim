@@ -340,15 +340,15 @@ void Gui::renderTelemetry(TelemetryData& telemetryData)
     ImGui::Text("%s", ssPosition.c_str());
 
     std::string ssApogeum = i18n->t(telemetry_apogee);
-    if (telemetryData.apogeum != 0)
+    if (telemetryData.apogee != 0)
     {
-        ssApogeum = i18n->t(telemetry_apogee) + std::to_string(telemetryData.apogeum) + " km";
+        ssApogeum = i18n->t(telemetry_apogee) + std::to_string(telemetryData.apogee) + " km";
     }
 
     std::string ssPerygeum = i18n->t(telemetry_perigee);
-    if (telemetryData.perygeum != 0)
+    if (telemetryData.perigee != 0)
     {
-        ssPerygeum = i18n->t(telemetry_perigee) + std::to_string(telemetryData.perygeum) + " km";
+        ssPerygeum = i18n->t(telemetry_perigee) + std::to_string(telemetryData.perigee) + " km";
     }
 
     ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "%s", ssApogeum.c_str());

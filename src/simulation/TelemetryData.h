@@ -14,8 +14,8 @@ namespace ofsim_simulation
         double velocity;
         double acceleration;
         double atmPressure;
-        double apogeum = 0;
-        double perygeum = 0;
+        double apogee = 0;
+        double perigee = 0;
         glm::dvec3 position;
     };
 }
