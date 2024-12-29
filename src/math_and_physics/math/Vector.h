@@ -2,69 +2,56 @@
 
 #include "../MathTypes.h"
 
-// 3D vector implementations. At this point only wrapper around glm classes;
-
-class Vector {
-public:
-    Vector() : vec(0.0, 0.0, 0.0) {}
-    Vector(f64 v) : vec(v) {}
-    Vector(f64 x, f64 y, f64 z) : vec(x, y, z) {}
-
-    Vector(const glm::dvec3& other) : vec(other) {}
-
-    f64 getX() const { return vec.x; }
-    f64 getY() const { return vec.y; }
-    f64 getZ() const { return vec.z; }
-
-    void setX(f64 x) { vec.x = x; }
-    void setY(f64 y) { vec.y = y; }
-    void setZ(f64 z) { vec.z = z; }
-
-    // Function to get the underlying glm::dvec3
-    dvec3 getVec() const { return vec; }
-
-    // Function to set the underlying glm::dvec3
-    void setVec(const glm::dvec3& newVec) { vec = newVec; }
+struct Vector 
+{
+    f64 x, y, z;
+    
+    Vector() : x(0.0), y(0.0), z(0.0) {}
+    Vector(f64 v) : x(v), y(v), z(v) {}
+    Vector(f64 _x, f64 _y, f64 _z) : x(_x), y(_y), z(_z) {}
 
     Vector operator+(const Vector& other) const 
     {
-        return Vector(vec + other.vec);
+        return {x + other.x, y + other.y, z + other.z};
     }
 
     Vector operator-(const Vector& other) const 
     {
-        return Vector(vec - other.vec);
+        return {x - other.x, y - other.y, z - other.z};
     }
 
     Vector operator*(f64 scalar) const 
     {
-        return Vector(vec * scalar);
+        return {x * scalar, y * scalar, z * scalar};
     }
 
-    // Dot product with another vector
+    // Dot product function
     f64 dot(const Vector& other) const 
     {
-        return glm::dot(vec, other.vec);
+        return x * other.x + y * other.y + z * other.z;
     }
 
-    // Cross product with another vector
+    // Cross product function
     Vector cross(const Vector& other) const 
     {
-        return Vector(glm::cross(vec, other.vec));
+        return {
+            y * other.z - z * other.y,
+            z * other.x - x * other.z,
+            x * other.y - y * other.x
+        };
     }
 
-    // Magnitude of the vector
+    // Magnitude (length) of the vector
     f64 magnitude() const 
     {
-        return glm::length(vec);
+        return std::sqrt(x * x + y * y + z * z);
     }
 
     // Normalize the vector
-    void normalize() 
+    Vector normalize() const 
     {
-        vec = glm::normalize(vec);
+        f64 mag = magnitude();
+        if (mag == 0.0) return *this;   // Avoid division by zero
+        return *this * (1.0 / mag);     // Scalar multiplication by the inverse of the magnitude
     }
-
-    private:
-        dvec3 vec;
 };

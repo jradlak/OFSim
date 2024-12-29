@@ -8,6 +8,31 @@ namespace ofsim_advanced_physics
         calcFuelChamberMassProperties();
     }
 
+    void RocketModel::calculateLoads(void)
+    {
+        Vector fb, mb;  // tmp forces and moments vectors
+
+        // reset forces and moments:
+        body.vForces.x = 0;
+        body.vForces.x = 0;
+        body.vForces.x = 0;
+
+        body.vMoments.x = 0;
+        body.vMoments.x = 0;
+        body.vMoments.x = 0;
+
+        fb.x = 0;
+        fb.y = 0; 
+        fb.z = 0;
+
+        mb.x = 0;
+        mb.y = 0; 
+        mb.z = 0;
+
+        // TODO: calculate forces and moments:
+
+    }
+
     void RocketModel::initialize(Vector initialPosition)
     {
         body.vPosition = initialPosition;

@@ -86,7 +86,7 @@ namespace ofsim_advanced_physics
         f64                         fuel;
 
         void updateFuel(f64 newFuel);
-        void calcLoads(void);
+        void calculateLoads(void);
 
         private:
             void initialize(Vector initialPosition);
