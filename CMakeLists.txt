@@ -94,6 +94,8 @@ add_executable("${CMAKE_PROJECT_NAME}"
     src/math_and_physics/math/Vector.h
     src/math_and_physics/math/Matrix.h
     src/math_and_physics/RocketModel.h
+    src/math_and_physics/RocketModel.cpp
+    
     src/math_and_physics/PhysicsSolver.h
     
     src/math_and_physics/Sphere.h
@@ -276,6 +278,7 @@ add_executable(
     src/math_and_physics/math/Matrix.h
     src/math_and_physics/PhysicsMath.h
     src/math_and_physics/RocketModel.h
+    src/math_and_physics/RocketModel.cpp
     
     src/math_and_physics/PhysicsSolver.h
     src/math_and_physics/Sphere.h
