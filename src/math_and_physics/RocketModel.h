@@ -1,8 +1,9 @@
 #pragma once
 
-#include "PhysicsMath.h"  
-
 #include <vector>
+
+#include "MathTypes.h"
+#include "Quaternion.h"
 
 // Rocket structure:
 //          /\
@@ -47,33 +48,33 @@ namespace ofsim_advanced_physics
     {
         f64         fTotalMass;         // total mass
         f64         fFuelMass;          // fuel mass
-        Matrix      mInertia;           // moment of inertia
-        Matrix      mInertiaInverse;    // inverted moment of inertia
+        dmat4       mInertia;           // moment of inertia
+        dmat4       mInertiaInverse;    // inverted moment of inertia
 
-        Vector      vPosition;          // rocket's position in the external coordination system (ECS)
+        dvec3       vPosition;          // rocket's position in the external coordination system (ECS)
 
-        Vector      vVelocity;          // velocity in the ECS
-        Vector      vVelocityBode;      // velocity in the LCS
-        Vector      vAngularVelocity;   // angular velocity in the LCS 
+        dvec3       vVelocity;          // velocity in the ECS
+        dvec3       vVelocityBode;      // velocity in the LCS
+        dvec3       vAngularVelocity;   // angular velocity in the LCS 
         
         f64         fSpeed;             // absolute speed
 
         Quaternion  qOrientation;       // orientation in the LCS
-        Vector      vEulerAngles;       // euler angles in the LCS
+        dvec3       vEulerAngles;       // euler angles in the LCS
 
-        Vector      vForces;            // sum of all forces acting on the rocket's body
-        Vector      vMoments;           // resultant forces moment acting on the rocket's body
+        dvec3       vForces;            // sum of all forces acting on the rocket's body
+        dvec3       vMoments;           // resultant forces moment acting on the rocket's body
     };
 
     struct BodyElement 
     {
         f64         fMass;
-        Vector	    vDCoords;
-        Vector	    vCGCoords;
-        Vector	    vLocalInertia;
+        dvec3	    vDCoords;
+        dvec3	    vCGCoords;
+        dvec3	    vLocalInertia;
         f64 	    fIncidence;
         f64	        fDihedral;
-        Vector	    vNormal;
+        dvec3	    vNormal;
         f64	        fArea;
     };
 
@@ -81,7 +82,7 @@ namespace ofsim_advanced_physics
     {
         RigidBody                   body;
         std::vector<BodyElement>    elements;
-        Vector                      thrustDirection;
+        dvec3                       thrustDirection;
         f64                         thrustMagnitude;
         f64                         fuel;
 
@@ -89,7 +90,7 @@ namespace ofsim_advanced_physics
         void calculateLoads(void);
 
         private:
-            void initialize(Vector initialPosition);
+            void initialize(dvec3 initialPosition);
             void calcMassProperties(void);
             void calcFuelChamberMassProperties(void);
     };

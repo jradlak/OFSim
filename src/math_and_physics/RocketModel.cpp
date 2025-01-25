@@ -10,7 +10,7 @@ namespace ofsim_advanced_physics
 
     void RocketModel::calculateLoads(void)
     {
-        Vector fb, mb;  // tmp forces and moments vectors
+        dvec3 fb, mb;  // tmp forces and moments vectors
 
         // reset forces and moments:
         body.vForces.x = 0;
@@ -33,7 +33,7 @@ namespace ofsim_advanced_physics
 
     }
 
-    void RocketModel::initialize(Vector initialPosition)
+    void RocketModel::initialize(dvec3 initialPosition)
     {
         body.vPosition = initialPosition;
     }
