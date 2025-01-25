@@ -89,10 +89,7 @@ add_executable("${CMAKE_PROJECT_NAME}"
     src/python_integration/PythonMachine.cpp
     
     src/math_and_physics/MathTypes.h
-
-    src/math_and_physics/math/Quaternion.h
-    src/math_and_physics/math/Vector.h
-    src/math_and_physics/math/Matrix.h
+    
     src/math_and_physics/RocketModel.h
     src/math_and_physics/RocketModel.cpp
     
@@ -272,11 +269,7 @@ add_executable(
     src/world/SolarSystem.cpp    
 
     src/math_and_physics/MathTypes.h
-
-    src/math_and_physics/math/Quaternion.h
-    src/math_and_physics/math/Vector.h
-    src/math_and_physics/math/Matrix.h
-    src/math_and_physics/PhysicsMath.h
+        
     src/math_and_physics/RocketModel.h
     src/math_and_physics/RocketModel.cpp
     

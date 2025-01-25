@@ -30,7 +30,7 @@ namespace ofsim_advanced_physics
         mb.z = 0;
 
         // TODO: calculate forces and moments:
-
+        
     }
 
     void RocketModel::initialize(dvec3 initialPosition)
