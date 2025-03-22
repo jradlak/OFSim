@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "../src/math_and_physics/Sphere.h"
+#include "../src/math/Sphere.h"
 
 using namespace ofsim_math_and_physics;
 

@@ -10,7 +10,7 @@
 #include <string>
 #include <memory>
 
-#include "../math_and_physics/Sphere.h"
+#include "../math/Sphere.h"
 #include "../renderer/ObjectRenderer.h"
 
 namespace ofsim_world

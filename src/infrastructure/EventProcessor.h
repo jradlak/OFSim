@@ -9,9 +9,9 @@
 
 #include "SimulationEvent.h"
 
-#include "../math_and_physics/MathTypes.h"
+#include "../math/MathTypes.h"
 #include "../world/Rocket.h"
-#include "../math_and_physics/PhysicsSolver.h"
+#include "../physics/PhysicsSolver.h"
 #include "../python_integration/PythonError.h"
 
 namespace ofsim_events 

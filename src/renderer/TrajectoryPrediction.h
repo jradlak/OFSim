@@ -3,7 +3,7 @@
 #include <vector>
 #include <memory>
 
-#include "../math_and_physics/Sphere.h"
+#include "../math/Sphere.h"
 #include "../simulation/TelemetryData.h"
 #include "ObjectRenderer.h"
 

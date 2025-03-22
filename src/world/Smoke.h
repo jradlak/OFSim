@@ -5,7 +5,7 @@
 #include <memory>
 
 #include "../renderer/ObjectRenderer.h"
-#include "../math_and_physics/Sphere.h"
+#include "../math/Sphere.h"
 
 namespace ofsim_world
 {

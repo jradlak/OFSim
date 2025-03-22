@@ -13,7 +13,6 @@ namespace ofsim_gui
         FILE_SAVE
     };
 
-
     class FileDialog
     {
     public:

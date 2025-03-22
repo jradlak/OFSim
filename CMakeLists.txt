@@ -67,56 +67,12 @@ if( MSVC )
     SET( CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /ENTRY:mainCRTStartup" )
 endif()
 
-add_executable("${CMAKE_PROJECT_NAME}"     
-    src/Application.cpp
-    
-    src/simulation/Simulation.h
-    
-    src/simulation/TelemetryCollector.h
-    src/simulation/TelemetryData.h    
-    src/simulation/Simulation.cpp    
-    src/simulation/TelemetryCollector.cpp    
-
-    src/infrastructure/FileService.h
-    src/infrastructure/FileService.cpp
-    src/infrastructure/ImageLoader.h    
-    src/infrastructure/EventProcessor.h
-    src/infrastructure/EventProcessor.cpp
-            
-    src/infrastructure/SimulationEvent.h
-
-    src/python_integration/PythonMachine.h
-    src/python_integration/PythonMachine.cpp
-    
-    src/math_and_physics/MathTypes.h
-    
-    src/math_and_physics/RocketModel.h
-    src/math_and_physics/RocketModel.cpp
-    
-    src/math_and_physics/PhysicsSolver.h
-    
-    src/math_and_physics/Sphere.h
-    
-    src/math_and_physics/PhysicsSolver.cpp
-    src/math_and_physics/Sphere.cpp
-
-    src/gui/Gui.h
+set(OFSim_GUI_src
     src/gui/Gui.cpp
-    src/gui/i18n.h
-    src/gui/i18n.cpp
-    src/gui/FileDialog.h
     src/gui/FileDialog.cpp
-    
-    src/renderer/Camera.h
-    src/renderer/Mesh.h
-    src/renderer/Model.h
-    src/renderer/ModelRenderer.h
-    src/renderer/ObjectRenderer.h
-    
-    src/renderer/Shader.h
-    src/renderer/SkyBoxRenderer.h
-    src/renderer/TrajectoryPrediction.h
-    src/renderer/Window.h
+)
+
+set (OFSim_renderer_src
     src/renderer/Camera.cpp
     src/renderer/Mesh.cpp
     src/renderer/Model.cpp
@@ -126,40 +82,56 @@ add_executable("${CMAKE_PROJECT_NAME}"
     src/renderer/SkyBoxRenderer.cpp
     src/renderer/TrajectoryPrediction.cpp
     src/renderer/Window.cpp
-    
-    src/world/GroundObject.h
-    src/world/Rocket.h
-    src/world/Smoke.h
-    src/world/SolarSystemConstants.h    
+)
+
+set (OFSim_world_src
     src/world/GroundObject.cpp
     src/world/Rocket.cpp
     src/world/Smoke.cpp    
-    
-    src/world/VectorIndicator.h
     src/world/VectorIndicator.cpp
-
-    src/world/CelestialBody.h
-    src/world/CloudsAndTrees.h        
-    src/world/SolarSystem.h    
     src/world/CelestialBody.cpp
     src/world/CloudsAndTrees.cpp        
-    src/world/SolarSystem.cpp    
-  
+    src/world/SolarSystem.cpp   
+)
+
+set (OFSim_vmachine_src
     src/vmachine/Instructions.cpp
-    src/vmachine/Instructions.h
     src/vmachine/Memory.cpp
-    src/vmachine/Memory.h
-    src/vmachine/Opcodes.h
     src/vmachine/Registers.cpp
-    src/vmachine/Registers.h
     src/vmachine/Translator.cpp
-    src/vmachine/Translator.h
     src/vmachine/VMachine.cpp
-    src/vmachine/VMachine.h
+)
+
+set (OFSim_simulation_src
+    src/simulation/Simulation.cpp
+    src/simulation/TelemetryCollector.cpp
+)
+
+set (OFSim_src
     
-    external_libraries/stb_image.h
+    src/infrastructure/FileService.cpp
+    src/infrastructure/EventProcessor.cpp
+
+    src/python_integration/PythonMachine.cpp
+    
+    src/math/Sphere.cpp
+    
+    src/physics/RocketModel.cpp
+    src/physics/PhysicsSolver.cpp
+     
     external_libraries/stb_image.cpp        
-    "src/simulation/ManualControlData.h")
+)
+
+add_executable("${CMAKE_PROJECT_NAME}"     
+    ${OFSim_src}
+    ${OFSim_GUI_src}
+    ${OFSim_renderer_src}
+    ${OFSim_world_src}
+    ${OFSim_vmachine_src}
+    ${OFSim_simulation_src}
+    src/gui/i18n.cpp
+    src/Application.cpp
+)
 
 #copy shaders to binary directory:
 if(MSVC)
@@ -231,79 +203,10 @@ endif()
 enable_testing()
 add_executable(
   ofsim_tests  
-    src/renderer/Camera.h
-    src/renderer/Mesh.h
-    src/renderer/Model.h
-    src/renderer/ModelRenderer.h
-    src/renderer/ObjectRenderer.h
     
-    src/renderer/Shader.h
-    src/renderer/SkyBoxRenderer.h
-    src/renderer/TrajectoryPrediction.h
-    src/renderer/Window.h
-    src/renderer/Camera.cpp
-    src/renderer/Mesh.cpp
-    src/renderer/Model.cpp
-    src/renderer/ModelRenderer.cpp
-    src/renderer/ObjectRenderer.cpp    
-    src/renderer/Shader.cpp
-    src/renderer/SkyBoxRenderer.cpp
-    src/renderer/TrajectoryPrediction.cpp
-    src/renderer/Window.cpp
-
-    src/world/GroundObject.h
-    src/world/Rocket.h
-    src/world/Smoke.h
-    src/world/SolarSystemConstants.h    
-    src/world/GroundObject.cpp
-    src/world/Rocket.cpp
-    src/world/Smoke.cpp
-    src/world/VectorIndicator.h
-    src/world/VectorIndicator.cpp
-
-    src/world/CelestialBody.h
-    src/world/CloudsAndTrees.h        
-    src/world/SolarSystem.h    
-    src/world/CelestialBody.cpp
-    src/world/CloudsAndTrees.cpp
-    src/world/SolarSystem.cpp    
-
-    src/math_and_physics/MathTypes.h
-        
-    src/math_and_physics/RocketModel.h
-    src/math_and_physics/RocketModel.cpp
-    
-    src/math_and_physics/PhysicsSolver.h
-    src/math_and_physics/Sphere.h
-    
-    src/math_and_physics/PhysicsSolver.cpp
-    src/math_and_physics/Sphere.cpp
-    
-    src/gui/i18n.h    
-    src/gui/i18n.cpp    
-
-    src/infrastructure/FileService.h
-    src/infrastructure/FileService.cpp
-    src/infrastructure/ImageLoader.h    
-    src/infrastructure/EventProcessor.h
-    src/infrastructure/EventProcessor.cpp
-    
-    src/infrastructure/SimulationEvent.h
-
-    src/vmachine/Instructions.cpp
-    src/vmachine/Instructions.h
-    src/vmachine/Memory.cpp
-    src/vmachine/Memory.h
-    src/vmachine/Opcodes.h
-    src/vmachine/Registers.cpp
-    src/vmachine/Registers.h
-    src/vmachine/Translator.cpp
-    src/vmachine/Translator.h
-    src/vmachine/VMachine.cpp
-    src/vmachine/VMachine.h
-  
-    external_libraries/stb_image.h
-    external_libraries/stb_image.cpp  
+  ${OFSim_src}
+  ${OFSim_vmachine_src}
+  src/gui/i18n.cpp
 
     "tests/SphereTests.cpp"    
     "tests/PhysicsSolverTests.cpp"

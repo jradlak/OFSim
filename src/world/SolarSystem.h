@@ -5,7 +5,7 @@
 #include "CelestialBody.h"
 #include "CloudsAndTrees.h"
 #include "GroundObject.h"
-#include "../math_and_physics/MathTypes.h"
+#include "../math/MathTypes.h"
 
 namespace ofsim_world
 {

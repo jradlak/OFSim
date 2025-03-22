@@ -147,7 +147,7 @@ void Simulation::mainLoop()
 	while (!mainWindow->shouldClose() && initializationProcess)
 	{
 		switchGLStateForWorldRendering(0, 0, 0);
-
+		
 		gui->newFrame();
 		gui->renderLoadingScreen();	
 		gui->endRendering();

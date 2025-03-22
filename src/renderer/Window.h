@@ -4,7 +4,7 @@
 #include <GLFW/glfw3.h>
 
 #include "../gui/i18n.h"
-#include "../math_and_physics/MathTypes.h"
+#include "../math/MathTypes.h"
 
 #include "Camera.h"
 

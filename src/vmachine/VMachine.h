@@ -11,7 +11,7 @@
 #include "Translator.h"
 #include "Opcodes.h"
 
-#include "../math_and_physics/MathTypes.h"
+#include "../math/MathTypes.h"
 #include "../infrastructure/EventProcessor.h"
 
 namespace ofsim_vm

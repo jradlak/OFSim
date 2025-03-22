@@ -11,7 +11,7 @@
 
 #include "Shader.h"
 #include "Model.h"
-#include "../math_and_physics/MathTypes.h"
+#include "../math/MathTypes.h"
 
 namespace ofsim_renderer
 {

@@ -1,7 +1,8 @@
 #pragma once
+
 #include <glm/glm.hpp>
 
-#include "../math_and_physics/MathTypes.h"
+#include "../math/MathTypes.h"
 
 namespace SolarSystemConstants
 {

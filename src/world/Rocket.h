@@ -8,7 +8,7 @@
 
 #include "../renderer/ModelRenderer.h"
 
-#include "../math_and_physics/MathTypes.h"
+#include "../math/MathTypes.h"
 
 #include "Smoke.h"
 

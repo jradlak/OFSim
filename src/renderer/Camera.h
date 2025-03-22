@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "../math_and_physics/MathTypes.h"
+#include "../math/MathTypes.h"
 
 namespace ofsim_renderer
 {

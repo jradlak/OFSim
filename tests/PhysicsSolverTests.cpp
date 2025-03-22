@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "../src/math_and_physics/PhysicsSolver.h"
+#include "../src/physics/PhysicsSolver.h"
 
 using namespace ofsim_math_and_physics;
 using namespace ofsim_world;

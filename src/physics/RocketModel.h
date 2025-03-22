@@ -2,8 +2,8 @@
 
 #include <vector>
 
-#include "MathTypes.h"
-#include "Quaternion.h"
+#include "../math/MathTypes.h"
+#include "../math/Quaternion.h"
 
 // Rocket structure:
 //          /\
