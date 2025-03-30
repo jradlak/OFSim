@@ -116,7 +116,7 @@ set (OFSim_src
     
     src/math/Sphere.cpp
     
-    src/physics/RocketModel.cpp
+    src/physics/rocket_model.cpp
     src/physics/PhysicsSolver.cpp
      
     external_libraries/stb_image.cpp        

@@ -1,8 +1,8 @@
-#include "RocketModel.h"
+#include "rocket_model.h"
 
 namespace ofsim_advanced_physics
 {
-    void RocketModel::updateFuel(f64 newFuel)
+    void RocketModel::update_fuel(f64 newFuel)
     {
         fuel = newFuel;
         calcFuelChamberMassProperties();
@@ -13,13 +13,13 @@ namespace ofsim_advanced_physics
         dvec3 fb, mb;  // tmp forces and moments vectors
 
         // reset forces and moments:
-        body.vForces.x = 0;
-        body.vForces.x = 0;
-        body.vForces.x = 0;
+        body.forces.x = 0;
+        body.forces.x = 0;
+        body.forces.x = 0;
 
-        body.vMoments.x = 0;
-        body.vMoments.x = 0;
-        body.vMoments.x = 0;
+        body.moments.x = 0;
+        body.moments.x = 0;
+        body.moments.x = 0;
 
         fb.x = 0;
         fb.y = 0; 
@@ -35,7 +35,7 @@ namespace ofsim_advanced_physics
 
     void RocketModel::initialize(dvec3 initialPosition)
     {
-        body.vPosition = initialPosition;
+        body.position = initialPosition;
     }
 
     void RocketModel::calcMassProperties(void)
