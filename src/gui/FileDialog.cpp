@@ -117,7 +117,7 @@ void FileDialog::renderFileDialog()
             }
             else if (selectedItem.type == ofsim_infrastructure::FileType::PARENT_DIRECTORY)
             {
-                directory = std::filesystem::path(directory).parent_path().u8string();
+                directory = std::filesystem::path(directory).parent_path().string();
                 loadFilesInDirectory(directory);
             }
         }

@@ -71,8 +71,8 @@ namespace ofsim_infrastructure
 				{
 					FileDescriptor fileDescriptor;
 					fileDescriptor.type = FileType::DIRECTORY;
-					fileDescriptor.name = entry.path().filename().u8string() + "/";
-					fileDescriptor.path = entry.path().parent_path().u8string();
+					fileDescriptor.name = entry.path().filename().string() + "/";
+					fileDescriptor.path = entry.path().parent_path().string();
 					directories.push_back(fileDescriptor);
 				}
 			}
@@ -86,16 +86,16 @@ namespace ofsim_infrastructure
 			for (const auto& entry : fs::directory_iterator(dirName))
 			{
 			
-				if (fs::is_directory(entry.path()) || entry.path().filename().u8string()[0] == '.')
+				if (fs::is_directory(entry.path()) || entry.path().filename().string()[0] == '.')
 				{
 					continue;
 				}
 				
-				std::string filePath = entry.path().u8string();
+				std::string filePath = entry.path().string();
 				FileDescriptor fileDescriptor;
 				fileDescriptor.type = FileType::FILE;
-				fileDescriptor.name = entry.path().filename().u8string();
-				fileDescriptor.path = entry.path().parent_path().u8string();
+				fileDescriptor.name = entry.path().filename().string();
+				fileDescriptor.path = entry.path().parent_path().string();
 				files.push_back(fileDescriptor);
 			}
 

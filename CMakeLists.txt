@@ -6,7 +6,7 @@ find_package( Python REQUIRED Development)
 
 include_directories( ${OPENGL_INCLUDE_DIRS} )
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 set(GLFW_BUILD_DOCS OFF CACHE BOOL  "GLFW lib only")
