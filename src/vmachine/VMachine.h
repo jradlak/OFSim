@@ -34,13 +34,13 @@ namespace ofsim_vm
 
 		void restart();
 
-		void clearMemory() { memory->clear(); }
+		void clearMemory() { memory.clear(); }
 
 		void provideSourcePath(const char *_sourcePath) { sourcePath = _sourcePath; }
 
 		void takeANap() { std::this_thread::sleep_for(std::chrono::milliseconds(100)); }
 
-		Memory *getMemory() { return memory.get(); }
+		Memory &getMemory() { return memory; }
 
 		bool isStarted() { return started; }		
 
@@ -49,13 +49,13 @@ namespace ofsim_vm
 
 		ofsim_events::EventProcessor& eventProcessor;
 
-		std::unique_ptr<Memory> memory;
-		std::unique_ptr<Registers> registers;
-		std::unique_ptr<Opcodes> opcodes;
-		std::unique_ptr<Instructions> instructions;
-		std::unique_ptr<Translator> translator;
+		Memory memory;
+		Registers registers;
+		Opcodes opcodes;		
+		Instructions instructions{memory, registers, eventProcessor};
+		Translator translator;
 
-		const char *sourcePath{nullptr};
+		std::string sourcePath{""};
 
 		u32 pc{0};
 		u32 oldpc{0};

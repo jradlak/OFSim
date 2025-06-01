@@ -49,8 +49,8 @@ data:
 		vm.start();
 		
 		// Assert
-		EXPECT_EQ(vm.getMemory()->fetchByte(255), 0);
-		EXPECT_EQ(vm.getMemory()->fetchByte(256), 72);
-		EXPECT_EQ(vm.getMemory()->fetchByte(257), 101);
+		EXPECT_EQ(vm.getMemory().fetchByte(255), 0);
+		EXPECT_EQ(vm.getMemory().fetchByte(256), 72);
+		EXPECT_EQ(vm.getMemory().fetchByte(257), 101);
 	}		
 }
