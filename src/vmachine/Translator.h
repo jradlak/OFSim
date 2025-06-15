@@ -24,7 +24,7 @@ namespace ofsim_vm
 	public:
 		Translator();
 
-		std::string translateSourceFile(const char* sourcePath);
+		std::string translateSourceFile(const std::string sourcePath);
 		void translateSourceString(const std::string sourceString);
 		void translateLine(std::string sourceLine, int lineNumber);
 
@@ -38,7 +38,7 @@ namespace ofsim_vm
 		~Translator() { }
 
 	private:
-		std::unique_ptr<Opcodes> opcodes;
+		Opcodes opcodes;
 
 		unsigned int instr_addr{ 0 };
 		ofsim_gui::I18n* i18n{ nullptr };

@@ -2,26 +2,26 @@
 
 using namespace ofsim_vm;
 
-VMachine::VMachine(ofsim_events::EventProcessor& _eventProcessor) : eventProcessor(_eventProcessor)
+VMachine::VMachine(ofsim_events::EventProcessor& _event_processor) : event_processor(_event_processor)
 {	
 }
 
-std::string VMachine::translateSourceCodeFromFile(const char* _sourcePath)
+std::string VMachine::translateSourceCodeFromFile(std::string _sourcePath)
 {
-	sourcePath = _sourcePath;	
+	source_path = _sourcePath;	
 	std::string source_code = translator.translateSourceFile(_sourcePath);
-    loadCode();
+    load_code();
 
 	return source_code;
 }
 
-void ofsim_vm::VMachine::translateSourceCode(std::string sourceCode)
+void ofsim_vm::VMachine::translate_source_code(std::string sourceCode)
 {
-	translator.translateSourceString(sourceCode);
-	loadCode();
+	translator.translateSourceString(sourceCode.c_str());
+	load_code();
 }
 
-void ofsim_vm::VMachine::loadCode()
+void ofsim_vm::VMachine::load_code()
 {
 	memory.clear(); // clear old program before load new one
 	Memory::memcopy(translator.code, memory.mem, 0, 0, translator.getCodeSize());
@@ -31,7 +31,7 @@ void VMachine::executionLoop()
 {
 	// code execution:		
 	unsigned int opcode = memory.fetchByte(0);
-	while (opcode != opcodes.getOpcode("halt") && !shouldStop)
+	while (opcode != opcodes.getOpcode("halt") && !should_stop)
 	{
 		// decode and execute instruction:
 		unsigned int args_size = opcodes.getInstrSize(opcode);
@@ -55,9 +55,9 @@ void VMachine::executionLoop()
 
 void VMachine::stop()
 {
-	shouldStop = true;
+	should_stop = true;
 	started = false;
-	takeANap();	
+	take_a_nap();	
 	registers.clear();
 	memory.clear();
 	pc = 0;
@@ -67,14 +67,14 @@ void VMachine::stop()
 void VMachine::restart()
 {
 	stop();
-	takeANap();	
+	take_a_nap();	
 	start();
 }
 
 void VMachine::start()
 {	
-	takeANap();
-	shouldStop = false;
+	take_a_nap();
+	should_stop = false;
 	started = true;
 	std::cout << "VMachine execution loop started!\n";	
 	executionLoop();
