@@ -43,7 +43,7 @@ data:
 		// Arrange	
 		ofsim_events::EventProcessor* eventProcessor = ofsim_events::EventProcessor::getInstance();
 		VMachine vm(*eventProcessor);
-		vm.translate_source_code(hello_world_vm);
+		vm.translateSourceCode(hello_world_vm);
 		
 		// Act
 		vm.start();

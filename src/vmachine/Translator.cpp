@@ -1,8 +1,6 @@
 #include "Translator.h"
 #include "Memory.h"
 
-#include <ostream>
-
 static inline std::string& ltrim(std::string& s);
 static inline std::string& rtrim(std::string& s);
 static inline std::string& trim(std::string& s);
@@ -10,17 +8,18 @@ static inline std::string& trim(std::string& s);
 using namespace ofsim_vm;
 
 Translator::Translator()
-{    
+{
+    opcodes = std::make_unique<Opcodes>();
     i18n = ofsim_gui::I18n::getInstance();
 }
 
-std::string Translator::translateSourceFile(const std::string sourcePath)
+std::string Translator::translateSourceFile(const char* sourcePath)
 {
     std::ifstream file(sourcePath, std::ios::in);
     std::stringstream fileBuffer;
     fileBuffer << file.rdbuf();
     std::string fileData = fileBuffer.str();
-    translateSourceString(fileData.c_str());
+    translateSourceString(fileData);
     file.close();
 
     return fileData;
@@ -29,8 +28,7 @@ std::string Translator::translateSourceFile(const std::string sourcePath)
 void ofsim_vm::Translator::translateSourceString(const std::string sourceString)
 {    
     std::string line;
-    std::stringstream ss(sourceString.c_str());
-
+    std::stringstream ss(sourceString);
     while (std::getline(ss, line))
     {
         recognizeInstr(line);
@@ -44,7 +42,6 @@ void ofsim_vm::Translator::translateSourceString(const std::string sourceString)
     ss2.seekg(0, std::ios::beg);
     while (std::getline(ss2, line))
     {
-        std::cout << "Translating line " << lineNumber << ": " << line << std::endl;
         translateLine(line, lineNumber++);
     }
 }
@@ -301,10 +298,10 @@ std::tuple<unsigned int, unsigned int> Translator::recognizeInstr(std::string so
     {
         unsigned int pos = line.find(" ");
         std::string token = line.substr(0, pos);
-        unsigned int opcode = opcodes.getOpcode(token);
+        unsigned int opcode = opcodes->getOpcode(token);
         if (opcode != 0x100) 
         {
-            unsigned int instrSize = opcodes.getInstrSize(opcode);
+            unsigned int instrSize = opcodes->getInstrSize(opcode);
             instr_addr += instrSize + 0x1;
             return std::make_tuple(opcode, instrSize);
         }

@@ -432,7 +432,7 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 			else if (this->orbitalProgramName.find(".oasm") != std::string::npos)
 			{
 				vmachine = std::make_unique<ofsim_vm::VMachine>(*EventProcessor::getInstance());
-				vmachine->translate_source_code(this->orbitalProgramSourceCode);
+				vmachine->translateSourceCode(this->orbitalProgramSourceCode);
 				vmThread = std::make_unique<std::thread>(&ofsim_vm::VMachine::start, vmachine.get());
 			}
 			else
