@@ -10,7 +10,6 @@
 #include "../renderer/Camera.h"
 #include "../renderer/Window.h"
 #include "../renderer/TrajectoryPrediction.h"
-#include "../renderer/TrajectoryPrediction.h"
 #include "../renderer/SkyBoxRenderer.h"
 #include "../gui/Gui.h"
 #include "../world/SolarSystem.h"

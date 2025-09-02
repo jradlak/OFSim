@@ -55,7 +55,7 @@ void Memory::storeDWord(unsigned int addr, double dword)
 }
 
 void Memory::memcopy(unsigned char* src, unsigned char* dst, unsigned int addr_s, unsigned int addr_d, unsigned int length)
-{	
+{
 	for (unsigned int i = 0; i < length; i++)
 	{
 		dst[addr_d + i] = src[addr_s + i];
