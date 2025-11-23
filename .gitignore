@@ -367,3 +367,6 @@ FodyWeavers.xsd
 #KDevelop:
 .kde4/
 *.kde4
+
+#IntelliJ:
+.idea/
