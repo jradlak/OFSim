@@ -1,3 +1,5 @@
+Unreleased - Added AGENTS.md with project workflow, formatting and validation guidance.
+
 Unreleased - Added EditorConfig settings for consistent indentation, UTF-8 encoding and LF line endings, excluding dependencies and generated files.
 
 Unreleased - Applied the shared formatting style to all project C++ sources and tests using clang-format 19; normalized their line endings to LF.
