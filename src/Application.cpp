@@ -4,6 +4,6 @@ using namespace ofsim_simulation;
 
 int main(int argc, char** argv)
 {
-	Simulation simulation;
-	simulation.start();	
+    Simulation simulation;
+    simulation.start();
 }

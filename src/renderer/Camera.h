@@ -7,59 +7,66 @@
 
 namespace ofsim_renderer
 {
-    enum Camera_Movement {
-        FORWARD,
-        BACKWARD,
-        LEFT,
-        RIGHT,
-        ROLL_LEFT,
-        ROLL_RIGHT,
-        NONE
-    };
+enum Camera_Movement
+{
+    FORWARD,
+    BACKWARD,
+    LEFT,
+    RIGHT,
+    ROLL_LEFT,
+    ROLL_RIGHT,
+    NONE
+};
 
-    // Initial camera values
-    constexpr f64 YAW         { 30.0 };
-    constexpr f64 PITCH       { -70.0 };
-    constexpr f64 SPEED       { 1200 };
-    constexpr f64 SENSITIVITY { 0.1 };
-    constexpr f64 ZOOM        { 80.0 };
+// Initial camera values
+constexpr f64 YAW{30.0};
+constexpr f64 PITCH{-70.0};
+constexpr f64 SPEED{1200};
+constexpr f64 SENSITIVITY{0.1};
+constexpr f64 ZOOM{80.0};
 
-    constexpr f64 initialRotationAngle {210.0};
+constexpr f64 initialRotationAngle{210.0};
 
-    struct Camera
-    {    
-        // camera attributes
-        dvec3 position, rotationPosition,
-            front, up, right, worldUp;
-            
-        f64 yaw, pitch, roll;           
-        f64 rotationAngle { initialRotationAngle };
+struct Camera
+{
+    // camera attributes
+    dvec3 position, rotationPosition, front, up, right, worldUp;
 
-        // camera options:
-        f64 MovementSpeed, movementSensitivity, Zoom;
+    f64 yaw, pitch, roll;
+    f64 rotationAngle{initialRotationAngle};
 
-        bool automaticRotation { true };
-        bool manualRotation { false };
+    // camera options:
+    f64 MovementSpeed, movementSensitivity, Zoom;
 
-        Camera(dvec3 _position = dvec3(0.0, 0.0, 0.0), dvec3 _up = dvec3(0.0, 1.0, 0.0),
-            f64 _yaw = YAW, f64 _pitch = PITCH, f64 _roll = 0.0);
+    bool automaticRotation{true};
+    bool manualRotation{false};
 
-        Camera(f64 posX, f64 posY, f64 posZ, f64 upX, f64 upY, f64 upZ, f64 _yaw, f64 _pitch, f64 _roll);
+    Camera(dvec3 _position = dvec3(0.0, 0.0, 0.0), dvec3 _up = dvec3(0.0, 1.0, 0.0), f64 _yaw = YAW,
+           f64 _pitch = PITCH, f64 _roll = 0.0);
 
-        dmat4 getViewMatrix() { return glm::lookAt(rotationPosition + dvec3(0, 0.021, 0),
-                                        position + dvec3(0, 0.007, 0), dvec3(0.0, 1.0, 0.0)); }
+    Camera(f64 posX, f64 posY, f64 posZ, f64 upX, f64 upY, f64 upZ, f64 _yaw, f64 _pitch,
+           f64 _roll);
 
-        void processCameraRotation(f64 xoffset, f64 yoffset, bool constrainPitch = true);
-        
-        void updatePosition(dvec3 newPosition) { position = newPosition; }
+    dmat4 getViewMatrix()
+    {
+        return glm::lookAt(rotationPosition + dvec3(0, 0.021, 0), position + dvec3(0, 0.007, 0),
+                           dvec3(0.0, 1.0, 0.0));
+    }
 
-        void updateAutomaticRotationPosition(dvec3 newPosition, f64 radius = 0.020);
+    void processCameraRotation(f64 xoffset, f64 yoffset, bool constrainPitch = true);
 
-        void updateManualRotationPosition(f64 xOffset, f64 yOffset, f64 radius);
+    void updatePosition(dvec3 newPosition)
+    {
+        position = newPosition;
+    }
 
-        void processKeyboard(Camera_Movement direction, f64 deltaTime);
+    void updateAutomaticRotationPosition(dvec3 newPosition, f64 radius = 0.020);
 
-    private:
-        void updateCameraVectors();
-    };
-}
+    void updateManualRotationPosition(f64 xOffset, f64 yOffset, f64 radius);
+
+    void processKeyboard(Camera_Movement direction, f64 deltaTime);
+
+private:
+    void updateCameraVectors();
+};
+} // namespace ofsim_renderer

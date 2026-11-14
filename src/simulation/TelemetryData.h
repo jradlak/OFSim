@@ -4,18 +4,18 @@
 
 namespace ofsim_simulation
 {
-    class TelemetryData
-    {
-    public:
-        unsigned long long time;
+class TelemetryData
+{
+public:
+    unsigned long long time;
 
-        double altitude;
-        double mass;
-        double velocity;
-        double acceleration;
-        double atmPressure;
-        double apogee = 0;
-        double perigee = 0;
-        glm::dvec3 position;
-    };
-}
+    double altitude;
+    double mass;
+    double velocity;
+    double acceleration;
+    double atmPressure;
+    double apogee = 0;
+    double perigee = 0;
+    glm::dvec3 position;
+};
+} // namespace ofsim_simulation

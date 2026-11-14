@@ -1,3 +1,5 @@
+Unreleased - Applied the shared formatting style to all project C++ sources and tests using clang-format 19; normalized their line endings to LF.
+
 Unreleased - Standalone LLVM-based clang-format configuration with four-space indentation, Allman braces and a 100-column limit. Removed the unused Google style submodule.
 
 Unreleased - Unified asynchronous stopping for simulation reset, mode changes and shutdown. Reset waits for flight programs to finish; added lifecycle regression tests.

@@ -15,7 +15,9 @@ void Model::draw(Shader& shader)
 void Model::loadModel(std::string path)
 {
     Assimp::Importer importer;
-    const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+    const aiScene* scene =
+        importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals |
+                                    aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
 
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
     {
@@ -50,22 +52,17 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
     for (u32 i = 0; i < mesh->mNumVertices; i++)
     {
         Vertex vertex{};
-        vec3 vector
-        {
-            mesh->mVertices[i].x,
-            mesh->mVertices[i].y,
-            mesh->mVertices[i].z
-        };
+        vec3 vector{mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z};
 
         vertex.position = vector;
-        
+
         if (mesh->HasNormals())
         {
             vector.x = mesh->mNormals[i].x;
             vector.y = mesh->mNormals[i].y;
             vector.z = mesh->mNormals[i].z;
             vertex.normal = vector;
-        }        
+        }
 
         vertices.push_back(vertex);
     }
@@ -73,12 +70,12 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
     for (u32 i = 0; i < mesh->mNumFaces; i++)
     {
         aiFace face = mesh->mFaces[i];
-   
+
         for (u32 j = 0; j < face.mNumIndices; j++)
         {
             indices.push_back(face.mIndices[j]);
         }
     }
-    
+
     return Mesh(vertices, indices);
 }

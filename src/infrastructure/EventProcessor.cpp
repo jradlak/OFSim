@@ -15,30 +15,30 @@ void ofsim_events::EventProcessor::processVMCommand(RocketCommand command)
     std::cout << "Command value: " << command.value() << std::endl;
 
     switch (command.code())
-    {        
-        case RocketCommandCode::THRUST_MAGNITUDE_CHANGE:
-			physics->updateThrustMagnitude(command.value());
-			break;
-		case RocketCommandCode::THRUST_ROTATION_CHANGE_X:
-			physics->rotateRocket(dvec3(command.value(), 0, 0));
-			break;
-		case RocketCommandCode::THRUST_ROTATION_CHANGE_Y:
-			physics->rotateRocket(dvec3(0, command.value(), 0));
-			break;
-		case RocketCommandCode::THRUST_ROTATION_CHANGE_Z:
-			physics->rotateRocket(dvec3(0, 0, command.value()));
-			break;
-        case RocketCommandCode::GYRO_ROTATION_CHANGE_X:
-            physics->rotateRocket(dvec3(command.value(), 0, 0));
-            break;
-        case RocketCommandCode::GYRO_ROTATION_CHANGE_Y:
-            physics->rotateRocket(dvec3(0, command.value(), 0));
-            break;
-        case RocketCommandCode::GYRO_ROTATION_CHANGE_Z:
-            physics->rotateRocket(dvec3(0, 0, command.value()));
-            break;
-		default:
-			break;  
+    {
+    case RocketCommandCode::THRUST_MAGNITUDE_CHANGE:
+        physics->updateThrustMagnitude(command.value());
+        break;
+    case RocketCommandCode::THRUST_ROTATION_CHANGE_X:
+        physics->rotateRocket(dvec3(command.value(), 0, 0));
+        break;
+    case RocketCommandCode::THRUST_ROTATION_CHANGE_Y:
+        physics->rotateRocket(dvec3(0, command.value(), 0));
+        break;
+    case RocketCommandCode::THRUST_ROTATION_CHANGE_Z:
+        physics->rotateRocket(dvec3(0, 0, command.value()));
+        break;
+    case RocketCommandCode::GYRO_ROTATION_CHANGE_X:
+        physics->rotateRocket(dvec3(command.value(), 0, 0));
+        break;
+    case RocketCommandCode::GYRO_ROTATION_CHANGE_Y:
+        physics->rotateRocket(dvec3(0, command.value(), 0));
+        break;
+    case RocketCommandCode::GYRO_ROTATION_CHANGE_Z:
+        physics->rotateRocket(dvec3(0, 0, command.value()));
+        break;
+    default:
+        break;
     }
 
     // simulate command processing time (innertia effect):
@@ -47,7 +47,7 @@ void ofsim_events::EventProcessor::processVMCommand(RocketCommand command)
     command_history.insert(std::pair<u64, RocketCommand>(runningTime, command));
 }
 
-EventProcessor *EventProcessor::getInstance()
+EventProcessor* EventProcessor::getInstance()
 {
     std::lock_guard<std::mutex> lock(mutex);
     if (instance == nullptr)
@@ -62,10 +62,11 @@ SimulationEvent EventProcessor::getEvent()
 {
     if (userEvent == nullptr)
     {
-         return SimulationEvent();
+        return SimulationEvent();
     }
 
-    SimulationEvent event = SimulationEvent(userEvent->id, userEvent->timestamp, userEvent->action, userEvent->data);
+    SimulationEvent event =
+        SimulationEvent(userEvent->id, userEvent->timestamp, userEvent->action, userEvent->data);
     delete userEvent;
     userEvent = nullptr;
 
@@ -76,27 +77,29 @@ void EventProcessor::createEvent(StateEvent action, std::string data)
 {
     if (userEvent == nullptr)
     {
-        userEvent = new SimulationEvent(eventCounter++, runningTime, action, data);        
+        userEvent = new SimulationEvent(eventCounter++, runningTime, action, data);
     }
 }
 
 void ofsim_events::EventProcessor::setThrustMagnitude(f64 thrust)
 {
     physics->updateThrustMagnitude(thrust);
-    RocketCommand command { RocketCommandCode::THRUST_MAGNITUDE_CHANGE, thrust };
+    RocketCommand command{RocketCommandCode::THRUST_MAGNITUDE_CHANGE, thrust};
     command_history.insert(std::pair<u64, RocketCommand>(runningTime, command));
 }
 
 void ofsim_events::EventProcessor::changeThrustRotatation(dvec3 deltaRotation)
 {
     physics->rotateRocket(deltaRotation);
-    
-    RocketCommand command1 { RocketCommandCode::THRUST_ROTATION_CHANGE_X, deltaRotation.x };
+
+    RocketCommand command1{RocketCommandCode::THRUST_ROTATION_CHANGE_X, deltaRotation.x};
     command_history.insert(std::pair<u64, RocketCommand>(runningTime, command1));
-    
-    RocketCommand command2 = RocketCommand(RocketCommandCode::THRUST_ROTATION_CHANGE_Y, deltaRotation.y);
+
+    RocketCommand command2 =
+        RocketCommand(RocketCommandCode::THRUST_ROTATION_CHANGE_Y, deltaRotation.y);
     command_history.insert(std::pair<u64, RocketCommand>(runningTime + 1, command2));
-    
-    RocketCommand command3 = RocketCommand(RocketCommandCode::THRUST_ROTATION_CHANGE_Z, deltaRotation.z);
+
+    RocketCommand command3 =
+        RocketCommand(RocketCommandCode::THRUST_ROTATION_CHANGE_Z, deltaRotation.z);
     command_history.insert(std::pair<u64, RocketCommand>(runningTime + 2, command3));
 }

@@ -7,30 +7,29 @@
 
 namespace ofsim_world
 {
-    struct CloudsAndTrees
-    {
-        CloudsAndTrees(const i32 _numberOfClouds, CelestialBody& _earth,
-            f64 _angle, f64 _dangle);
+struct CloudsAndTrees
+{
+    CloudsAndTrees(const i32 _numberOfClouds, CelestialBody& _earth, f64 _angle, f64 _dangle);
 
-        void render(dmat4 projection, dmat4 view, const dvec3 lightPos);
+    void render(dmat4 projection, dmat4 view, const dvec3 lightPos);
 
-    private:
-        const int numberOfClouds;
+private:
+    const int numberOfClouds;
 
-        std::unique_ptr<ofsim_renderer::ModelRenderer> cloudRenderer;
-        std::unique_ptr<ofsim_renderer::ModelRenderer> treeRenderer;
+    std::unique_ptr<ofsim_renderer::ModelRenderer> cloudRenderer;
+    std::unique_ptr<ofsim_renderer::ModelRenderer> treeRenderer;
 
-        std::vector<dvec3> cloudsPositions;
-        std::vector<dvec3> treesPositions;
+    std::vector<dvec3> cloudsPositions;
+    std::vector<dvec3> treesPositions;
 
-        std::vector<f64> cloudsSizes;
+    std::vector<f64> cloudsSizes;
 
-        f64 angle;
-        f64 dangle;
-        dvec3 initialRotation {0, 0, 0};
+    f64 angle;
+    f64 dangle;
+    dvec3 initialRotation{0, 0, 0};
 
-        CelestialBody& earth;
+    CelestialBody& earth;
 
-        void calculatePositionsAndSizes();
-    };
-}
+    void calculatePositionsAndSizes();
+};
+} // namespace ofsim_world

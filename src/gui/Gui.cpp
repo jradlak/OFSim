@@ -22,20 +22,20 @@ void Gui::initialization(Window* mainWindow)
     // ImGui initialization:
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    ImGuiIO& io = ImGui::GetIO();
+    (void)io;
     ImGui::StyleColorsDark();
     ImGui_ImplGlfw_InitForOpenGL(mainWindow->getWindow(), true);
     ImGui_ImplOpenGL3_Init("#version 330");
 
-    std::string manualPath = i18n->currentLanguage == Language::PL 
-        ? "doc/operation_manual_pl.txt"
-        : "doc/operation_manual_en.txt";
+    std::string manualPath = i18n->currentLanguage == Language::PL ? "doc/operation_manual_pl.txt"
+                                                                   : "doc/operation_manual_en.txt";
 
-    helpText = ofsim_infrastructure::loadTextFile(manualPath);    
+    helpText = ofsim_infrastructure::loadTextFile(manualPath);
 }
 
 void Gui::newFrame()
-{     
+{
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
@@ -44,43 +44,43 @@ void Gui::newFrame()
 void Gui::renderMenuBar()
 {
     EventProcessor* eventProcessor = EventProcessor::getInstance();
-    
+
     if (ImGui::BeginMainMenuBar())
     {
         if (ImGui::BeginMenu("Program"))
         {
-            if (ImGui::MenuItem(i18n->t(menu_new))) 
-            { 
-                eventProcessor->createEvent(StateEvent::FILE_NEW, ""); 
+            if (ImGui::MenuItem(i18n->t(menu_new)))
+            {
+                eventProcessor->createEvent(StateEvent::FILE_NEW, "");
             }
 
-            if (ImGui::MenuItem(i18n->t(menu_open))) 
-            {                 
+            if (ImGui::MenuItem(i18n->t(menu_open)))
+            {
                 viewFileOpen = true;
-                eventProcessor->createEvent(StateEvent::SHOW_FILE_OPEN_DIALOG, "");                
+                eventProcessor->createEvent(StateEvent::SHOW_FILE_OPEN_DIALOG, "");
             }
 
-            if (ImGui::MenuItem(i18n->t(menu_save))) 
-            { 
+            if (ImGui::MenuItem(i18n->t(menu_save)))
+            {
                 eventProcessor->createEvent(StateEvent::FILE_SAVE, "");
             }
 
             if (ImGui::MenuItem(i18n->t(menu_save_as)))
             {
-                viewFileSaveAs = true;                
+                viewFileSaveAs = true;
             }
-            
+
             ImGui::Separator();
-            if (ImGui::MenuItem(i18n->t(menu_close))) 
-            {  
+            if (ImGui::MenuItem(i18n->t(menu_close)))
+            {
                 eventProcessor->createEvent(StateEvent::FILE_EXIT, "");
             }
 
             ImGui::EndMenu();
         }
-        
+
         if (ImGui::BeginMenu(i18n->t(menu_view)))
-        {            
+        {
             ImGui::Checkbox(i18n->t(menu_telemetry_data), &viewTelemetryOn);
             ImGui::Checkbox(i18n->t(menu_telemetry_plots), &viewTelemetryPlot);
             ImGui::Checkbox(i18n->t(menu_command_history), &viewCommands);
@@ -92,16 +92,16 @@ void Gui::renderMenuBar()
 
         if (ImGui::BeginMenu(i18n->t(menu_help)))
         {
-            if (ImGui::MenuItem(i18n->t(menu_manual))) 
-            { 
+            if (ImGui::MenuItem(i18n->t(menu_manual)))
+            {
                 eventProcessor->createEvent(StateEvent::HELP_HELP, "");
-                viewHelpScreen = true;          
+                viewHelpScreen = true;
             }
-            
+
             ImGui::Separator();
-            
-            if (ImGui::MenuItem(i18n->t(menu_about))) 
-            { 
+
+            if (ImGui::MenuItem(i18n->t(menu_about)))
+            {
                 eventProcessor->createEvent(StateEvent::HELP_ABOUT, "");
                 viewSplashScreen = true;
             }
@@ -110,12 +110,13 @@ void Gui::renderMenuBar()
         }
 
         ImGui::EndMainMenuBar();
-    }    
+    }
 }
 
 void Gui::renderSplashScreen()
 {
-    if (!viewSplashScreen) return;
+    if (!viewSplashScreen)
+        return;
 
     ImGui::SetNextWindowSize(ImVec2(772, 590), ImGuiCond_Once);
     ImGui::SetNextWindowPos(ImVec2(580, 200), ImGuiCond_Once);
@@ -129,7 +130,7 @@ void Gui::renderSplashScreen()
     ImGui::TextWrapped("%s", i18n->t(splash_info));
 
     ImGui::NewLine();
-   
+
     ImGui::Separator();
 
     ImGui::Text("%s", i18n->t(splash_version));
@@ -137,9 +138,9 @@ void Gui::renderSplashScreen()
 
     ImGui::Separator();
     ImGui::NewLine();
-    
+
     if (ImGui::Button("OK", ImVec2(120, 0)))
-    {        
+    {
         viewSplashScreen = false;
 
         viewTelemetryOn = true;
@@ -155,8 +156,10 @@ void Gui::renderSplashScreen()
     if (item_current != selcted_language_item)
     {
         selcted_language_item = item_current;
-        if (item_current == 0) i18n->switchLanguage(PL);
-        if (item_current == 1) i18n->switchLanguage(EN);
+        if (item_current == 0)
+            i18n->switchLanguage(PL);
+        if (item_current == 1)
+            i18n->switchLanguage(EN);
     }
 
     ImGui::End();
@@ -164,20 +167,21 @@ void Gui::renderSplashScreen()
 
 void ofsim_gui::Gui::renderHelpScreen()
 {
-    if (!viewHelpScreen) return;
+    if (!viewHelpScreen)
+        return;
 
     ImGui::SetNextWindowSize(ImVec2(772, 890), ImGuiCond_Once);
     ImGui::SetNextWindowPos(ImVec2(580, 50), ImGuiCond_Once);
-    
+
     ImGui::Begin(i18n->t(help_title));
 
     ImGui::Separator();
     ImGui::NewLine();
-    
+
     ImGui::TextWrapped("%s", helpText.c_str());
 
     if (ImGui::Button("OK", ImVec2(120, 0)))
-    {        
+    {
         viewHelpScreen = false;
     }
 
@@ -185,26 +189,29 @@ void ofsim_gui::Gui::renderHelpScreen()
 }
 
 void Gui::renderFileOpenDialog()
-{   
-    if (!viewFileOpen) return;
+{
+    if (!viewFileOpen)
+        return;
 
-    fileOpenDialog.renderFileDialog();    
+    fileOpenDialog.renderFileDialog();
 
     viewFileOpen = fileOpenDialog.viewFileOpen;
 }
 
 void Gui::renderFileSaveAsDialog()
 {
-    if (!viewFileSaveAs) return;
+    if (!viewFileSaveAs)
+        return;
 
     fileSaveDialog.renderFileDialog();
 
-    viewFileSaveAs = fileSaveDialog.viewFileOpen;    
+    viewFileSaveAs = fileSaveDialog.viewFileOpen;
 }
 
 void Gui::renderSimulationControlWindow(unsigned long long time)
 {
-    if (!viewSimulationControl && !simulationStopping) return;
+    if (!viewSimulationControl && !simulationStopping)
+        return;
 
     EventProcessor* eventProcessor = EventProcessor::getInstance();
 
@@ -216,16 +223,18 @@ void Gui::renderSimulationControlWindow(unsigned long long time)
     unsigned long long seconds = time / 1000;
     unsigned long long millis = time % 1000;
 
-    std::string strClock = i18n->t(sim_panel_clock) + std::to_string(seconds) + "." + std::to_string(millis) + "s";
+    std::string strClock =
+        i18n->t(sim_panel_clock) + std::to_string(seconds) + "." + std::to_string(millis) + "s";
     ImGui::Text("%s", strClock.c_str());
 
     ImGui::SameLine();
-    std::string strTimeFactor = i18n->t(sim_panel_time_compression) + std::to_string(timeFactor) + "x";
+    std::string strTimeFactor =
+        i18n->t(sim_panel_time_compression) + std::to_string(timeFactor) + "x";
     ImGui::TextUnformatted(simulationStopping ? i18n->t(sim_panel_stopping)
-                                             : strTimeFactor.c_str());
+                                              : strTimeFactor.c_str());
     ImGui::BeginDisabled(simulationStopping);
 
-    if (ImGui::ImageButton((void*)(intptr_t)pp_texture, ImVec2(32, 32))) 
+    if (ImGui::ImageButton((void*)(intptr_t)pp_texture, ImVec2(32, 32)))
     {
         if (playing)
         {
@@ -242,10 +251,11 @@ void Gui::renderSimulationControlWindow(unsigned long long time)
             eventProcessor->createEvent(StateEvent::START_SIMULATION, "");
         }
     }
-    
+
     ImGui::SameLine();
 
-    if (ImGui::ImageButton((void*)(intptr_t)stop_texture, ImVec2(32, 32))) {
+    if (ImGui::ImageButton((void*)(intptr_t)stop_texture, ImVec2(32, 32)))
+    {
         pp_texture = play_texture;
         playing = false;
         timeFactor = -1;
@@ -254,13 +264,14 @@ void Gui::renderSimulationControlWindow(unsigned long long time)
 
     ImGui::SameLine();
 
-    if (ImGui::ImageButton((void*)(intptr_t)fwd_texture, ImVec2(32, 32))) {
+    if (ImGui::ImageButton((void*)(intptr_t)fwd_texture, ImVec2(32, 32)))
+    {
         std::cout << "Kliknieto fwd!! \n";
 
         if (timeFactor == 16)
         {
             timeFactor = 1;
-        } 
+        }
         else if (timeFactor > 0)
         {
             timeFactor *= 2;
@@ -268,11 +279,11 @@ void Gui::renderSimulationControlWindow(unsigned long long time)
     }
 
     ImGui::SameLine();
-    if (ImGui::Checkbox(i18n->t(camera_autorotation), &cameraAutorotation)) 
+    if (ImGui::Checkbox(i18n->t(camera_autorotation), &cameraAutorotation))
     {
-        eventProcessor->createEvent(StateEvent::CAMERA_AUTOROTATION, 
-         cameraAutorotation ? "1" : "0");
-    }   
+        eventProcessor->createEvent(StateEvent::CAMERA_AUTOROTATION,
+                                    cameraAutorotation ? "1" : "0");
+    }
     ImGui::EndDisabled();
 
     ImGui::End();
@@ -288,35 +299,42 @@ void Gui::setSimulationStopping(bool stopping)
 
 void Gui::renderCodeEditor(std::string& text)
 {
-    if (!viewSourceCode) return;
+    if (!viewSourceCode)
+        return;
 
     ImGui::SetNextWindowSize(ImVec2(450, 780), ImGuiCond_Once);
     ImGui::SetNextWindowPos(ImVec2(60, 140), ImGuiCond_Once);
-    
+
     ImGui::Begin(i18n->t(code_editor_title));
 
     int numLines = 1;
-    for (int i = 0; text[i]; i++) {
-        if (text[i] == '\n') {
+    for (int i = 0; text[i]; i++)
+    {
+        if (text[i] == '\n')
+        {
             numLines++;
         }
     }
-    ImGui::BeginChild("TextEditor", ImVec2(450, ImGui::GetTextLineHeight() * 257), false, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+    ImGui::BeginChild("TextEditor", ImVec2(450, ImGui::GetTextLineHeight() * 257), false,
+                      ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 
     // Draw the line numbers
-    ImGui::BeginChild("LineNumbers", ImVec2(30, 0), false, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
-    for (int i = 1; i <= numLines; i++) {
+    ImGui::BeginChild("LineNumbers", ImVec2(30, 0), false,
+                      ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+    for (int i = 1; i <= numLines; i++)
+    {
         ImGui::Text("%d.", i);
     }
 
     ImGui::EndChild();
 
     ImGui::SameLine();
-    
-    static ImGuiInputTextFlags flags = ImGuiInputTextFlags_AllowTabInput;   
-    ImGui::InputTextMultiline("##source", &text, ImVec2(-FLT_MIN, ImGui::GetTextLineHeight() * 257), flags);
+
+    static ImGuiInputTextFlags flags = ImGuiInputTextFlags_AllowTabInput;
+    ImGui::InputTextMultiline("##source", &text, ImVec2(-FLT_MIN, ImGui::GetTextLineHeight() * 257),
+                              flags);
     currentlyEdit = ImGui::IsItemFocused();
-    
+
     ImGui::EndChild();
 
     ImGui::End();
@@ -324,29 +342,33 @@ void Gui::renderCodeEditor(std::string& text)
 
 void Gui::renderTelemetry(TelemetryData& telemetryData)
 {
-    if (!viewTelemetryOn) return;
+    if (!viewTelemetryOn)
+        return;
 
     ImGui::SetNextWindowSize(ImVec2(450, 150), ImGuiCond_Once);
     ImGui::SetNextWindowPos(ImVec2(1290, 30), ImGuiCond_Once);
 
     ImGui::Begin(i18n->t(telemetry_title));
-    
-    std::string ssAltitude = i18n->t(telemetry_altitude) + std::to_string(telemetryData.altitude) + " km";
+
+    std::string ssAltitude =
+        i18n->t(telemetry_altitude) + std::to_string(telemetryData.altitude) + " km";
     ImGui::Text("%s", ssAltitude.c_str());
 
     std::string ssMass = i18n->t(telemetry_mass) + std::to_string(telemetryData.mass) + "t";
     ImGui::Text("%s", ssMass.c_str());
 
-    std::string ssPressure = i18n->t(telemetry_atm_press) + std::to_string(telemetryData.atmPressure * 10);
+    std::string ssPressure =
+        i18n->t(telemetry_atm_press) + std::to_string(telemetryData.atmPressure * 10);
     ImGui::Text("%s", ssPressure.c_str());
 
-    std::string ssVelocity = i18n->t(telemetry_velocity) + std::to_string(telemetryData.velocity) + "km/s";
+    std::string ssVelocity =
+        i18n->t(telemetry_velocity) + std::to_string(telemetryData.velocity) + "km/s";
     ImGui::Text("%s", ssVelocity.c_str());
 
     std::string ssPosition = i18n->t(telemetry_position) +
-        std::to_string(telemetryData.position.x) + ", " +
-        std::to_string(telemetryData.position.y) + ", " +
-        std::to_string(telemetryData.position.z) + ")";
+                             std::to_string(telemetryData.position.x) + ", " +
+                             std::to_string(telemetryData.position.y) + ", " +
+                             std::to_string(telemetryData.position.z) + ")";
     ImGui::Text("%s", ssPosition.c_str());
 
     std::string ssApogeum = i18n->t(telemetry_apogee);
@@ -363,17 +385,17 @@ void Gui::renderTelemetry(TelemetryData& telemetryData)
 
     ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "%s", ssApogeum.c_str());
     ImGui::TextColored(ImVec4(1.0f, 0.0f, 1.0f, 1.0f), "%s", ssPerygeum.c_str());
-    
+
     ImGui::End();
 }
 
-void Gui::plotTelemetry(
-    std::vector<double> velocityHistory, double maxVelo,
-    std::vector<double> altitudeHistory, double maxAlt,
-    std::vector<double> atmPressureHistory, double maxAtm,
-    std::vector<double> accelerationHistory, double maxAcc, double minAcc)
+void Gui::plotTelemetry(std::vector<double> velocityHistory, double maxVelo,
+                        std::vector<double> altitudeHistory, double maxAlt,
+                        std::vector<double> atmPressureHistory, double maxAtm,
+                        std::vector<double> accelerationHistory, double maxAcc, double minAcc)
 {
-    if (!viewTelemetryPlot) return;
+    if (!viewTelemetryPlot)
+        return;
 
     ImGui::SetNextWindowSize(ImVec2(450, 510), ImGuiCond_Once);
     ImGui::SetNextWindowPos(ImVec2(1290, 190), ImGuiCond_Once);
@@ -393,11 +415,15 @@ void Gui::plotTelemetry(
         arrAtm[i] = (float)atmPressureHistory[i];
     }
 
-    ImGui::PlotHistogram(i18n->t(telemetry_plots_velocity), arrVelo, n, 0, NULL, 0.0f, (float)maxVelo, ImVec2(370, 110.0f));
-    ImGui::PlotHistogram(i18n->t(telemetry_plots_delta_v), arrAcc, n, 0, NULL, (float)minAcc, (float)maxAcc, ImVec2(370, 110.0f));
-    ImGui::PlotHistogram(i18n->t(telemetry_plots_altitude), arrAlt, n, 0, NULL, 0.0f, (float)maxAlt, ImVec2(370, 110.0f));
-    ImGui::PlotHistogram(i18n->t(telemetry_plots_atm_press), arrAtm, n, 0, NULL, 0.0f, (float)maxAtm, ImVec2(370, 110.0f));
-    
+    ImGui::PlotHistogram(i18n->t(telemetry_plots_velocity), arrVelo, n, 0, NULL, 0.0f,
+                         (float)maxVelo, ImVec2(370, 110.0f));
+    ImGui::PlotHistogram(i18n->t(telemetry_plots_delta_v), arrAcc, n, 0, NULL, (float)minAcc,
+                         (float)maxAcc, ImVec2(370, 110.0f));
+    ImGui::PlotHistogram(i18n->t(telemetry_plots_altitude), arrAlt, n, 0, NULL, 0.0f, (float)maxAlt,
+                         ImVec2(370, 110.0f));
+    ImGui::PlotHistogram(i18n->t(telemetry_plots_atm_press), arrAtm, n, 0, NULL, 0.0f,
+                         (float)maxAtm, ImVec2(370, 110.0f));
+
     delete[] arrVelo;
     delete[] arrAlt;
     delete[] arrAcc;
@@ -407,7 +433,7 @@ void Gui::plotTelemetry(
 }
 
 void Gui::renderPresentationModeInfo(double distance)
-{    
+{
     ImGui::SetNextWindowSize(ImVec2(450, 110), ImGuiCond_Once);
     ImGui::SetNextWindowPos(ImVec2(1250, 210), ImGuiCond_Once);
     ImGui::Begin(i18n->t(presentation_title));
@@ -416,7 +442,7 @@ void Gui::renderPresentationModeInfo(double distance)
     viewCommands = false;
     viewSourceCode = false;
     viewFileOpen = false;
-    
+
     ImGui::NewLine();
 
     std::string ssDistance = i18n->t(presentation_distance) + std::to_string(distance) + " km";
@@ -425,19 +451,19 @@ void Gui::renderPresentationModeInfo(double distance)
     ImGui::End();
 }
 
-void Gui::renderTranslationErrors(ofsim_python_integration::PythonError &error)
+void Gui::renderTranslationErrors(ofsim_python_integration::PythonError& error)
 {
     if (!error.active)
     {
         return;
     }
-        
+
     ImGui::SetNextWindowSize(ImVec2(580, 110), ImGuiCond_Once);
     ImGui::SetNextWindowPos(ImVec2(500, 200), ImGuiCond_Once);
 
     ImGui::Begin(i18n->t(translation_errors_title));
     ImGui::TextWrapped("%s", error.message.c_str());
-    
+
     ImGui::NewLine();
 
     if (ImGui::Button("OK", ImVec2(120, 0)))
@@ -454,12 +480,13 @@ void Gui::restoreWindows()
     viewTelemetryOn = true;
     viewTelemetryPlot = true;
     viewCommands = true;
-    viewSourceCode = true;    
+    viewSourceCode = true;
 }
 
 void Gui::renderCommandHistory(std::map<u64, RocketCommand>& commandHistory)
 {
-    if (!viewCommands) return;
+    if (!viewCommands)
+        return;
 
     ImGui::SetNextWindowSize(ImVec2(450, 210), ImGuiCond_Once);
     ImGui::SetNextWindowPos(ImVec2(1290, 710), ImGuiCond_Once);
@@ -467,45 +494,44 @@ void Gui::renderCommandHistory(std::map<u64, RocketCommand>& commandHistory)
     ImGui::Begin(i18n->t(commands_title));
 
     std::map<u64, RocketCommand>::reverse_iterator itr;
-    for (itr = commandHistory.rbegin(); itr != commandHistory.rend(); ++itr) 
+    for (itr = commandHistory.rbegin(); itr != commandHistory.rend(); ++itr)
     {
         u64 ctime = itr->first;
         u64 seconds = ctime / 1000;
         u64 millis = ctime % 1000;
 
         RocketCommand cmd = itr->second;
-        
+
         RocketCommandCode code = cmd.code();
         f64 value = cmd.value();
         std::string cmdTxt = "";
         switch (code)
         {
-            case RocketCommandCode::THRUST_MAGNITUDE_CHANGE:
-                cmdTxt = i18n->t(commands_thrust_change);
-                break;
-            case RocketCommandCode::THRUST_ROTATION_CHANGE_X:
-                cmdTxt = i18n->t(commands_thrust_direction_x);
-                break;
-            case RocketCommandCode::THRUST_ROTATION_CHANGE_Y:
-                cmdTxt = i18n->t(commands_thrust_direction_y);
-                break;
-            case RocketCommandCode::THRUST_ROTATION_CHANGE_Z:
-                cmdTxt = i18n->t(commands_thrust_direction_z);
-                break;
-            case RocketCommandCode::GYRO_ROTATION_CHANGE_X:
-                cmdTxt = i18n->t(commands_thrust_rotation_x);
-                break;
-            case RocketCommandCode::GYRO_ROTATION_CHANGE_Y:
-                cmdTxt = i18n->t(commands_thrust_rotation_y);
-                break;
-            case RocketCommandCode::GYRO_ROTATION_CHANGE_Z:
-                cmdTxt = i18n->t(commands_thrust_rotation_z);
-                break;
+        case RocketCommandCode::THRUST_MAGNITUDE_CHANGE:
+            cmdTxt = i18n->t(commands_thrust_change);
+            break;
+        case RocketCommandCode::THRUST_ROTATION_CHANGE_X:
+            cmdTxt = i18n->t(commands_thrust_direction_x);
+            break;
+        case RocketCommandCode::THRUST_ROTATION_CHANGE_Y:
+            cmdTxt = i18n->t(commands_thrust_direction_y);
+            break;
+        case RocketCommandCode::THRUST_ROTATION_CHANGE_Z:
+            cmdTxt = i18n->t(commands_thrust_direction_z);
+            break;
+        case RocketCommandCode::GYRO_ROTATION_CHANGE_X:
+            cmdTxt = i18n->t(commands_thrust_rotation_x);
+            break;
+        case RocketCommandCode::GYRO_ROTATION_CHANGE_Y:
+            cmdTxt = i18n->t(commands_thrust_rotation_y);
+            break;
+        case RocketCommandCode::GYRO_ROTATION_CHANGE_Z:
+            cmdTxt = i18n->t(commands_thrust_rotation_z);
+            break;
         }
 
-        std::string message = std::to_string(seconds) + "." + std::to_string(millis) + "s: "
-            + cmdTxt + " "
-            + std::to_string(value);
+        std::string message = std::to_string(seconds) + "." + std::to_string(millis) +
+                              "s: " + cmdTxt + " " + std::to_string(value);
 
         ImGui::Text("%s", message.c_str());
     }
@@ -520,65 +546,65 @@ void Gui::renderDiagnostics(const DiagnosticsData& diagnostics)
 
     ImGui::Begin("Simulation diagnostics: ");
 
-    std::string positionTxt = "Rocket's position (x, y, z): \n"
-        + std::to_string(diagnostics.rocketPosition.x) + ", \n"
-        + std::to_string(diagnostics.rocketPosition.y) + ", \n"
-        + std::to_string(diagnostics.rocketPosition.z) + ", \n";
+    std::string positionTxt = "Rocket's position (x, y, z): \n" +
+                              std::to_string(diagnostics.rocketPosition.x) + ", \n" +
+                              std::to_string(diagnostics.rocketPosition.y) + ", \n" +
+                              std::to_string(diagnostics.rocketPosition.z) + ", \n";
     ImGui::Text("%s", positionTxt.c_str());
 
-    std::string rotationTxt = "Rocket's rotation (x, y, z): \n"
-        + std::to_string(diagnostics.rocketRotation.x) + ", \n"
-        + std::to_string(diagnostics.rocketRotation.y) + ", \n"
-        + std::to_string(diagnostics.rocketRotation.z);
+    std::string rotationTxt = "Rocket's rotation (x, y, z): \n" +
+                              std::to_string(diagnostics.rocketRotation.x) + ", \n" +
+                              std::to_string(diagnostics.rocketRotation.y) + ", \n" +
+                              std::to_string(diagnostics.rocketRotation.z);
     ImGui::Text("%s", rotationTxt.c_str());
 
-    std::string anglesTxt = "Angles (dTheta, dPhi): \n"
-        + std::to_string(diagnostics.dTheta) + ", \n"
-        + std::to_string(diagnostics.dPhi) + ", \n";
+    std::string anglesTxt = "Angles (dTheta, dPhi): \n" + std::to_string(diagnostics.dTheta) +
+                            ", \n" + std::to_string(diagnostics.dPhi) + ", \n";
     ImGui::Text("%s", anglesTxt.c_str());
 
-    std::string thrustTxt = "Rocket's thrust vector direction (x, y, z): \n"
-        + std::to_string(diagnostics.thrustVectorDirection.x) + ", \n"
-        + std::to_string(diagnostics.thrustVectorDirection.y) + ", \n"
-        + std::to_string(diagnostics.thrustVectorDirection.z);
+    std::string thrustTxt = "Rocket's thrust vector direction (x, y, z): \n" +
+                            std::to_string(diagnostics.thrustVectorDirection.x) + ", \n" +
+                            std::to_string(diagnostics.thrustVectorDirection.y) + ", \n" +
+                            std::to_string(diagnostics.thrustVectorDirection.z);
     ImGui::Text("%s", thrustTxt.c_str());
 
-    std::string cameraTxt = "Camera's position (x, y, x): \n"
-            + std::to_string(diagnostics.cameraPosition.x) + ", \n"
-            + std::to_string(diagnostics.cameraPosition.y) + ", \n"
-            + std::to_string(diagnostics.cameraPosition.z);
+    std::string cameraTxt = "Camera's position (x, y, x): \n" +
+                            std::to_string(diagnostics.cameraPosition.x) + ", \n" +
+                            std::to_string(diagnostics.cameraPosition.y) + ", \n" +
+                            std::to_string(diagnostics.cameraPosition.z);
     ImGui::Text("%s", cameraTxt.c_str());
 
     ImGui::End();
 }
 
-void ofsim_gui::Gui::renderManualControlData(const ofsim_simulation::ManualControlData& manualControl)
+void ofsim_gui::Gui::renderManualControlData(
+    const ofsim_simulation::ManualControlData& manualControl)
 {
     ImGui::SetNextWindowSize(ImVec2(450, 780), ImGuiCond_Once);
     ImGui::SetNextWindowPos(ImVec2(60, 140), ImGuiCond_Once);
 
     ImGui::Begin("Manual mode: ");
 
-    std::string rotationTxt = "Rocket's rotation (x, y, z): \n"
-        + std::to_string(manualControl.rocketRotation.x) + ", \n"
-        + std::to_string(manualControl.rocketRotation.y) + ", \n"
-        + std::to_string(manualControl.rocketRotation.z);
+    std::string rotationTxt = "Rocket's rotation (x, y, z): \n" +
+                              std::to_string(manualControl.rocketRotation.x) + ", \n" +
+                              std::to_string(manualControl.rocketRotation.y) + ", \n" +
+                              std::to_string(manualControl.rocketRotation.z);
     ImGui::Text("%s", rotationTxt.c_str());
 
-    std::string velocityTxt = "Rocket's velocity (x, y, z): \n"
-        + std::to_string(manualControl.velocityVector.x) + ", \n"
-        + std::to_string(manualControl.velocityVector.y) + ", \n"
-        + std::to_string(manualControl.velocityVector.z);
+    std::string velocityTxt = "Rocket's velocity (x, y, z): \n" +
+                              std::to_string(manualControl.velocityVector.x) + ", \n" +
+                              std::to_string(manualControl.velocityVector.y) + ", \n" +
+                              std::to_string(manualControl.velocityVector.z);
     ImGui::Text("%s", velocityTxt.c_str());
 
-    std::string thrustTxt = "Rocket's thrust (x, y, z): \n"
-        + std::to_string(manualControl.thrustVector.x) + ", \n"
-        + std::to_string(manualControl.thrustVector.y) + ", \n"
-        + std::to_string(manualControl.thrustVector.z);
+    std::string thrustTxt = "Rocket's thrust (x, y, z): \n" +
+                            std::to_string(manualControl.thrustVector.x) + ", \n" +
+                            std::to_string(manualControl.thrustVector.y) + ", \n" +
+                            std::to_string(manualControl.thrustVector.z);
     ImGui::Text("%s", thrustTxt.c_str());
 
-    std::string thrustMagTxt = "Rocket's thrust vector magnitude: \n"
-        + std::to_string(manualControl.thrustVectorMagnitude);
+    std::string thrustMagTxt = "Rocket's thrust vector magnitude: \n" +
+                               std::to_string(manualControl.thrustVectorMagnitude);
     ImGui::Text("%s", thrustMagTxt.c_str());
 
     ImGui::End();
@@ -605,16 +631,21 @@ void Gui::endRendering()
 }
 
 void Gui::loadTextures()
-{    
-    bool ret = ofsim_infrastructure::ImageLoader::loadTextureFromFile("assets/textures/play.png", &play_texture, &out_width, &out_height);
+{
+    bool ret = ofsim_infrastructure::ImageLoader::loadTextureFromFile(
+        "assets/textures/play.png", &play_texture, &out_width, &out_height);
     IM_ASSERT(ret);
-    ret = ofsim_infrastructure::ImageLoader::loadTextureFromFile("assets/textures/stop.png", &stop_texture, &out_width, &out_height);
+    ret = ofsim_infrastructure::ImageLoader::loadTextureFromFile(
+        "assets/textures/stop.png", &stop_texture, &out_width, &out_height);
     IM_ASSERT(ret);
-    ret = ofsim_infrastructure::ImageLoader::loadTextureFromFile("assets/textures/pause.png", &pause_texture, &out_width, &out_height);
+    ret = ofsim_infrastructure::ImageLoader::loadTextureFromFile(
+        "assets/textures/pause.png", &pause_texture, &out_width, &out_height);
     IM_ASSERT(ret);
-    ret = ofsim_infrastructure::ImageLoader::loadTextureFromFile("assets/textures/fwd.png", &fwd_texture, &out_width, &out_height);
+    ret = ofsim_infrastructure::ImageLoader::loadTextureFromFile(
+        "assets/textures/fwd.png", &fwd_texture, &out_width, &out_height);
     IM_ASSERT(ret);
-    ret = ofsim_infrastructure::ImageLoader::loadTextureFromFile("assets/textures/splash.jpg", &splashTexture, &out_width, &out_height);
+    ret = ofsim_infrastructure::ImageLoader::loadTextureFromFile(
+        "assets/textures/splash.jpg", &splashTexture, &out_width, &out_height);
     IM_ASSERT(ret);
 
     pp_texture = play_texture;
@@ -629,7 +660,7 @@ void Gui::cleanUp()
 
 int Gui::getTimeFactor()
 {
-    if (timeFactor == -1) 
+    if (timeFactor == -1)
     {
         timeFactor = 0;
         return -1;

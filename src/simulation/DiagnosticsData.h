@@ -3,15 +3,15 @@
 #include "../math/MathTypes.h"
 
 namespace ofsim_simulation
-{  
-    struct DiagnosticsData
-    {
-        dvec3 rocketRotation, rocketPosition;
+{
+struct DiagnosticsData
+{
+    dvec3 rocketRotation, rocketPosition;
 
-        dvec3 cameraPosition;
+    dvec3 cameraPosition;
 
-        dvec3 thrustVectorDirection;
+    dvec3 thrustVectorDirection;
 
-        f64 dTheta, dPhi;
-    };
-}
+    f64 dTheta, dPhi;
+};
+} // namespace ofsim_simulation

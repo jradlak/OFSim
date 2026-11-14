@@ -8,35 +8,30 @@
 
 namespace ofsim_world
 {
-    enum class GroundObjectType
-    {
-        LAUNCHPAD,
-        PLATFORM        
-    };
+enum class GroundObjectType
+{
+    LAUNCHPAD,
+    PLATFORM
+};
 
-    struct GroundObject
-    {
-        GroundObject(
-            std::string shaderName,
-            std::string modelName,
-            glm::dvec3 _position,
-            double _size,
-            GroundObjectType type = GroundObjectType::LAUNCHPAD);
+struct GroundObject
+{
+    GroundObject(std::string shaderName, std::string modelName, glm::dvec3 _position, double _size,
+                 GroundObjectType type = GroundObjectType::LAUNCHPAD);
 
-        void render(glm::dmat4 projection, glm::dmat4 view, glm::dvec3 _lightPos);
+    void render(glm::dmat4 projection, glm::dmat4 view, glm::dvec3 _lightPos);
 
-        void updateColor(float _r, float _g, float _b);
+    void updateColor(float _r, float _g, float _b);
 
-        glm::dvec3 position;
-        glm::dvec3 rotation;
+    glm::dvec3 position;
+    glm::dvec3 rotation;
 
-    private:
-        std::unique_ptr<ofsim_renderer::ModelRenderer> modelRenderer;
+private:
+    std::unique_ptr<ofsim_renderer::ModelRenderer> modelRenderer;
 
-        //model color;
-        float r, g, b;
+    // model color;
+    float r, g, b;
 
-
-        double size;
-    };
-}
+    double size;
+};
+} // namespace ofsim_world

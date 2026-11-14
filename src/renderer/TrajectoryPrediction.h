@@ -10,24 +10,24 @@
 class TrajectoryPrediction
 {
 public:
-    TrajectoryPrediction() { renderer = std::make_unique<ObjectRenderer>("ball_shader"); }
+    TrajectoryPrediction()
+    {
+        renderer = std::make_unique<ObjectRenderer>("ball_shader");
+    }
 
-	void initWithPositions(
-		std::vector<double> px,
-		std::vector<double> py,
-		std::vector<double> pz,
-        std::vector<ofsim_simulation::TelemetryData> telemetryHistory);
+    void initWithPositions(std::vector<double> px, std::vector<double> py, std::vector<double> pz,
+                           std::vector<ofsim_simulation::TelemetryData> telemetryHistory);
 
-	void render(glm::dmat4 projection, glm::dmat4 view, const glm::dvec3 lightPos);
-	
-	~TrajectoryPrediction() {}
+    void render(glm::dmat4 projection, glm::dmat4 view, const glm::dvec3 lightPos);
+
+    ~TrajectoryPrediction() {}
 
 private:
-	std::vector<std::unique_ptr<ofsim_math_and_physics::Sphere>> spheresHistory;
-	std::vector<std::unique_ptr<ofsim_math_and_physics::Sphere>> spheresPrediction;
-	
-	std::unique_ptr<ObjectRenderer> renderer;
+    std::vector<std::unique_ptr<ofsim_math_and_physics::Sphere>> spheresHistory;
+    std::vector<std::unique_ptr<ofsim_math_and_physics::Sphere>> spheresPrediction;
 
-	void renderHistory(glm::dmat4 projection, glm::dmat4 view, const glm::dvec3 lightPos);
-	void renderPrediction(glm::dmat4 projection, glm::dmat4 view, const glm::dvec3 lightPos);
+    std::unique_ptr<ObjectRenderer> renderer;
+
+    void renderHistory(glm::dmat4 projection, glm::dmat4 view, const glm::dvec3 lightPos);
+    void renderPrediction(glm::dmat4 projection, glm::dmat4 view, const glm::dvec3 lightPos);
 };

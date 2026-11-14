@@ -5,112 +5,116 @@
 
 namespace ofsim_gui
 {
-	enum Language {
-		PL,
-		EN
-	};
+enum Language
+{
+    PL,
+    EN
+};
 
-	enum Label {
-		menu_new,
-		menu_open,
-		menu_save,
-		menu_save_as,
-		menu_close,
-		menu_view,
-		menu_telemetry_data,
-		menu_telemetry_plots,
-		menu_command_history,
-		menu_program_source_code,
-		menu_help,
-		menu_manual,
-		menu_about,
+enum Label
+{
+    menu_new,
+    menu_open,
+    menu_save,
+    menu_save_as,
+    menu_close,
+    menu_view,
+    menu_telemetry_data,
+    menu_telemetry_plots,
+    menu_command_history,
+    menu_program_source_code,
+    menu_help,
+    menu_manual,
+    menu_about,
 
-		splash_title,
-		splash_info,
-		splash_version,
-		splash_author,
+    splash_title,
+    splash_info,
+    splash_version,
+    splash_author,
 
-		help_title,
+    help_title,
 
-		dialog_title,
-		dialog_directory,
-		dialog_load,
-		dialog_file_list,
-		dialog_load_file_directory,
-		dialog_load_file,
-		dialog_load_directory,
-		dialog_save_file,
-		dialog_cancel,
+    dialog_title,
+    dialog_directory,
+    dialog_load,
+    dialog_file_list,
+    dialog_load_file_directory,
+    dialog_load_file,
+    dialog_load_directory,
+    dialog_save_file,
+    dialog_cancel,
 
-		dialog_save_title,
-		dialog_save_file_name,
+    dialog_save_title,
+    dialog_save_file_name,
 
-		sim_panel_title,
-		sim_panel_clock,
-		sim_panel_time_compression,
-		sim_panel_stopping,
+    sim_panel_title,
+    sim_panel_clock,
+    sim_panel_time_compression,
+    sim_panel_stopping,
 
-		code_editor_title,
+    code_editor_title,
 
-		telemetry_title,
-		telemetry_altitude,
-		telemetry_mass,
-		telemetry_atm_press,
-		telemetry_velocity,
-		telemetry_position,
-		telemetry_perigee,
-		telemetry_apogee,
+    telemetry_title,
+    telemetry_altitude,
+    telemetry_mass,
+    telemetry_atm_press,
+    telemetry_velocity,
+    telemetry_position,
+    telemetry_perigee,
+    telemetry_apogee,
 
-		telemetry_plots_title,
-		telemetry_plots_velocity,
-		telemetry_plots_delta_v,
-		telemetry_plots_altitude,
-		telemetry_plots_atm_press,
+    telemetry_plots_title,
+    telemetry_plots_velocity,
+    telemetry_plots_delta_v,
+    telemetry_plots_altitude,
+    telemetry_plots_atm_press,
 
-		presentation_title,
-		presentation_distance,
+    presentation_title,
+    presentation_distance,
 
-		commands_title,
-		commands_thrust_change,
-		commands_thrust_direction_x,
-		commands_thrust_direction_y,
-		commands_thrust_direction_z,
-		commands_thrust_rotation_x,
-		commands_thrust_rotation_y,
-		commands_thrust_rotation_z,
+    commands_title,
+    commands_thrust_change,
+    commands_thrust_direction_x,
+    commands_thrust_direction_y,
+    commands_thrust_direction_z,
+    commands_thrust_rotation_x,
+    commands_thrust_rotation_y,
+    commands_thrust_rotation_z,
 
-		translation_errors_title,
-		translate_error,
+    translation_errors_title,
+    translate_error,
 
-		camera_autorotation
-	};
+    camera_autorotation
+};
 
-	class I18n
-	{
-	public:
-		
-		static I18n* getInstance();
+class I18n
+{
+public:
+    static I18n* getInstance();
 
-		const char* t(Label label);
-		const char* translate(Label label, Language lang);
-		void switchLanguage(Language newLanguage) { currentLanguage = newLanguage; }
+    const char* t(Label label);
+    const char* translate(Label label, Language lang);
+    void switchLanguage(Language newLanguage)
+    {
+        currentLanguage = newLanguage;
+    }
 
-		Language currentLanguage;
+    Language currentLanguage;
 
-		~I18n() {}
+    ~I18n() {}
 
-	private:
-		I18n() : currentLanguage(PL)
-		{
-			initLabels();		
-		}
+private:
+    I18n() : currentLanguage(PL)
+    {
+        initLabels();
+    }
 
-		I18n(const I18n&) = delete;
-		I18n& operator=(const I18n&) = delete;
+    I18n(const I18n&) = delete;
+    I18n& operator=(const I18n&) = delete;
 
-		std::map<Label, std::string> plLabels;
-		std::map<Label, std::string> enLabels;
-	
-		void initLabels();
-	};
-}
+    std::map<Label, std::string> plLabels;
+    std::map<Label, std::string> enLabels;
+
+    void initLabels();
+};
+} // namespace ofsim_gui

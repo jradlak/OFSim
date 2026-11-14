@@ -7,30 +7,30 @@
 
 namespace ofsim_gui
 {
-    enum class DialogMode
-    {
-        FILE_OPEN,
-        FILE_SAVE
-    };
+enum class DialogMode
+{
+    FILE_OPEN,
+    FILE_SAVE
+};
 
-    class FileDialog
-    {
-    public:
-        FileDialog(DialogMode mode);
+class FileDialog
+{
+public:
+    FileDialog(DialogMode mode);
 
-        void renderFileDialog();
+    void renderFileDialog();
 
-        bool viewFileOpen { false };
+    bool viewFileOpen{false};
 
-    private:
-        std::string selectedFileToSave { "" };
-        std::string directory { "" };            
-        std::vector<ofsim_infrastructure::FileDescriptor> filesInDirectory;
-        ofsim_infrastructure::FileDescriptor selectedItem;
-		DialogMode mode;
+private:
+    std::string selectedFileToSave{""};
+    std::string directory{""};
+    std::vector<ofsim_infrastructure::FileDescriptor> filesInDirectory;
+    ofsim_infrastructure::FileDescriptor selectedItem;
+    DialogMode mode;
 
-        I18n* i18n;
+    I18n* i18n;
 
-        void loadFilesInDirectory(std::string &directory);	
-    };
-}
+    void loadFilesInDirectory(std::string& directory);
+};
+} // namespace ofsim_gui

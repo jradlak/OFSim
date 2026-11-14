@@ -2,11 +2,14 @@
 
 using namespace ofsim_world;
 
-CloudsAndTrees::CloudsAndTrees(const i32 _numberOfClouds, CelestialBody& _earth, f64 _angle, f64 _dangle)
+CloudsAndTrees::CloudsAndTrees(const i32 _numberOfClouds, CelestialBody& _earth, f64 _angle,
+                               f64 _dangle)
     : numberOfClouds(_numberOfClouds), earth(_earth), angle(_angle), dangle(_dangle)
 {
-    cloudRenderer = std::make_unique<ofsim_renderer::ModelRenderer>("model3d_shader", "assets/models/Cloud.obj");
-    treeRenderer = std::make_unique<ofsim_renderer::ModelRenderer>("model3d_shader", "assets/models/Tree.obj");
+    cloudRenderer = std::make_unique<ofsim_renderer::ModelRenderer>("model3d_shader",
+                                                                    "assets/models/Cloud.obj");
+    treeRenderer =
+        std::make_unique<ofsim_renderer::ModelRenderer>("model3d_shader", "assets/models/Tree.obj");
 
     calculatePositionsAndSizes();
 }
@@ -25,10 +28,12 @@ void CloudsAndTrees::render(dmat4 projection, dmat4 view, const dvec3 lightPos)
     treeShader->setVec3("lightColor", 1.0f, 1.0f, 1.0f);
     treeShader->setVec3("lightPos", lightPos);
 
-    for (int i = 0; i < numberOfClouds; i++) 
-    {                
-        cloudRenderer->renderWithRotation(projection, view, dvec3(cloudsSizes[i]), cloudsPositions[i], initialRotation);
-        treeRenderer->renderWithRotation(projection, view, dvec3(0.00007), treesPositions[i], initialRotation);
+    for (int i = 0; i < numberOfClouds; i++)
+    {
+        cloudRenderer->renderWithRotation(projection, view, dvec3(cloudsSizes[i]),
+                                          cloudsPositions[i], initialRotation);
+        treeRenderer->renderWithRotation(projection, view, dvec3(0.00007), treesPositions[i],
+                                         initialRotation);
     }
 }
 
@@ -39,9 +44,11 @@ void CloudsAndTrees::calculatePositionsAndSizes()
         f32 rangle = (rand() % 46 + 4) / 30.0;
         f32 rdangle = (rand() % 46 + 4) / 30.0;
         i32 min1 = rand() % 2;
-        if (min1 == 0) rangle *= -1;
+        if (min1 == 0)
+            rangle *= -1;
         i32 min2 = rand() % 2;
-        if (min2 == 0) rdangle *= -1;
+        if (min2 == 0)
+            rdangle *= -1;
 
         dvec3 cloudPoint = earth.pointAboveTheSurface(angle, dangle, 6371 + 0.1);
 

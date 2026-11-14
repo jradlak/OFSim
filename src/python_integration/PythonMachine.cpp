@@ -4,11 +4,12 @@
 
 #include <stdexcept>
 
-PyObject *ofsim_python_integration::PythonMachine::orbital_thrust_magnitude_change(PyObject *self, PyObject *args)
+PyObject* ofsim_python_integration::PythonMachine::orbital_thrust_magnitude_change(PyObject* self,
+                                                                                   PyObject* args)
 {
-    PyObject *a;
+    PyObject* a;
     if (PyArg_UnpackTuple(args, "", 1, 1, &a))
-    {        
+    {
         double thrust = PyFloat_AsDouble(a);
         ofsim_events::EventProcessor::getInstance()->setThrustMagnitude(thrust);
         std::cout << "orbital_thrust_change: " << thrust << std::endl;
@@ -17,11 +18,12 @@ PyObject *ofsim_python_integration::PythonMachine::orbital_thrust_magnitude_chan
     return PyLong_FromLong(0);
 }
 
-PyObject *ofsim_python_integration::PythonMachine::orbital_rocket_rotation_change(PyObject *self, PyObject *args)
+PyObject* ofsim_python_integration::PythonMachine::orbital_rocket_rotation_change(PyObject* self,
+                                                                                  PyObject* args)
 {
     PyObject* listObj;
 
-    if (!PyArg_ParseTuple( args, "O", &listObj))
+    if (!PyArg_ParseTuple(args, "O", &listObj))
     {
         return NULL;
     }
@@ -33,19 +35,19 @@ PyObject *ofsim_python_integration::PythonMachine::orbital_rocket_rotation_chang
     PyObject* valueZ = PyList_GetItem(listObj, 2);
     double z = PyFloat_AsDouble(valueZ);
 
-    dvec3 deltaRotation {x, y, z};
+    dvec3 deltaRotation{x, y, z};
     ofsim_events::EventProcessor::getInstance()->changeThrustRotatation(deltaRotation);
 
-    //Py_DecRef(listObj);
+    // Py_DecRef(listObj);
 
     return PyLong_FromLong(0);
 }
 
-PyObject *ofsim_python_integration::PythonMachine::get_orbital_data(PyObject *self, PyObject *argsB)
+PyObject* ofsim_python_integration::PythonMachine::get_orbital_data(PyObject* self, PyObject* argsB)
 {
     PyObject* rocket_data = PyDict_New();
-    
-    dvec3 position = ofsim_events::EventProcessor::getInstance()->getRocketPosition();    
+
+    dvec3 position = ofsim_events::EventProcessor::getInstance()->getRocketPosition();
     PyDict_SetItemString(rocket_data, "positionX", PyFloat_FromDouble(position.x));
     PyDict_SetItemString(rocket_data, "positionY", PyFloat_FromDouble(position.y));
     PyDict_SetItemString(rocket_data, "positionZ", PyFloat_FromDouble(position.z));
@@ -71,7 +73,7 @@ PyObject *ofsim_python_integration::PythonMachine::get_orbital_data(PyObject *se
 
     bool isTerminated = ofsim_events::EventProcessor::getInstance()->isPythonMachineTerminated();
     PyDict_SetItemString(rocket_data, "shouldStop", PyBool_FromLong(isTerminated));
-    
+
     return rocket_data;
 }
 
@@ -79,19 +81,21 @@ void ofsim_python_integration::PythonMachine::runPythonOrbitalProgram(std::strin
 {
     // Register once; the interpreter is initialized/finalized for each run.
     static const int registered = PyImport_AppendInittab("orbital_fs", &PyInit_orbital_fs);
-    if (registered != 0) throw std::runtime_error("Unable to register orbital_fs");
+    if (registered != 0)
+        throw std::runtime_error("Unable to register orbital_fs");
     CPyInstance hInstance;
 
     PyObject* globals = PyDict_New();
-    if (globals == nullptr) throw std::runtime_error("Unable to create Python globals");
+    if (globals == nullptr)
+        throw std::runtime_error("Unable to create Python globals");
     PyObject* result = PyRun_String(sourceCode.c_str(), Py_file_input, globals, globals);
     Py_DECREF(globals);
     if (result == NULL)
     {
         PyObject *type, *value, *traceback;
         PyErr_Fetch(&type, &value, &traceback);
-        
-        PyObject *str_exc = value ? PyObject_Str(value) : nullptr;
+
+        PyObject* str_exc = value ? PyObject_Str(value) : nullptr;
         const char* text = str_exc ? PyUnicode_AsUTF8(str_exc) : nullptr;
         std::string error_message = text ? text : "Unknown Python script error";
 

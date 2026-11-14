@@ -5,7 +5,7 @@
 
 namespace vm_tests
 {
-	using namespace ofsim_vm;
+using namespace ofsim_vm;
 
 std::string hello_world_vm = R"(
 ; store address of data in register (Hello world literal)
@@ -38,19 +38,19 @@ jmp print_loop
 data:
   db Hello world)";
 
-	TEST(VMachineTests, simpleRun)
-	{
-		// Arrange	
-		ofsim_events::EventProcessor* eventProcessor = ofsim_events::EventProcessor::getInstance();
-		VMachine vm(*eventProcessor);
-		vm.translateSourceCode(hello_world_vm);
-		
-		// Act
-		vm.start();
-		
-		// Assert
-		EXPECT_EQ(vm.getMemory()->fetchByte(255), 0);
-		EXPECT_EQ(vm.getMemory()->fetchByte(256), 72);
-		EXPECT_EQ(vm.getMemory()->fetchByte(257), 101);
-	}		
+TEST(VMachineTests, simpleRun)
+{
+    // Arrange
+    ofsim_events::EventProcessor* eventProcessor = ofsim_events::EventProcessor::getInstance();
+    VMachine vm(*eventProcessor);
+    vm.translateSourceCode(hello_world_vm);
+
+    // Act
+    vm.start();
+
+    // Assert
+    EXPECT_EQ(vm.getMemory()->fetchByte(255), 0);
+    EXPECT_EQ(vm.getMemory()->fetchByte(256), 72);
+    EXPECT_EQ(vm.getMemory()->fetchByte(257), 101);
 }
+} // namespace vm_tests

@@ -15,12 +15,21 @@ class Window
 public:
     Window(Camera& _camera, const u32 _width, const u32 _height);
 
-    int initialize();    
-    
-    bool shouldClose() { return glfwWindowShouldClose(mainWindow); }
-    void swapBuffers() { glfwSwapBuffers(mainWindow); }
+    int initialize();
 
-    GLFWwindow* getWindow() { return mainWindow; }
+    bool shouldClose()
+    {
+        return glfwWindowShouldClose(mainWindow);
+    }
+    void swapBuffers()
+    {
+        glfwSwapBuffers(mainWindow);
+    }
+
+    GLFWwindow* getWindow()
+    {
+        return mainWindow;
+    }
 
     ~Window();
 
@@ -40,8 +49,8 @@ private:
     ofsim_gui::I18n* i18n;
 
     static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-    
-    static void mouse_callback(GLFWwindow* window, double xpos, double ypos);       
+
+    static void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 
     static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 };

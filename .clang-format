@@ -9,6 +9,7 @@ AccessModifierOffset: -4
 NamespaceIndentation: None
 ColumnLimit: 100
 BreakBeforeBraces: Allman
+SortIncludes: Never
 
 DerivePointerAlignment: false
 PointerAlignment: Left

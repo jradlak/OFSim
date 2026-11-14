@@ -17,22 +17,23 @@
 class SkyBoxRenderer
 {
 public:
-    SkyBoxRenderer() { skyboxShader = std::make_unique<Shader>("shaders/skybox_vs.glsl", "shaders/skybox_fs.glsl"); }
+    SkyBoxRenderer()
+    {
+        skyboxShader = std::make_unique<Shader>("shaders/skybox_vs.glsl", "shaders/skybox_fs.glsl");
+    }
 
-	void init();
+    void init();
 
-	void render(glm::dmat4& projection,
-		glm::dmat4& view,
-		ofsim_renderer::Camera* camera);
+    void render(glm::dmat4& projection, glm::dmat4& view, ofsim_renderer::Camera* camera);
 
-	~SkyBoxRenderer();
+    ~SkyBoxRenderer();
 
 private:
     std::unique_ptr<Shader> skyboxShader;
-	unsigned int skyboxVAO, skyboxVBO;
-	unsigned int cubemapTexture;
-	
-	std::vector<std::string> faces;
-	
-	unsigned int loadCubemap();
+    unsigned int skyboxVAO, skyboxVBO;
+    unsigned int cubemapTexture;
+
+    std::vector<std::string> faces;
+
+    unsigned int loadCubemap();
 };
