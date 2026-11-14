@@ -1,6 +1,9 @@
 # OFSim
 Orbital Flight Simulator
 
+See the [project status and development roadmap](doc/PROJECT_STATUS.md) for completed
+work, remaining technical issues and recommended next steps.
+
 **=====Introduction:=====**
 
 The idea of the program is to simulate ballistic flights (including orbital) of a rocket in the gravitational field of a planet with parameters similar to Earth. 

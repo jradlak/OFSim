@@ -55,6 +55,8 @@ rg --files -0 src tests -g '*.cpp' -g '*.h' -g '*.hpp' \
 - Keep one `Unreleased` section, grouped into `Added`, `Changed`, `Fixed` and
   `Removed` as applicable. Omit empty categories and list versions newest first.
   Preserve historical entries and do not invent release dates or version numbers.
+- Update `doc/PROJECT_STATUS.md` when work changes a tracked status. Mark milestones
+  complete only after their completion criteria have been verified.
 - Summarize the result, checks performed and any remaining limitations.
 - After changing code, configuration or documentation, end the response with
   a suggested short, single-line commit message in English. Match the repository
