@@ -5,6 +5,8 @@ are grouped under `Unreleased`. Release dates were not recorded for historical v
 
 ## Unreleased
 
+## 0.27.6 - 2026-11-14
+
 ### Added
 
 - Concise project status report tracking completed work, open review findings and next steps.
@@ -23,6 +25,7 @@ are grouped under `Unreleased`. Release dates were not recorded for historical v
 
 - Unified asynchronous stopping for reset, control-mode changes and shutdown. Reset now waits
   for flight programs to finish while the interface remains responsive.
+  Python programs must still cooperate with stop requests; forced termination is not yet supported.
 
 ### Removed
 
