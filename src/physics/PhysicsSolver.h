@@ -83,7 +83,7 @@ struct PhysicsSolver
         return altitude > max_altitude ? 0.0 : atmosphereDragForceMagnitude;
     }
 
-    f64 altitude;
+    f64 altitude{0.0};
     dvec3 thrustVector;
     f64 thrustMagnitude;
     dvec3 deltaP; // delta position

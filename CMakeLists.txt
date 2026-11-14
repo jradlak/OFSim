@@ -213,7 +213,8 @@ add_executable(
     "tests/MemoryTests.cpp"
     "tests/TranslatorTests.cpp"
     "tests/VMTests.cpp"
-    "tests/ProgramRunnerTests.cpp")
+    "tests/ProgramRunnerTests.cpp"
+    "tests/EventProcessorTests.cpp")
 
 target_link_libraries(
     ofsim_tests

@@ -371,30 +371,31 @@ void Instructions::cmd(unsigned char* args)
     double value = registers.fl(r_src_addr);
 
     RocketCommand cmd((RocketCommandCode)cmd_code, value);
-    eventProcessor.processVMCommand(cmd);
+    eventProcessor.processVMCommand(runId, cmd);
 }
 
 void ofsim_vm::Instructions::ftc(unsigned char* args)
 {
-    dvec3 rotation = eventProcessor.getRocketRotation();
+    const auto data = eventProcessor.getTelemetry();
+    dvec3 rotation = data.rotation;
     double rotation_x = rotation.x;
     double rotation_y = rotation.y;
     double rotation_z = rotation.z;
 
-    dvec3 position = eventProcessor.getRocketPosition();
+    dvec3 position = data.position;
     double position_x = position.x;
     double position_y = position.y;
     double position_z = position.z;
 
-    dvec3 velocity = eventProcessor.getRocketVelocity();
+    dvec3 velocity = data.velocity;
     double velocity_x = velocity.x;
     double velocity_y = velocity.y;
     double velocity_z = velocity.z;
 
-    double mass = eventProcessor.getRocketMass();
-    double thrust_magnitude = eventProcessor.getThrustMagnitude();
-    double altitude = eventProcessor.getAltitude();
-    double runningTime = eventProcessor.getRunningTime();
+    double mass = data.mass;
+    double thrust_magnitude = data.thrustMagnitude;
+    double altitude = data.altitude;
+    double runningTime = data.runningTime;
 
     memory.storeDWord(65528, rotation_x);
     memory.storeDWord(65520, rotation_y);

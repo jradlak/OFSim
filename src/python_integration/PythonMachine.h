@@ -4,6 +4,8 @@
 #include <string>
 #include <iostream>
 
+#include "../math/MathTypes.h"
+
 namespace ofsim_python_integration
 {
 struct CPyInstance
@@ -27,7 +29,7 @@ struct PythonMachine
 
     static PyObject* get_orbital_data(PyObject* self, PyObject* args);
 
-    void runPythonOrbitalProgram(std::string sourceCode);
+    void runPythonOrbitalProgram(std::string sourceCode, u64 runId = 0);
 
     void terminateProgram();
 };
@@ -42,7 +44,7 @@ static struct PyMethodDef methods[] = {
     {NULL, NULL, 0, NULL}};
 
 static struct PyModuleDef modOrbitalFsDef = {
-    PyModuleDef_HEAD_INIT, "orbital_fs", NULL, -1, methods, NULL, NULL, NULL, NULL};
+    PyModuleDef_HEAD_INIT, "orbital_fs", NULL, sizeof(u64), methods, NULL, NULL, NULL, NULL};
 
 static PyObject* PyInit_orbital_fs(void)
 {

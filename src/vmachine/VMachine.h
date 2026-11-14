@@ -20,7 +20,7 @@ namespace ofsim_vm
 class VMachine
 {
 public:
-    VMachine(ofsim_events::EventProcessor& _eventProcessor);
+    VMachine(ofsim_events::EventProcessor& _eventProcessor, u64 runId = 0);
 
     // Translates source code from the file path, and returs loaded source txt file
     std::string translateSourceCodeFromFile(const char* _sourcePath);

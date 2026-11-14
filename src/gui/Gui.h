@@ -59,7 +59,7 @@ public:
                        std::vector<double> atmPressureHistory, double maxAtm,
                        std::vector<double> accelerationHistory, double maxAcc, double minAcc);
 
-    void renderCommandHistory(std::map<u64, RocketCommand>& commandHistory);
+    void renderCommandHistory(const std::multimap<u64, RocketCommand>& commandHistory);
 
     void renderDiagnostics(const ofsim_simulation::DiagnosticsData& diagnostics);
 

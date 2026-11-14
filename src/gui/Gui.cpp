@@ -483,7 +483,7 @@ void Gui::restoreWindows()
     viewSourceCode = true;
 }
 
-void Gui::renderCommandHistory(std::map<u64, RocketCommand>& commandHistory)
+void Gui::renderCommandHistory(const std::multimap<u64, RocketCommand>& commandHistory)
 {
     if (!viewCommands)
         return;
@@ -493,8 +493,7 @@ void Gui::renderCommandHistory(std::map<u64, RocketCommand>& commandHistory)
 
     ImGui::Begin(i18n->t(commands_title));
 
-    std::map<u64, RocketCommand>::reverse_iterator itr;
-    for (itr = commandHistory.rbegin(); itr != commandHistory.rend(); ++itr)
+    for (auto itr = commandHistory.rbegin(); itr != commandHistory.rend(); ++itr)
     {
         u64 ctime = itr->first;
         u64 seconds = ctime / 1000;

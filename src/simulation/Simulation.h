@@ -107,6 +107,7 @@ private:
     std::unique_ptr<ofsim_vm::VMachine> vmachine{nullptr};
     // Declared after the machines so they outlive its destructor.
     ProgramRunner programRunner;
+    u64 commandRun{0};
 
     bool closeRequested{false};
     SimulationMode modeAfterStop{SimulationMode::WAITING_FOR_BEGIN};
@@ -157,6 +158,7 @@ private:
     void createGui();
 
     void collectTelemetry();
+    void publishProgramTelemetry();
 
     u64 currentTime();
 

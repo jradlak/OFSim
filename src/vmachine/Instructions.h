@@ -10,8 +10,8 @@ class Instructions
 {
 public:
     Instructions(Memory& _memory, Registers& _registers,
-                 ofsim_events::EventProcessor& _eventProcessor)
-        : memory(_memory), registers(_registers), eventProcessor(_eventProcessor)
+                 ofsim_events::EventProcessor& _eventProcessor, u64 _runId = 0)
+        : eventProcessor(_eventProcessor), runId(_runId), memory(_memory), registers(_registers)
     {
     }
 
@@ -82,6 +82,7 @@ public:
 
 private:
     ofsim_events::EventProcessor& eventProcessor;
+    const u64 runId;
     Memory& memory;
     Registers& registers;
 };

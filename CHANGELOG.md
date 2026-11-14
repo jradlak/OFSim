@@ -5,6 +5,12 @@ are grouped under `Unreleased`. Release dates were not recorded for historical v
 
 ## Unreleased
 
+### Fixed
+
+- Confined rocket and physics updates to the main loop, with a bounded flight-command queue,
+  consistent telemetry snapshots and rejection of commands from stopped or previous runs.
+- Preserved all command-history entries sharing the same simulation timestamp.
+
 ## 0.27.6 - 2026-11-14
 
 ### Added

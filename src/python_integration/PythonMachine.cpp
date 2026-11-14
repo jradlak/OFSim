@@ -11,7 +11,16 @@ PyObject* ofsim_python_integration::PythonMachine::orbital_thrust_magnitude_chan
     if (PyArg_UnpackTuple(args, "", 1, 1, &a))
     {
         double thrust = PyFloat_AsDouble(a);
-        ofsim_events::EventProcessor::getInstance()->setThrustMagnitude(thrust);
+        try
+        {
+            const auto runId = *static_cast<u64*>(PyModule_GetState(self));
+            ofsim_events::EventProcessor::getInstance()->setThrustMagnitude(runId, thrust);
+        }
+        catch (const std::exception& error)
+        {
+            PyErr_SetString(PyExc_RuntimeError, error.what());
+            return nullptr;
+        }
         std::cout << "orbital_thrust_change: " << thrust << std::endl;
     }
 
@@ -36,7 +45,16 @@ PyObject* ofsim_python_integration::PythonMachine::orbital_rocket_rotation_chang
     double z = PyFloat_AsDouble(valueZ);
 
     dvec3 deltaRotation{x, y, z};
-    ofsim_events::EventProcessor::getInstance()->changeThrustRotatation(deltaRotation);
+    try
+    {
+        const auto runId = *static_cast<u64*>(PyModule_GetState(self));
+        ofsim_events::EventProcessor::getInstance()->changeThrustRotatation(runId, deltaRotation);
+    }
+    catch (const std::exception& error)
+    {
+        PyErr_SetString(PyExc_RuntimeError, error.what());
+        return nullptr;
+    }
 
     // Py_DecRef(listObj);
 
@@ -45,45 +63,32 @@ PyObject* ofsim_python_integration::PythonMachine::orbital_rocket_rotation_chang
 
 PyObject* ofsim_python_integration::PythonMachine::get_orbital_data(PyObject* self, PyObject* argsB)
 {
-    PyObject* rocket_data = PyDict_New();
-
-    dvec3 position = ofsim_events::EventProcessor::getInstance()->getRocketPosition();
-    PyDict_SetItemString(rocket_data, "positionX", PyFloat_FromDouble(position.x));
-    PyDict_SetItemString(rocket_data, "positionY", PyFloat_FromDouble(position.y));
-    PyDict_SetItemString(rocket_data, "positionZ", PyFloat_FromDouble(position.z));
-
-    dvec3 velocity = ofsim_events::EventProcessor::getInstance()->getRocketVelocity();
-    PyDict_SetItemString(rocket_data, "velocityX", PyFloat_FromDouble(velocity.x));
-    PyDict_SetItemString(rocket_data, "velocityY", PyFloat_FromDouble(velocity.y));
-    PyDict_SetItemString(rocket_data, "velocityZ", PyFloat_FromDouble(velocity.z));
-
-    dvec3 rotation = ofsim_events::EventProcessor::getInstance()->getRocketRotation();
-    PyDict_SetItemString(rocket_data, "rotationX", PyFloat_FromDouble(rotation.x));
-    PyDict_SetItemString(rocket_data, "rotationY", PyFloat_FromDouble(rotation.y));
-    PyDict_SetItemString(rocket_data, "rotationZ", PyFloat_FromDouble(rotation.z));
-
-    f64 altitude = ofsim_events::EventProcessor::getInstance()->getAltitude();
-    PyDict_SetItemString(rocket_data, "altitude", PyFloat_FromDouble(altitude));
-
-    f64 thrustMagnitude = ofsim_events::EventProcessor::getInstance()->getThrustMagnitude();
-    PyDict_SetItemString(rocket_data, "thrustMagnitude", PyFloat_FromDouble(thrustMagnitude));
-
-    f64 mass = ofsim_events::EventProcessor::getInstance()->getRocketMass();
-    PyDict_SetItemString(rocket_data, "rocketMass", PyFloat_FromDouble(mass));
-
-    bool isTerminated = ofsim_events::EventProcessor::getInstance()->isPythonMachineTerminated();
-    PyDict_SetItemString(rocket_data, "shouldStop", PyBool_FromLong(isTerminated));
-
-    return rocket_data;
+    auto& events = *ofsim_events::EventProcessor::getInstance();
+    const auto data = events.getTelemetry();
+    return Py_BuildValue(
+        "{s:d,s:d,s:d,s:d,s:d,s:d,s:d,s:d,s:d,s:d,s:d,s:d,s:O}", "positionX", data.position.x,
+        "positionY", data.position.y, "positionZ", data.position.z, "velocityX", data.velocity.x,
+        "velocityY", data.velocity.y, "velocityZ", data.velocity.z, "rotationX", data.rotation.x,
+        "rotationY", data.rotation.y, "rotationZ", data.rotation.z, "altitude", data.altitude,
+        "thrustMagnitude", data.thrustMagnitude, "rocketMass", data.mass, "shouldStop",
+        events.isPythonMachineTerminated() ? Py_True : Py_False);
 }
 
-void ofsim_python_integration::PythonMachine::runPythonOrbitalProgram(std::string sourceCode)
+void ofsim_python_integration::PythonMachine::runPythonOrbitalProgram(std::string sourceCode,
+                                                                      u64 runId)
 {
     // Register once; the interpreter is initialized/finalized for each run.
     static const int registered = PyImport_AppendInittab("orbital_fs", &PyInit_orbital_fs);
     if (registered != 0)
         throw std::runtime_error("Unable to register orbital_fs");
     CPyInstance hInstance;
+
+    // Bind the identifier to this interpreter's module, including Python-created threads.
+    PyObject* module = PyImport_ImportModule("orbital_fs");
+    if (module == nullptr)
+        throw std::runtime_error("Unable to initialize orbital_fs");
+    *static_cast<u64*>(PyModule_GetState(module)) = runId;
+    Py_DECREF(module);
 
     PyObject* globals = PyDict_New();
     if (globals == nullptr)

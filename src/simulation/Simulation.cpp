@@ -83,6 +83,7 @@ void Simulation::requestStop(SimulationMode nextMode)
     modeAfterStop = nextMode;
     simulationMode = SimulationMode::STOPPING;
     gui->setSimulationStopping(true);
+    EventProcessor::getInstance()->endCommandRun();
     programRunner.requestStop();
 }
 
@@ -110,7 +111,7 @@ void Simulation::updateProgramExecution()
             stop();
         }
 
-        // poll() joined the worker, so neither machine can access the world now.
+        // poll() joined the worker, so its machine can now be destroyed.
         pythonMachine.reset();
         vmachine.reset();
     }
@@ -137,6 +138,7 @@ void Simulation::updateProgramExecution()
 
 void Simulation::resetSimulation()
 {
+    EventProcessor::getInstance()->endCommandRun();
     // dispose rocket and physics:
     physics.reset();
     rocket.reset();
@@ -155,10 +157,10 @@ void Simulation::resetSimulation()
     runningTime = 0;
     lag = 0;
     previous = currentTime();
-    EventProcessor::getInstance()->provideRunnigTume(0);
     telemetryCollector->clear();
 
-    EventProcessor::getInstance()->povideRocketAndPhysics(rocket.get(), physics.get());
+    commandRun = EventProcessor::getInstance()->beginCommandRun();
+    publishProgramTelemetry();
     EventProcessor::getInstance()->terminatePythonMachine(false);
 }
 
@@ -219,7 +221,6 @@ void Simulation::mainLoop()
         if (simulationMode == SimulationMode::FINISHED)
             break;
 
-        EventProcessor::getInstance()->provideRunnigTume(runningTime);
         int factor = gui->getTimeFactor();
 
         // Always advance the wall-clock baseline, including while stopping/paused.
@@ -234,7 +235,19 @@ void Simulation::mainLoop()
         }
 
         // input processing:
-        userInteractionLogic(toTheMoon, radius, step);
+        try
+        {
+            userInteractionLogic(toTheMoon, radius, step);
+        }
+        catch (const std::exception& error)
+        {
+            EventProcessor::getInstance()->publishPythonError(
+                {true, "Flight program error", error.what()});
+            stop();
+        }
+
+        if (simulationMode != SimulationMode::STOPPING)
+            EventProcessor::getInstance()->applyCommands(*physics, runningTime);
 
         if (simulationMode == SimulationMode::STANDARD_SIMULATION ||
             simulationMode == SimulationMode::MANUAL_CONTROL ||
@@ -242,6 +255,8 @@ void Simulation::mainLoop()
         {
             lag = physics->calculateForces(lag);
         }
+
+        publishProgramTelemetry();
 
         std::vector<float> rgb = physics->atmosphereRgb();
         switchGLStateForWorldRendering(rgb[0], rgb[1], rgb[2]);
@@ -457,7 +472,8 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
     // Lifecycle events must also work when the source editor has focus.
     if (event.action == StateEvent::FILE_EXIT)
     {
-        glfwSetWindowShouldClose(mainWindow->getWindow(), true);
+        closeRequested = true;
+        stop();
         return;
     }
 
@@ -501,16 +517,19 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
             {
                 EventProcessor::getInstance()->terminatePythonMachine(false);
                 EventProcessor::getInstance()->publishPythonError({});
+                commandRun = EventProcessor::getInstance()->beginCommandRun();
                 if (this->orbitalProgramName.find(".py") != std::string::npos)
                 {
                     pythonMachine = std::make_unique<ofsim_python_integration::PythonMachine>();
-                    programRunner.start([this, source = orbitalProgramSourceCode]
-                                        { pythonMachine->runPythonOrbitalProgram(source); },
-                                        [this] { pythonMachine->terminateProgram(); });
+                    programRunner.start(
+                        [this, source = orbitalProgramSourceCode, runId = commandRun]
+                        { pythonMachine->runPythonOrbitalProgram(source, runId); },
+                        [this] { pythonMachine->terminateProgram(); });
                 }
                 else if (this->orbitalProgramName.find(".oasm") != std::string::npos)
                 {
-                    vmachine = std::make_unique<ofsim_vm::VMachine>(*EventProcessor::getInstance());
+                    vmachine = std::make_unique<ofsim_vm::VMachine>(*EventProcessor::getInstance(),
+                                                                    commandRun);
                     vmachine->translateSourceCode(this->orbitalProgramSourceCode);
                     programRunner.start([this] { vmachine->start(); },
                                         [this] { vmachine->stop(); });
@@ -549,51 +568,51 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius, f64& step)
 
     if (event.action == StateEvent::THRUST_MAG_UP)
     {
-        f64 thrust = EventProcessor::getInstance()->getThrustMagnitude();
-        EventProcessor::getInstance()->setThrustMagnitude(thrust + 0.1);
+        f64 thrust = physics->thrustMagnitude;
+        EventProcessor::getInstance()->setThrustMagnitude(commandRun, thrust + 0.1);
     }
 
     if (event.action == StateEvent::THRUST_MAG_DOWN)
     {
-        f64 thrust = EventProcessor::getInstance()->getThrustMagnitude();
-        EventProcessor::getInstance()->setThrustMagnitude(thrust - 0.1);
+        f64 thrust = physics->thrustMagnitude;
+        EventProcessor::getInstance()->setThrustMagnitude(commandRun, thrust - 0.1);
     }
 
     const f64 ROT_FCTR = 0.5;
     if (event.action == StateEvent::ROTATE_X_UP)
     {
         dvec3 dRotation = dvec3(ROT_FCTR, 0, 0);
-        EventProcessor::getInstance()->changeThrustRotatation(dRotation);
+        EventProcessor::getInstance()->changeThrustRotatation(commandRun, dRotation);
     }
 
     if (event.action == StateEvent::ROTATE_X_DOWN)
     {
         dvec3 dRotation = dvec3(-ROT_FCTR, 0, 0);
-        EventProcessor::getInstance()->changeThrustRotatation(dRotation);
+        EventProcessor::getInstance()->changeThrustRotatation(commandRun, dRotation);
     }
 
     if (event.action == StateEvent::ROTATE_Y_UP)
     {
         dvec3 dRotation = dvec3(0.0, ROT_FCTR, 0);
-        EventProcessor::getInstance()->changeThrustRotatation(dRotation);
+        EventProcessor::getInstance()->changeThrustRotatation(commandRun, dRotation);
     }
 
     if (event.action == StateEvent::ROTATE_Y_DOWN)
     {
         dvec3 dRotation = dvec3(0.0, -ROT_FCTR, 0);
-        EventProcessor::getInstance()->changeThrustRotatation(dRotation);
+        EventProcessor::getInstance()->changeThrustRotatation(commandRun, dRotation);
     }
 
     if (event.action == StateEvent::ROTATE_Z_UP)
     {
         dvec3 dRotation = dvec3(0.0, 0, ROT_FCTR);
-        EventProcessor::getInstance()->changeThrustRotatation(dRotation);
+        EventProcessor::getInstance()->changeThrustRotatation(commandRun, dRotation);
     }
 
     if (event.action == StateEvent::ROTATE_Z_DOWN)
     {
         dvec3 dRotation = dvec3(0.0, 0, -ROT_FCTR);
-        EventProcessor::getInstance()->changeThrustRotatation(dRotation);
+        EventProcessor::getInstance()->changeThrustRotatation(commandRun, dRotation);
     }
 
     if (event.action == StateEvent::FILE_SAVE)
@@ -768,13 +787,22 @@ void Simulation::initializationSequence()
     initialSolarSystemInformation();
     initialOrbitalInformation();
 
-    EventProcessor::getInstance()->povideRocketAndPhysics(rocket.get(), physics.get());
+    commandRun = EventProcessor::getInstance()->beginCommandRun();
+    publishProgramTelemetry();
 }
 
 void Simulation::createGui()
 {
     gui = std::make_unique<ofsim_gui::Gui>();
     gui->initialization(mainWindow.get());
+}
+
+void Simulation::publishProgramTelemetry()
+{
+    const auto& properties = rocket->properties();
+    EventProcessor::getInstance()->publishTelemetry(
+        {properties.position, properties.rotation, properties.velocity, physics->altitude,
+         physics->thrustMagnitude, properties.mass, runningTime});
 }
 
 void Simulation::collectTelemetry()

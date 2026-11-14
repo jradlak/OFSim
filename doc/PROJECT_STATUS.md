@@ -26,14 +26,17 @@ Remaining:
 
 ## 2. Shared simulation state and thread synchronization
 
-**Status:** Open. Workers still access live rocket and physics objects through
-[EventProcessor](../src/infrastructure/EventProcessor.h).
+**Status:** Complete. Automated regression checks and manual GUI verification passed.
 
-- [ ] Give simulation state a single owner; initially, keep updates in the main loop.
-- [ ] Replace direct worker mutations with a synchronized command queue.
-- [ ] Provide consistent telemetry snapshots instead of live object pointers.
-- [ ] Define ownership of command history, errors, events and simulation time.
-- [ ] Reject commands from previous runs and define queue handling during reset.
+- [x] Keep rocket and physics updates in the main loop.
+- [x] Replace direct worker mutations with a bounded, synchronized command queue.
+- [x] Provide consistent telemetry snapshots instead of live object pointers.
+- [x] Keep command history, errors and UI events on the main thread; publish simulation
+  time with telemetry and retain the atomic Python stop flag.
+- [x] Invalidate queued and late commands on Stop, mode changes and shutdown;
+  publish the initial telemetry after reset and assign each run a fresh identifier.
+- [x] Verify steering, pause, Stop/reset, mode changes and closing in the GUI with
+  Python and VM programs after the communication change.
 
 ## 3. Physics and trajectory prediction
 
@@ -53,12 +56,11 @@ outside the integration loop, and prediction uses different geometry.
 
 **Status:** Open. [VM memory](../src/vmachine/Memory.cpp) has incomplete bounds
 checks and unsafe typed reads. [Python callbacks](../src/python_integration/PythonMachine.cpp)
-use insufficiently validated arguments and leave temporary telemetry references unreleased.
+use insufficiently validated arguments.
 
 - [ ] Validate complete memory ranges and replace unsafe casts with checked copies.
 - [ ] Validate code size, instruction boundaries, opcodes and register operands.
-- [ ] Validate Python argument types, sequence lengths and numeric conversions;
-  release temporary references.
+- [ ] Validate Python argument types, sequence lengths and numeric conversions.
 - [ ] Report malformed programs and invalid API calls as controlled errors in the UI.
 - [ ] Update example scripts that use the obsolete `orbital_thrust_change` API name.
 
@@ -70,14 +72,17 @@ Completed:
 
 - Added [regression tests](../tests/ProgramRunnerTests.cpp) for immediate and repeated
   stopping, worker cleanup, execution errors, VM memory preservation and Python reruns.
+- Added [communication tests](../tests/EventProcessorTests.cpp) for deferred and ordered
+  commands, queue overflow, stop/reset invalidation, concurrent access and Python/VM
+  telemetry compatibility.
+- Verified steering, pause, Stop/reset, mode changes and shutdown in the GUI with
+  Python and VM programs.
 
 Remaining:
 
 - [ ] Add physical reference cases and checks for orbital energy, angular momentum,
   time-step sensitivity and prediction agreement.
-- [ ] Test active-program reset, stale commands and concurrent access alongside item 2.
 - [ ] Add invalid-input and memory-boundary cases alongside item 4; use relevant sanitizers.
-- [ ] Define and perform a repeatable GUI check of Stop, reset, mode changes and window close.
 
 ## 6. Reproducible builds and automated checks
 
@@ -101,9 +106,9 @@ Remaining:
 
 ## Next task
 
-Implement item 2: a command queue and telemetry snapshots owned by the existing
-simulation loop, with queued commands invalidated on reset. This establishes the
-communication boundary needed to move Python into a separate process.
+Finish item 1 by moving Python into a separate process with bounded cancellation.
+The command queue and telemetry snapshots now
+provide the communication boundary for that work.
 
-Then finish item 1, harden inputs in item 4 and improve physics in item 3, adding
-item 5 tests with each change. Item 6 can proceed as separate maintenance work.
+Then harden inputs in item 4 and improve physics in item 3, adding item 5 tests
+with each change. Item 6 can proceed as separate maintenance work.

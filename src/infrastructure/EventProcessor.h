@@ -1,61 +1,59 @@
 #pragma once
 
 #include <string>
-#include <ctime>
 #include <mutex>
 #include <map>
 #include <atomic>
+#include <vector>
+#include <initializer_list>
+#include <cstddef>
 
 #include "RocketCommand.h"
-
 #include "SimulationEvent.h"
-
 #include "../math/MathTypes.h"
-#include "../world/Rocket.h"
-#include "../physics/PhysicsSolver.h"
 #include "../python_integration/PythonError.h"
+
+namespace ofsim_math_and_physics
+{
+struct PhysicsSolver;
+}
 
 namespace ofsim_events
 {
-// Central singleton responsible for creating nad passing events and data between different parts of
-// the application.
+struct TelemetrySnapshot
+{
+    dvec3 position{0.0};
+    dvec3 rotation{0.0};
+    dvec3 velocity{0.0};
+    f64 altitude{0.0};
+    f64 thrustMagnitude{0.0};
+    f64 mass{0.0};
+    u64 runningTime{0};
+};
+
+// UI events, history and errors belong to the main thread. Workers exchange only
+// queued commands, telemetry copies and the atomic Python stop flag.
 class EventProcessor
 {
 public:
-    // UI events:
     SimulationEvent getEvent();
     void createEvent(StateEvent action, std::string data);
 
-    // Rocket status:
-    dvec3 getRocketPosition()
-    {
-        return rocket->properties().position;
-    }
-    dvec3 getRocketRotation()
-    {
-        return rocket->properties().rotation;
-    }
-    dvec3 getRocketVelocity()
-    {
-        return rocket->properties().velocity;
-    }
-    f64 getAltitude()
-    {
-        return physics->altitude;
-    }
-    f64 getThrustMagnitude()
-    {
-        return physics->thrustMagnitude;
-    }
-    f64 getRocketMass()
-    {
-        return rocket->properties().mass;
-    }
+    TelemetrySnapshot getTelemetry();
+    void publishTelemetry(const TelemetrySnapshot& snapshot);
 
-    // Rocket commands:
-    void setThrustMagnitude(f64 thrust);
-    void changeThrustRotatation(dvec3 deltaRotation);
-    std::map<u64, RocketCommand>& getCommandHistory()
+    // Main-thread lifecycle: stop invalidates queued and subsequently sent commands.
+    u64 beginCommandRun();
+    void endCommandRun();
+    void applyCommands(ofsim_math_and_physics::PhysicsSolver& physics, u64 runningTime);
+
+    static constexpr std::size_t commandQueueCapacity = 4096;
+    void enqueueCommand(u64 runId, RocketCommand command);
+    void setThrustMagnitude(u64 runId, f64 thrust);
+    void changeThrustRotatation(u64 runId, dvec3 deltaRotation);
+    void processVMCommand(u64 runId, RocketCommand command);
+
+    const std::multimap<u64, RocketCommand>& getCommandHistory() const
     {
         return command_history;
     }
@@ -64,7 +62,6 @@ public:
         command_history.clear();
     }
 
-    // Python integration:
     void terminatePythonMachine(bool terminate)
     {
         shouldTerminatePythonMachine = terminate;
@@ -82,28 +79,7 @@ public:
         return pythonError;
     }
 
-    // VM integration:
-    void processVMCommand(RocketCommand command);
-    void provideRunnigTume(u64 _runntingTime)
-    {
-        runningTime = _runntingTime;
-    }
-    u64 getRunningTime()
-    {
-        return runningTime;
-    }
-
-    u64 currentTime();
-
     static EventProcessor* getInstance();
-
-    // utility methods:
-    void povideRocketAndPhysics(ofsim_world::Rocket* _rocket,
-                                ofsim_math_and_physics::PhysicsSolver* _physics)
-    {
-        rocket = _rocket;
-        physics = _physics;
-    }
 
     EventProcessor(EventProcessor const&) = delete;
     void operator=(EventProcessor const&) = delete;
@@ -113,22 +89,21 @@ protected:
     ~EventProcessor() {};
 
 private:
-    // since this class is a sigleton I don't figure it out how to pass references to
-    // objects instead of pointers,
-    // because references should be intilized immediately
-    ofsim_world::Rocket* rocket;
-    ofsim_math_and_physics::PhysicsSolver* physics;
+    void enqueueCommands(u64 runId, std::initializer_list<RocketCommand> commands);
+
+    std::mutex exchangeMutex;
+    TelemetrySnapshot telemetry;
+    std::vector<RocketCommand> pendingCommands;
+    u64 runCounter{0};
+    u64 activeRun{0};
 
     SimulationEvent* userEvent = nullptr;
     u32 eventCounter{0};
     std::atomic<bool> shouldTerminatePythonMachine{false};
     ofsim_python_integration::PythonError pythonError;
-
-    std::map<u64, RocketCommand> command_history;
+    std::multimap<u64, RocketCommand> command_history;
 
     static EventProcessor* instance;
     static std::mutex mutex;
-
-    u64 runningTime{0};
 };
 } // namespace ofsim_events
