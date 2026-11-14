@@ -1,3 +1,5 @@
+Unreleased - Standalone LLVM-based clang-format configuration with four-space indentation, Allman braces and a 100-column limit. Removed the unused Google style submodule.
+
 Unreleased - Unified asynchronous stopping for simulation reset, mode changes and shutdown. Reset waits for flight programs to finish; added lifecycle regression tests.
 
 0.27.5 - CHANGELOG.md added. Minor files in folder structure refactor. Code formatter added as a submodule project (clang-format, google-style)
