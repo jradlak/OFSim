@@ -1,3 +1,0 @@
-[submodule "external_libraries/google-style-clang-format"]
-	path = external_libraries/google-style-clang-format
-	url = https://github.com/kehanXue/google-style-clang-format.git
