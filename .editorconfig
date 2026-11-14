@@ -1,0 +1,30 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+indent_style = space
+indent_size = 4
+tab_width = 4
+trim_trailing_whitespace = true
+
+[*.{json,yml,yaml}]
+indent_size = 2
+
+[.clang-format]
+indent_size = 2
+
+# Preserve Markdown hard line breaks.
+[*.md]
+trim_trailing_whitespace = false
+
+# Keep project rules out of dependencies, generated files and assets.
+[{external_libraries,libs,build,assets}/**]
+charset = unset
+end_of_line = unset
+insert_final_newline = unset
+indent_style = unset
+indent_size = unset
+tab_width = unset
+trim_trailing_whitespace = unset
