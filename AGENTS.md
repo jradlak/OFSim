@@ -57,6 +57,8 @@ rg --files -0 src tests -g '*.cpp' -g '*.h' -g '*.hpp' \
   Preserve historical entries and do not invent release dates or version numbers.
 - Update `doc/PROJECT_STATUS.md` when work changes a tracked status. Mark milestones
   complete only after their completion criteria have been verified.
+- Keep the report focused on problems, statuses, completed work and next steps.
+  Omit transient test counts, local setup details and session narration.
 - Summarize the result, checks performed and any remaining limitations.
 - After changing code, configuration or documentation, end the response with
   a suggested short, single-line commit message in English. Match the repository

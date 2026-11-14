@@ -7,7 +7,7 @@ are grouped under `Unreleased`. Release dates were not recorded for historical v
 
 ### Added
 
-- Project status report and roadmap covering completed work and remaining review findings.
+- Concise project status report tracking completed work, open review findings and next steps.
 - EditorConfig settings for consistent indentation, UTF-8 encoding and LF line endings.
 - Project workflow, formatting and validation guidance in `AGENTS.md`.
 - Regression tests for flight program execution and stopping.
