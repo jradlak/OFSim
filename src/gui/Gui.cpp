@@ -204,7 +204,7 @@ void Gui::renderFileSaveAsDialog()
 
 void Gui::renderSimulationControlWindow(unsigned long long time)
 {
-    if (!viewSimulationControl) return;
+    if (!viewSimulationControl && !simulationStopping) return;
 
     EventProcessor* eventProcessor = EventProcessor::getInstance();
 
@@ -221,7 +221,9 @@ void Gui::renderSimulationControlWindow(unsigned long long time)
 
     ImGui::SameLine();
     std::string strTimeFactor = i18n->t(sim_panel_time_compression) + std::to_string(timeFactor) + "x";
-    ImGui::Text("%s", strTimeFactor.c_str());
+    ImGui::TextUnformatted(simulationStopping ? i18n->t(sim_panel_stopping)
+                                             : strTimeFactor.c_str());
+    ImGui::BeginDisabled(simulationStopping);
 
     if (ImGui::ImageButton((void*)(intptr_t)pp_texture, ImVec2(32, 32))) 
     {
@@ -271,8 +273,17 @@ void Gui::renderSimulationControlWindow(unsigned long long time)
         eventProcessor->createEvent(StateEvent::CAMERA_AUTOROTATION, 
          cameraAutorotation ? "1" : "0");
     }   
+    ImGui::EndDisabled();
 
     ImGui::End();
+}
+
+void Gui::setSimulationStopping(bool stopping)
+{
+    simulationStopping = stopping;
+    playing = false;
+    pp_texture = play_texture;
+    timeFactor = 0;
 }
 
 void Gui::renderCodeEditor(std::string& text)
@@ -290,7 +301,6 @@ void Gui::renderCodeEditor(std::string& text)
             numLines++;
         }
     }
-
     ImGui::BeginChild("TextEditor", ImVec2(450, ImGui::GetTextLineHeight() * 257), false, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 
     // Draw the line numbers

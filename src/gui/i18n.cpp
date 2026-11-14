@@ -95,6 +95,8 @@ void I18n::initLabels()
 	enLabels[sim_panel_clock] = "Clock: ";
 	plLabels[sim_panel_time_compression] = "Kompresja czasu: ";
 	enLabels[sim_panel_time_compression] = "Time compression: ";
+	plLabels[sim_panel_stopping] = "Zatrzymywanie programu...";
+	enLabels[sim_panel_stopping] = "Stopping flight program...";
 
 	plLabels[code_editor_title] = "Edytor kodu zrodlowego programu lotu";
 	enLabels[code_editor_title] = "Flight program source code editor";

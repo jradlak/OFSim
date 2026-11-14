@@ -48,6 +48,7 @@ namespace ofsim_gui
 		sim_panel_title,
 		sim_panel_clock,
 		sim_panel_time_compression,
+		sim_panel_stopping,
 
 		code_editor_title,
 

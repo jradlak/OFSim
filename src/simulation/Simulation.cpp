@@ -64,43 +64,73 @@ void Simulation::start() {
   mainLoop();
 }
 
-void Simulation::terminatePythonMachine() {
-  if (pythonThread != nullptr) {
-    pythonMachine->terminateProgram();
-    pythonThread->join();
-    pythonMachine.reset();
-    pythonThread.reset();
-    pythonMachine = nullptr;
-    pythonThread = nullptr;
-  }
-}
-
-void Simulation::terminateVMachine() {
-  if (vmThread != nullptr) {
-    vmachine->stop();
-    vmThread->join();
-    vmThread.reset();
-    vmachine.reset();
-    vmachine = nullptr;
-    vmThread = nullptr;
-  }
-}
-
 void Simulation::stop() {
-  terminatePythonMachine();
+  auto mode = simulationMode;
+  if (mode == SimulationMode::TRAJECTORY_PREDICTION ||
+      mode == SimulationMode::PRESENTATION_MODE) mode = returnMode;
+  const bool manual = mode == SimulationMode::MANUAL_CONTROL ||
+                      mode == SimulationMode::WAITING_FOR_BEGIN_MANUAL_CONTROL;
+  requestStop(manual ? SimulationMode::WAITING_FOR_BEGIN_MANUAL_CONTROL
+                     : SimulationMode::WAITING_FOR_BEGIN);
+}
 
-  simulationMode = SimulationMode::WAITING_FOR_BEGIN;
+void Simulation::requestStop(SimulationMode nextMode) {
+  if (simulationMode == SimulationMode::STOPPING ||
+      simulationMode == SimulationMode::FINISHED) return;
 
+  modeAfterStop = nextMode;
+  simulationMode = SimulationMode::STOPPING;
+  gui->setSimulationStopping(true);
+  programRunner.requestStop();
+}
+
+void Simulation::updateProgramExecution() {
+  if (programRunner.poll()) {
+    if (auto error = programRunner.error()) {
+      std::string message = "Unknown flight program error";
+      try {
+        std::rethrow_exception(error);
+      } catch (const std::exception& exception) {
+        message = exception.what();
+      } catch (...) {}
+
+      EventProcessor::getInstance()->publishPythonError(
+          {true, "Flight program error", message});
+      stop();
+    }
+
+    // poll() joined the worker, so neither machine can access the world now.
+    pythonMachine.reset();
+    vmachine.reset();
+  }
+
+  if (simulationMode != SimulationMode::STOPPING || programRunner.active()) return;
+
+  pythonMachine.reset();
+  vmachine.reset();
+
+  if (closeRequested) {
+    simulationMode = SimulationMode::FINISHED;
+    return;
+  }
+
+  resetSimulation();
+  simulationMode = modeAfterStop;
+  returnMode = modeAfterStop;
+  camera->manualRotation = false;
+  camera->automaticRotation = true;
+  gui->setSimulationStopping(false);
+}
+
+void Simulation::resetSimulation() {
   // dispose rocket and physics:
+  physics.reset();
   rocket.reset();
-  rocket = nullptr;
   glm::dvec3 rocketPos = rocketInitialPosition(theta, phi);
 
   rocket = std::make_unique<Rocket>("model3d_shader", rocketPos,
                                     rocket_initial_size);
 
-  physics.reset();
-  physics = nullptr;
   physicsRocketInitialOrientation();
 
   EventProcessor::getInstance()->clearCommandHistory();
@@ -110,6 +140,9 @@ void Simulation::stop() {
   physics->reset();
 
   runningTime = 0;
+  lag = 0;
+  previous = currentTime();
+  EventProcessor::getInstance()->provideRunnigTume(0);
   telemetryCollector->clear();
 
   EventProcessor::getInstance()->povideRocketAndPhysics(rocket.get(),
@@ -130,7 +163,6 @@ void Simulation::mainLoop() {
   // init time variables:
   startTime = currentTime();
   runningTime = 0;
-  timePaused = 0;
 
   f64 radius{0.000000001};
   f64 step{0.000000001};
@@ -156,19 +188,28 @@ void Simulation::mainLoop() {
     initializationProcess = false;
   }
 
-  while (!mainWindow->shouldClose()) {
+  if (initializationProcess) return;
+
+  while (simulationMode != SimulationMode::FINISHED) {
+    if (mainWindow->shouldClose()) {
+      // Keep servicing the window until its program has released world objects.
+      glfwSetWindowShouldClose(mainWindow->getWindow(), false);
+      closeRequested = true;
+      stop();
+    }
+
+    updateProgramExecution();
+    if (simulationMode == SimulationMode::FINISHED) break;
+
     EventProcessor::getInstance()->provideRunnigTume(runningTime);
     int factor = gui->getTimeFactor();
 
-    // calculate lag:
-    if (factor == 0)  // simulation paused
-    {
-      timePaused = currentTime() - previous;
-    } else if (factor > 0)  // simulation running
-    {
-      u64 current = currentTime() - timePaused;
-      u64 elapsed = (current - previous) * factor;
-      previous = current;
+    // Always advance the wall-clock baseline, including while stopping/paused.
+    u64 current = currentTime();
+    u64 elapsed = current - previous;
+    previous = current;
+    if (factor > 0 && simulationMode != SimulationMode::STOPPING) {
+      elapsed *= factor;
       lag += elapsed;
       runningTime += elapsed;
     }
@@ -270,11 +311,6 @@ void Simulation::mainLoop() {
     mainWindow->swapBuffers();
     glfwPollEvents();
   }
-
-  simulationMode = SimulationMode::FINISHED;
-
-  terminatePythonMachine();
-  terminateVMachine();
 }
 
 void Simulation::renderHUD() {
@@ -325,8 +361,10 @@ void Simulation::renderHUD() {
     gui->renderSimulationControlWindow(runningTime);
     gui->renderCodeEditor(orbitalProgramSourceCode);
 
-    gui->renderCommandHistory(
-        ofsim_events::EventProcessor::getInstance()->getCommandHistory());
+    if (simulationMode != SimulationMode::STOPPING) {
+      gui->renderCommandHistory(
+          ofsim_events::EventProcessor::getInstance()->getCommandHistory());
+    }
 
     gui->plotTelemetry(
         telemetryCollector->velocityHistory, telemetryCollector->maxVelocity,
@@ -386,15 +424,25 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius,
   // recieve and interpret user events:
   SimulationEvent event = EventProcessor::getInstance()->getEvent();
 
-  if (gui->isCurrentlyEdit()) {
-    // if code is editing - do nthng
+  // Lifecycle events must also work when the source editor has focus.
+  if (event.action == StateEvent::FILE_EXIT) {
+    glfwSetWindowShouldClose(mainWindow->getWindow(), true);
     return;
   }
 
-  if (event.action == StateEvent::PYTHON_PROGRAM_EXECUTION_STOP) {
-    if (simulationMode == SimulationMode::STANDARD_SIMULATION) {
-      stop();
-    }
+  if (simulationMode == SimulationMode::STOPPING) return;
+
+  if (event.action == StateEvent::PYTHON_PROGRAM_EXECUTION_STOP ||
+      event.action == StateEvent::VM_PROGRAM_EXECUTION_STOP ||
+      event.action == StateEvent::PYTHON_PROGRAM_RAISED_ERROR ||
+      event.action == StateEvent::VM_PROGRAM_RAISED_ERROR) {
+    stop();
+    return;
+  }
+
+  if (gui->isCurrentlyEdit()) {
+    // if code is editing - do nthng
+    return;
   }
 
   if (event.action == StateEvent::PROGRAM_FILE_OPEN) {
@@ -404,30 +452,47 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius,
   }
 
   if (event.action == StateEvent::START_SIMULATION) {
-    if (simulationMode == SimulationMode::WAITING_FOR_BEGIN) {
+    if (simulationMode == SimulationMode::WAITING_FOR_BEGIN &&
+        !programRunner.active()) {
       if (this->orbitalProgramSourceCode.empty()) {
         std::cout << "No source code to execute!\n";
+        gui->setSimulationStopping(false);
         return;
       }
 
-      if (this->orbitalProgramName.find(".py") != std::string::npos) {
-        pythonMachine =
-            std::make_unique<ofsim_python_integration::PythonMachine>();
-        pythonThread = std::make_unique<std::thread>(
-            &ofsim_python_integration::PythonMachine::runPythonOrbitalProgram,
-            pythonMachine.get(), this->orbitalProgramSourceCode);
-      } else if (this->orbitalProgramName.find(".oasm") != std::string::npos) {
-        vmachine = std::make_unique<ofsim_vm::VMachine>(
-            *EventProcessor::getInstance());
-        vmachine->translateSourceCode(this->orbitalProgramSourceCode);
-        vmThread = std::make_unique<std::thread>(&ofsim_vm::VMachine::start,
-                                                 vmachine.get());
-      } else {
-        std::cout << "Unknown file extension!\n";
-        return;
-      }
+      try {
+        EventProcessor::getInstance()->terminatePythonMachine(false);
+        EventProcessor::getInstance()->publishPythonError({});
+        if (this->orbitalProgramName.find(".py") != std::string::npos) {
+          pythonMachine =
+              std::make_unique<ofsim_python_integration::PythonMachine>();
+          programRunner.start(
+              [this, source = orbitalProgramSourceCode] {
+                pythonMachine->runPythonOrbitalProgram(source);
+              },
+              [this] { pythonMachine->terminateProgram(); });
+        } else if (this->orbitalProgramName.find(".oasm") != std::string::npos) {
+          vmachine = std::make_unique<ofsim_vm::VMachine>(
+              *EventProcessor::getInstance());
+          vmachine->translateSourceCode(this->orbitalProgramSourceCode);
+          programRunner.start([this] { vmachine->start(); },
+                              [this] { vmachine->stop(); });
+        } else {
+          std::cout << "Unknown file extension!\n";
+          gui->setSimulationStopping(false);
+          return;
+        }
 
-      simulationMode = SimulationMode::STANDARD_SIMULATION;
+        simulationMode = SimulationMode::STANDARD_SIMULATION;
+      } catch (const std::exception& error) {
+        EventProcessor::getInstance()->publishPythonError(
+            {true, "Flight program error", error.what()});
+        stop();
+      } catch (...) {
+        EventProcessor::getInstance()->publishPythonError(
+            {true, "Flight program error", "Unable to start flight program"});
+        stop();
+      }
     }
 
     if (simulationMode == SimulationMode::WAITING_FOR_BEGIN_MANUAL_CONTROL) {
@@ -479,11 +544,6 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius,
     EventProcessor::getInstance()->changeThrustRotatation(dRotation);
   }
 
-  if (event.action == StateEvent::PYTHON_PROGRAM_RAISED_ERROR) {
-    gui->setTimeFactor(-1);
-    stop();
-  }
-
   if (event.action == StateEvent::FILE_SAVE) {
     ofsim_infrastructure::saveSourceCode(SOURCE_CODE_FILE_NAME,
                                          orbitalProgramSourceCode);
@@ -492,10 +552,6 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius,
   if (event.action == StateEvent::FILE_SAVED_AS) {
     std::string fileToSave = event.data;
     ofsim_infrastructure::saveSourceCode(fileToSave, orbitalProgramSourceCode);
-  }
-
-  if (event.action == StateEvent::FILE_EXIT) {
-    glfwSetWindowShouldClose(mainWindow->getWindow(), true);
   }
 
   if (event.action == StateEvent::CAMERA_AUTOROTATION) {
@@ -519,7 +575,6 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius,
     } else if (simulationMode == SimulationMode::DIAGNOSTICS_MODE) {
       std::cout << "Waiting for begin mode! \n" << std::flush;
       stop();  // reseting the rocket, physics and vm states;
-      simulationMode = SimulationMode::WAITING_FOR_BEGIN;
       camera->automaticRotation = true;
       dTheta = theta;
       dPhi = phi;
@@ -608,11 +663,13 @@ void Simulation::userInteractionLogic(dvec3& toTheMoon, f64& radius,
 
   if (event.action == StateEvent::CHANGE_MODE_TO_FROM_MANUAL_CONTROL)  // r
   {
-    if (simulationMode == SimulationMode::WAITING_FOR_BEGIN) {
-      simulationMode = SimulationMode::WAITING_FOR_BEGIN_MANUAL_CONTROL;
-    } else {
-      simulationMode = SimulationMode::WAITING_FOR_BEGIN;
-    }
+    auto mode = simulationMode;
+    if (mode == SimulationMode::TRAJECTORY_PREDICTION ||
+        mode == SimulationMode::PRESENTATION_MODE) mode = returnMode;
+    const bool manual = mode == SimulationMode::MANUAL_CONTROL ||
+                        mode == SimulationMode::WAITING_FOR_BEGIN_MANUAL_CONTROL;
+    requestStop(manual ? SimulationMode::WAITING_FOR_BEGIN
+                       : SimulationMode::WAITING_FOR_BEGIN_MANUAL_CONTROL);
   }
 
   if (event.action == StateEvent::SHOW_DIAGNOSTICS_IN_SIMULATION) {

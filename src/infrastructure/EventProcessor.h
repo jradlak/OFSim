@@ -4,6 +4,7 @@
 #include <ctime>
 #include <mutex>
 #include <map>
+#include <atomic>
 
 #include "RocketCommand.h"
 
@@ -72,7 +73,7 @@ namespace ofsim_events
 		
             SimulationEvent* userEvent = nullptr;
             u32 eventCounter {0};
-			bool shouldTerminatePythonMachine { false };	
+			std::atomic<bool> shouldTerminatePythonMachine { false };
 			ofsim_python_integration::PythonError pythonError;
 
 			std::map<u64, RocketCommand> command_history;

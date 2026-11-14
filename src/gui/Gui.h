@@ -76,6 +76,8 @@ namespace ofsim_gui
 
 		void setTimeFactor(int factor) { timeFactor = factor; }
 
+        void setSimulationStopping(bool stopping);
+
 		std::string getSavedFile() { return savedFile; }
 		void clearSavedFile() { savedFile = ""; }
 				
@@ -95,6 +97,7 @@ namespace ofsim_gui
 		GLuint splashTexture { 0 };
 
 		bool playing { false };
+        bool simulationStopping { false };
 
 		int out_width { 0 };
 		int out_height { 0 };

@@ -4,6 +4,7 @@
 #include <memory>
 #include <thread>
 #include <string>
+#include <atomic>
 
 #include "Memory.h"
 #include "Registers.h"
@@ -38,8 +39,6 @@ namespace ofsim_vm
 
 		void provideSourcePath(const char *_sourcePath) { sourcePath = _sourcePath; }
 
-		void takeANap() { std::this_thread::sleep_for(std::chrono::milliseconds(100)); }
-
 		Memory *getMemory() { return memory.get(); }
 
 		bool isStarted() { return started; }		
@@ -60,7 +59,7 @@ namespace ofsim_vm
 		u32 pc{0};
 		u32 oldpc{0};
 
-		bool shouldStop{true};
-		bool started{false};
+		std::atomic<bool> shouldStop{false};
+		std::atomic<bool> started{false};
 	};
 } // namespace ofsim_vm

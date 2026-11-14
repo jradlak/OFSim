@@ -212,7 +212,8 @@ add_executable(
     "tests/PhysicsSolverTests.cpp"
     "tests/MemoryTests.cpp"
     "tests/TranslatorTests.cpp"
-    "tests/VMTests.cpp")
+    "tests/VMTests.cpp"
+    "tests/ProgramRunnerTests.cpp")
 
 target_link_libraries(
     ofsim_tests
@@ -226,4 +227,4 @@ target_link_libraries(
 )
 
 include(GoogleTest)
-gtest_discover_tests(ofsim_tests)
+gtest_discover_tests(ofsim_tests PROPERTIES TIMEOUT 15)

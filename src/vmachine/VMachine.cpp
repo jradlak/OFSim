@@ -1,5 +1,8 @@
 #include "VMachine.h"
 
+#include <stdexcept>
+#include <vector>
+
 using namespace ofsim_vm;
 
 VMachine::VMachine(ofsim_events::EventProcessor& _eventProcessor) : eventProcessor(_eventProcessor)
@@ -40,10 +43,9 @@ void VMachine::executionLoop()
 	{
 		// decode and execute instruction:
 		unsigned int args_size = opcodes->getInstrSize(opcode);
-		unsigned char* args = new unsigned char[args_size];
-		Memory::memcopy(memory->mem, args, pc + 1, 0, args_size);
-		instructions->call(opcode, args);
-		delete[] args;		
+		std::vector<unsigned char> args(args_size);
+		Memory::memcopy(memory->mem, args.data(), pc + 1, 0, args_size);
+		instructions->call(opcode, args.data());
 		pc = registers->pc();
 		if (oldpc == pc)
 		{
@@ -61,26 +63,31 @@ void VMachine::executionLoop()
 void VMachine::stop()
 {
 	shouldStop = true;
-	started = false;
-	takeANap();	
-	registers->clear();
-	memory->clear();
-	pc = 0;
-	oldpc = 0;
+	// Memory belongs to the worker until it exits. Collect it before resetting.
 }
 
 void VMachine::restart()
 {
-	stop();
-	takeANap();	
+	// The caller must collect the previous worker before restarting.
+	if (started) throw std::logic_error("Cannot restart a running VM");
+	registers->clear();
+	pc = 0;
+	oldpc = 0;
+	loadCode();
+	shouldStop = false;
 	start();
 }
 
 void VMachine::start()
 {	
-	takeANap();
-	shouldStop = false;
+	// A stop requested before this thread starts must not be lost.
 	started = true;
 	std::cout << "VMachine execution loop started!\n";	
-	executionLoop();
+	try {
+		executionLoop();
+	} catch (...) {
+		started = false;
+		throw;
+	}
+	started = false;
 }

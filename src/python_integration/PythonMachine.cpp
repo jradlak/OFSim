@@ -2,6 +2,8 @@
 
 #include "../infrastructure/EventProcessor.h"
 
+#include <stdexcept>
+
 PyObject *ofsim_python_integration::PythonMachine::orbital_thrust_magnitude_change(PyObject *self, PyObject *args)
 {
     PyObject *a;
@@ -75,27 +77,32 @@ PyObject *ofsim_python_integration::PythonMachine::get_orbital_data(PyObject *se
 
 void ofsim_python_integration::PythonMachine::runPythonOrbitalProgram(std::string sourceCode)
 {
-    PyImport_AppendInittab("orbital_fs", &PyInit_orbital_fs);
+    // Register once; the interpreter is initialized/finalized for each run.
+    static const int registered = PyImport_AppendInittab("orbital_fs", &PyInit_orbital_fs);
+    if (registered != 0) throw std::runtime_error("Unable to register orbital_fs");
     CPyInstance hInstance;
 
-    PyObject* result = PyRun_String(sourceCode.c_str(), Py_file_input, PyDict_New(), PyDict_New());
+    PyObject* globals = PyDict_New();
+    if (globals == nullptr) throw std::runtime_error("Unable to create Python globals");
+    PyObject* result = PyRun_String(sourceCode.c_str(), Py_file_input, globals, globals);
+    Py_DECREF(globals);
     if (result == NULL)
     {
         PyObject *type, *value, *traceback;
         PyErr_Fetch(&type, &value, &traceback);
         
-        PyObject *str_exc = PyObject_Str(value);
-        
-        
-        std::string error_message = PyUnicode_AsUTF8(str_exc);
-        std::cout << "Error: " << error_message << std::endl; 
-        ofsim_events::EventProcessor::getInstance()->publishPythonError({true, "Python Script Error", error_message});
+        PyObject *str_exc = value ? PyObject_Str(value) : nullptr;
+        const char* text = str_exc ? PyUnicode_AsUTF8(str_exc) : nullptr;
+        std::string error_message = text ? text : "Unknown Python script error";
 
-        Py_DECREF(type);
-        Py_DECREF(value);
-        ofsim_events::EventProcessor::getInstance()
-                ->createEvent(ofsim_events::StateEvent::PYTHON_PROGRAM_RAISED_ERROR, "Python script error!");
-    }    
+        Py_XDECREF(str_exc);
+        Py_XDECREF(type);
+        Py_XDECREF(value);
+        Py_XDECREF(traceback);
+        // ProgramRunner transfers this error after Python has finalized.
+        throw std::runtime_error(error_message);
+    }
+    Py_DECREF(result);
 }
 
 void ofsim_python_integration::PythonMachine::terminateProgram()

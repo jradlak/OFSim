@@ -18,6 +18,7 @@
 #include "../python_integration/PythonMachine.h"
 #include "../vmachine/VMachine.h"
 #include "ManualControlData.h"
+#include "ProgramRunner.h"
 
 namespace ofsim_simulation
 {    
@@ -32,6 +33,7 @@ namespace ofsim_simulation
         TRAJECTORY_PREDICTION,
         PRESENTATION_MODE,
         DIAGNOSTICS_MODE,
+        STOPPING,
         FINISHED
     };
 
@@ -87,7 +89,6 @@ namespace ofsim_simulation
         // simulation time variables:
         u64 startTime;
         u64 runningTime;
-        u64 timePaused;
 
         // orbital orientation variables:
         f64 lastAltitude{ 0 };
@@ -101,11 +102,14 @@ namespace ofsim_simulation
 
         // Python integration:
         std::unique_ptr<ofsim_python_integration::PythonMachine> pythonMachine { nullptr };
-        std::unique_ptr<std::thread> pythonThread { nullptr };
 
         // VM integration:
         std::unique_ptr<ofsim_vm::VMachine> vmachine { nullptr };
-        std::unique_ptr<std::thread> vmThread { nullptr };
+        // Declared after the machines so they outlive its destructor.
+        ProgramRunner programRunner;
+
+        bool closeRequested { false };
+        SimulationMode modeAfterStop { SimulationMode::WAITING_FOR_BEGIN };
 
         SimulationMode simulationMode{ SimulationMode::WAITING_FOR_BEGIN };
         SimulationMode returnMode{ SimulationMode::WAITING_FOR_BEGIN };
@@ -128,8 +132,9 @@ namespace ofsim_simulation
         void initWindowContext();
         void mainLoop();
 
-        void terminatePythonMachine();
-        void terminateVMachine();
+        void requestStop(SimulationMode nextMode);
+        void updateProgramExecution();
+        void resetSimulation();
 
         void renderHUD();
 
