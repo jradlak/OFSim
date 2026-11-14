@@ -52,6 +52,9 @@ rg --files -0 src tests -g '*.cpp' -g '*.h' -g '*.hpp' \
 
 - Add concise `CHANGELOG.md` entries for meaningful changes. Describe major
   stages rather than individual implementation details.
+- Keep one `Unreleased` section, grouped into `Added`, `Changed`, `Fixed` and
+  `Removed` as applicable. Omit empty categories and list versions newest first.
+  Preserve historical entries and do not invent release dates or version numbers.
 - Summarize the result, checks performed and any remaining limitations.
 - After changing code, configuration or documentation, end the response with
   a suggested short, single-line commit message in English. Match the repository

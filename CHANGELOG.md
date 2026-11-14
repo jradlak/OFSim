@@ -1,47 +1,104 @@
-Unreleased - Added AGENTS.md with project workflow, formatting and validation guidance.
+# Changelog
 
-Unreleased - Added EditorConfig settings for consistent indentation, UTF-8 encoding and LF line endings, excluding dependencies and generated files.
+Notable changes are listed by version, newest first. Changes awaiting release
+are grouped under `Unreleased`. Release dates were not recorded for historical versions.
 
-Unreleased - Applied the shared formatting style to all project C++ sources and tests using clang-format 19; normalized their line endings to LF.
+## Unreleased
 
-Unreleased - Standalone LLVM-based clang-format configuration with four-space indentation, Allman braces and a 100-column limit. Removed the unused Google style submodule.
+### Added
 
-Unreleased - Unified asynchronous stopping for simulation reset, mode changes and shutdown. Reset waits for flight programs to finish; added lifecycle regression tests.
+- EditorConfig settings for consistent indentation, UTF-8 encoding and LF line endings.
+- Project workflow, formatting and validation guidance in `AGENTS.md`.
+- Regression tests for flight program execution and stopping.
 
-0.27.5 - CHANGELOG.md added. Minor files in folder structure refactor. Code formatter added as a submodule project (clang-format, google-style)
+### Changed
 
-0.27.4 - Improvents in the Camera behaviour in the Trajecotry Prediction Mode, enabling physics in trajectory prediction
+- Adopted a standalone LLVM-based clang-format configuration with four-space indentation,
+  Allman braces and a 100-column limit.
+- Formatted project C++ sources and tests with clang-format 19 and normalized line endings to LF.
+- Organized this changelog into version sections with categorized unreleased changes.
 
-0.27.3 - Enable/disable autorotation switch (new element in GUI)
+### Fixed
 
-0.27.2 - Loading screen.
+- Unified asynchronous stopping for reset, control-mode changes and shutdown. Reset now waits
+  for flight programs to finish while the interface remains responsive.
 
-0.27.1 - Fix in displaing operation manual.
+### Removed
 
-0.27.0 - Savig source code files in File Save Dialog.
+- Unused Google style clang-format submodule.
 
-0.26.3 - Filesystem navigation in the File Dialog.
+## 0.27.5
 
-0.26.2 - Corrections of the initial camera position in the trajectory prediction mode.
+- Added this changelog, reorganized files and introduced the Google style clang-format submodule.
 
-0.26.1 - In manual control mode, displaying velocity and thrust vector indicators.
+## 0.27.4
 
-0.26.0 - Manual control mode. It is now possible to manually control the rocket using user's computer keyboard.
+- Improved camera behavior and enabled physics in trajectory prediction mode.
 
-0.25.1 - Rocket's initial orientation fixes. Now the rockt is fully perpendicular to the planet's surface at point (0, y, 0). The appropriate rotation of the planet ensures the correct geographical coordinates.
+## 0.27.3
 
-0.25.0 - Diagnostics mode.
+- Added a GUI switch to enable or disable camera autorotation.
 
-0.24.1 - Fully working VM integration.
+## 0.27.2
 
-0.24.0 - Restore a previously removed virtual machine.
+- Added a loading screen.
 
-0.23.2 - Serious code reactorings: remove quaternions, and simplification of the inital rocket orientation code.
+## 0.27.1
 
-0.23.1 - Fixes in the planet texturying. Change size of the planet. Point (0, 0, 0) is now in the center of the planet and the origin of the simulation.
+- Fixed the operation manual display.
 
-0.23.0 - Python integration. Remove Virtual Machine.
+## 0.27.0
 
-0.22.2 - Fixes simulation resetting process. Now full reset is possible when simulation is stopped.
+- Added source code saving through the Save File dialog.
 
-0.22.1 - Code editor line numbers.
+## 0.26.3
+
+- Added filesystem navigation to the file dialog.
+
+## 0.26.2
+
+- Corrected the initial camera position in trajectory prediction mode.
+
+## 0.26.1
+
+- Added velocity and thrust vector indicators in manual control mode.
+
+## 0.26.0
+
+- Added manual rocket control using the keyboard.
+
+## 0.25.1
+
+- Corrected initial rocket orientation and planet rotation to match geographic coordinates.
+
+## 0.25.0
+
+- Added diagnostics mode.
+
+## 0.24.1
+
+- Completed virtual machine integration.
+
+## 0.24.0
+
+- Restored the previously removed virtual machine.
+
+## 0.23.2
+
+- Removed quaternions and simplified the initial rocket orientation code.
+
+## 0.23.1
+
+- Improved planet texturing, adjusted planet size and moved the coordinate origin to its center.
+
+## 0.23.0
+
+- Added Python integration and removed the virtual machine.
+
+## 0.22.2
+
+- Fixed simulation stopping to allow a full reset.
+
+## 0.22.1
+
+- Added line numbers to the code editor.
