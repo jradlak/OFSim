@@ -5,6 +5,11 @@ are grouped under `Unreleased`. Release dates were not recorded for historical v
 
 ## Unreleased
 
+### Changed
+
+- Expanded the project status report with thrust restart, prediction horizon and
+  telemetry issues, regression coverage needs and the revised repair order.
+
 ## 0.27.7 alpha - 2026-11-15
 
 ### Changed

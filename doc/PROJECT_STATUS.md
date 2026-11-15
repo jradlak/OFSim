@@ -53,13 +53,26 @@ Completed:
 
 Remaining:
 
+- [ ] Preserve thrust direction independently of magnitude. Setting thrust to exactly
+  zero and then restoring it without a reset normalizes a zero vector, producing
+  non-finite thrust and rocket position.
 - [ ] Establish consistent units, planet radius and gravitational parameters.
 - [ ] Implement inverse-square gravity and time-dependent fuel consumption.
 - [ ] Recalculate altitude and check ground contact during each physics step.
 - [ ] Use consistent geometry and gravity in simulation and prediction; define
   whether prediction represents coasting or powered flight.
-- [ ] Clear all prediction buffers and bound the prediction horizon.
+- [ ] Clear all prediction buffers, including `velocityMagnitude`, and bound the
+  prediction horizon. After 8000 seconds, subtracting elapsed time from the limit
+  underflows an unsigned value and produces an enormous integration step.
 - [ ] Review integration accuracy and atmospheric drag.
+- [ ] Correct [telemetry collection](../src/simulation/TelemetryCollector.cpp): reset
+  `lastVelocity` between flights and calculate the plotted rate of change of speed
+  using the actual sample interval. The current calculation is a speed difference,
+  so its scale depends on sample spacing and the first sample after reset uses the
+  previous flight's speed.
+- [ ] Bound `accelerationHistory` consistently with the other plot buffers and define
+  bounded retention or downsampling for `telemetryHistory`, which is used to display
+  the flight path. Both currently grow without a limit.
 
 ## 4. VM memory access and Python API validation
 
@@ -92,9 +105,10 @@ precomputed instruction-start validation and code/data separation are not implem
 
 Remaining:
 
-- [ ] Validate arithmetic operations, including integer division by zero and
+- [ ] Validate arithmetic operations, including integer division and modulo by zero and
   invalid bit shifts.
-- [ ] Validate Python argument types, sequence lengths and numeric conversions.
+- [ ] Validate Python argument types, sequence lengths and numeric conversions;
+  reject non-finite thrust and rotation values before they reach physics.
 - [ ] Report remaining arithmetic faults and invalid Python API calls as controlled
   errors in the UI.
 - [ ] Update example scripts that use the obsolete `orbital_thrust_change` API name.
@@ -125,6 +139,9 @@ Completed:
 
 Remaining:
 
+- [ ] Cover zero-thrust restart without reset, prediction at and beyond its time
+  limit, repeated prediction calls, telemetry reset, irregular sample intervals
+  and history retention limits with regression tests.
 - [ ] Add physical reference cases and checks for orbital energy, angular momentum,
   time-step sensitivity and prediction agreement.
 - [ ] Extend invalid-input cases to arithmetic faults and Python API arguments
@@ -152,9 +169,13 @@ Remaining:
 
 ## Next task
 
-Finish item 1 by moving Python into a separate process with bounded cancellation.
-The command queue and telemetry snapshots now
-provide the communication boundary for that work.
+First fix the localized thrust, prediction and telemetry issues in item 3, with
+the corresponding item 5 regression tests, and harden the remaining arithmetic
+and Python API inputs in item 4.
 
-Then harden inputs in item 4 and improve physics in item 3, adding item 5 tests
-with each change. Item 6 can proceed as separate maintenance work.
+Then finish item 1 by moving Python into a separate process with bounded
+cancellation. The command queue and telemetry snapshots now provide the
+communication boundary for that work.
+
+Continue with the broader physics work in item 3, adding item 5 tests with each
+change. Item 6 can proceed as separate maintenance work.
