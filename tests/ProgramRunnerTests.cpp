@@ -163,11 +163,57 @@ TEST(ProgramRunnerTests, RunningVmCanBeStoppedWithoutClearingItsMemory)
 TEST(ProgramRunnerTests, VmExecutionExceptionDoesNotEscapeWorker)
 {
     ofsim_vm::VMachine vm(*ofsim_events::EventProcessor::getInstance());
-    vm.translateSourceCode("set r0, 70000\n bld r1, r0\n halt\n");
+    vm.translateSourceCode("set r0, 65536\n bld r1, r0\n halt\n");
     ProgramRunner runner;
     runner.start([&] { vm.start(); }, [&] { vm.stop(); });
     ASSERT_TRUE(collect(runner));
-    EXPECT_TRUE(runner.error());
+    ASSERT_TRUE(runner.error());
+    EXPECT_THROW(std::rethrow_exception(runner.error()), std::out_of_range);
+    EXPECT_FALSE(vm.isStarted());
+}
+
+TEST(ProgramRunnerTests, InvalidVmRegistersReportErrorsAndAllowNextRun)
+{
+    ProgramRunner runner;
+    for (const unsigned char index : {16, 17, 255})
+    {
+        ofsim_vm::VMachine vm(*ofsim_events::EventProcessor::getInstance());
+        vm.translateSourceCode("set r0, 42\n halt\n");
+        vm.getMemory()->storeByte(1, index);
+        runner.start([&] { vm.start(); }, [&] { vm.stop(); });
+        ASSERT_TRUE(collect(runner));
+        ASSERT_TRUE(runner.error());
+        EXPECT_FALSE(vm.isStarted());
+        try
+        {
+            std::rethrow_exception(runner.error());
+        }
+        catch (const std::out_of_range& error)
+        {
+            EXPECT_NE(std::string(error.what()).find("VM register index out of range"),
+                      std::string::npos);
+        }
+
+        ofsim_vm::VMachine nextVm(*ofsim_events::EventProcessor::getInstance());
+        nextVm.translateSourceCode("set r0, 256\n set r1, 42\n bst r0, r1\n halt\n");
+        runner.start([&] { nextVm.start(); }, [&] { nextVm.stop(); });
+        ASSERT_TRUE(collect(runner));
+        EXPECT_FALSE(runner.error());
+        EXPECT_EQ(nextVm.getMemory()->fetchByte(256), 42);
+    }
+}
+
+TEST(ProgramRunnerTests, OverflowingVmMemoryRangeReportsAnError)
+{
+    ofsim_vm::VMachine vm(*ofsim_events::EventProcessor::getInstance());
+    vm.translateSourceCode("set r0, 0\n ld r1, r0\n halt\n");
+    // Encode UINT_MAX - 3 without depending on the translator's integer parser.
+    vm.getMemory()->storeWord(2, -4);
+    ProgramRunner runner;
+    runner.start([&] { vm.start(); }, [&] { vm.stop(); });
+    ASSERT_TRUE(collect(runner));
+    ASSERT_TRUE(runner.error());
+    EXPECT_THROW(std::rethrow_exception(runner.error()), std::out_of_range);
     EXPECT_FALSE(vm.isStarted());
 }
 

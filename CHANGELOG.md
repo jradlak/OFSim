@@ -11,6 +11,10 @@ are grouped under `Unreleased`. Release dates were not recorded for historical v
 
 ### Fixed
 
+- Rejected invalid VM memory ranges and register indices with controlled errors, preserving
+  valid end-of-memory accesses and replacing unsafe typed reads with byte copies.
+- Initialized engine state, thrust telemetry and displacement consistently on first start
+  and reset, with regression coverage for VM boundaries and physics initialization.
 - Confined rocket and physics updates to the main loop, with a bounded flight-command queue,
   consistent telemetry snapshots and rejection of commands from stopped or previous runs.
 - Preserved all command-history entries sharing the same simulation timestamp.

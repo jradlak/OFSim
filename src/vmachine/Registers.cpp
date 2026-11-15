@@ -1,5 +1,8 @@
 #include "Registers.h"
 
+#include <stdexcept>
+#include <string>
+
 using namespace ofsim_vm;
 
 unsigned int& Registers::operator[](unsigned char index)
@@ -36,9 +39,8 @@ void Registers::clear()
 
 void Registers::assertKnown(unsigned char index)
 {
-    if (index > number_of_registers)
+    if (index >= number_of_registers)
     {
-        std::cout << "Unknown register!!! Program must be terminated!" << std::endl;
-        exit(0);
+        throw std::out_of_range("VM register index out of range: " + std::to_string(index));
     }
 }

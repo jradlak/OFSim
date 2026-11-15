@@ -58,6 +58,6 @@ public:
 
 private:
     std::mutex memMutex;
-    void assertConditions(unsigned int addr) const;
+    void assertRange(unsigned int addr, unsigned int length) const;
 };
 } // namespace ofsim_vm

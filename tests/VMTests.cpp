@@ -1,11 +1,41 @@
 #include <gtest/gtest.h>
 
+#include <stdexcept>
+
 #include "../src/infrastructure/EventProcessor.h"
 #include "../src/vmachine/VMachine.h"
 
 namespace vm_tests
 {
 using namespace ofsim_vm;
+
+TEST(RegistersTests, FirstAndLastRegistersAreAccessible)
+{
+    Registers registers;
+    for (const unsigned char index : {0, 15})
+    {
+        registers[index] = 123456;
+        registers.fl(index, -123.5);
+        EXPECT_EQ(registers[index], 123456);
+        EXPECT_DOUBLE_EQ(registers.fl(index), -123.5);
+    }
+}
+
+TEST(RegistersTests, InvalidIndicesAreRejectedForIntegerAndFloatingPointRegisters)
+{
+    Registers registers;
+    registers[15] = 42;
+    registers.fl(0, 123.5);
+    for (const unsigned char index : {16, 17, 255})
+    {
+        EXPECT_THROW(registers[index], std::out_of_range);
+        EXPECT_THROW(registers[index] = 123, std::out_of_range);
+        EXPECT_THROW(registers.fl(index), std::out_of_range);
+        EXPECT_THROW(registers.fl(index, 123.5), std::out_of_range);
+    }
+    EXPECT_EQ(registers[15], 42);
+    EXPECT_DOUBLE_EQ(registers.fl(0), 123.5);
+}
 
 std::string hello_world_vm = R"(
 ; store address of data in register (Hello world literal)

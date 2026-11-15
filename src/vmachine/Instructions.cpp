@@ -1,5 +1,7 @@
 #include "Instructions.h"
 
+#include <cstring>
+
 #include "../infrastructure/RocketCommand.h"
 
 using namespace ofsim_vm;
@@ -25,18 +27,16 @@ void Instructions::fmov(unsigned char* args)
 void Instructions::set(unsigned char* args)
 {
     unsigned char r_dst_addr = args[0];
-    unsigned char avalue[4] = {};
-    Memory::memcopy(args, avalue, 1, 0, 4);
-    unsigned int rvalue = *reinterpret_cast<unsigned int*>(avalue);
+    unsigned int rvalue;
+    std::memcpy(&rvalue, args + 1, sizeof(rvalue));
     registers[r_dst_addr] = rvalue;
 }
 
 void Instructions::fset(unsigned char* args)
 {
     unsigned char r_dst_addr = args[0];
-    unsigned char avalue[8] = {};
-    Memory::memcopy(args, avalue, 1, 0, 8);
-    double rvalue = *reinterpret_cast<double*>(avalue);
+    double rvalue;
+    std::memcpy(&rvalue, args + 1, sizeof(rvalue));
     registers.fl(r_dst_addr, rvalue);
 }
 
@@ -341,9 +341,8 @@ void Instructions::ja(unsigned char* args)
 
 void Instructions::jmp(unsigned char* args)
 {
-    unsigned char aaddr[4] = {};
-    Memory::memcopy(args, aaddr, 0, 0, 4);
-    unsigned int addr = *reinterpret_cast<unsigned int*>(aaddr);
+    unsigned int addr;
+    std::memcpy(&addr, args, sizeof(addr));
     // unsigned int dst_addr = (registers.pc() + addr) % 0xffff;
     registers.pc(addr);
 }

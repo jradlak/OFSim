@@ -1,6 +1,6 @@
 # Project status and development roadmap
 
-Updated: 2026-11-14.
+Updated: 2026-11-15.
 
 The six items below retain the numbering from the initial project review.
 
@@ -44,6 +44,15 @@ Remaining:
 radial gravity and fuel consumption without a time factor. Altitude is calculated
 outside the integration loop, and prediction uses different geometry.
 
+Completed:
+
+- Initialized the engine as off on construction and reset, with consistent thrust
+  magnitude, direction-vector magnitude and rocket telemetry.
+- Initialized the displacement baseline and cleared displacement when resetting or
+  establishing orientation; added first-step and reset regression checks.
+
+Remaining:
+
 - [ ] Establish consistent units, planet radius and gravitational parameters.
 - [ ] Implement inverse-square gravity and time-dependent fuel consumption.
 - [ ] Recalculate altitude and check ground contact during each physics step.
@@ -54,12 +63,24 @@ outside the integration loop, and prediction uses different geometry.
 
 ## 4. VM memory access and Python API validation
 
-**Status:** Open. [VM memory](../src/vmachine/Memory.cpp) has incomplete bounds
-checks and unsafe typed reads. [Python callbacks](../src/python_integration/PythonMachine.cpp)
-use insufficiently validated arguments.
+**Status:** Partially complete. VM data access and register checks are hardened;
+program decoding and Python API validation remain open.
 
-- [ ] Validate complete memory ranges and replace unsafe casts with checked copies.
-- [ ] Validate code size, instruction boundaries, opcodes and register operands.
+Completed:
+
+- Added overflow-safe range checks to byte, word and double-word memory accessors,
+  preserving valid accesses ending at the memory boundary.
+- Replaced unsafe typed reads in memory accessors and instruction operands with
+  byte copies, preserving the existing VM data layout.
+- Rejected invalid integer and floating-point register indices with descriptive
+  exceptions instead of terminating the application; verified worker error delivery
+  and subsequent execution in regression tests.
+
+Remaining:
+
+- [ ] Validate code size, instruction boundaries, opcodes and bulk memory copies
+  during program loading and decoding.
+- [ ] Validate register operands before execution, including translator conversions.
 - [ ] Validate Python argument types, sequence lengths and numeric conversions.
 - [ ] Report malformed programs and invalid API calls as controlled errors in the UI.
 - [ ] Update example scripts that use the obsolete `orbital_thrust_change` API name.
@@ -75,6 +96,11 @@ Completed:
 - Added [communication tests](../tests/EventProcessorTests.cpp) for deferred and ordered
   commands, queue overflow, stop/reset invalidation, concurrent access and Python/VM
   telemetry compatibility.
+- Added memory and register boundary cases, overflowing addresses, worker error
+  recovery and physics initialization/reset checks; the test suite passed with
+  AddressSanitizer and UndefinedBehaviorSanitizer (leak detection excluded).
+- Verified memory/register error messages, subsequent valid VM execution, coasting,
+  powered flight and restoration of the initial engine state after reset in the GUI.
 - Verified steering, pause, Stop/reset, mode changes and shutdown in the GUI with
   Python and VM programs.
 
@@ -82,7 +108,8 @@ Remaining:
 
 - [ ] Add physical reference cases and checks for orbital energy, angular momentum,
   time-step sensitivity and prediction agreement.
-- [ ] Add invalid-input and memory-boundary cases alongside item 4; use relevant sanitizers.
+- [ ] Extend invalid-input cases to malformed instruction streams and Python API
+  arguments alongside the remaining item 4 work; use relevant sanitizers.
 
 ## 6. Reproducible builds and automated checks
 

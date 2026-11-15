@@ -30,9 +30,9 @@ PhysicsSolver::PhysicsSolver(RocketPhysicalProperties& _rocketProperties,
                              CelestialBodyType _celestialBodyType, f64 _celestialBodySize,
                              i32 _MS_PER_UPDATE)
     : rocketProperties(_rocketProperties), celestialBodyType(_celestialBodyType),
-      celestialBodySize(_celestialBodySize), ms_per_update(_MS_PER_UPDATE),
-      thrustMagnitude(INIT_THRUST_MAGNITUDE)
+      celestialBodySize(_celestialBodySize), ms_per_update(_MS_PER_UPDATE), thrustMagnitude(0.0)
 {
+    reset();
 }
 
 void PhysicsSolver::establishInitialOrientation(dvec3 rocketInitialPosition, const f64 _theta,
@@ -42,6 +42,8 @@ void PhysicsSolver::establishInitialOrientation(dvec3 rocketInitialPosition, con
 
     thrustVector = direction * thrustMagnitude;
     rocketProperties.rotation = dvec3(_theta, 0, _phi);
+    lastPos = rocketProperties.position;
+    deltaP = dvec3(0.0);
 }
 
 u64 PhysicsSolver::calculateForces(u64 timeInterval)
@@ -147,8 +149,14 @@ void PhysicsSolver::reset()
     resetForces();
     thrustMagnitude = min_thrust;
     thrustCutOff = true;
+    rocketProperties.thrustMagnitude = thrustMagnitude;
+    thrustVector = length(thrustVector) > 0.0 ? normalize(thrustVector) * thrustMagnitude
+                                              : dvec3(0.0, thrustMagnitude, 0.0);
+    lastPos = rocketProperties.position;
+    deltaP = dvec3(0.0);
 
-    altitude = 0.0;
+    altitude = calculateAltitude();
+    atmosphereDragForceMagnitude = 0.0;
     calculateAtmosphereGradient();
     calculateAtmosphericDragForce();
 }

@@ -1,11 +1,59 @@
 #include <gtest/gtest.h>
 
 #include <thread>
+#include <cstring>
+#include <limits>
+#include <stdexcept>
 #include "../src/vmachine/Memory.h"
 
 namespace vm_tests
 {
 using namespace ofsim_vm;
+
+TEST(MemoryTests, LastCompleteRangesAndUnalignedValuesRoundTrip)
+{
+    Memory memory;
+    memory.storeByte(mem_size - 1, 0xAB);
+    EXPECT_EQ(memory.fetchByte(mem_size - 1), 0xAB);
+    memory.storeWord(mem_size - 4, -1234567);
+    EXPECT_EQ(memory.fetchWord(mem_size - 4), -1234567);
+    memory.storeDWord(mem_size - 8, -1234.125);
+    EXPECT_DOUBLE_EQ(memory.fetchDWord(mem_size - 8), -1234.125);
+
+    memory.storeWord(1, -1234567);
+    EXPECT_EQ(memory.fetchWord(1), -1234567);
+    const int word = -1234567;
+    EXPECT_EQ(std::memcmp(memory.mem + 1, &word, sizeof(word)), 0);
+    memory.storeDWord(3, -1234.125);
+    EXPECT_DOUBLE_EQ(memory.fetchDWord(3), -1234.125);
+    const double dword = -1234.125;
+    EXPECT_EQ(std::memcmp(memory.mem + 3, &dword, sizeof(dword)), 0);
+}
+
+TEST(MemoryTests, IncompleteRangesAndOverflowingAddressesAreRejectedWithoutWrites)
+{
+    Memory memory;
+    const auto maxAddress = std::numeric_limits<unsigned int>::max();
+    for (const auto addr : {mem_size, mem_size + 1, maxAddress})
+    {
+        EXPECT_THROW(memory.fetchByte(addr), std::out_of_range);
+        EXPECT_THROW(memory.storeByte(addr, 42), std::out_of_range);
+    }
+    memory.storeDWord(mem_size - 8, 42.125);
+    memory.storeDWord(0, 123.5);
+    for (const auto addr : {mem_size - 3, mem_size - 1, mem_size, maxAddress - 3, maxAddress})
+    {
+        EXPECT_THROW(memory.fetchWord(addr), std::out_of_range);
+        EXPECT_THROW(memory.storeWord(addr, 42), std::out_of_range);
+    }
+    for (const auto addr : {mem_size - 7, mem_size - 1, mem_size, maxAddress - 7, maxAddress})
+    {
+        EXPECT_THROW(memory.fetchDWord(addr), std::out_of_range);
+        EXPECT_THROW(memory.storeDWord(addr, 42), std::out_of_range);
+    }
+    EXPECT_DOUBLE_EQ(memory.fetchDWord(0), 123.5);
+    EXPECT_DOUBLE_EQ(memory.fetchDWord(mem_size - 8), 42.125);
+}
 
 TEST(MemoryTests, simpleStoreAndFetchBytes)
 {

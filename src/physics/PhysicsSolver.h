@@ -84,9 +84,9 @@ struct PhysicsSolver
     }
 
     f64 altitude{0.0};
-    dvec3 thrustVector;
+    dvec3 thrustVector{0.0, 1.0, 0.0};
     f64 thrustMagnitude;
-    dvec3 deltaP; // delta position
+    dvec3 deltaP{0.0}; // delta position
 
     // trajectory prediction:
     std::vector<f64> trajectoryPredictionX;
@@ -117,9 +117,9 @@ private:
 
     int ms_per_update;
 
-    bool thrustCutOff;
+    bool thrustCutOff{true};
 
-    dvec3 lastPos;
+    dvec3 lastPos{0.0};
 
     std::vector<f64> velocityMagnitude;
 
