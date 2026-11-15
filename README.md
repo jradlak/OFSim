@@ -48,7 +48,7 @@ git clone https://github.com/jradlak/OFSim.git --recursive
 
 Compilation:
 
-Project requires CMake and C++ (g++ or MSVC++) compiler supporting at least C++17.
+Project requires CMake and a C++ compiler (g++ or MSVC++) supporting C++20.
 ```
 (in the project's home directory):
 
@@ -58,6 +58,17 @@ cmake --build build
 cd build/
 ./OFSim
 ```
+On Linux, add `-DGLFW_BUILD_WAYLAND=OFF` to the configure command to use X11
+when Wayland development tools are unavailable. Preserve existing CMake options
+when reusing a build directory.
+
+Build and run the regression tests from the repository root:
+
+```bash
+cmake --build build --target OFSim ofsim_tests -j 8
+ctest --test-dir build --output-on-failure
+```
+
 If you use Visual Studio 2022 on Windows, you can import the project into the IDE - the configuration should be automatic.
 
 **=====Screenshots:=====**
@@ -76,12 +87,12 @@ If you use Visual Studio 2022 on Windows, you can import the project into the ID
 
 **=====Things To Do:=====**
 
-ASAP:
-1. The rotation of the rocket does not completely coincide with the rotation of the thrust vector.
+Current priorities and known limitations are tracked in the
+[project roadmap](doc/PROJECT_STATUS.md). The next major tasks are bounded Python
+cancellation and physics/prediction consistency. VM translation and execution errors
+are reported in the GUI; Python programs still need to cooperate with stop requests.
 
-Less urgent:
-1. Correcting the position of the sun and moon. Currently, they are located polar to the planet, despite maintaining the correct distances.
-2. Error handling in vm's assembly programs. Simple error handling in the Python programs is already here.
+Other planned improvements include correcting the positions of the Sun and Moon.
 
 **=====Plans for the future:=====**
 

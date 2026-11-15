@@ -23,6 +23,10 @@ Completed:
   clock between runs and transferred execution errors to the main thread through
   [ProgramRunner](../src/simulation/ProgramRunner.h).
 
+A Python stop request sets a flag; it does not interrupt `time.sleep()` or force
+Python-created threads to exit. Worker collection waits for execution and interpreter
+finalization to finish.
+
 Remaining:
 
 - [ ] Run Python flight programs in a separate process. An uncooperative script
@@ -51,6 +55,8 @@ Completed:
 **Status:** Partially complete. [PhysicsSolver](../src/physics/PhysicsSolver.cpp) uses constant
 radial gravity and fuel consumption without a time factor. Altitude is calculated
 outside the integration loop, and prediction uses different geometry.
+Simulation altitude subtracts twice the supplied body size, while prediction subtracts
+it once. Prediction currently models gravity-only coasting.
 
 Completed:
 
@@ -75,6 +81,9 @@ Remaining:
 
 - [ ] Establish consistent units, planet radius and gravitational parameters.
 - [ ] Implement inverse-square gravity and time-dependent fuel consumption.
+- [ ] Define physical limits for finite thrust and rotation commands, preserve the dry
+  mass when fuel is exhausted and handle non-finite solver results. Finite input alone
+  does not prevent negative mass or infinite velocity at extreme thrust values.
 - [ ] Recalculate altitude and check ground contact during each physics step.
 - [ ] Use consistent geometry and gravity in simulation and prediction; define
   whether prediction represents coasting or powered flight.
@@ -82,7 +91,8 @@ Remaining:
 
 ## 4. VM memory access and Python API validation
 
-**Status:** Complete. Automated regression checks and GUI error recovery verification passed.
+**Status:** Partially complete. Memory accessors and Python API validation are implemented;
+instruction-wide operand-access verification remains.
 
 Completed:
 
@@ -114,6 +124,15 @@ Completed:
 - [x] Preserved Python exception types in program diagnostics and verified controlled
   VM/Python errors followed by successful valid programs in tests and the GUI.
 - [x] Updated the bundled Python example to use `orbital_thrust_magnitude_change`.
+- [x] Corrected `vnot` to read its single register operand within the decoded buffer,
+  preserving the instruction format. Regression checks verify bitwise results and
+  that other registers remain unchanged.
+
+Remaining:
+
+- [ ] Audit operand reads in every VM instruction and add execution coverage for each
+  opcode, including malformed operands. Decoder validation alone does not ensure that
+  instruction implementations stay within their operand buffers.
 
 The loaded image includes instructions and `db` data; data access retains the full
 VM address space. Validation checks complete instructions at the current address;
@@ -153,11 +172,16 @@ Completed:
   passed with AddressSanitizer and UndefinedBehaviorSanitizer (leak detection excluded).
 - [x] Verified arithmetic and Python API error messages followed by successful VM and
   Python flight programs in the GUI.
+- [x] Added `vnot` execution checks for the first and last registers and instruction
+  checks for every register. VM regression tests passed with AddressSanitizer and
+  UndefinedBehaviorSanitizer (leak detection excluded). Verified GUI execution with
+  `vnot` on the first and last registers, reset and successful reruns.
 
 Remaining:
 
 - [ ] Add physical reference cases and checks for orbital energy, angular momentum,
   time-step sensitivity and prediction agreement.
+- [ ] Complete per-opcode VM execution and operand-boundary coverage for item 4.
 
 ## 6. Reproducible builds and automated checks
 
@@ -167,8 +191,9 @@ Remaining:
 Remaining:
 
 - [ ] Pin dependencies to reviewed tags or commits and modernize their CMake setup.
-- [ ] Verify a clean build and update build instructions to C++20, required system
-  libraries and supported X11/Wayland options.
+- [ ] Verify a clean build and complete the build instructions for required system
+  libraries and supported X11/Wayland options. C++20 requirements, the X11 fallback
+  option and regression-test commands are documented in [README.md](../README.md).
 - [ ] Add reusable format and format-check commands using clang-format 19.
 - [ ] Add CI for compilation, tests and formatting, with sanitizer checks where practical.
 

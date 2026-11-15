@@ -392,7 +392,7 @@ TEST(ProgramRunnerTests, InvalidPythonApiCallsReportTypedErrorsAndAllowValidReru
     }
 }
 
-TEST(ProgramRunnerTests, StoppingPythonDoesNotWaitForItsSleep)
+TEST(ProgramRunnerTests, PythonStopRequestSetsFlagAndCollectsAfterScriptReturns)
 {
     ofsim_python_integration::PythonMachine python;
     auto& events = *ofsim_events::EventProcessor::getInstance();

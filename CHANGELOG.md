@@ -7,6 +7,10 @@ are grouped under `Unreleased`. Release dates were not recorded for historical v
 
 ### Changed
 
+- Updated build instructions to C++20 with X11 fallback and regression-test commands;
+  recorded physical input limits and VM instruction coverage as remaining roadmap work.
+- Clarified that the Python stop regression checks flag delivery and collection after
+  the script returns, without claiming to interrupt sleep.
 - Recorded architecture concerns and deferred refactoring goals after program cancellation
   and physics correctness work in the project roadmap.
 - Standardized project status definitions and completion checkboxes in the roadmap.
@@ -15,6 +19,8 @@ are grouped under `Unreleased`. Release dates were not recorded for historical v
 
 ### Fixed
 
+- Corrected the single-register operand read in VM `vnot`, preventing a buffer
+  overread; added instruction and execution regression checks.
 - Validated VM arithmetic and Python API inputs, rejected non-finite flight commands
   and preserved descriptive errors and valid reruns after failures, with regression
   coverage. Corrected the obsolete API call in the bundled Python example.

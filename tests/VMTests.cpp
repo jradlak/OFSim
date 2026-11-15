@@ -193,6 +193,48 @@ TEST(VMachineTests, InstructionAtTheLastByteOfAFullImageCanHalt)
     EXPECT_NO_THROW(vm.start());
 }
 
+TEST(VMachineTests, BitwiseNotUsesSingleDecodedRegisterOperand)
+{
+    VMachine vm(*ofsim_events::EventProcessor::getInstance());
+    for (const unsigned int index : {0u, number_of_registers - 1})
+    {
+        SCOPED_TRACE(index);
+        const auto target = "r" + std::to_string(index);
+        const auto address = index == 0 ? "r1" : "r0";
+        for (const unsigned int value : {0u, std::numeric_limits<unsigned int>::max(), 0xA5A55A5Au})
+        {
+            SCOPED_TRACE(value);
+            vm.translateSourceCode("set " + target + ", " + std::to_string(value) + "\nvnot " +
+                                   target + "\nset " + address + ", 256\nst " + address + ", " +
+                                   target + "\nhalt");
+            ASSERT_NO_THROW(vm.start());
+            EXPECT_EQ(static_cast<unsigned int>(vm.getMemory()->fetchWord(256)), ~value);
+        }
+    }
+}
+
+TEST(InstructionsTests, BitwiseNotChangesOnlyTheSelectedRegister)
+{
+    Memory memory;
+    Registers registers;
+    Instructions instructions(memory, registers, *ofsim_events::EventProcessor::getInstance());
+    for (unsigned char index = 0; index < number_of_registers; ++index)
+    {
+        SCOPED_TRACE(static_cast<unsigned int>(index));
+        for (unsigned char other = 0; other < number_of_registers; ++other)
+            registers[other] = 0x12345670u + other;
+
+        unsigned char args[] = {index};
+        instructions.vnot(args);
+
+        for (unsigned char other = 0; other < number_of_registers; ++other)
+        {
+            const auto original = 0x12345670u + other;
+            EXPECT_EQ(registers[other], other == index ? ~original : original);
+        }
+    }
+}
+
 TEST(InstructionsTests, ZeroDivisorsLeaveDestinationRegistersUnchanged)
 {
     Memory memory;

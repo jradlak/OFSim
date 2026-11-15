@@ -236,7 +236,7 @@ void Instructions::vxor(unsigned char* args)
 
 void Instructions::vnot(unsigned char* args)
 {
-    unsigned char r_src_addr = args[1];
+    unsigned char r_src_addr = args[0];
     unsigned int value1 = registers[r_src_addr];
 
     registers[r_src_addr] = ~value1;
