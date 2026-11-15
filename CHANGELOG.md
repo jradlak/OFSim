@@ -5,8 +5,11 @@ are grouped under `Unreleased`. Release dates were not recorded for historical v
 
 ## Unreleased
 
+## 0.27.7 alpha - 2026-11-15
+
 ### Changed
 
+- Updated the splash screen version to 0.27.7 alpha and author years to 2021 - 2026.
 - Improved logical grouping in the translator with blank lines and documented the convention.
 - Updated the build instructions in `AGENTS.md` to use eight parallel jobs.
 

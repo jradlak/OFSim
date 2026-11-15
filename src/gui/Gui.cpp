@@ -134,7 +134,7 @@ void Gui::renderSplashScreen()
     ImGui::Separator();
 
     ImGui::Text("%s", i18n->t(splash_version));
-    ImGui::Text("Jakub Radlak 2021 - 2024");
+    ImGui::Text("Jakub Radlak 2021 - 2026");
 
     ImGui::Separator();
     ImGui::NewLine();
