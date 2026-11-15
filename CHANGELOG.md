@@ -7,6 +7,7 @@ are grouped under `Unreleased`. Release dates were not recorded for historical v
 
 ### Changed
 
+- Improved logical grouping in the translator with blank lines and documented the convention.
 - Updated the build instructions in `AGENTS.md` to use eight parallel jobs.
 
 ### Fixed
