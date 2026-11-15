@@ -123,8 +123,8 @@ void I18n::initLabels()
     enLabels[telemetry_plots_title] = "Telemetry plots";
     plLabels[telemetry_plots_velocity] = "Predkosc";
     enLabels[telemetry_plots_velocity] = "Velocity";
-    plLabels[telemetry_plots_delta_v] = "Delta-v";
-    enLabels[telemetry_plots_delta_v] = "Delta-v";
+    plLabels[telemetry_plots_speed_rate] = "d|v|/dt";
+    enLabels[telemetry_plots_speed_rate] = "d|v|/dt";
     plLabels[telemetry_plots_altitude] = "Wysokosc";
     enLabels[telemetry_plots_altitude] = "Altitude";
     plLabels[telemetry_plots_atm_press] = "Cisn. atm.";

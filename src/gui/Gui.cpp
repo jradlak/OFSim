@@ -417,7 +417,7 @@ void Gui::plotTelemetry(std::vector<double> velocityHistory, double maxVelo,
 
     ImGui::PlotHistogram(i18n->t(telemetry_plots_velocity), arrVelo, n, 0, NULL, 0.0f,
                          (float)maxVelo, ImVec2(370, 110.0f));
-    ImGui::PlotHistogram(i18n->t(telemetry_plots_delta_v), arrAcc, n, 0, NULL, (float)minAcc,
+    ImGui::PlotHistogram(i18n->t(telemetry_plots_speed_rate), arrAcc, n, 0, "km/s^2", (float)minAcc,
                          (float)maxAcc, ImVec2(370, 110.0f));
     ImGui::PlotHistogram(i18n->t(telemetry_plots_altitude), arrAlt, n, 0, NULL, 0.0f, (float)maxAlt,
                          ImVec2(370, 110.0f));

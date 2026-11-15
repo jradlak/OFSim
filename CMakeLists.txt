@@ -206,10 +206,12 @@ add_executable(
     
   ${OFSim_src}
   ${OFSim_vmachine_src}
+  src/simulation/TelemetryCollector.cpp
   src/gui/i18n.cpp
 
     "tests/SphereTests.cpp"    
     "tests/PhysicsSolverTests.cpp"
+    "tests/TelemetryCollectorTests.cpp"
     "tests/MemoryTests.cpp"
     "tests/TranslatorTests.cpp"
     "tests/VMTests.cpp"

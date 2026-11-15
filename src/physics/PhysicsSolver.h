@@ -57,6 +57,11 @@ struct PhysicsSolver
     // used in the API by the orbital programs written by the usersto control the rocket's thrust
     void updateThrustMagnitude(f64 newMagintude);
 
+    const dvec3& getThrustDirection() const
+    {
+        return thrustDirection;
+    }
+
     // similar to above: rotate the rocket's orientation (and by design thrust verctor) by a given
     // angle
     void rotateRocket(dvec3 deltaRotation)
@@ -118,10 +123,9 @@ private:
     int ms_per_update;
 
     bool thrustCutOff{true};
+    dvec3 thrustDirection{0.0, 1.0, 0.0};
 
     dvec3 lastPos{0.0};
-
-    std::vector<f64> velocityMagnitude;
 
     // PRIVATE METHODS:
 

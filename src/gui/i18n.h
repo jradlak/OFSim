@@ -65,7 +65,7 @@ enum Label
 
     telemetry_plots_title,
     telemetry_plots_velocity,
-    telemetry_plots_delta_v,
+    telemetry_plots_speed_rate,
     telemetry_plots_altitude,
     telemetry_plots_atm_press,
 

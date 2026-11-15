@@ -10,6 +10,15 @@ are grouped under `Unreleased`. Release dates were not recorded for historical v
 - Expanded the project status report with thrust restart, prediction horizon and
   telemetry issues, regression coverage needs and the revised repair order.
 
+### Fixed
+
+- Preserved rocket and thrust direction when rotating with zero thrust and restarting
+  the engine without reset, with regression coverage.
+- Bounded the trajectory prediction horizon, cleared stale prediction data and kept
+  flight history visible when prediction is empty, reusing rendering geometry.
+- Corrected telemetry timing and reset, aligned bounded plot buffers and progressively
+  downsampled flight history while retaining its first and latest points.
+
 ## 0.27.7 alpha - 2026-11-15
 
 ### Changed

@@ -13,6 +13,8 @@ public:
     TrajectoryPrediction()
     {
         renderer = std::make_unique<ObjectRenderer>("ball_shader");
+        ofsim_math_and_physics::Sphere sphere(3, 32, 16);
+        renderer->init(sphere.verticesAndNormals, sphere.indices);
     }
 
     void initWithPositions(std::vector<double> px, std::vector<double> py, std::vector<double> pz,

@@ -38,9 +38,9 @@ PhysicsSolver::PhysicsSolver(RocketPhysicalProperties& _rocketProperties,
 void PhysicsSolver::establishInitialOrientation(dvec3 rocketInitialPosition, const f64 _theta,
                                                 const f64 _phi)
 {
-    dvec3 direction = normalize(rocketInitialPosition - celestialBodyCenter(celestialBodySize));
+    thrustDirection = normalize(rocketInitialPosition - celestialBodyCenter(celestialBodySize));
 
-    thrustVector = direction * thrustMagnitude;
+    thrustVector = thrustDirection * thrustMagnitude;
     rocketProperties.rotation = dvec3(_theta, 0, _phi);
     lastPos = rocketProperties.position;
     deltaP = dvec3(0.0);
@@ -112,22 +112,23 @@ void PhysicsSolver::predictTrajectory(u64 elapsedTime)
     trajectoryPredictionY.clear();
     trajectoryPredictionZ.clear();
 
+    constexpr u64 predictionLimitMs = MAX_PREDICTION_TIME * 1000ULL;
+    if (elapsedTime >= predictionLimitMs)
+        return;
+
     dvec3 currentVelocity = rocketProperties.velocity;
     dvec3 position = rocketProperties.position;
 
-    elapsedTime /= 1000;
-    i32 n = prediction_steps;
-    f64 currentTime = MAX_PREDICTION_TIME - elapsedTime;
-    f64 deltaTime = (f64)currentTime / n;
+    const f64 remainingSeconds = (predictionLimitMs - elapsedTime) / 1000.0;
+    const f64 deltaTime = remainingSeconds / prediction_steps;
 
-    for (u32 index = 0; index < n; index++)
+    for (u32 index = 0; index < prediction_steps; index++)
     {
         dvec3 gravityForceVector = normalize(position - celestialBodyCenter(celestialBodySize)) *
                                    SolarSystemConstants::GConst;
 
         currentVelocity += gravityForceVector * deltaTime;
         position += currentVelocity * deltaTime;
-        currentTime += deltaTime;
 
         f64 altitude = length(position - celestialBodyCenter(celestialBodySize)) -
                        celestialBodySize + MIN_ALTITUDE;
@@ -139,19 +140,20 @@ void PhysicsSolver::predictTrajectory(u64 elapsedTime)
         trajectoryPredictionX.push_back(position.x);
         trajectoryPredictionY.push_back(position.y);
         trajectoryPredictionZ.push_back(position.z);
-
-        velocityMagnitude.push_back(length(currentVelocity));
     }
 }
 
 void PhysicsSolver::reset()
 {
     resetForces();
+    trajectoryPredictionX.clear();
+    trajectoryPredictionY.clear();
+    trajectoryPredictionZ.clear();
+
     thrustMagnitude = min_thrust;
     thrustCutOff = true;
     rocketProperties.thrustMagnitude = thrustMagnitude;
-    thrustVector = length(thrustVector) > 0.0 ? normalize(thrustVector) * thrustMagnitude
-                                              : dvec3(0.0, thrustMagnitude, 0.0);
+    thrustVector = thrustDirection * thrustMagnitude;
     lastPos = rocketProperties.position;
     deltaP = dvec3(0.0);
 
@@ -164,8 +166,7 @@ void PhysicsSolver::reset()
 void PhysicsSolver::updateThrustMagnitude(f64 newMagintude)
 {
     thrustMagnitude = newMagintude;
-    thrustVector = normalize(thrustVector);
-    thrustVector *= thrustMagnitude;
+    thrustVector = thrustDirection * thrustMagnitude;
     thrustCutOff = false;
 
     rocketProperties.thrustMagnitude = newMagintude;
@@ -178,21 +179,23 @@ void PhysicsSolver::updateThrustMagnitude(f64 newMagintude)
 
 void PhysicsSolver::rotateRocketAndThrust(dvec3 deltaRotation)
 {
-    // rotate thrust vector:
     if (deltaRotation.x != 0)
     {
-        thrustVector = glm::rotateX(thrustVector, glm::radians(deltaRotation.x));
+        thrustDirection = glm::rotateX(thrustDirection, glm::radians(deltaRotation.x));
     }
 
     if (deltaRotation.y != 0)
     {
-        thrustVector = glm::rotateY(thrustVector, glm::radians(deltaRotation.y));
+        thrustDirection = glm::rotateY(thrustDirection, glm::radians(deltaRotation.y));
     }
 
     if (deltaRotation.z != 0)
     {
-        thrustVector = glm::rotateZ(thrustVector, glm::radians(deltaRotation.z));
+        thrustDirection = glm::rotateZ(thrustDirection, glm::radians(deltaRotation.z));
     }
+
+    thrustDirection = normalize(thrustDirection);
+    thrustVector = thrustDirection * thrustMagnitude;
 
     // rotate rocket orientation:
     rocketProperties.rotation += deltaRotation;

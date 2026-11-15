@@ -50,29 +50,27 @@ Completed:
   magnitude, direction-vector magnitude and rocket telemetry.
 - Initialized the displacement baseline and cleared displacement when resetting or
   establishing orientation; added first-step and reset regression checks.
+- Preserved thrust direction independently of magnitude, including rotation at
+  exactly zero thrust and restart without reset. Rendering uses the retained direction.
+- Bounded prediction to the remaining time before 8000 seconds, returning an empty
+  prediction at or beyond the limit. Prediction and reset clear coordinate buffers;
+  removed the unused prediction-speed buffer and initialized rendering geometry once
+  so flight history can be displayed without predicted points.
+- Corrected [telemetry collection](../src/simulation/TelemetryCollector.cpp) to reset
+  its sample baseline and calculate the signed rate of change of speed using actual
+  millisecond timestamps, with a baseline sample at initialization and reset.
+- Kept all plot histories aligned within 2048 samples and bounded flight history to
+  2048 points through progressive downsampling, retaining the first and latest points.
+  The flight-path renderer includes the latest retained point.
 
 Remaining:
 
-- [ ] Preserve thrust direction independently of magnitude. Setting thrust to exactly
-  zero and then restoring it without a reset normalizes a zero vector, producing
-  non-finite thrust and rocket position.
 - [ ] Establish consistent units, planet radius and gravitational parameters.
 - [ ] Implement inverse-square gravity and time-dependent fuel consumption.
 - [ ] Recalculate altitude and check ground contact during each physics step.
 - [ ] Use consistent geometry and gravity in simulation and prediction; define
   whether prediction represents coasting or powered flight.
-- [ ] Clear all prediction buffers, including `velocityMagnitude`, and bound the
-  prediction horizon. After 8000 seconds, subtracting elapsed time from the limit
-  underflows an unsigned value and produces an enormous integration step.
 - [ ] Review integration accuracy and atmospheric drag.
-- [ ] Correct [telemetry collection](../src/simulation/TelemetryCollector.cpp): reset
-  `lastVelocity` between flights and calculate the plotted rate of change of speed
-  using the actual sample interval. The current calculation is a speed difference,
-  so its scale depends on sample spacing and the first sample after reset uses the
-  previous flight's speed.
-- [ ] Bound `accelerationHistory` consistently with the other plot buffers and define
-  bounded retention or downsampling for `telemetryHistory`, which is used to display
-  the flight path. Both currently grow without a limit.
 
 ## 4. VM memory access and Python API validation
 
@@ -136,12 +134,15 @@ Completed:
   valid VM execution and repeated start/reset in the GUI.
 - Verified steering, pause, Stop/reset, mode changes and shutdown in the GUI with
   Python and VM programs.
+- Added regression checks for zero-thrust restart and rotation, prediction limits,
+  repeated prediction and reset, telemetry sampling and reset, aligned plot windows
+  and bounded flight history spanning the whole flight. Physics and telemetry tests
+  passed with AddressSanitizer, UndefinedBehaviorSanitizer and leak detection enabled.
+- Verified zero-thrust rotation and restart, finite flight telemetry, signed speed-rate
+  plots, pause and repeated prediction-mode changes in the GUI.
 
 Remaining:
 
-- [ ] Cover zero-thrust restart without reset, prediction at and beyond its time
-  limit, repeated prediction calls, telemetry reset, irregular sample intervals
-  and history retention limits with regression tests.
 - [ ] Add physical reference cases and checks for orbital energy, angular momentum,
   time-step sensitivity and prediction agreement.
 - [ ] Extend invalid-input cases to arithmetic faults and Python API arguments
@@ -169,9 +170,8 @@ Remaining:
 
 ## Next task
 
-First fix the localized thrust, prediction and telemetry issues in item 3, with
-the corresponding item 5 regression tests, and harden the remaining arithmetic
-and Python API inputs in item 4.
+Harden the remaining arithmetic and Python API inputs in item 4, with the
+corresponding item 5 regression tests.
 
 Then finish item 1 by moving Python into a separate process with bounded
 cancellation. The command queue and telemetry snapshots now provide the

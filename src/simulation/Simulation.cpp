@@ -158,6 +158,7 @@ void Simulation::resetSimulation()
     lag = 0;
     previous = currentTime();
     telemetryCollector->clear();
+    collectTelemetry();
 
     commandRun = EventProcessor::getInstance()->beginCommandRun();
     publishProgramTelemetry();
@@ -300,13 +301,13 @@ void Simulation::mainLoop()
         solarSystem->render(projection, view, SolarSystemConstants::lightPos);
         // rocket->render(projection, view, SolarSystemConstants::lightPos);
         rocket->renderParallelToVectorWithColorAndStretch(
-            projection, view, SolarSystemConstants::lightPos, physics->thrustVector, vec3(0.55f),
-            dvec3(1.0));
+            projection, view, SolarSystemConstants::lightPos, physics->getThrustDirection(),
+            vec3(0.55f), dvec3(1.0));
 
         if (simulationMode == SimulationMode::MANUAL_CONTROL ||
             simulationMode == SimulationMode::WAITING_FOR_BEGIN_MANUAL_CONTROL)
         {
-            const dvec3& thrustDirection = physics->thrustVector;
+            const dvec3& thrustDirection = physics->getThrustDirection();
             const dvec3& velocityDirection = rocket->properties().velocity;
             velocityIndicator->renderWithMagnitudeAndDirection(
                 projection, view, SolarSystemConstants::lightPos, rocket->properties().position,
@@ -787,6 +788,7 @@ void Simulation::initializationSequence()
     initialSolarSystemInformation();
     initialOrbitalInformation();
 
+    collectTelemetry();
     commandRun = EventProcessor::getInstance()->beginCommandRun();
     publishProgramTelemetry();
 }
@@ -807,21 +809,17 @@ void Simulation::publishProgramTelemetry()
 
 void Simulation::collectTelemetry()
 {
-    u64 tickTock = runningTime / 1000;
-    if (runningTime > 0)
-    {
-        TelemetryData data;
-        data.time = tickTock;
-        data.altitude = physics->altitude;
-        data.apogee = apogeum;
-        data.perigee = perygeum;
-        data.atmPressure = physics->getAtmosphereDragForceMagnitude();
-        data.mass = rocket->properties().mass;
-        data.velocity = glm::length(rocket->properties().velocity);
-        data.position = rocket->properties().position;
+    TelemetryData data{};
+    data.time = runningTime;
+    data.altitude = physics->altitude;
+    data.apogee = apogeum;
+    data.perigee = perygeum;
+    data.atmPressure = physics->getAtmosphereDragForceMagnitude();
+    data.mass = rocket->properties().mass;
+    data.velocity = glm::length(rocket->properties().velocity);
+    data.position = rocket->properties().position;
 
-        telemetryCollector->registerTelemetry(data);
-    }
+    telemetryCollector->registerTelemetry(data);
 }
 
 void Simulation::initWindowContext()

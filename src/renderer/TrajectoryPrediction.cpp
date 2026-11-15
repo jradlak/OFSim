@@ -23,10 +23,11 @@ void TrajectoryPrediction::initWithPositions(std::vector<double> px, std::vector
         spheresHistory.push_back(std::move(sphere));
     }
 
-    if (spheresPrediction.size() > 0)
+    if (!telemetryHistory.empty() && (telemetryHistory.size() - 1) % 8 != 0)
     {
-        ofsim_math_and_physics::Sphere* sphere = spheresPrediction[0].get();
-        renderer->init(sphere->verticesAndNormals, sphere->indices);
+        auto sphere = std::make_unique<ofsim_math_and_physics::Sphere>(3, 32, 16);
+        sphere->position = telemetryHistory.back().position;
+        spheresHistory.push_back(std::move(sphere));
     }
 }
 
