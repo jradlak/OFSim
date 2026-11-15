@@ -7,6 +7,7 @@ are grouped under `Unreleased`. Release dates were not recorded for historical v
 
 ### Changed
 
+- Standardized project status definitions and completion checkboxes in the roadmap.
 - Expanded the project status report with thrust restart, prediction horizon and
   telemetry issues, regression coverage needs and the revised repair order.
 

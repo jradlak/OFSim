@@ -4,16 +4,24 @@ Updated: 2026-11-15.
 
 The six items below retain the numbering from the initial project review.
 
+Status definitions:
+
+- **Open:** No listed milestones have been completed and verified.
+- **Partially complete:** Some work is complete and verified; listed work remains.
+- **Complete:** All listed work is complete and the required checks have passed.
+
+Completed work is marked `[x]`; remaining work is marked `[ ]`.
+
 ## 1. Stopping, reset and program lifetime
 
 **Status:** Partially complete.
 
 Completed:
 
-- Added a common asynchronous stopping lifecycle for Stop, reset, control-mode
+- [x] Added a common asynchronous stopping lifecycle for Stop, reset, control-mode
   changes and shutdown in [Simulation](../src/simulation/Simulation.cpp).
-- Deferred reset and VM memory cleanup until the worker has finished.
-- Added atomic stop flags, preserved early stop requests, reset the simulation
+- [x] Deferred reset and VM memory cleanup until the worker has finished.
+- [x] Added atomic stop flags, preserved early stop requests, reset the simulation
   clock between runs and transferred execution errors to the main thread through
   [ProgramRunner](../src/simulation/ProgramRunner.h).
 
@@ -28,38 +36,40 @@ Remaining:
 
 **Status:** Complete. Automated regression checks and manual GUI verification passed.
 
-- [x] Keep rocket and physics updates in the main loop.
-- [x] Replace direct worker mutations with a bounded, synchronized command queue.
-- [x] Provide consistent telemetry snapshots instead of live object pointers.
-- [x] Keep command history, errors and UI events on the main thread; publish simulation
-  time with telemetry and retain the atomic Python stop flag.
-- [x] Invalidate queued and late commands on Stop, mode changes and shutdown;
-  publish the initial telemetry after reset and assign each run a fresh identifier.
-- [x] Verify steering, pause, Stop/reset, mode changes and closing in the GUI with
+Completed:
+
+- [x] Kept rocket and physics updates in the main loop.
+- [x] Replaced direct worker mutations with a bounded, synchronized command queue.
+- [x] Provided consistent telemetry snapshots instead of live object pointers.
+- [x] Kept command history, errors and UI events on the main thread; published simulation
+  time with telemetry and retained the atomic Python stop flag.
+- [x] Invalidated queued and late commands on Stop, mode changes and shutdown;
+  published the initial telemetry after reset and assigned each run a fresh identifier.
+- [x] Verified steering, pause, Stop/reset, mode changes and closing in the GUI with
   Python and VM programs after the communication change.
 
 ## 3. Physics and trajectory prediction
 
-**Status:** Open. [PhysicsSolver](../src/physics/PhysicsSolver.cpp) uses constant
+**Status:** Partially complete. [PhysicsSolver](../src/physics/PhysicsSolver.cpp) uses constant
 radial gravity and fuel consumption without a time factor. Altitude is calculated
 outside the integration loop, and prediction uses different geometry.
 
 Completed:
 
-- Initialized the engine as off on construction and reset, with consistent thrust
+- [x] Initialized the engine as off on construction and reset, with consistent thrust
   magnitude, direction-vector magnitude and rocket telemetry.
-- Initialized the displacement baseline and cleared displacement when resetting or
+- [x] Initialized the displacement baseline and cleared displacement when resetting or
   establishing orientation; added first-step and reset regression checks.
-- Preserved thrust direction independently of magnitude, including rotation at
+- [x] Preserved thrust direction independently of magnitude, including rotation at
   exactly zero thrust and restart without reset. Rendering uses the retained direction.
-- Bounded prediction to the remaining time before 8000 seconds, returning an empty
+- [x] Bounded prediction to the remaining time before 8000 seconds, returning an empty
   prediction at or beyond the limit. Prediction and reset clear coordinate buffers;
   removed the unused prediction-speed buffer and initialized rendering geometry once
   so flight history can be displayed without predicted points.
-- Corrected [telemetry collection](../src/simulation/TelemetryCollector.cpp) to reset
+- [x] Corrected [telemetry collection](../src/simulation/TelemetryCollector.cpp) to reset
   its sample baseline and calculate the signed rate of change of speed using actual
   millisecond timestamps, with a baseline sample at initialization and reset.
-- Kept all plot histories aligned within 2048 samples and bounded flight history to
+- [x] Kept all plot histories aligned within 2048 samples and bounded flight history to
   2048 points through progressive downsampling, retaining the first and latest points.
   The flight-path renderer includes the latest retained point.
 
@@ -79,20 +89,20 @@ instruction decoding are hardened; arithmetic checks and Python API validation r
 
 Completed:
 
-- Added overflow-safe range checks to byte, word and double-word memory accessors,
+- [x] Added overflow-safe range checks to byte, word and double-word memory accessors,
   preserving valid accesses ending at the memory boundary.
-- Replaced unsafe typed reads in memory accessors and instruction operands with
+- [x] Replaced unsafe typed reads in memory accessors and instruction operands with
   byte copies, preserving the existing VM data layout.
-- Rejected invalid integer and floating-point register indices with descriptive
+- [x] Rejected invalid integer and floating-point register indices with descriptive
   exceptions instead of terminating the application; verified worker error delivery
   and subsequent execution in regression tests.
-- Added synchronized, range-checked block transfers, made VM memory storage private
+- [x] Added synchronized, range-checked block transfers, made VM memory storage private
   and removed the unchecked `Memory::memcopy` helper.
-- Bounded both translation passes to the code buffer, counted `db` data when
+- [x] Bounded both translation passes to the code buffer, counted `db` data when
   resolving labels and reset translator state between programs and after errors.
-- Validated source instructions, operand counts, labels, register conversions and
+- [x] Validated source instructions, operand counts, labels, register conversions and
   numeric ranges; translation errors include the source line.
-- Bounded instruction fetching to the loaded image, rejecting empty programs,
+- [x] Bounded instruction fetching to the loaded image, rejecting empty programs,
   unknown opcodes, incomplete operands and invalid decoded register indices.
   Ordinary instructions advance explicitly, preserving direct, conditional and
   indirect self-jumps and stop requests.
@@ -117,28 +127,28 @@ Remaining:
 
 Completed:
 
-- Added [regression tests](../tests/ProgramRunnerTests.cpp) for immediate and repeated
+- [x] Added [regression tests](../tests/ProgramRunnerTests.cpp) for immediate and repeated
   stopping, worker cleanup, execution errors, VM memory preservation and Python reruns.
-- Added [communication tests](../tests/EventProcessorTests.cpp) for deferred and ordered
+- [x] Added [communication tests](../tests/EventProcessorTests.cpp) for deferred and ordered
   commands, queue overflow, stop/reset invalidation, concurrent access and Python/VM
   telemetry compatibility.
-- Added memory and register boundary cases, overflowing addresses, worker error
+- [x] Added memory and register boundary cases, overflowing addresses, worker error
   recovery and physics initialization/reset checks; the test suite passed with
   AddressSanitizer and UndefinedBehaviorSanitizer (leak detection excluded).
-- Verified memory/register error messages, subsequent valid VM execution, coasting,
+- [x] Verified memory/register error messages, subsequent valid VM execution, coasting,
   powered flight and restoration of the initial engine state after reset in the GUI.
-- Added block-copy concurrency and boundary checks, translator capacity/reuse cases,
+- [x] Added block-copy concurrency and boundary checks, translator capacity/reuse cases,
   malformed instruction streams, loaded-image limits and cancellable self-jumps.
   Confirmed byte-for-byte translation compatibility for bundled assembly examples.
-- Verified source and runtime diagnostics, stopping self-jump loops, subsequent
+- [x] Verified source and runtime diagnostics, stopping self-jump loops, subsequent
   valid VM execution and repeated start/reset in the GUI.
-- Verified steering, pause, Stop/reset, mode changes and shutdown in the GUI with
+- [x] Verified steering, pause, Stop/reset, mode changes and shutdown in the GUI with
   Python and VM programs.
-- Added regression checks for zero-thrust restart and rotation, prediction limits,
+- [x] Added regression checks for zero-thrust restart and rotation, prediction limits,
   repeated prediction and reset, telemetry sampling and reset, aligned plot windows
   and bounded flight history spanning the whole flight. Physics and telemetry tests
   passed with AddressSanitizer, UndefinedBehaviorSanitizer and leak detection enabled.
-- Verified zero-thrust rotation and restart, finite flight telemetry, signed speed-rate
+- [x] Verified zero-thrust rotation and restart, finite flight telemetry, signed speed-rate
   plots, pause and repeated prediction-mode changes in the GUI.
 
 Remaining:
@@ -152,6 +162,8 @@ Remaining:
 
 **Status:** Open. [CMake](../CMakeLists.txt) fetches several dependencies from
 `master` and uses deprecated GLM setup. Formatting and validation are still run manually.
+
+Remaining:
 
 - [ ] Pin dependencies to reviewed tags or commits and modernize their CMake setup.
 - [ ] Verify a clean build and update build instructions to C++20, required system
