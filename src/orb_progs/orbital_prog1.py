@@ -1,7 +1,7 @@
 import orbital_fs
 import time
 
-orbital_fs.orbital_thrust_change(0.24)
+orbital_fs.orbital_thrust_magnitude_change(0.24)
 
 orbital_data = orbital_fs.get_orbital_data()
 

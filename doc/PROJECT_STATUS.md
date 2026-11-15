@@ -84,8 +84,7 @@ Remaining:
 
 ## 4. VM memory access and Python API validation
 
-**Status:** Partially complete. VM source translation, block memory access and
-instruction decoding are hardened; arithmetic checks and Python API validation remain open.
+**Status:** Complete. Automated regression checks and GUI error recovery verification passed.
 
 Completed:
 
@@ -106,20 +105,21 @@ Completed:
   unknown opcodes, incomplete operands and invalid decoded register indices.
   Ordinary instructions advance explicitly, preserving direct, conditional and
   indirect self-jumps and stop requests.
+- [x] Rejected zero divisors in integer division, modulo and floating-point division,
+  including negative zero, and bounded bit shifts to the register width. Arithmetic
+  errors identify the instruction and its address without changing the destination.
+- [x] Validated Python API argument counts, rotation list/tuple lengths and numeric
+  conversions, preserving conversion exceptions and rejecting non-finite values.
+  Rotation conversion retains its elements even if user code mutates the input list.
+- [x] Rejected non-finite flight commands from either language before enqueueing,
+  validating whole rotations before inserting any of their component commands.
+- [x] Preserved Python exception types in program diagnostics and verified controlled
+  VM/Python errors followed by successful valid programs in tests and the GUI.
+- [x] Updated the bundled Python example to use `orbital_thrust_magnitude_change`.
 
 The loaded image includes instructions and `db` data; data access retains the full
 VM address space. Validation checks complete instructions at the current address;
 precomputed instruction-start validation and code/data separation are not implemented.
-
-Remaining:
-
-- [ ] Validate arithmetic operations, including integer division and modulo by zero and
-  invalid bit shifts.
-- [ ] Validate Python argument types, sequence lengths and numeric conversions;
-  reject non-finite thrust and rotation values before they reach physics.
-- [ ] Report remaining arithmetic faults and invalid Python API calls as controlled
-  errors in the UI.
-- [ ] Update example scripts that use the obsolete `orbital_thrust_change` API name.
 
 ## 5. Regression and physics tests
 
@@ -150,13 +150,16 @@ Completed:
   passed with AddressSanitizer, UndefinedBehaviorSanitizer and leak detection enabled.
 - [x] Verified zero-thrust rotation and restart, finite flight telemetry, signed speed-rate
   plots, pause and repeated prediction-mode changes in the GUI.
+- [x] Added arithmetic boundaries, Python argument/conversion failures, mutation during
+  rotation conversion, command rejection and valid reruns after errors. The full suite
+  passed with AddressSanitizer and UndefinedBehaviorSanitizer (leak detection excluded).
+- [x] Verified arithmetic and Python API error messages followed by successful VM and
+  Python flight programs in the GUI.
 
 Remaining:
 
 - [ ] Add physical reference cases and checks for orbital energy, angular momentum,
   time-step sensitivity and prediction agreement.
-- [ ] Extend invalid-input cases to arithmetic faults and Python API arguments
-  alongside the remaining item 4 work; use relevant sanitizers.
 
 ## 6. Reproducible builds and automated checks
 
@@ -182,10 +185,7 @@ Remaining:
 
 ## Next task
 
-Harden the remaining arithmetic and Python API inputs in item 4, with the
-corresponding item 5 regression tests.
-
-Then finish item 1 by moving Python into a separate process with bounded
+Finish item 1 by moving Python into a separate process with bounded
 cancellation. The command queue and telemetry snapshots now provide the
 communication boundary for that work.
 

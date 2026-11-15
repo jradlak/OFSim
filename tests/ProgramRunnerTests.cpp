@@ -306,6 +306,92 @@ TEST(ProgramRunnerTests, PythonErrorsAndSubsequentRunsAreCollectedAfterFinalizat
     }
 }
 
+TEST(ProgramRunnerTests, VmArithmeticFaultsIncludeInstructionAddressesAndAllowValidReruns)
+{
+    ProgramRunner runner;
+    const std::pair<std::string, std::string> cases[] = {
+        {"set r0, 17\nset r1, 0\ndiv r0, r1", "VM div by zero at address 12"},
+        {"set r0, 17\nset r1, 0\nmod r0, r1", "VM mod by zero at address 12"},
+        {"fset f0, 17.5\nfset f1, 0.0\nfdiv f0, f1", "VM fdiv by zero at address 20"},
+        {"fset f0, 17.5\nfset f1, -0.0\nfdiv f0, f1", "VM fdiv by zero at address 20"},
+        {"set r0, 1\nset r1, 32\nvshl r0, r1",
+         "VM vshl shift count out of range: 32 at address 12"},
+        {"set r0, 1\nset r1, 33\nvshr r0, r1",
+         "VM vshr shift count out of range: 33 at address 12"},
+        {"set r0, 1\nset r1, -1\nvshl r0, r1",
+         "VM vshl shift count out of range: 4294967295 at address 12"},
+        {"set r0, 1\nset r1, -1\nvshr r0, r1",
+         "VM vshr shift count out of range: 4294967295 at address 12"}};
+    for (const auto& [source, message] : cases)
+    {
+        SCOPED_TRACE(source);
+        ofsim_vm::VMachine vm(*ofsim_events::EventProcessor::getInstance());
+        vm.translateSourceCode(source + "\nhalt");
+        runner.start([&] { vm.start(); }, [&] { vm.stop(); });
+        ASSERT_TRUE(collect(runner));
+        ASSERT_TRUE(runner.error());
+        EXPECT_FALSE(vm.isStarted());
+        try
+        {
+            std::rethrow_exception(runner.error());
+        }
+        catch (const std::domain_error& error)
+        {
+            EXPECT_EQ(error.what(), message);
+        }
+
+        vm.translateSourceCode("set r0, 256\nset r1, 42\nbst r0, r1\nhalt");
+        runner.start([&] { vm.start(); }, [&] { vm.stop(); });
+        ASSERT_TRUE(collect(runner));
+        EXPECT_FALSE(runner.error());
+        EXPECT_EQ(vm.getMemory()->fetchByte(256), 42);
+    }
+}
+
+TEST(ProgramRunnerTests, InvalidPythonApiCallsReportTypedErrorsAndAllowValidReruns)
+{
+    ProgramRunner runner;
+    ofsim_python_integration::PythonMachine python;
+    const std::pair<std::string, std::string> cases[] = {
+        {"orbital_fs.orbital_thrust_magnitude_change()", "TypeError:"},
+        {"orbital_fs.orbital_rocket_rotation_change([1, 2])", "ValueError: Rotation must contain"},
+        {"orbital_fs.orbital_thrust_magnitude_change(10**10000)", "OverflowError:"},
+        {"orbital_fs.orbital_rocket_rotation_change([1, 2, float('nan')])",
+         "ValueError: Rotation values must be finite"},
+        {"orbital_fs.get_orbital_data(1)", "TypeError:"}};
+    for (const auto& [call, message] : cases)
+    {
+        SCOPED_TRACE(call);
+        runner.start([&] { python.runPythonOrbitalProgram("import orbital_fs\n" + call); },
+                     [&] { python.terminateProgram(); });
+        ASSERT_TRUE(collect(runner));
+        ASSERT_TRUE(runner.error());
+        EXPECT_FALSE(Py_IsInitialized());
+        try
+        {
+            std::rethrow_exception(runner.error());
+        }
+        catch (const std::runtime_error& error)
+        {
+            EXPECT_EQ(std::string(error.what()).find(message), 0);
+        }
+
+        runner.start(
+            [&]
+            {
+                python.runPythonOrbitalProgram(
+                    "import orbital_fs\nassert orbital_fs.orbital_thrust_magnitude_change(0.2) == "
+                    "0\n"
+                    "assert orbital_fs.orbital_rocket_rotation_change((1, 2, 3)) == 0\n"
+                    "assert isinstance(orbital_fs.get_orbital_data(), dict)\n");
+            },
+            [&] { python.terminateProgram(); });
+        ASSERT_TRUE(collect(runner));
+        EXPECT_FALSE(runner.error());
+        EXPECT_FALSE(Py_IsInitialized());
+    }
+}
+
 TEST(ProgramRunnerTests, StoppingPythonDoesNotWaitForItsSleep)
 {
     ofsim_python_integration::PythonMachine python;

@@ -3,25 +3,37 @@
 #include "../infrastructure/EventProcessor.h"
 
 #include <stdexcept>
+#include <cmath>
+
+namespace
+{
+bool finiteValue(double value, const char* message)
+{
+    if (std::isfinite(value))
+        return true;
+    PyErr_SetString(PyExc_ValueError, message);
+    return false;
+}
+} // namespace
 
 PyObject* ofsim_python_integration::PythonMachine::orbital_thrust_magnitude_change(PyObject* self,
                                                                                    PyObject* args)
 {
-    PyObject* a;
-    if (PyArg_UnpackTuple(args, "", 1, 1, &a))
+    double thrust;
+    if (!PyArg_ParseTuple(args, "d:orbital_thrust_magnitude_change", &thrust))
+        return nullptr;
+    if (!finiteValue(thrust, "Thrust magnitude must be finite"))
+        return nullptr;
+
+    try
     {
-        double thrust = PyFloat_AsDouble(a);
-        try
-        {
-            const auto runId = *static_cast<u64*>(PyModule_GetState(self));
-            ofsim_events::EventProcessor::getInstance()->setThrustMagnitude(runId, thrust);
-        }
-        catch (const std::exception& error)
-        {
-            PyErr_SetString(PyExc_RuntimeError, error.what());
-            return nullptr;
-        }
-        std::cout << "orbital_thrust_change: " << thrust << std::endl;
+        const auto runId = *static_cast<u64*>(PyModule_GetState(self));
+        ofsim_events::EventProcessor::getInstance()->setThrustMagnitude(runId, thrust);
+    }
+    catch (const std::exception& error)
+    {
+        PyErr_SetString(PyExc_RuntimeError, error.what());
+        return nullptr;
     }
 
     return PyLong_FromLong(0);
@@ -30,21 +42,39 @@ PyObject* ofsim_python_integration::PythonMachine::orbital_thrust_magnitude_chan
 PyObject* ofsim_python_integration::PythonMachine::orbital_rocket_rotation_change(PyObject* self,
                                                                                   PyObject* args)
 {
-    PyObject* listObj;
-
-    if (!PyArg_ParseTuple(args, "O", &listObj))
+    PyObject* rotation;
+    if (!PyArg_ParseTuple(args, "O:orbital_rocket_rotation_change", &rotation))
+        return nullptr;
+    if (!PyList_Check(rotation) && !PyTuple_Check(rotation))
     {
-        return NULL;
+        PyErr_SetString(PyExc_TypeError, "Rotation must be a list or tuple of three numbers");
+        return nullptr;
     }
 
-    PyObject* valueX = PyList_GetItem(listObj, 0);
-    double x = PyFloat_AsDouble(valueX);
-    PyObject* valueY = PyList_GetItem(listObj, 1);
-    double y = PyFloat_AsDouble(valueY);
-    PyObject* valueZ = PyList_GetItem(listObj, 2);
-    double z = PyFloat_AsDouble(valueZ);
+    // Keep elements alive even if a numeric conversion mutates the original list.
+    PyObject* values = PySequence_Tuple(rotation);
+    if (values == nullptr)
+        return nullptr;
+    if (PyTuple_Size(values) != 3)
+    {
+        Py_DECREF(values);
+        PyErr_SetString(PyExc_ValueError, "Rotation must contain exactly three numbers");
+        return nullptr;
+    }
 
-    dvec3 deltaRotation{x, y, z};
+    dvec3 deltaRotation;
+    for (int index = 0; index < 3; ++index)
+    {
+        deltaRotation[index] = PyFloat_AsDouble(PyTuple_GetItem(values, index));
+        if (PyErr_Occurred() ||
+            !finiteValue(deltaRotation[index], "Rotation values must be finite"))
+        {
+            Py_DECREF(values);
+            return nullptr;
+        }
+    }
+    Py_DECREF(values);
+
     try
     {
         const auto runId = *static_cast<u64*>(PyModule_GetState(self));
@@ -56,13 +86,14 @@ PyObject* ofsim_python_integration::PythonMachine::orbital_rocket_rotation_chang
         return nullptr;
     }
 
-    // Py_DecRef(listObj);
-
     return PyLong_FromLong(0);
 }
 
-PyObject* ofsim_python_integration::PythonMachine::get_orbital_data(PyObject* self, PyObject* argsB)
+PyObject* ofsim_python_integration::PythonMachine::get_orbital_data(PyObject* self, PyObject* args)
 {
+    if (!PyArg_ParseTuple(args, ":get_orbital_data"))
+        return nullptr;
+
     auto& events = *ofsim_events::EventProcessor::getInstance();
     const auto data = events.getTelemetry();
     return Py_BuildValue(
@@ -99,11 +130,16 @@ void ofsim_python_integration::PythonMachine::runPythonOrbitalProgram(std::strin
     {
         PyObject *type, *value, *traceback;
         PyErr_Fetch(&type, &value, &traceback);
+        PyErr_NormalizeException(&type, &value, &traceback);
 
+        PyObject* name = type ? PyObject_GetAttrString(type, "__name__") : nullptr;
+        const char* type_name = name ? PyUnicode_AsUTF8(name) : nullptr;
         PyObject* str_exc = value ? PyObject_Str(value) : nullptr;
         const char* text = str_exc ? PyUnicode_AsUTF8(str_exc) : nullptr;
-        std::string error_message = text ? text : "Unknown Python script error";
+        std::string error_message = type_name ? std::string(type_name) + ": " : "";
+        error_message += text ? text : "Unknown Python script error";
 
+        Py_XDECREF(name);
         Py_XDECREF(str_exc);
         Py_XDECREF(type);
         Py_XDECREF(value);

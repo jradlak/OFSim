@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include <stdexcept>
+#include <limits>
 
 #include "../src/infrastructure/EventProcessor.h"
 #include "../src/vmachine/VMachine.h"
@@ -190,5 +191,69 @@ TEST(VMachineTests, InstructionAtTheLastByteOfAFullImageCanHalt)
     VMachine vm(*ofsim_events::EventProcessor::getInstance());
     vm.translateSourceCode("jmp last\ndb " + std::string(32768 - 6, 'x') + "\nlast: halt");
     EXPECT_NO_THROW(vm.start());
+}
+
+TEST(InstructionsTests, ZeroDivisorsLeaveDestinationRegistersUnchanged)
+{
+    Memory memory;
+    Registers registers;
+    Instructions instructions(memory, registers, *ofsim_events::EventProcessor::getInstance());
+    unsigned char args[] = {0, 1};
+    registers[0] = 17;
+    registers[1] = 0;
+    EXPECT_THROW(instructions.div(args), std::domain_error);
+    EXPECT_THROW(instructions.mod(args), std::domain_error);
+    EXPECT_EQ(registers[0], 17);
+
+    registers.fl(0, 17.5);
+    for (const double zero : {0.0, -0.0})
+    {
+        registers.fl(1, zero);
+        EXPECT_THROW(instructions.fdiv(args), std::domain_error);
+        EXPECT_DOUBLE_EQ(registers.fl(0), 17.5);
+    }
+
+    registers[1] = 5;
+    instructions.div(args);
+    EXPECT_EQ(registers[0], 3);
+    registers[0] = 17;
+    instructions.mod(args);
+    EXPECT_EQ(registers[0], 2);
+    registers.fl(1, -2.5);
+    instructions.fdiv(args);
+    EXPECT_DOUBLE_EQ(registers.fl(0), -7.0);
+}
+
+TEST(InstructionsTests, ShiftsValidateCountsAndPreserveUnsignedSemantics)
+{
+    Memory memory;
+    Registers registers;
+    Instructions instructions(memory, registers, *ofsim_events::EventProcessor::getInstance());
+    unsigned char args[] = {0, 1};
+    constexpr unsigned int width = std::numeric_limits<unsigned int>::digits;
+    for (const unsigned int count : {width, width + 1, std::numeric_limits<unsigned int>::max()})
+    {
+        registers[0] = 17;
+        registers[1] = count;
+        EXPECT_THROW(instructions.vshl(args), std::domain_error);
+        EXPECT_THROW(instructions.vshr(args), std::domain_error);
+        EXPECT_EQ(registers[0], 17);
+    }
+
+    registers[0] = 17;
+    registers[1] = 0;
+    instructions.vshl(args);
+    instructions.vshr(args);
+    EXPECT_EQ(registers[0], 17);
+    registers[0] = 1;
+    registers[1] = width - 1;
+    instructions.vshl(args);
+    EXPECT_EQ(registers[0], 1u << (width - 1));
+    instructions.vshr(args);
+    EXPECT_EQ(registers[0], 1);
+    registers[0] = std::numeric_limits<unsigned int>::max();
+    registers[1] = 1;
+    instructions.vshl(args);
+    EXPECT_EQ(registers[0], std::numeric_limits<unsigned int>::max() - 1);
 }
 } // namespace vm_tests

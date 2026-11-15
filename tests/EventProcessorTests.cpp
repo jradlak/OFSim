@@ -2,6 +2,7 @@
 
 #include <future>
 #include <chrono>
+#include <limits>
 
 #include "../src/infrastructure/EventProcessor.h"
 #include "../src/physics/PhysicsSolver.h"
@@ -136,6 +137,135 @@ TEST_F(EventProcessorTests, QueueLimitRejectsWholeRotationWithoutPartialChanges)
     EXPECT_EQ(properties.rotation, dvec3(0));
     EXPECT_EQ(events.getCommandHistory().size(), EventProcessor::commandQueueCapacity);
     EXPECT_NO_THROW(events.setThrustMagnitude(runId, 0.5));
+}
+
+TEST_F(EventProcessorTests, NonFiniteCommandsAndWholeRotationsAreRejectedBeforeEnqueueing)
+{
+    events.setThrustMagnitude(runId, 0.2);
+    for (const double value :
+         {std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::infinity(),
+          -std::numeric_limits<double>::infinity()})
+    {
+        EXPECT_THROW(events.setThrustMagnitude(runId, value), std::invalid_argument);
+        EXPECT_THROW(
+            events.enqueueCommand(runId, {RocketCommandCode::GYRO_ROTATION_CHANGE_X, value}),
+            std::invalid_argument);
+        for (int axis = 0; axis < 3; ++axis)
+        {
+            dvec3 rotation(1, 2, 3);
+            rotation[axis] = value;
+            EXPECT_THROW(events.changeThrustRotatation(runId, rotation), std::invalid_argument);
+        }
+    }
+    events.setThrustMagnitude(runId, 0.3);
+    events.applyCommands(physics, 0);
+    EXPECT_EQ(properties.rotation, dvec3(0));
+    EXPECT_DOUBLE_EQ(physics.thrustMagnitude, 0.3);
+    EXPECT_EQ(events.getCommandHistory().size(), 2);
+}
+
+TEST_F(EventProcessorTests, InvalidPythonArgumentsPreserveExceptionsAndDoNotQueueCommands)
+{
+    const auto initialThrust = physics.thrustMagnitude;
+    ofsim_python_integration::PythonMachine python;
+    ASSERT_NO_THROW(python.runPythonOrbitalProgram(R"(
+import orbital_fs
+
+def rejected(error, function, *args, **kwargs):
+    try:
+        function(*args, **kwargs)
+    except error:
+        pass
+    else:
+        raise AssertionError('invalid arguments were accepted')
+
+class FailedConversion:
+    def __float__(self):
+        raise LookupError('conversion failed')
+
+class InvalidConversion:
+    def __float__(self):
+        return 'not a float'
+
+thrust = orbital_fs.orbital_thrust_magnitude_change
+rotate = orbital_fs.orbital_rocket_rotation_change
+for args in [(), (1, 2)]:
+    rejected(TypeError, thrust, *args)
+    rejected(TypeError, rotate, *args)
+for value in [None, '1', object(), [], complex(1, 2), InvalidConversion()]:
+    rejected(TypeError, thrust, value)
+    for axis in range(3):
+        rotation = [1, 2, 3]
+        rotation[axis] = value
+        rejected(TypeError, rotate, rotation)
+for value in [None, 1, '123', {0: 1, 1: 2, 2: 3}, iter([1, 2, 3])]:
+    rejected(TypeError, rotate, value)
+for value in [[], [1], [1, 2], [1, 2, 3, 4], (), (1, 2, 3, 4)]:
+    rejected(ValueError, rotate, value)
+for value, error in [(float('nan'), ValueError), (float('inf'), ValueError),
+                     (-float('inf'), ValueError), (10**10000, OverflowError),
+                     (FailedConversion(), LookupError)]:
+    rejected(error, thrust, value)
+    for axis in range(3):
+        rotation = [1, 2, 3]
+        rotation[axis] = value
+        rejected(error, rotate, rotation)
+rejected(TypeError, orbital_fs.get_orbital_data, 1)
+rejected(TypeError, thrust, value=1)
+assert isinstance(orbital_fs.get_orbital_data(), dict)
+)",
+                                                   runId));
+    EXPECT_FALSE(Py_IsInitialized());
+    events.applyCommands(physics, 0);
+    EXPECT_TRUE(events.getCommandHistory().empty());
+    EXPECT_DOUBLE_EQ(physics.thrustMagnitude, initialThrust);
+    EXPECT_EQ(properties.rotation, dvec3(0));
+}
+
+TEST_F(EventProcessorTests, PythonConversionsKeepRotationElementsAliveAndAllowFurtherCalls)
+{
+    ofsim_python_integration::PythonMachine python;
+    ASSERT_NO_THROW(python.runPythonOrbitalProgram(R"(
+import orbital_fs
+
+class Number:
+    def __float__(self):
+        return -1.0
+
+class MutatingNumber:
+    def __float__(self):
+        rotation.clear()
+        return 1.0
+
+rotation = [MutatingNumber(), Number(), 3]
+assert orbital_fs.orbital_rocket_rotation_change(rotation) == 0
+assert rotation == []
+try:
+    orbital_fs.orbital_rocket_rotation_change([1, 2, None])
+except TypeError:
+    pass
+else:
+    raise AssertionError('invalid rotation was accepted')
+assert orbital_fs.orbital_rocket_rotation_change((0, 0, -1)) == 0
+assert orbital_fs.orbital_thrust_magnitude_change(Number()) == 0
+assert orbital_fs.orbital_thrust_magnitude_change(0) == 0
+)",
+                                                   runId));
+    events.applyCommands(physics, 0);
+    EXPECT_EQ(properties.rotation, dvec3(1, -1, 2));
+    EXPECT_DOUBLE_EQ(physics.thrustMagnitude, 0.0);
+    EXPECT_EQ(events.getCommandHistory().size(), 8);
+}
+
+TEST_F(EventProcessorTests, VmNonFiniteArithmeticResultsCannotReachPhysics)
+{
+    ofsim_vm::VMachine vm(events, runId);
+    vm.translateSourceCode("fset f0, 1e308\nfset f1, 1e308\nfmul f0, f1\n"
+                           "set r0, 1\ncmd r0, f0\nhalt");
+    EXPECT_THROW(vm.start(), std::invalid_argument);
+    EXPECT_FALSE(vm.isStarted());
+    events.applyCommands(physics, 0);
+    EXPECT_TRUE(events.getCommandHistory().empty());
 }
 
 TEST_F(EventProcessorTests, ConcurrentProducerAndConsumerPreserveEveryCommandInOrder)

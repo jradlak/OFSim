@@ -40,7 +40,7 @@ static struct PyMethodDef methods[] = {
     {"orbital_rocket_rotation_change", PythonMachine::orbital_rocket_rotation_change, METH_VARARGS,
      "Change rotation of the rocket."},
     {"get_orbital_data", PythonMachine::get_orbital_data, METH_VARARGS,
-     "Get thrust of the rocker engine."},
+     "Get the current telemetry snapshot and stop flag."},
     {NULL, NULL, 0, NULL}};
 
 static struct PyModuleDef modOrbitalFsDef = {

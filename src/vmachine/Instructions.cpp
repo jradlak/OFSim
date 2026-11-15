@@ -1,6 +1,8 @@
 #include "Instructions.h"
 
 #include <cstring>
+#include <limits>
+#include <stdexcept>
 
 #include "../infrastructure/RocketCommand.h"
 
@@ -170,6 +172,9 @@ void Instructions::div(unsigned char* args)
     unsigned int value1 = registers[r_src_addr];
     unsigned int value2 = registers[r_dst_addr];
 
+    if (value1 == 0)
+        throw std::domain_error("VM div by zero");
+
     registers[r_dst_addr] = value2 / value1;
 }
 
@@ -180,6 +185,9 @@ void Instructions::fdiv(unsigned char* args)
     double value1 = registers.fl(r_src_addr);
     double value2 = registers.fl(r_dst_addr);
 
+    if (value1 == 0.0)
+        throw std::domain_error("VM fdiv by zero");
+
     registers.fl(r_dst_addr, value2 / value1);
 }
 
@@ -189,6 +197,9 @@ void Instructions::mod(unsigned char* args)
     unsigned char r_dst_addr = args[0];
     unsigned int value1 = registers[r_src_addr];
     unsigned int value2 = registers[r_dst_addr];
+
+    if (value1 == 0)
+        throw std::domain_error("VM mod by zero");
 
     registers[r_dst_addr] = value2 % value1;
 }
@@ -238,6 +249,9 @@ void Instructions::vshl(unsigned char* args)
     unsigned int value1 = registers[r_src_addr];
     unsigned int value2 = registers[r_dst_addr];
 
+    if (value1 >= std::numeric_limits<unsigned int>::digits)
+        throw std::domain_error("VM vshl shift count out of range: " + std::to_string(value1));
+
     registers[r_dst_addr] = value2 << value1;
 }
 
@@ -247,6 +261,9 @@ void Instructions::vshr(unsigned char* args)
     unsigned char r_dst_addr = args[0];
     unsigned int value1 = registers[r_src_addr];
     unsigned int value2 = registers[r_dst_addr];
+
+    if (value1 >= std::numeric_limits<unsigned int>::digits)
+        throw std::domain_error("VM vshr shift count out of range: " + std::to_string(value1));
 
     registers[r_dst_addr] = value2 >> value1;
 }

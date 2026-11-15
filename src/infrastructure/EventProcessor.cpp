@@ -3,6 +3,7 @@
 #include <thread>
 #include <chrono>
 #include <stdexcept>
+#include <cmath>
 
 #include "../physics/PhysicsSolver.h"
 
@@ -43,6 +44,11 @@ void EventProcessor::enqueueCommands(u64 runId, std::initializer_list<RocketComm
     std::lock_guard<std::mutex> lock(exchangeMutex);
     if (runId == 0 || runId != activeRun)
         return;
+    for (const auto& command : commands)
+    {
+        if (!std::isfinite(command.value()))
+            throw std::invalid_argument("Flight command value must be finite");
+    }
     if (commands.size() > commandQueueCapacity - pendingCommands.size())
         throw std::runtime_error("Flight command queue is full");
     pendingCommands.insert(pendingCommands.end(), commands.begin(), commands.end());

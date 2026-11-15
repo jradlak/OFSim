@@ -76,7 +76,15 @@ void VMachine::executionLoop()
 
         // Ordinary instructions fall through; taken jumps explicitly replace this address.
         registers->pc(pc + argsSize + 1);
-        instructions->call(opcode, args.data());
+        try
+        {
+            instructions->call(opcode, args.data());
+        }
+        catch (const std::domain_error& error)
+        {
+            throw std::domain_error(std::string(error.what()) + " at address " +
+                                    std::to_string(pc));
+        }
         pc = registers->pc();
     }
 }

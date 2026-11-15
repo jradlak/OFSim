@@ -13,6 +13,9 @@ are grouped under `Unreleased`. Release dates were not recorded for historical v
 
 ### Fixed
 
+- Validated VM arithmetic and Python API inputs, rejected non-finite flight commands
+  and preserved descriptive errors and valid reruns after failures, with regression
+  coverage. Corrected the obsolete API call in the bundled Python example.
 - Preserved rocket and thrust direction when rotating with zero thrust and restarting
   the engine without reset, with regression coverage.
 - Bounded the trajectory prediction horizon, cleared stale prediction data and kept
