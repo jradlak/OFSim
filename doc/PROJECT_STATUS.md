@@ -2,8 +2,6 @@
 
 Updated: 2026-11-15.
 
-The six items below retain the numbering from the initial project review.
-
 Status definitions:
 
 - **Open:** No listed milestones have been completed and verified.
@@ -174,6 +172,46 @@ Remaining:
 - [ ] Add reusable format and format-check commands using clang-format 19.
 - [ ] Add CI for compilation, tests and formatting, with sanitizer checks where practical.
 
+## 7. Architecture and separation of responsibilities
+
+**Status:** Open. Lower priority than bounded program cancellation and physics correctness;
+the implementation stage has not been scheduled.
+
+The qualitative architecture assessment is approximately 6/10 for the current project
+scope. Separate physics, rendering, GUI and VM modules, together with the command queue,
+telemetry snapshots and `ProgramRunner`, provide useful boundaries.
+
+The greatest complexity is concentrated in [Simulation](../src/simulation/Simulation.cpp)
+and its coordination with `ProgramRunner`, `EventProcessor` and the Python/VM interpreters.
+It combines mode transitions, timing, program execution, world ownership, rendering and
+GUI interactions. Correctness depends on operation ordering, especially during errors,
+Stop, reset and shutdown. Creating the simulation also creates an OpenGL window/context,
+which makes full lifecycle tests depend on the GUI.
+
+[EventProcessor](../src/infrastructure/EventProcessor.h) is a global singleton combining
+UI events, flight commands, telemetry, history and errors. This broad role makes
+dependencies and state ownership harder to follow. Python's unbounded stopping behavior
+is tracked separately in item 1 and should be addressed first.
+
+Remaining:
+
+- [ ] Extract a simulation core that can manage time, physics and telemetry without
+  creating a window or an OpenGL context; connect the GUI and renderer through explicit
+  inputs and outputs.
+- [ ] Separate flight-program lifecycle coordination from `Simulation`, building on
+  `ProgramRunner` and the process boundary introduced by item 1.
+- [ ] Make mode transitions and their preconditions explicit, keeping Stop, reset,
+  error handling and shutdown consistent across modes.
+- [ ] Narrow the communication interfaces and pass dependencies explicitly, separating
+  UI events/errors from worker command and telemetry exchange with clear state ownership.
+- [ ] Add tests of the extracted core for start, pause, failure, Stop, reset and reruns,
+  retaining GUI checks for the affected interactions.
+
+Prefer small extractions alongside item 1 or 3 when they directly support those fixes.
+Schedule broader restructuring after bounded cancellation and baseline physics correctness
+have been verified. Use item 5 regression coverage and item 6 automated checks to protect
+larger changes; splitting source files alone does not address the responsibility overlap.
+
 ## Completed tooling and documentation work
 
 - [x] Added a standalone [.clang-format](../.clang-format) and removed the Google style submodule.
@@ -191,3 +229,6 @@ communication boundary for that work.
 
 Continue with the broader physics work in item 3, adding item 5 tests with each
 change. Item 6 can proceed as separate maintenance work.
+
+Keep item 7 as later architecture work, with its exact stage still to be decided.
+Extract responsibilities incrementally when required by the higher-priority fixes.

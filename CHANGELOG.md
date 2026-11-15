@@ -7,6 +7,8 @@ are grouped under `Unreleased`. Release dates were not recorded for historical v
 
 ### Changed
 
+- Recorded architecture concerns and deferred refactoring goals after program cancellation
+  and physics correctness work in the project roadmap.
 - Standardized project status definitions and completion checkboxes in the roadmap.
 - Expanded the project status report with thrust restart, prediction horizon and
   telemetry issues, regression coverage needs and the revised repair order.
