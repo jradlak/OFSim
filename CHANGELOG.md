@@ -11,6 +11,10 @@ are grouped under `Unreleased`. Release dates were not recorded for historical v
 
 ### Fixed
 
+- Validated VM source translation and instruction decoding, with checked block transfers,
+  bounded program images and controlled diagnostics for malformed programs.
+- Corrected label resolution, translator reuse and self-jumps while preserving the bytecode
+  generated for bundled assembly examples.
 - Rejected invalid VM memory ranges and register indices with controlled errors, preserving
   valid end-of-memory accesses and replacing unsafe typed reads with byte copies.
 - Initialized engine state, thrust telemetry and displacement consistently on first start

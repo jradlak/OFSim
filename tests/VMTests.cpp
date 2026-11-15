@@ -84,3 +84,111 @@ TEST(VMachineTests, simpleRun)
     EXPECT_EQ(vm.getMemory()->fetchByte(257), 101);
 }
 } // namespace vm_tests
+
+namespace vm_tests
+{
+TEST(VMachineTests, EmptyFailedAndClearedProgramsCannotExecuteOldCode)
+{
+    VMachine vm(*ofsim_events::EventProcessor::getInstance());
+    vm.translateSourceCode("halt");
+    EXPECT_THROW(vm.translateSourceCode("; empty"), std::runtime_error);
+    EXPECT_THROW(vm.start(), std::out_of_range);
+    EXPECT_FALSE(vm.isStarted());
+    vm.translateSourceCode("halt");
+    EXPECT_THROW(vm.translateSourceCode("jmp missing"), std::runtime_error);
+    EXPECT_THROW(vm.start(), std::out_of_range);
+    EXPECT_EQ(vm.getMemory()->fetchByte(0), 0);
+    vm.translateSourceCode("halt");
+    EXPECT_NO_THROW(vm.start());
+    vm.clearMemory();
+    EXPECT_THROW(vm.start(), std::out_of_range);
+}
+
+TEST(VMachineTests, UnknownOpcodeAndIncompleteInstructionsAreRejected)
+{
+    VMachine vm(*ofsim_events::EventProcessor::getInstance());
+    vm.translateSourceCode("halt");
+    vm.getMemory()->storeByte(0, 0x02);
+    EXPECT_THROW(vm.start(), std::invalid_argument);
+    EXPECT_FALSE(vm.isStarted());
+    for (const unsigned char opcode : {0x03, 0x04, 0x22, 0x23})
+    {
+        vm.translateSourceCode("halt");
+        vm.getMemory()->storeByte(0, opcode);
+        EXPECT_THROW(vm.start(), std::out_of_range);
+    }
+    // The missing operand would still fit in VM memory, but lies outside the image.
+    vm.translateSourceCode("db abcdefghi");
+    vm.getMemory()->storeByte(0, 0x04);
+    EXPECT_THROW(vm.start(), std::out_of_range);
+}
+
+TEST(VMachineTests, InvalidSecondRegisterIsRejectedDuringDecoding)
+{
+    VMachine vm(*ofsim_events::EventProcessor::getInstance());
+    vm.translateSourceCode("mov r0, r1\nhalt");
+    vm.getMemory()->storeByte(2, 16);
+    EXPECT_THROW(vm.start(), std::out_of_range);
+}
+
+TEST(VMachineTests, FallingOffTheImageAndOutOfImageJumpsReportErrors)
+{
+    VMachine vm(*ofsim_events::EventProcessor::getInstance());
+    for (const std::string program :
+         {"jmp 5", "jmp 65535\nhalt", "jmp 4294967295\nhalt", "set r0, -1\njmpr r0\nhalt",
+          "set r0, 65536\njmpr r0\nhalt", "ftc", "set r0, 42"})
+    {
+        SCOPED_TRACE(program);
+        vm.translateSourceCode(program);
+        EXPECT_THROW(vm.start(), std::out_of_range);
+        EXPECT_FALSE(vm.isStarted());
+    }
+}
+
+TEST(VMachineTests, DataAccessRemainsAvailableBeyondTheLoadedImage)
+{
+    VMachine vm(*ofsim_events::EventProcessor::getInstance());
+    vm.translateSourceCode("set r0, 65535\nset r1, 42\nbst r0, r1\nbld r2, r0\n"
+                           "set r0, 256\nbst r0, r2\nhalt");
+    EXPECT_NO_THROW(vm.start());
+    EXPECT_EQ(vm.getMemory()->fetchByte(65535), 42);
+    EXPECT_EQ(vm.getMemory()->fetchByte(256), 42);
+}
+
+TEST(VMachineTests, UntakenJumpFallsThroughAndNoArgumentInstructionsRemainValid)
+{
+    VMachine vm(*ofsim_events::EventProcessor::getInstance());
+    vm.translateSourceCode("set r0, 256\nset r1, 42\ncmp r1, r1\njnz bad\n"
+                           "bst r0, r1\nftc\nhalt\nbad: db X");
+    EXPECT_NO_THROW(vm.start());
+    EXPECT_EQ(vm.getMemory()->fetchByte(256), 42);
+}
+
+TEST(VMachineTests, ModifiedCodeIsValidatedWhenFetched)
+{
+    VMachine vm(*ofsim_events::EventProcessor::getInstance());
+    vm.translateSourceCode("set r0, next\nset r1, 2\nbst r0, r1\nnext: halt");
+    EXPECT_THROW(vm.start(), std::invalid_argument);
+}
+
+TEST(VMachineTests, RestartReloadsTheProgramAndResetsItsCounter)
+{
+    VMachine vm(*ofsim_events::EventProcessor::getInstance());
+    vm.translateSourceCode("set r0, 256\nset r1, 42\nbst r0, r1\nhalt");
+    vm.start();
+    vm.getMemory()->storeByte(0, 2);
+    vm.getMemory()->storeByte(256, 99);
+    EXPECT_NO_THROW(vm.restart());
+    EXPECT_EQ(vm.getMemory()->fetchByte(256), 42);
+}
+} // namespace vm_tests
+
+namespace vm_tests
+{
+TEST(VMachineTests, InstructionAtTheLastByteOfAFullImageCanHalt)
+{
+    VMachine vm(*ofsim_events::EventProcessor::getInstance());
+    vm.translateSourceCode("jmp last\ndb " + std::string(32768 - 6, 'x') + "\nlast: halt");
+    EXPECT_NO_THROW(vm.start());
+}
+} // namespace vm_tests

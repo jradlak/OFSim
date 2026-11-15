@@ -17,6 +17,7 @@ VMachine::VMachine(ofsim_events::EventProcessor& _eventProcessor, u64 runId)
 
 std::string VMachine::translateSourceCodeFromFile(const char* _sourcePath)
 {
+    clearMemory();
     sourcePath = _sourcePath;
     std::string source_code = translator->translateSourceFile(_sourcePath);
     loadCode();
@@ -26,38 +27,57 @@ std::string VMachine::translateSourceCodeFromFile(const char* _sourcePath)
 
 void ofsim_vm::VMachine::translateSourceCode(std::string sourceCode)
 {
+    clearMemory();
     translator->translateSourceString(sourceCode);
     loadCode();
 }
 
 void ofsim_vm::VMachine::loadCode()
 {
-    memory->clear(); // clear old program before load new one
-    Memory::memcopy(translator->code, memory->mem, 0, 0, translator->getCodeSize());
+    clearMemory();
+    const auto size = translator->getCodeSize();
+    if (size == 0)
+        throw std::runtime_error("VM program is empty");
+    memory->writeBlock(0, std::span<const unsigned char>(translator->code, size));
+    loadedCodeSize = size;
 }
 
 void VMachine::executionLoop()
 {
-    // code execution:
-    unsigned int opcode = memory->fetchByte(0);
-    while (opcode != opcodes->getOpcode("halt") && !shouldStop)
+    while (!shouldStop)
     {
-        // decode and execute instruction:
-        unsigned int args_size = opcodes->getInstrSize(opcode);
-        std::vector<unsigned char> args(args_size);
-        Memory::memcopy(memory->mem, args.data(), pc + 1, 0, args_size);
+        if (pc >= loadedCodeSize)
+            throw std::out_of_range("VM instruction address outside loaded program: " +
+                                    std::to_string(pc));
+        const auto opcode = memory->fetchByte(pc);
+        unsigned int argsSize;
+        try
+        {
+            argsSize = opcodes->getInstrSize(opcode);
+        }
+        catch (const std::invalid_argument& error)
+        {
+            throw std::invalid_argument(std::string(error.what()) + " at address " +
+                                        std::to_string(pc));
+        }
+        if (argsSize > loadedCodeSize - pc - 1)
+            throw std::out_of_range("Incomplete VM instruction at address " + std::to_string(pc));
+        std::vector<unsigned char> args(argsSize);
+        memory->readBlock(pc + 1, args);
+        for (unsigned int i = 0; i < opcodes->getRegisterOperandCount(opcode); ++i)
+        {
+            if (args[i] >= number_of_registers)
+                throw std::out_of_range(
+                    "VM register index out of range: " + std::to_string(args[i]) + " at address " +
+                    std::to_string(pc));
+        }
+        if (opcode == opcodes->getOpcode("halt"))
+            return;
+
+        // Ordinary instructions fall through; taken jumps explicitly replace this address.
+        registers->pc(pc + argsSize + 1);
         instructions->call(opcode, args.data());
         pc = registers->pc();
-        if (oldpc == pc)
-        {
-            // there was no jump - update program counter:
-            pc += args_size + 1;
-            registers->pc(pc);
-        }
-        oldpc = pc;
-
-        // fetch another opcode
-        opcode = memory->fetchByte(pc);
     }
 }
 
@@ -74,7 +94,6 @@ void VMachine::restart()
         throw std::logic_error("Cannot restart a running VM");
     registers->clear();
     pc = 0;
-    oldpc = 0;
     loadCode();
     shouldStop = false;
     start();

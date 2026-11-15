@@ -3,6 +3,7 @@
 #include <vector>
 #include <tuple>
 #include <string>
+#include <stdexcept>
 
 namespace ofsim_vm
 {
@@ -91,12 +92,22 @@ public:
             }
         }
 
-        return 0x0;
+        throw std::invalid_argument("Unknown VM opcode: " + std::to_string(opcode));
+    }
+
+    unsigned int getRegisterOperandCount(unsigned int opcode)
+    {
+        const auto size = getInstrSize(opcode);
+        if (size == 2)
+            return 2;
+        if (size == 1 || opcode == 0x3 || opcode == 0x4)
+            return 1;
+        return 0;
     }
 
     bool isJump(unsigned int opcode)
     {
-        return opcode >= 0x1C && opcode != 0x24;
+        return opcode >= 0x1C && opcode <= 0x23;
     }
 
     ~Opcodes() {}

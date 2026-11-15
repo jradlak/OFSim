@@ -55,13 +55,20 @@ void Memory::storeDWord(unsigned int addr, double dword)
     std::memcpy(mem + addr, &dword, sizeof(dword));
 }
 
-void Memory::memcopy(unsigned char* src, unsigned char* dst, unsigned int addr_s,
-                     unsigned int addr_d, unsigned int length)
+void Memory::readBlock(unsigned int addr, std::span<unsigned char> destination)
 {
-    for (unsigned int i = 0; i < length; i++)
-    {
-        dst[addr_d + i] = src[addr_s + i];
-    }
+    std::lock_guard<std::mutex> lock(memMutex);
+    assertRange(addr, destination.size());
+    if (!destination.empty())
+        std::memcpy(destination.data(), mem + addr, destination.size());
+}
+
+void Memory::writeBlock(unsigned int addr, std::span<const unsigned char> source)
+{
+    std::lock_guard<std::mutex> lock(memMutex);
+    assertRange(addr, source.size());
+    if (!source.empty())
+        std::memcpy(mem + addr, source.data(), source.size());
 }
 
 void Memory::clear()
@@ -73,7 +80,7 @@ void Memory::clear()
     }
 }
 
-void Memory::assertRange(unsigned int addr, unsigned int length) const
+void Memory::assertRange(unsigned int addr, std::size_t length) const
 {
     if (addr > mem_size || length > mem_size - addr)
     {

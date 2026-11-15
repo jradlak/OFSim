@@ -217,6 +217,57 @@ TEST(ProgramRunnerTests, OverflowingVmMemoryRangeReportsAnError)
     EXPECT_FALSE(vm.isStarted());
 }
 
+TEST(ProgramRunnerTests, DirectConditionalAndIndirectSelfJumpsStayActiveUntilStopped)
+{
+    for (const std::string jump : {"jmp loop", "jz loop", "jmpr r2"})
+    {
+        SCOPED_TRACE(jump);
+        ofsim_vm::VMachine vm(*ofsim_events::EventProcessor::getInstance());
+        vm.translateSourceCode("set r2, loop\nset r0, 256\nset r1, 7\nbst r0, r1\n"
+                               "cmp r1, r1\nloop: " +
+                               jump + "\nset r0, 257\nset r1, 99\nbst r0, r1\nhalt");
+        ProgramRunner runner;
+        runner.start([&] { vm.start(); }, [&] { vm.stop(); });
+        const auto deadline = std::chrono::steady_clock::now() + 3s;
+        while (vm.getMemory()->fetchByte(256) != 7 && std::chrono::steady_clock::now() < deadline)
+            std::this_thread::sleep_for(1ms);
+        EXPECT_EQ(vm.getMemory()->fetchByte(256), 7);
+        std::this_thread::sleep_for(30ms);
+        EXPECT_FALSE(runner.poll());
+        EXPECT_EQ(vm.getMemory()->fetchByte(257), 0);
+        runner.requestStop();
+        ASSERT_TRUE(collect(runner));
+        EXPECT_FALSE(runner.error());
+    }
+}
+
+TEST(ProgramRunnerTests, MalformedVmInstructionErrorsAreCollectedBeforeAValidRerun)
+{
+    ProgramRunner runner;
+    for (const unsigned char opcode : {0x02, 0x04})
+    {
+        ofsim_vm::VMachine vm(*ofsim_events::EventProcessor::getInstance());
+        vm.translateSourceCode("halt");
+        vm.getMemory()->storeByte(0, opcode);
+        runner.start([&] { vm.start(); }, [&] { vm.stop(); });
+        ASSERT_TRUE(collect(runner));
+        ASSERT_TRUE(runner.error());
+        EXPECT_FALSE(vm.isStarted());
+        try
+        {
+            std::rethrow_exception(runner.error());
+        }
+        catch (const std::exception& error)
+        {
+            EXPECT_NE(std::string(error.what()).find("address 0"), std::string::npos);
+        }
+        vm.translateSourceCode("halt");
+        runner.start([&] { vm.start(); }, [&] { vm.stop(); });
+        ASSERT_TRUE(collect(runner));
+        EXPECT_FALSE(runner.error());
+    }
+}
+
 TEST(ProgramRunnerTests, PythonErrorsAndSubsequentRunsAreCollectedAfterFinalization)
 {
     ofsim_python_integration::PythonMachine python;

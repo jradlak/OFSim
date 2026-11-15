@@ -63,8 +63,8 @@ Remaining:
 
 ## 4. VM memory access and Python API validation
 
-**Status:** Partially complete. VM data access and register checks are hardened;
-program decoding and Python API validation remain open.
+**Status:** Partially complete. VM source translation, block memory access and
+instruction decoding are hardened; arithmetic checks and Python API validation remain open.
 
 Completed:
 
@@ -75,14 +75,28 @@ Completed:
 - Rejected invalid integer and floating-point register indices with descriptive
   exceptions instead of terminating the application; verified worker error delivery
   and subsequent execution in regression tests.
+- Added synchronized, range-checked block transfers, made VM memory storage private
+  and removed the unchecked `Memory::memcopy` helper.
+- Bounded both translation passes to the code buffer, counted `db` data when
+  resolving labels and reset translator state between programs and after errors.
+- Validated source instructions, operand counts, labels, register conversions and
+  numeric ranges; translation errors include the source line.
+- Bounded instruction fetching to the loaded image, rejecting empty programs,
+  unknown opcodes, incomplete operands and invalid decoded register indices.
+  Ordinary instructions advance explicitly, preserving direct, conditional and
+  indirect self-jumps and stop requests.
+
+The loaded image includes instructions and `db` data; data access retains the full
+VM address space. Validation checks complete instructions at the current address;
+precomputed instruction-start validation and code/data separation are not implemented.
 
 Remaining:
 
-- [ ] Validate code size, instruction boundaries, opcodes and bulk memory copies
-  during program loading and decoding.
-- [ ] Validate register operands before execution, including translator conversions.
+- [ ] Validate arithmetic operations, including integer division by zero and
+  invalid bit shifts.
 - [ ] Validate Python argument types, sequence lengths and numeric conversions.
-- [ ] Report malformed programs and invalid API calls as controlled errors in the UI.
+- [ ] Report remaining arithmetic faults and invalid Python API calls as controlled
+  errors in the UI.
 - [ ] Update example scripts that use the obsolete `orbital_thrust_change` API name.
 
 ## 5. Regression and physics tests
@@ -101,6 +115,11 @@ Completed:
   AddressSanitizer and UndefinedBehaviorSanitizer (leak detection excluded).
 - Verified memory/register error messages, subsequent valid VM execution, coasting,
   powered flight and restoration of the initial engine state after reset in the GUI.
+- Added block-copy concurrency and boundary checks, translator capacity/reuse cases,
+  malformed instruction streams, loaded-image limits and cancellable self-jumps.
+  Confirmed byte-for-byte translation compatibility for bundled assembly examples.
+- Verified source and runtime diagnostics, stopping self-jump loops, subsequent
+  valid VM execution and repeated start/reset in the GUI.
 - Verified steering, pause, Stop/reset, mode changes and shutdown in the GUI with
   Python and VM programs.
 
@@ -108,8 +127,8 @@ Remaining:
 
 - [ ] Add physical reference cases and checks for orbital energy, angular momentum,
   time-step sensitivity and prediction agreement.
-- [ ] Extend invalid-input cases to malformed instruction streams and Python API
-  arguments alongside the remaining item 4 work; use relevant sanitizers.
+- [ ] Extend invalid-input cases to arithmetic faults and Python API arguments
+  alongside the remaining item 4 work; use relevant sanitizers.
 
 ## 6. Reproducible builds and automated checks
 

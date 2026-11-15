@@ -38,6 +38,9 @@ public:
     void clearMemory()
     {
         memory->clear();
+        loadedCodeSize = 0;
+        pc = 0;
+        registers->clear();
     }
 
     void provideSourcePath(const char* _sourcePath)
@@ -69,7 +72,7 @@ private:
     const char* sourcePath{nullptr};
 
     u32 pc{0};
-    u32 oldpc{0};
+    u32 loadedCodeSize{0};
 
     std::atomic<bool> shouldStop{false};
     std::atomic<bool> started{false};

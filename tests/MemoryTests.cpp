@@ -4,11 +4,77 @@
 #include <cstring>
 #include <limits>
 #include <stdexcept>
+#include <array>
+#include <atomic>
 #include "../src/vmachine/Memory.h"
 
 namespace vm_tests
 {
 using namespace ofsim_vm;
+
+TEST(MemoryTests, BlocksAcceptEmptyAndExactBoundaryRanges)
+{
+    Memory memory;
+    const std::array<unsigned char, 4> bytes{0xAB, 0xCD, 0xEF, 0x42};
+    std::array<unsigned char, 4> result{};
+    for (const auto address : {0u, mem_size - 4})
+    {
+        memory.writeBlock(address, bytes);
+        memory.readBlock(address, result);
+        EXPECT_EQ(result, bytes);
+    }
+    for (const auto address : {0u, mem_size})
+    {
+        EXPECT_NO_THROW(memory.writeBlock(address, {}));
+        EXPECT_NO_THROW(memory.readBlock(address, {}));
+    }
+    EXPECT_EQ(memory.fetchByte(mem_size - 1), 0x42);
+}
+
+TEST(MemoryTests, InvalidBlocksDoNotPartiallyReadOrWrite)
+{
+    Memory memory;
+    const std::array<unsigned char, 4> original{1, 2, 3, 4};
+    const std::array<unsigned char, 4> replacement{5, 6, 7, 8};
+    memory.writeBlock(mem_size - 4, original);
+    for (const auto address : {mem_size - 3, mem_size, std::numeric_limits<unsigned int>::max()})
+    {
+        auto result = replacement;
+        EXPECT_THROW(memory.readBlock(address, result), std::out_of_range);
+        EXPECT_EQ(result, replacement);
+        EXPECT_THROW(memory.writeBlock(address, replacement), std::out_of_range);
+    }
+    EXPECT_THROW(memory.readBlock(mem_size + 1, {}), std::out_of_range);
+    EXPECT_THROW(memory.writeBlock(mem_size + 1, {}), std::out_of_range);
+    std::array<unsigned char, 4> result{};
+    memory.readBlock(mem_size - 4, result);
+    EXPECT_EQ(result, original);
+}
+
+TEST(MemoryTests, ConcurrentBlockCopiesNeverExposePartialWrites)
+{
+    Memory memory;
+    const std::array<unsigned char, 64> zero{};
+    auto ones = zero;
+    ones.fill(1);
+    std::atomic<bool> started{false};
+    std::thread writer(
+        [&]
+        {
+            while (!started.load())
+                std::this_thread::yield();
+            for (int i = 0; i < 2000; ++i)
+                memory.writeBlock(128, i % 2 ? zero : ones);
+        });
+    started = true;
+    for (int i = 0; i < 2000; ++i)
+    {
+        std::array<unsigned char, 64> result;
+        memory.readBlock(128, result);
+        EXPECT_TRUE(result == zero || result == ones);
+    }
+    writer.join();
+}
 
 TEST(MemoryTests, LastCompleteRangesAndUnalignedValuesRoundTrip)
 {
@@ -23,11 +89,15 @@ TEST(MemoryTests, LastCompleteRangesAndUnalignedValuesRoundTrip)
     memory.storeWord(1, -1234567);
     EXPECT_EQ(memory.fetchWord(1), -1234567);
     const int word = -1234567;
-    EXPECT_EQ(std::memcmp(memory.mem + 1, &word, sizeof(word)), 0);
+    unsigned char wordBytes[sizeof(word)];
+    memory.readBlock(1, wordBytes);
+    EXPECT_EQ(std::memcmp(wordBytes, &word, sizeof(word)), 0);
     memory.storeDWord(3, -1234.125);
     EXPECT_DOUBLE_EQ(memory.fetchDWord(3), -1234.125);
     const double dword = -1234.125;
-    EXPECT_EQ(std::memcmp(memory.mem + 3, &dword, sizeof(dword)), 0);
+    unsigned char doubleBytes[sizeof(dword)];
+    memory.readBlock(3, doubleBytes);
+    EXPECT_EQ(std::memcmp(doubleBytes, &dword, sizeof(dword)), 0);
 }
 
 TEST(MemoryTests, IncompleteRangesAndOverflowingAddressesAreRejectedWithoutWrites)

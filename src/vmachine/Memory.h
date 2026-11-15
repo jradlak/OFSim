@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <mutex>
+#include <span>
 
 namespace ofsim_vm
 {
@@ -32,15 +33,13 @@ constexpr unsigned int mem_size = 64 * 1024; // 64 KB
 class Memory
 {
 public:
-    unsigned char mem[mem_size]{0};
-
     Memory()
     {
         clear();
     }
 
-    static void memcopy(unsigned char* src, unsigned char* dst, unsigned int addr_s,
-                        unsigned int addr_d, unsigned int length);
+    void readBlock(unsigned int addr, std::span<unsigned char> destination);
+    void writeBlock(unsigned int addr, std::span<const unsigned char> source);
 
     unsigned char fetchByte(unsigned int addr);
 
@@ -57,7 +56,8 @@ public:
     void clear();
 
 private:
+    unsigned char mem[mem_size]{0};
     std::mutex memMutex;
-    void assertRange(unsigned int addr, unsigned int length) const;
+    void assertRange(unsigned int addr, std::size_t length) const;
 };
 } // namespace ofsim_vm
