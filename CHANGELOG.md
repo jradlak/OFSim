@@ -5,6 +5,10 @@ are grouped under `Unreleased`. Release dates were not recorded for historical v
 
 ## Unreleased
 
+### Changed
+
+- Updated the build instructions in `AGENTS.md` to use eight parallel jobs.
+
 ### Fixed
 
 - Confined rocket and physics updates to the main loop, with a bounded flight-command queue,

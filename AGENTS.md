@@ -17,7 +17,7 @@ tools are unavailable. Preserve existing CMake settings when reusing a build.
 After changes that affect compilation or behavior, build and run the tests:
 
 ```bash
-cmake --build build --target OFSim ofsim_tests -j 4
+cmake --build build --target OFSim ofsim_tests -j 8
 ctest --test-dir build --output-on-failure
 ```
 
