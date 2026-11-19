@@ -7,6 +7,8 @@ are grouped under `Unreleased`. Release dates were not recorded for historical v
 
 ### Changed
 
+- Recorded the preference for small, simple functional changes that reuse existing
+  mechanisms before introducing more infrastructure.
 - Updated build instructions to C++20 with X11 fallback and regression-test commands;
   recorded physical input limits and VM instruction coverage as remaining roadmap work.
 - Clarified that the Python stop regression checks flag delivery and collection after
@@ -19,6 +21,9 @@ are grouped under `Unreleased`. Release dates were not recorded for historical v
 
 ### Fixed
 
+- Isolated Linux Python flight programs in another OFSim process, preserving the
+  flight API and existing command queue. Added bounded stopping, startup/error
+  handling and regression coverage for uncooperative scripts and valid reruns.
 - Corrected the single-register operand read in VM `vnot`, preventing a buffer
   overread; added instruction and execution regression checks.
 - Validated VM arithmetic and Python API inputs, rejected non-finite flight commands

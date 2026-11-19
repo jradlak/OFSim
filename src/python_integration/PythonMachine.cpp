@@ -1,4 +1,5 @@
 #include "PythonMachine.h"
+#include "PythonProcess.h"
 
 #include "../infrastructure/EventProcessor.h"
 
@@ -28,7 +29,10 @@ PyObject* ofsim_python_integration::PythonMachine::orbital_thrust_magnitude_chan
     try
     {
         const auto runId = *static_cast<u64*>(PyModule_GetState(self));
-        ofsim_events::EventProcessor::getInstance()->setThrustMagnitude(runId, thrust);
+        PythonMessage message;
+        message.operation = PythonOperation::THRUST;
+        message.value.x = thrust;
+        exchangePythonMessage(message, runId);
     }
     catch (const std::exception& error)
     {
@@ -78,7 +82,10 @@ PyObject* ofsim_python_integration::PythonMachine::orbital_rocket_rotation_chang
     try
     {
         const auto runId = *static_cast<u64*>(PyModule_GetState(self));
-        ofsim_events::EventProcessor::getInstance()->changeThrustRotatation(runId, deltaRotation);
+        PythonMessage message;
+        message.operation = PythonOperation::ROTATION;
+        message.value = deltaRotation;
+        exchangePythonMessage(message, runId);
     }
     catch (const std::exception& error)
     {
@@ -94,19 +101,28 @@ PyObject* ofsim_python_integration::PythonMachine::get_orbital_data(PyObject* se
     if (!PyArg_ParseTuple(args, ":get_orbital_data"))
         return nullptr;
 
-    auto& events = *ofsim_events::EventProcessor::getInstance();
-    const auto data = events.getTelemetry();
+    PythonMessage message;
+    message.operation = PythonOperation::TELEMETRY;
+    try
+    {
+        message = exchangePythonMessage(message, *static_cast<u64*>(PyModule_GetState(self)));
+    }
+    catch (const std::exception& error)
+    {
+        PyErr_SetString(PyExc_RuntimeError, error.what());
+        return nullptr;
+    }
+    const auto& data = message.telemetry;
     return Py_BuildValue(
         "{s:d,s:d,s:d,s:d,s:d,s:d,s:d,s:d,s:d,s:d,s:d,s:d,s:O}", "positionX", data.position.x,
         "positionY", data.position.y, "positionZ", data.position.z, "velocityX", data.velocity.x,
         "velocityY", data.velocity.y, "velocityZ", data.velocity.z, "rotationX", data.rotation.x,
         "rotationY", data.rotation.y, "rotationZ", data.rotation.z, "altitude", data.altitude,
         "thrustMagnitude", data.thrustMagnitude, "rocketMass", data.mass, "shouldStop",
-        events.isPythonMachineTerminated() ? Py_True : Py_False);
+        message.shouldStop ? Py_True : Py_False);
 }
 
-void ofsim_python_integration::PythonMachine::runPythonOrbitalProgram(std::string sourceCode,
-                                                                      u64 runId)
+void ofsim_python_integration::PythonMachine::runEmbedded(std::string sourceCode, u64 runId)
 {
     // Register once; the interpreter is initialized/finalized for each run.
     static const int registered = PyImport_AppendInittab("orbital_fs", &PyInit_orbital_fs);
@@ -124,6 +140,7 @@ void ofsim_python_integration::PythonMachine::runPythonOrbitalProgram(std::strin
     PyObject* globals = PyDict_New();
     if (globals == nullptr)
         throw std::runtime_error("Unable to create Python globals");
+    pythonWorkerReady();
     PyObject* result = PyRun_String(sourceCode.c_str(), Py_file_input, globals, globals);
     Py_DECREF(globals);
     if (result == NULL)

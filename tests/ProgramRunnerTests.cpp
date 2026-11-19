@@ -7,6 +7,13 @@
 #include "../src/simulation/ProgramRunner.h"
 #include "../src/vmachine/VMachine.h"
 
+#ifdef __linux__
+#include <filesystem>
+#include <fstream>
+#include <unistd.h>
+#include "../src/physics/PhysicsSolver.h"
+#endif
+
 namespace
 {
 using namespace std::chrono_literals;
@@ -407,4 +414,173 @@ TEST(ProgramRunnerTests, PythonStopRequestSetsFlagAndCollectsAfterScriptReturns)
     EXPECT_FALSE(Py_IsInitialized());
     events.terminatePythonMachine(false);
 }
+
+#ifdef __linux__
+TEST(ProgramRunnerTests, PythonRunsInAnotherProcessAndPreservesOutputAndThreadedApiCalls)
+{
+    auto& events = *ofsim_events::EventProcessor::getInstance();
+    events.terminatePythonMachine(false);
+    ofsim_python_integration::PythonMachine python;
+    EXPECT_NO_THROW(python.runPythonOrbitalProgram(
+        "import os, sys, threading, orbital_fs\nassert os.getpid() != " + std::to_string(getpid()) +
+        R"(
+print('worker stdout remains separate from IPC', flush=True)
+print('worker stderr remains separate from IPC', file=sys.stderr, flush=True)
+errors = []
+def read_telemetry():
+    try:
+        for _ in range(50):
+            assert isinstance(orbital_fs.get_orbital_data()['altitude'], float)
+    except BaseException as error:
+        errors.append(error)
+threads = [threading.Thread(target=read_telemetry) for _ in range(4)]
+for thread in threads:
+    thread.start()
+for thread in threads:
+    thread.join()
+assert not errors, errors
+)"));
+    EXPECT_NO_THROW(python.runPythonOrbitalProgram("#" + std::string(1024 * 1024, 'x') + "\npass"));
+    EXPECT_FALSE(Py_IsInitialized());
+}
+
+TEST(ProgramRunnerTests, PythonLaunchAndProcessFailuresAllowValidReruns)
+{
+    auto& events = *ofsim_events::EventProcessor::getInstance();
+    events.terminatePythonMachine(false);
+    ofsim_python_integration::PythonMachine missing("/nonexistent/ofsim-python-worker");
+    EXPECT_THROW(missing.runPythonOrbitalProgram("pass"), std::system_error);
+    ofsim_python_integration::PythonMachine python;
+    for (const std::string source :
+         {"import os; os._exit(0)", "import os, signal; os.kill(os.getpid(), signal.SIGKILL)"})
+    {
+        SCOPED_TRACE(source);
+        EXPECT_THROW(python.runPythonOrbitalProgram(source), std::runtime_error);
+        EXPECT_NO_THROW(python.runPythonOrbitalProgram("assert 2 + 2 == 4"));
+    }
+    EXPECT_FALSE(Py_IsInitialized());
+}
+
+TEST(ProgramRunnerTests, PythonStartupTimeoutCollectsAnUnresponsiveWorker)
+{
+    const auto path = std::filesystem::temp_directory_path() /
+                      ("ofsim-stalled-worker-" + std::to_string(getpid()));
+    struct RemoveFile
+    {
+        std::filesystem::path path;
+        ~RemoveFile()
+        {
+            std::error_code error;
+            std::filesystem::remove(path, error);
+        }
+    } cleanup{path};
+    std::ofstream(path) << "#!/bin/sh\nexec sleep 60\n";
+    std::filesystem::permissions(path, std::filesystem::perms::owner_all);
+    ofsim_events::EventProcessor::getInstance()->terminatePythonMachine(false);
+    ofsim_python_integration::PythonMachine python(path.string());
+    const auto started = std::chrono::steady_clock::now();
+    try
+    {
+        python.runPythonOrbitalProgram("pass");
+        FAIL() << "An unresponsive worker was accepted";
+    }
+    catch (const std::runtime_error& error)
+    {
+        EXPECT_NE(std::string(error.what()).find("startup timed out"), std::string::npos);
+    }
+    EXPECT_LT(std::chrono::steady_clock::now() - started, 7s);
+}
+
+TEST(ProgramRunnerTests, PythonStopBoundsLoopsSleepAndInterpreterFinalization)
+{
+    auto& events = *ofsim_events::EventProcessor::getInstance();
+    for (const std::string body :
+         {"while True: pass\n", "import time; time.sleep(60)\n",
+          "import os\nos.setpgid(0, os.getpgid(os.getppid()))\nwhile True: pass\n",
+          "import threading, time\n"
+          "threading.Thread(target=lambda: time.sleep(60)).start()\n"})
+    {
+        SCOPED_TRACE(body);
+        events.terminatePythonMachine(false);
+        const auto runId = events.beginCommandRun();
+        ofsim_world::RocketPhysicalProperties properties{};
+        properties.position = dvec3(0, 100000, 0);
+        properties.mass = 10;
+        ofsim_math_and_physics::PhysicsSolver physics(properties, ofsim_world::planet, 6371, 12);
+        ofsim_python_integration::PythonMachine python;
+        ProgramRunner runner;
+        runner.start(
+            [&]
+            {
+                python.runPythonOrbitalProgram(
+                    "import orbital_fs\norbital_fs.orbital_thrust_magnitude_change(0.5)\n" + body,
+                    runId);
+            },
+            [&] { python.terminateProgram(); });
+        const auto started = std::chrono::steady_clock::now();
+        while (properties.thrustMagnitude != 0.5 && std::chrono::steady_clock::now() - started < 3s)
+        {
+            events.applyCommands(physics, 0);
+            std::this_thread::sleep_for(1ms);
+        }
+        ASSERT_DOUBLE_EQ(properties.thrustMagnitude, 0.5);
+        EXPECT_FALSE(runner.poll());
+        events.endCommandRun();
+        const auto stopping = std::chrono::steady_clock::now();
+        runner.requestStop();
+        EXPECT_FALSE(runner.poll());
+        ASSERT_TRUE(collect(runner));
+        EXPECT_LT(std::chrono::steady_clock::now() - stopping, 2s);
+        EXPECT_FALSE(runner.error());
+        events.terminatePythonMachine(false);
+        EXPECT_NO_THROW(python.runPythonOrbitalProgram("pass"));
+    }
+    events.clearCommandHistory();
+}
+
+TEST(ProgramRunnerTests, PythonCooperativeStopRejectsLateCommandsAndImmediateStopsArePreserved)
+{
+    auto& events = *ofsim_events::EventProcessor::getInstance();
+    ofsim_python_integration::PythonMachine python;
+    events.terminatePythonMachine(false);
+    const auto runId = events.beginCommandRun();
+    ProgramRunner runner;
+    runner.start(
+        [&]
+        {
+            python.runPythonOrbitalProgram(R"(
+import orbital_fs
+while not orbital_fs.get_orbital_data()['shouldStop']:
+    pass
+orbital_fs.orbital_thrust_magnitude_change(0.8)
+)",
+                                           runId);
+        },
+        [&] { python.terminateProgram(); });
+    events.endCommandRun();
+    const auto stopping = std::chrono::steady_clock::now();
+    runner.requestStop();
+    ASSERT_TRUE(collect(runner));
+    EXPECT_LT(std::chrono::steady_clock::now() - stopping, 900ms);
+    EXPECT_FALSE(runner.error());
+
+    ofsim_world::RocketPhysicalProperties properties{};
+    properties.mass = 10;
+    properties.position = dvec3(0, 100000, 0);
+    ofsim_math_and_physics::PhysicsSolver physics(properties, ofsim_world::planet, 6371, 12);
+    events.applyCommands(physics, 0);
+    EXPECT_NE(properties.thrustMagnitude, 0.8);
+
+    for (int iteration = 0; iteration < 3; ++iteration)
+    {
+        events.terminatePythonMachine(false);
+        runner.start([&] { python.runPythonOrbitalProgram("while True: pass"); },
+                     [&] { python.terminateProgram(); });
+        runner.requestStop();
+        ASSERT_TRUE(collect(runner));
+        EXPECT_FALSE(runner.error());
+    }
+    events.terminatePythonMachine(false);
+}
+#endif
 } // namespace

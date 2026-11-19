@@ -113,6 +113,7 @@ set (OFSim_src
     src/infrastructure/EventProcessor.cpp
 
     src/python_integration/PythonMachine.cpp
+    src/python_integration/PythonProcess.cpp
     
     src/math/Sphere.cpp
     
@@ -230,4 +231,5 @@ target_link_libraries(
 )
 
 include(GoogleTest)
+add_dependencies(ofsim_tests OFSim)
 gtest_discover_tests(ofsim_tests PROPERTIES TIMEOUT 15)

@@ -3,6 +3,7 @@
 #include <Python.h>
 #include <string>
 #include <iostream>
+#include <utility>
 
 #include "../math/MathTypes.h"
 
@@ -23,6 +24,8 @@ struct CPyInstance
 
 struct PythonMachine
 {
+    explicit PythonMachine(std::string executable = {}) : workerExecutable(std::move(executable)) {}
+
     static PyObject* orbital_thrust_magnitude_change(PyObject* self, PyObject* args);
 
     static PyObject* orbital_rocket_rotation_change(PyObject* self, PyObject* args);
@@ -32,6 +35,12 @@ struct PythonMachine
     void runPythonOrbitalProgram(std::string sourceCode, u64 runId = 0);
 
     void terminateProgram();
+
+    static int runWorker(int descriptor);
+
+private:
+    static void runEmbedded(std::string sourceCode, u64 runId);
+    std::string workerExecutable;
 };
 
 static struct PyMethodDef methods[] = {

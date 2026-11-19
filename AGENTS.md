@@ -32,6 +32,10 @@ of rebuilding the application.
   in English. Follow the naming conventions of the surrounding code.
 - Keep changes focused. Separate broad formatting or renaming from behavior
   changes.
+- Prefer the simplest functional solution and minimize changed code. Reuse existing
+  mechanisms, avoid speculative abstractions and extra infrastructure, and add
+  complexity only when a concrete requirement justifies it. Implement and verify
+  a small complete solution before considering broader improvements.
 - Separate logical stages within functions with a single blank line, following
   the surrounding code. Use blank lines rather than adding section comments.
 - Follow `.clang-format` and `.editorconfig`. Use `clang-format-19` to format

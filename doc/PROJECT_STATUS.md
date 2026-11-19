@@ -1,6 +1,6 @@
 # Project status and development roadmap
 
-Updated: 2026-11-15.
+Updated: 2026-11-19.
 
 Status definitions:
 
@@ -22,17 +22,33 @@ Completed:
 - [x] Added atomic stop flags, preserved early stop requests, reset the simulation
   clock between runs and transferred execution errors to the main thread through
   [ProgramRunner](../src/simulation/ProgramRunner.h).
+- [x] On Linux, moved Python execution to the same executable's `--python-worker`
+  mode, before window creation, with local IPC for the existing flight API. Reused
+  `ProgramRunner`, the command queue and telemetry snapshots without changing
+  `Simulation`'s lifecycle.
+- [x] On Linux, allowed one second of wall time for cooperative stopping, followed
+  by forced termination and worker collection, including interpreter finalization.
+  Added a five-second startup timeout and controlled launch/crash diagnostics.
+- [x] Verified Linux process isolation, threaded API calls, large source transfers,
+  immediate/cooperative/forced stopping, startup timeout, crash recovery and reruns
+  in automated tests. Lifecycle and communication tests passed with AddressSanitizer
+  and UndefinedBehaviorSanitizer. Verified pause, Stop/reset, mode changes, error
+  reporting, reruns and closing during Python sleep in the GUI.
 
-A Python stop request sets a flag; it does not interrupt `time.sleep()` or force
-Python-created threads to exit. Worker collection waits for execution and interpreter
-finalization to finish.
+On Linux, cooperative stopping still uses `shouldStop`; the deadline also covers
+scripts stuck in `time.sleep()` and Python-created threads. The supervisor uses a
+monotonic clock and collects the worker before reset. Worker process-group cleanup
+also terminates descendants that remain in that group. Source transfers are limited
+to 4 MiB and worker diagnostics to 1023 bytes. This is execution isolation, not an OS
+security sandbox; deliberately detached descendants are outside group cleanup.
+
+Other platforms retain embedded Python: stopping sets a flag and can still wait
+indefinitely for execution or interpreter finalization.
 
 Remaining:
 
-- [ ] Run Python flight programs in a separate process. An uncooperative script
-  can currently keep stopping or shutdown pending indefinitely.
-- [ ] Add graceful cancellation followed by forced termination after a deadline,
-  including handling of worker crashes and startup failures.
+- [ ] Extend and verify process isolation and bounded cancellation on other supported
+  platforms before marking this item complete.
 
 ## 2. Shared simulation state and thread synchronization
 
@@ -248,9 +264,9 @@ larger changes; splitting source files alone does not address the responsibility
 
 ## Next task
 
-Finish item 1 by moving Python into a separate process with bounded
-cancellation. The command queue and telemetry snapshots now provide the
-communication boundary for that work.
+The minimal Linux stage of item 1 is implemented and verified. Review that scope
+before deciding whether to extend process isolation to other supported platforms;
+item 1 remains partially complete until that work is verified.
 
 Continue with the broader physics work in item 3, adding item 5 tests with each
 change. Item 6 can proceed as separate maintenance work.

@@ -88,9 +88,16 @@ If you use Visual Studio 2022 on Windows, you can import the project into the ID
 **=====Things To Do:=====**
 
 Current priorities and known limitations are tracked in the
-[project roadmap](doc/PROJECT_STATUS.md). The next major tasks are bounded Python
-cancellation and physics/prediction consistency. VM translation and execution errors
-are reported in the GUI; Python programs still need to cooperate with stop requests.
+[project roadmap](doc/PROJECT_STATUS.md). The next major tasks are physics/prediction
+consistency and extending Python process isolation beyond Linux. VM translation and
+execution errors are reported in the GUI.
+
+On Linux, Python flight programs run in a separate instance of OFSim. Stop, reset,
+mode changes and closing allow one second for cooperative termination through
+`shouldStop`, then forcibly terminate the worker. This uses wall time, independently
+of simulation pause or speed. Worker startup has a five-second timeout. Source code
+is limited to 4 MiB and worker diagnostics to 1023 bytes. Other platforms retain
+embedded Python and require scripts to cooperate with stop requests.
 
 Other planned improvements include correcting the positions of the Sun and Moon.
 
